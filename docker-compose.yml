@@ -1,0 +1,24 @@
+version: '3.1' # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+        
+  mongodata: 
+    image: mongo
+    volumes:
+      - ./data/mongo:/data/db
+    command: --break-mongo
+    
+  mongodb: 
+    image: mongo 
+    volumes_from:
+     - mongodata
+    ports:
+      - "27017:27017"
+    command: --smallfiles --rest --auth   
+    
