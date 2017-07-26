@@ -1,5 +1,8 @@
 # Spring Reactive Sample
 
+The upcoming Spring 5 embraces Reactive Streams. 
+
+For developers, it brings a complete new programming model.
 
 
 ## References
