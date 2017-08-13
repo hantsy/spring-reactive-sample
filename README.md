@@ -1,14 +1,47 @@
 # Spring Reactive Sample
 
-The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). Reactive Streams specification provides four APIs and a TCK. Reactor and RxJava2 implement this specification, and Java 9 introduces a Flow API to adopt it. 
+[toc]
 
-For Spring developers, it brings a complete new programming model. Spring core framework added a new `spring-webflux` module and provided built-in reactive support via Reactor and RxJava. Spring Security 5 also added reactive feature. In Spring Data umbrella projects, Redis, Mongo, Cassandra subprojects firstly got reactive supports. Spring Session also added an reactive variant for its `SessionRepository`. 
+The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). From the offcial website of [Reactive Streams](http://www.reactive-streams.org/):
 
-## Create a Reactive Spring web application
+>Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.This encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
 
-As my [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot), I still use Apache Maven as build tool in this sample.
+Currently, the JVM specification is completed, it includes a Java API(four simple interface), a textual Specification, a TCK and implementation examples. Check [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams) for more details.
 
-Create a general web application. 
+
+Reactor and RxJava2 implement this specification, and it is also adopted in Java 9 by the new Flow API. 
+
+For Spring developers, it brings a complete new programming model. In this post, we will try to cover all reactive features in the Spring projects.
+
+* Spring core framework added a new `spring-webflux` module, and provided built-in reactive programming support via Reactor and RxJava. 
+* Spring Security 5 also added reactive feature. 
+* In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. Unluckily due to the original JDBC is desginated for blocking access, Spring Data JPA can not benefit from this feature. 
+* Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included in the latest 2.0.0.M3. 
+
+**NOTE: At the moment I am writing this post, some projects are still under active development, I will update the content and the sample codes according to the final release version. Please start [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to track it.**
+ 
+## Create a Webflux application
+
+An example exceeds thousands of words. Let's begin to write some codes and enjoy the reactive programming brought by Spring 5.
+
+Generally, I would like reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application. 
+
+In the following steps we will start with creating RESTful APIs for Post. 
+
+
+### Prerequisites
+
+Make sure you have installed:
+
+* Java 8, https://java.oracle.com
+* Apache Maven, https://maven.apache.org
+* Your favorite IDE, including NetBeans IDE, Eclipse, Intellij IDEA.
+
+**NOTE**: Do not forget to add your Java and Maven command into your system environment variable **PATH** .
+
+### Prepare project skeleton
+
+Execute the following command to create a general web application from Maven archetype. 
 
 ```
 $ mvn archetype:generate -DgroupId=com.example
@@ -16,12 +49,19 @@ $ mvn archetype:generate -DgroupId=com.example
 	-DarchetypeArtifactId=maven-archetype-webapp
 	-DinteractiveMode=false
 ```
+You can import the generated codes into your IDEs for further development.
 
-Add `spring-webflux` and others to project dependencies. 
+Open *pom.xml* in your editor, add some modifications:
 
-The initial pom.xml looks like:
+1. Add `spring-boot-starter-parent` as parent POM to manage the versions of all required dependencies for this project.
+2. Add `spring-webflux`, `jackson-databind`, `reactor-core` as dependencies for Spring Web Reactive support
+3. Add `logback` as logging framework, `jcl-over-slf4j` is a bridge for Spring jcl and slf4j.
+4. Use Lombok to erase the tedious getters, setters, etc for a simple POJO class, check the [Lombok project](http://projectlombok.org) to get more information if you have Lombok trouble in your IDEs.
+5. You have to add spring milestone repositories in `repositories` and `pluginRepositories`, because at the moment, they are still in active development, and not availble in the official Maven public repository.
 
-```
+The final pom.xml looks like:
+
+```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -138,17 +178,13 @@ The initial pom.xml looks like:
 </project>
 ```
 
-I use `spring-boot-starter-parent` as parent POM to manage the versions of all dependencies.
+### Getting started
 
-1. `spring-webflux`, `jackson-databind`, `reactor-core` for Reactive support, logback as logging framework.
-2. Lombok to clean POJO codes, check [Lombok project](http://projectlombok.org) to get more details.
-3. I also add spring repositories in `repositories` and `pluginRepositories`, because at the moment, they are still in active development, and not availble in the official Maven public repository.
+The project skeleton is ready, now let's add some codes to play reactive programming.
 
-Let's create some codes to play.
+Create a new class named `Post`, it includes three fields: id, title, content.
 
-A simple POJO `Post`.
-
-```
+```java
 @Data
 @ToString
 @Builder
@@ -163,9 +199,19 @@ class Post {
 }
 ```
 
-A dummy repository `PostRepository`.
+`@Data`, `@ToString`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor` are from the Lombok project.
 
-```
+When you compile `Post`, it will utilize Java compiler built-in Annotation Processing tooling to add extra facilities into the final compiled classes, including:
+
+1. Getters and setters of the three fields, and overrides `equals` and `hashCode` methods.
+2. Overrides `toString` method.
+3. A builder class for creating the Post instance more easily.
+4. A constructor with no arguments.
+5. A constructor with all fields as arguments.
+
+Create a dummy repository named `PostRepository` to retrieve posts from and save them back to a repository.
+
+```java
 @Component
 class PostRepository {
 
@@ -200,16 +246,20 @@ class PostRepository {
 }
 ```
 
-Currently we do not connect to any database. Use a `Map` based data store instead. If you have used Spring Data before, you will find these APIs are similiar. The difference we return a `Flux` or `Mono` instead.
+Currently we do not connect to any database, use a `Map` backed data store instead. When we talk about the Spring Data reactive feature later, we will replace it with a real Spring Data reactive implementation.
 
-`Flux` and `Mono` are from Reactor, which powers the reactive support in Spring by default. 
+If you have used Spring Data before, you will find these APIs are every similiar with `Repository` interface provided in Spring Data. 
+
+The main difference is in the current Repository class all methods return a `Flux` or `Mono` instead.
+
+`Flux` and `Mono` are from Reactor, which powers the reactive support in Spring 5 by default. 
 
 * `Flux` means it could return lots of results in the stream. 
-*`Mono` means it could return 0 to 1 result. 
+* `Mono` means it could return 0 to 1 result. 
 
-Create a controller `PostController`.
+Create a controller class named `PostController` to expose RESTful PAIs for `Post`.
 
-```
+```java
 @RestController
 @RequestMapping(value = "/posts")
 class PostController {
@@ -238,9 +288,9 @@ class PostController {
 }
 ```
 
-Use `@EnableWebFlux` to activiate webflux in this application.
+Create a `@configuration` class, add an `@EnableWebFlux` annotation to activiate webflux in this application.
 
-```
+```java
 @Configuration
 @ComponentScan
 @EnableWebFlux
@@ -249,11 +299,13 @@ class WebConfig {
 }
 ``` 
 
-Now we are going to run all of these facilities, there are some approaches to run the application.
+Now we almost have done the programming work, let's try to bootstrap the application.
 
-Create a class with `main` to run the application programticially. 
+### Bootstrap
 
-```
+Create a general main class to run the application programticially. 
+
+```java
 ApplicationContext context = new AnnotationConfigApplicationContext(WebConfig.class, SecurityConfig.class);  
 
 HttpHandler handler = DispatcherHandler.toHttpHandler(context);  
@@ -269,15 +321,16 @@ Tomcat.addServlet(rootContext, "httpHandlerServlet", servlet);
 rootContext.addServletMapping("/", "httpHandlerServlet");
 tomcatServer.start();
 ```
+
 The above codes perform some tasks.
 
 1. Create a `HttpHandler` from `ApplicationContext`.
-2. Use ServletHttpHandlerAdapter to bridge the Servlet APIs to reactive based HttpHandler.
+2. Use `ServletHttpHandlerAdapter` to bridge the Servlet APIs to reactive based `HttpHandler`.
 3. Start tomcat server. 
 
 Do not forget add the `tomcat-embed-core` to project dependencies.
 
-```
+```xml
  <dependency>
 	<groupId>org.apache.tomcat.embed</groupId>
 	<artifactId>tomcat-embed-core</artifactId>
@@ -286,9 +339,11 @@ Do not forget add the `tomcat-embed-core` to project dependencies.
 
 You can simply run this class in IDEs as others Java application projects. 
 
-But if you want to package all dependencies into one jar and run the application in one line command `java -jar filename`, just add  `maven-assembly-plugin` configuration into the pom.xml file.
+If you want to package all dependencies into one jar and run the application in one line command `java -jar filename`, maven-assembly-plugin can help this purpose.
 
-```
+Add `maven-assembly-plugin` configuration into the pom.xml file.
+
+```xml
 <!-- Maven Assembly Plugin -->
 <plugin>
 	<groupId>org.apache.maven.plugins</groupId>
@@ -317,7 +372,18 @@ But if you want to package all dependencies into one jar and run the application
 </plugin>
 ```
 
-Now run `mvn package` in the project root folder, you will get an extra fat jar in the *target* folder which includes all classes in this project and its dependencies.
+Eneter the project root folder, execute the following command:
+
+```
+mvn package
+```
+
+When it is done, switch to the *target* folder, besides the general jar, you will find an extra fat jar was generated, which filename is ended with **jar-with-dependencies.jar**.
+
+```
+spring-reactive-sample-vanilla-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+spring-reactive-sample-vanilla-0.0.1-SNAPSHOT.jar
+```  
 
 Run the following command to run this applicaiton. 
 
@@ -325,18 +391,25 @@ Run the following command to run this applicaiton.
 java -jar target/XXXX-jar-with-dependencies.jar 
 ```
 
+When it is started, try to fetch posts.
+
+```
+#curl http://localhost:8080/posts
+[{"id":1,"title":"First Post","content":"content of First Post"},{"id":2,"title":"Second Post","content":"content of Second Post"}]
+```
+
 Alternatively, you can run the application in Reactor Netty, or JBoss Undertow.
 
 For Reactor Netty, replace the above tomcat bootstraping codes with:
 
-```
+```java
 ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
 HttpServer.create(DEFAULT_HOST, DEFAULT_PORT).newHandler(adapter).block();
 ```
 
 And add `reactor-netty` in your project dependencies.
 
-```
+```xml
 <dependency>
 	<groupId>io.projectreactor.ipc</groupId>
 	<artifactId>reactor-netty</artifactId>
@@ -345,7 +418,7 @@ And add `reactor-netty` in your project dependencies.
 
 For Undertow, replace the above tomcat bootstraping codes with:
 
-```
+```java
 UndertowHttpHandlerAdapter undertowAdapter = new UndertowHttpHandlerAdapter(handler);
 Undertow server = Undertow.builder().addHttpListener(DEFAULT_PORT, DEFAULT_HOST).setHandler(undertowAdapter).build();
 server.start();
@@ -353,12 +426,14 @@ server.start();
 
 And add `undertow-core` in your project dependencies.
 
-```
+```xml
 <dependency>
 	<groupId>io.undertow</groupId>
 	<artifactId>undertow-core</artifactId>
 </dependency>
 ```
+
+#### Standalone Servlet Container
 
 If you are stick on traditional web applications, and want to package it into a **war** file and deploy it into an existing servlet container, Spring 5 provides a `AbstractAnnotationConfigDispatcherHandlerInitializer` to fill the gap. It is a standard Spring `ApplicationInitializer` implementation which can be recoginised by Spring when servlet container starts up.
 
@@ -383,9 +458,11 @@ And change the project packaging from **jar** to **war** in pom.xml.
 <packaging>war</packaging>
 ```
 
-Now you can run this application on a IDE managed web server directly. Or package the project into a **war** package and deploy it into a servlet 3.1 based container(tomcat, jetty).
+Now you can run this application on a IDE managed Servlet 3.1 Container directly. 
 
-Alternatively, if you want to run this application via `mvn` command in development stage. `cargo-maven2-plugin` maven plugin can archive this purpose.
+Or package the project into a **war** format and deploy it into a servlet 3.1 based container(tomcat, jetty) manually.
+
+Alternatively, if you want to run this application via `mvn` command in the development stage. `cargo-maven2-plugin` can archive this purpose.
 
 ```
 <plugin> 
