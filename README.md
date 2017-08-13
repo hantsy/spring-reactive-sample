@@ -385,7 +385,7 @@ spring-reactive-sample-vanilla-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 spring-reactive-sample-vanilla-0.0.1-SNAPSHOT.jar
 ```  
 
-Run the following command to run this applicaiton. 
+Run the following command to run this application. 
 
 ```
 java -jar target/XXXX-jar-with-dependencies.jar 
@@ -439,7 +439,7 @@ If you are stick on traditional web applications, and want to package it into a 
 
 Replace the above bootstraping class with:
 
-```
+```java
 public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInitializer {
 
     @Override
@@ -454,7 +454,7 @@ public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInit
 
 And change the project packaging from **jar** to **war** in pom.xml.
 
-```
+```xml
 <packaging>war</packaging>
 ```
 
@@ -464,7 +464,7 @@ Or package the project into a **war** format and deploy it into a servlet 3.1 ba
 
 Alternatively, if you want to run this application via `mvn` command in the development stage. `cargo-maven2-plugin` can archive this purpose.
 
-```
+```xml
 <plugin> 
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-war-plugin</artifactId>
@@ -501,13 +501,215 @@ mvn verify cargo:run
 
 Currently Spring Boot 2.0 is still in active development. The final Spring Boot 2.0 will target the latest Spring technology stack, including Spring 5, Spring Security 5, Spring Session 2 etc. 
 
-Open browser and navigate to [http://start.spring.io](http://start.spring.io). In the Spring Boot Initializer page, select Spring Boot version as 2.0.0.M3 or 2.0.0.SNAPSHOT. In the dependencies box, type **reactive**, it will display all reactive options in a dropdown menu. Select **Ractive Web** to add `spring-webflux` into project dependencies. You can also add other items as you like, such as **Reactive MongoDb**, **Reactive Redis** etc.
+Open browser and navigate to [http://start.spring.io](http://start.spring.io). 
 
 ![Spring Boot initializer](https://github.com/hantsy/spring-reactive-sample/blob/master/init.png)
 
-Click **Generate project** button or hint **ALT+NETER** keys to generate a project skeleton as a zip file for downloading.
+In the Spring Boot Initializer page. 
 
-Download and extract it into your disc, import the source codes into your favorite IDEs.
+1. Select Spring Boot version as 2.0.0.M3 or 2.0.0.SNAPSHOT. 
+2. In the dependencies box, type **reactive**, it will display all reactive options in a dropdown menu. Select **Ractive Web** to add `spring-webflux` into project dependencies. You can also add other items as you like, such as **Reactive MongoDb**, **Reactive Redis** etc.
+3. Click **Generate project** button or hint **ALT+NETER** keys to generate a project skeleton as a zip file for downloading.
+
+Download and extract it into your disc, import the source codes into your IDEs.
+
+A new `spring-boot-starter-webflux` starter is added in the pom.xml.
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+```
+
+In a Spring Boot application, `spring-boot-starter-webflux` will handle the dependencies  and enable webflux automatically. 
+
+Reuse the former codes,
+
+1. Remove `WebConfig` class.
+2. Replace the Bootstrap class with the Spring Boot's `@SpringBootApplication` annotated class as the application entry.
+
+```java
+@SpringBootApplication
+public class DemoApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
+}
+```
+
+By default, Spring Boot will use React Netty to a webflux application. No need extra configuration for it.
+
+Run the following command to run this application.
+
+```
+mvn spring-boot:run
+```
+
+## Spring Security for Webflux
+ 
+Reflect to new webflux feature introduced in Spring 5, Spring Security 5 added new APIs to handle Reactive Web security.
+
+Similar with Spring 5, Spring Security 5 added a new module named `spring-secuirty-webflux`.
+
+Add it in the project dependencies aside with `spring-boot-starter-security`.
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-webflux</artifactId>
+</dependency>
+```
+
+**NOTE**: Currently you have to add `spring-security-webflux` explicitly, there is no specific starters for `spring-security-webflux`.
+
+Add `@EnableWebFluxSecurity` to a configuration class to enable Spring security for Webflux.
+
+```java
+@EnableWebFluxSecurity
+class SecurityConfig {
+
+	@Bean
+	SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+		return http
+			.authorizeExchange()
+				.pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
+				//.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+				.anyExchange().authenticated()
+				.and()
+			.build();
+	}
+
+	private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
+		return authentication
+			.map( a -> context.getVariables().get("user").equals(a.getName()))
+			.map( granted -> new AuthorizationDecision(granted));
+	}
+
+	@Bean
+	public MapUserDetailsRepository userDetailsRepository() {
+		UserDetails rob = User.withUsername("test").password("test123").roles("USER").build();
+		UserDetails admin = User.withUsername("admin").password("admin123").roles("USER","ADMIN").build();
+		return new MapUserDetailsRepository(rob, admin);
+	}
+
+}
+```
+
+1. `HttpSecurity` is from `spring-secuirty-webflux`, similar with the general version, but handle `WebExhange` instead of Servlet based `WebRequest`.
+2. A new `UserDetailsRepository` interface is introduced which is aligned with Reactor APIs. By default, an in-memory `Map` based implementation `MapUserDetailsRepository` is provided, you can customsize yourself by implementing the `UserDetailsRepository` interface.
+
+Start the application by:
+
+```
+mvn spring-boot:run
+```
+
+Try to add a new post without authentication:
+
+```
+#curl -v  -X POST http://localhost:8080/posts -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* timeout on name lookup is not supported
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> POST /posts HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.54.1
+> Accept: */*
+> Content-Type:application/json
+> Content-Length: 42
+>
+* upload completely sent off: 42 out of 42 bytes
+< HTTP/1.1 401 Unauthorized
+< WWW-Authenticate: Basic realm="Realm"
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Content-Type-Options: nosniff
+< X-Frame-Options: DENY
+< X-XSS-Protection: 1 ; mode=block
+< content-length: 0
+<
+* Connection #0 to host localhost left intact
+```
+
+The server rejected the client request, and send back a 401 error(401 Unauthorized).
+
+Use predefined **test:test123** credentials to get authentication and send post request again.
+
+```
+curl -v  -X POST http://localhost:8080/posts -u "test:test123" -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* timeout on name lookup is not supported
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+* Server auth using Basic with user 'test'
+> POST /posts HTTP/1.1
+> Host: localhost:8080
+> Authorization: Basic dGVzdDp0ZXN0MTIz
+> User-Agent: curl/7.54.1
+> Accept: */*
+> Content-Type:application/json
+> Content-Length: 50
+>
+* upload completely sent off: 50 out of 50 bytes
+< HTTP/1.1 200 OK
+< transfer-encoding: chunked
+< Content-Type: application/json;charset=UTF-8
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Content-Type-Options: nosniff
+< X-Frame-Options: DENY
+< X-XSS-Protection: 1 ; mode=block
+< set-cookie: SESSION=b99124f7-c0a0-4507-b9be-34718af3d137; HTTPOnly
+<
+{"id":"59906f9d3c44060e044fb378","title":"My Post","content":"content of My Post","createdDate":[2017,8,13,23,26,21,392000000]}* Connection #0 to host localhost left intact
+```
+
+It is done secussfully, and return the new created post.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
