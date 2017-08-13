@@ -424,15 +424,15 @@ mvn verify cargo:run
 
 Currently Spring Boot 2.0 is still in active development. The final Spring Boot 2.0 will target the latest Spring technology stack, including Spring 5, Spring Security 5, Spring Session 2 etc. 
 
-Open browser and navigate to http://start.spring.io,. In the Spring Boot Initializer page, select Spring Boot version as 2.0.0.M3 or 2.0.0.SNAPSHOT. In the dependencies box, type **reactive**, it will all reative options in a dropdown ment. Select **Web Ractive** to add `spring-webflux` into project dependencies. You can also add other items as you like, such as **Mongo Reactive**, **Redis Reactive** etc.
+Open browser and navigate to [http://start.spring.io](http://start.spring.io). In the Spring Boot Initializer page, select Spring Boot version as 2.0.0.M3 or 2.0.0.SNAPSHOT. In the dependencies box, type **reactive**, it will display all reactive options in a dropdown menu. Select **Ractive Web** to add `spring-webflux` into project dependencies. You can also add other items as you like, such as **Reactive MongoDb**, **Reactive Redis** etc.
 
 ![Spring Boot initializer](https://github.com/hantsy/spring-reactive-sample/blob/master/init.png)
 
-Click **Generate** button or hint **ALT+NETER** keys to generate a project skeleton as a zip file for downloading.
+Click **Generate project** button or hint **ALT+NETER** keys to generate a project skeleton as a zip file for downloading.
 
 Download and extract it into your disc, import the source codes into your favorite IDEs.
 
-Open pom.xml file, .
+
 
 
 ## References
