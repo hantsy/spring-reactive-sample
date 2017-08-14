@@ -618,9 +618,9 @@ spring:
       uri: mongodb://localhost:27017/blog
 ```
 
-Before starting up your application, make sure have a running MongoDB instance in your local system. 
+Before starting up your application, make sure there is a running MongoDB instance in your local system. 
 
-**NOTE**: If you have not installed it, go to [the download page](ttps://www.mongodb.com/download-center?jmp=nav#community) and get a copy of MongoDB, and install it into your system.
+**NOTE**: If you have not installed it, go to [Mongo download page](ttps://www.mongodb.com/download-center?jmp=nav#community) and get a copy of MongoDB, and install it into your system.
 
 Alternatively, if you are familiar with Docker, it is simple to start a MongoDB instance via Docker Compose file.
 
@@ -678,7 +678,7 @@ private LocalDateTime createdDate;
 
 Add some test datas into MongoDB when it starts up.
 
-```
+```java
 @Component
 @Slf4j
 class DataInitializr implements CommandLineRunner {
@@ -888,6 +888,16 @@ It is done secussfully, and returns the new created post.
 ## Put all together
 
 ## Sample codes
+
+The following table lits all sample codes related to this post.
+
+name|description
+---|---
+vanilla| The initial application, includes basic `spring-webflux` feature, use a main class to start up the application
+war| Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container.
+boot| Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support
+boot-routes| Use `RouterFunction` instead of the general `Controller` in **boot**
+session| More features will be added here
 
 ## References
 
