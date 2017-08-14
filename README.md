@@ -8,7 +8,6 @@ The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.or
 
 Currently, the JVM specification is completed, it includes a Java API(four simple interface), a textual Specification, a TCK and implementation examples. Check [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams) for more details.
 
-
 Reactor and RxJava2 implement this specification, and it is also adopted in Java 9 by the new Flow API. 
 
 For Spring developers, it brings a complete new programming model. In this post, we will try to cover all reactive features in the Spring projects.
@@ -35,7 +34,7 @@ Make sure you have installed:
 
 * Java 8, https://java.oracle.com
 * Apache Maven, https://maven.apache.org
-* Your favorite IDE, including NetBeans IDE, Eclipse, Intellij IDEA.
+* Your favorite IDE, including NetBeans IDE, Eclipse(or Eclipse based IDE, such as Spring ToolSuite is recommended) or Intellij IDEA.
 
 **NOTE**: Do not forget to add your Java and Maven command into your system environment variable **PATH** .
 
@@ -303,6 +302,15 @@ Now we almost have done the programming work, let's try to bootstrap the applica
 
 ### Bootstrap
 
+According to the official documention, in [WebFlux framework](http://docs.spring.io/spring-framework/docs/5.0.x/spring-framework-reference/web.html#web-reactive) section, there are some options to bootsrap a reactive web application.
+
+>WebFlux can run on Servlet containers with support for the Servlet 3.1 Non-Blocking IO API as well as on other async runtimes such as Netty and Undertow. 
+
+![Spring Boot initializer](https://github.com/hantsy/spring-reactive-sample/blob/master/webflux.png)
+
+
+#### Apache Tomcat
+
 Create a general main class to run the application programticially. 
 
 ```java
@@ -400,6 +408,9 @@ When it is started, try to fetch posts.
 
 Alternatively, you can run the application in Reactor Netty, or JBoss Undertow.
 
+
+#### Reactor Netty
+
 For Reactor Netty, replace the above tomcat bootstraping codes with:
 
 ```java
@@ -415,6 +426,8 @@ And add `reactor-netty` in your project dependencies.
 	<artifactId>reactor-netty</artifactId>
 </dependency>
 ```
+
+#### Undertow
 
 For Undertow, replace the above tomcat bootstraping codes with:
 
@@ -435,7 +448,7 @@ And add `undertow-core` in your project dependencies.
 
 #### Standalone Servlet Container
 
-If you are stick on traditional web applications, and want to package it into a **war** file and deploy it into an existing servlet container, Spring 5 provides a `AbstractAnnotationConfigDispatcherHandlerInitializer` to fill the gap. It is a standard Spring `ApplicationInitializer` implementation which can be recoginised by Spring when servlet container starts up.
+If you are stick on traditional web applications, and want to package it into a **war** file and deploy it into an existing servlet container, Spring 5 provides a `AbstractAnnotationConfigDispatcherHandlerInitializer` to archive this purpose. It is a standard Spring `ApplicationInitializer` implementation which can be scanned by Spring container when servlet container starts up.
 
 Replace the above bootstraping class with:
 
@@ -513,7 +526,7 @@ In the Spring Boot Initializer page.
 
 Download and extract it into your disc, import the source codes into your IDEs.
 
-A new `spring-boot-starter-webflux` starter is added in the pom.xml.
+As you see, in the pom.xml, new Spring Boot strater `spring-boot-starter-webflux`  is added.
 
 ```xml
 <dependency>
@@ -521,13 +534,13 @@ A new `spring-boot-starter-webflux` starter is added in the pom.xml.
 	<artifactId>spring-boot-starter-webflux</artifactId>
 </dependency>
 ```
-
-In a Spring Boot application, `spring-boot-starter-webflux` will handle the dependencies  and enable webflux automatically. 
+And the ``
+In a Spring Boot application, `spring-boot-starter-webflux` will handle the `spring-webflux` related dependencies  and enable webflux automatically. 
 
 Reuse the former codes,
 
-1. Remove `WebConfig` class.
-2. Replace the Bootstrap class with the Spring Boot's `@SpringBootApplication` annotated class as the application entry.
+1. No need `WebConfig`, Spring Boot configures it for you.
+2. The former bootstraping class or `ApplicationInitializer` is no use now, the Spring Boot's `@SpringBootApplication` annotated class hands over the application bootstrap.
 
 ```java
 @SpringBootApplication
@@ -541,13 +554,196 @@ public class DemoApplication {
 
 By default, Spring Boot will use React Netty to a webflux application. No need extra configuration for it.
 
-Run the following command to run this application.
+Use Spring Boot maven plugin to run this application.
 
 ```
 mvn spring-boot:run
 ```
 
-## Spring Security for Webflux
+## Reactive Data Operations
+
+The next generation of Spring Data will embrace Reactive Streamse, and new reactive supported `Repository` and `Template` are added in the Spring Data Commons. 
+
+Currently, three subprojects(Redis, MongoDB, Cassandra) have implemented these interfaces, and got Reactive programming at the first time.
+
+Here we use Spring Data MongoDB as an example, and convert the above `Map` based repsoitory to MongoDB driven repository.
+
+Based on the former Spring Boot sample, add `spring-boot-starter-data-mongodb-reactive` into the project dependencies.
+
+```
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+</dependency>
+```
+
+This reactive Spring Boot starter will enable reactive support for MongoDB in this project. 
+
+Create a new `Post` MongoDB document class.
+
+```java
+@Document
+@Data
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+class Post {
+
+    @Id
+    private String id;
+    private String title;
+    private String content;
+
+
+}
+```
+
+1. `@Document` declares it as a MongoDB document.
+2. `@Id` indicates it is the id of `Post` document.
+
+Delcares `PostRepository` interface to extend Sprign Data MongoDB specific `ReactiveMongoRepository`.
+
+```java
+interface PostRepository extends ReactiveMongoRepository<Post, String> {
+}
+```
+
+Configure MongoDB connection in the *appliation.yml* file.
+
+```yml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/blog
+```
+
+Before starting up your application, make sure have a running MongoDB instance in your local system. 
+
+**NOTE**: If you have not installed it, go to [the download page](ttps://www.mongodb.com/download-center?jmp=nav#community) and get a copy of MongoDB, and install it into your system.
+
+Alternatively, if you are familiar with Docker, it is simple to start a MongoDB instance via Docker Compose file.
+
+```yml
+version: '3.3' # specify docker-compose version
+
+# Define the services/containers to be run
+services:
+
+  redis:
+    image: redis
+    ports:
+      - "6379:6379"
+      
+  mongodb: 
+    image: mongo 
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "27017:27017"
+    command: --smallfiles --rest
+#   command: --smallfiles --rest --auth  
+
+volumes:
+  mongodata:  
+```
+
+Execute `docker-compose up` to start a MongoDB instance in a Docker container.
+
+Now it is ready for starting up the application.
+
+```
+mvn spring-boot:run
+```
+
+### Data Auditing Support
+
+Spring Data Mongo supports data auditing as Spring Data JPA, it can set the current user and created/last modified timestamp to a field automatically.
+
+Add `EnableMongoAuditing` to application class to activiate auditing for MongoDB.
+
+```
+@EnableMongoAuditing
+public class DemoApplication {}
+```
+
+In `Post` document, add a new field `createdDate`, annotated it with `@CreatedDate`, it will fill the createdDate with current date when inserting it into MongoDB.
+
+```java
+@CreatedDate
+private LocalDateTime createdDate;
+```	
+
+### Data initialition
+
+Add some test datas into MongoDB when it starts up.
+
+```
+@Component
+@Slf4j
+class DataInitializr implements CommandLineRunner {
+
+    private final PostRepository posts;
+
+    public DataInitializr(PostRepository posts) {
+        this.posts = posts;
+    }
+
+    @Override
+    public void run(String[] args) {
+        log.info("start data initialization  ...");
+        this.posts
+            .deleteAll()
+            .thenMany(
+                Flux
+                    .just("Post one", "Post two")
+                    .flatMap(
+                        title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+                    )
+            )
+            .log()
+            .subscribe(
+                null,
+                null,
+                () -> log.info("done initialization...")
+            );
+
+    }
+
+}
+```
+
+Use a `CommandLineRunner` to make sure the `run` method is executed after the application is started.
+
+Execute `mvn spring-boot:run` to start up the application now, then we can test if the data is initialized successfully.
+
+```
+curl -v http://localhost:8080/posts
+* timeout on name lookup is not supported
+*   Trying ::1...
+* TCP_NODELAY set
+* Connected to localhost (::1) port 8080 (#0)
+> GET /posts HTTP/1.1
+> Host: localhost:8080
+> User-Agent: curl/7.54.1
+> Accept: */*
+>
+< HTTP/1.1 200 OK
+< transfer-encoding: chunked
+< Content-Type: application/json;charset=UTF-8
+< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
+< Pragma: no-cache
+< Expires: 0
+< X-Content-Type-Options: nosniff
+< X-Frame-Options: DENY
+< X-XSS-Protection: 1 ; mode=block
+<
+[{"id":"599149d53c44062e08c58b86","title":"Post one","content":"content of Post one","createdDate":[2017,8,14,14,57,25,71000000]},{"id":"599149d53c44062e08c58b87","title":"Post two","content":"content of Post two","createdDate":[2017,8,14,14,57,25,173000000]}]* Connection #0 to host localhost left intact
+```
+
+As you see, the data is initialized and createdDate is inserted automatically.
+
+## Security for Webflux
  
 Reflect to new webflux feature introduced in Spring 5, Spring Security 5 added new APIs to handle Reactive Web security.
 
@@ -601,17 +797,17 @@ class SecurityConfig {
 
 }
 ```
+1. Use `@EnableWebFluxSecurity` annotation to enable Security for `spring-webflux` based application.
+2. `SecurityWebFilterChain` bean is a must to configure the details of Spring Security. `HttpSecurity` is from `spring-secuirty-webflux`, similar with the general version, but handle `WebExhange` instead of Servlet based `WebRequest`.
+3. A new `UserDetailsRepository` interface is introduced which is aligned with Reactor APIs. By default, an in-memory `Map` based implementation `MapUserDetailsRepository` is provided, you can customsize yourself by implementing the `UserDetailsRepository` interface.
 
-1. `HttpSecurity` is from `spring-secuirty-webflux`, similar with the general version, but handle `WebExhange` instead of Servlet based `WebRequest`.
-2. A new `UserDetailsRepository` interface is introduced which is aligned with Reactor APIs. By default, an in-memory `Map` based implementation `MapUserDetailsRepository` is provided, you can customsize yourself by implementing the `UserDetailsRepository` interface.
-
-Start the application by:
+Starts up the application and verify the Spring Security configuratoin work as expected.
 
 ```
 mvn spring-boot:run
 ```
 
-Try to add a new post without authentication:
+After it is started, try to add a new post without authentication:
 
 ```
 #curl -v  -X POST http://localhost:8080/posts -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
@@ -641,9 +837,9 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 * Connection #0 to host localhost left intact
 ```
 
-The server rejected the client request, and send back a 401 error(401 Unauthorized).
+The server side rejects the client request, and sends back a 401 error(401 Unauthorized).
 
-Use predefined **test:test123** credentials to get authentication and send post request again.
+Use the predefined **test:test123** credentials to get authenticated and send the post request again.
 
 ```
 curl -v  -X POST http://localhost:8080/posts -u "test:test123" -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
@@ -676,43 +872,22 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 {"id":"59906f9d3c44060e044fb378","title":"My Post","content":"content of My Post","createdDate":[2017,8,13,23,26,21,392000000]}* Connection #0 to host localhost left intact
 ```
 
-It is done secussfully, and return the new created post.
+It is done secussfully, and returns the new created post.
+
+## Dive into Funcational Programming
+
+### RouterFunction
+
+### Kotlin 
 
 
+## Client
 
+## Test
 
+## Put all together
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+## Sample codes
 
 ## References
 
