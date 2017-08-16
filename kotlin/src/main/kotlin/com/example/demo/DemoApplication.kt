@@ -1,6 +1,6 @@
 package com.example.demo
 
-import org.slf4j.LoggerFactory.*
+import org.slf4j.LoggerFactory.getLogger
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -48,11 +48,13 @@ class SecurityConfig {
                 .and()
                 .build()
     }
-    private fun currentUserMatchesPath(authentication:Mono<Authentication>, context: AuthorizationContext):Mono<AuthorizationDecision> {
+
+    private fun currentUserMatchesPath(authentication: Mono<Authentication>, context: AuthorizationContext): Mono<AuthorizationDecision> {
         return authentication
-                .map({ a-> context.variables?.get("user")?.equals(a.name) })
-                .map({ granted-> AuthorizationDecision(granted?:false) })
+                .map { context.variables?.get("user")?.equals(it.name) }
+                .map { AuthorizationDecision(it ?: false) }
     }
+
     @Bean
     fun userDetailsRepository(): MapUserDetailsRepository {
         val rob = User.withUsername("test").password("test123").roles("USER").build()
@@ -63,28 +65,26 @@ class SecurityConfig {
 
 @RestController
 @RequestMapping(value = "/posts")
-class PostController(val posts:PostRepository) {
+class PostController(val posts: PostRepository) {
 
     @GetMapping("")
-    fun all():Flux<Post> = this.posts.findAll()
+    fun all(): Flux<Post> = this.posts.findAll()
 
     @PostMapping("")
-    fun create(@RequestBody post:Post): Mono<Post> = this.posts.save(post)
+    fun create(@RequestBody post: Post): Mono<Post> = this.posts.save(post)
 
     @GetMapping("/{id}")
-    fun get(@PathVariable("id") id:String):Mono<Post> = this.posts.findById(id)
+    fun get(@PathVariable("id") id: String): Mono<Post> = this.posts.findById(id)
 
     @PutMapping("/{id}")
-    fun update(@PathVariable("id") id:String, @RequestBody post:Post):Mono<Post> {
+    fun update(@PathVariable("id") id: String, @RequestBody post: Post): Mono<Post> {
         return this.posts.findById(id)
-                .map({
-                    p->p.copy(title = post.title, content = post.content)
-                })
-                .flatMap({ p-> this.posts.save(p) })
+                .map { it.copy(title = post.title, content = post.content) }
+                .flatMap { this.posts.save(it) }
     }
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable("id") id:String):Mono<Void> = this.posts.deleteById(id)
+    fun delete(@PathVariable("id") id: String): Mono<Void> = this.posts.deleteById(id)
 
 }
 
@@ -94,28 +94,28 @@ class DataInitializr(val posts: PostRepository) : CommandLineRunner {
 
     override fun run(vararg strings: String) {
         log.info("start data initialization ...")
-         this.posts
+        this.posts
                 .deleteAll()
                 .thenMany(
-                    Flux
-                        .just("Post one", "Post two")
-                        .flatMap({ title -> this.posts.save(Post(title = title, content = "content of " + title)) })
+                        Flux
+                                .just("Post one", "Post two")
+                                .flatMap { this.posts.save(Post(title = it, content = "content of " + it)) }
                 )
                 .log()
                 .subscribe(
-                    null,
-                    null,
-                    { log.info("done initialization...") }
+                        null,
+                        null,
+                        { log.info("done initialization...") }
                 )
     }
 }
 
 
-interface PostRepository: ReactiveMongoRepository<Post, String>
+interface PostRepository : ReactiveMongoRepository<Post, String>
 
 @Document
 data class Post(@Id var id: String? = null,
                 var title: String? = null,
-                var content: String?= null,
+                var content: String? = null,
                 @CreatedDate var createdDate: LocalDateTime = LocalDateTime.now()
 )
