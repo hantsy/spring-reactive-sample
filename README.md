@@ -534,12 +534,14 @@ As you see, in the pom.xml, new Spring Boot strater `spring-boot-starter-webflux
 	<artifactId>spring-boot-starter-webflux</artifactId>
 </dependency>
 ```
-And the ``
-In a Spring Boot application, `spring-boot-starter-webflux` will handle the `spring-webflux` related dependencies  and enable webflux automatically. 
 
-Reuse the former codes,
+And the `spring-boot-maven-plugin` is added in the initial pom.xml.
 
-1. No need `WebConfig`, Spring Boot configures it for you.
+Spring Boot starter `spring-boot-starter-webflux` will handle the `spring-webflux` related dependencies  and enable webflux support automatically. 
+
+Compare the former vanilla version,
+
+1. No need explicit `WebConfig`, Spring Boot configures it automatically.
 2. The former bootstraping class or `ApplicationInitializer` is no use now, the Spring Boot's `@SpringBootApplication` annotated class hands over the application bootstrap.
 
 ```java
@@ -552,9 +554,9 @@ public class DemoApplication {
 }
 ```
 
-By default, Spring Boot will use React Netty to a webflux application. No need extra configuration for it.
+By default, Spring Boot will use Reactor Netty to run a webflux application. No need extra configuration for it.
 
-Use Spring Boot maven plugin to run this application.
+Starts up application via:
 
 ```
 mvn spring-boot:run
@@ -897,6 +899,7 @@ vanilla| The initial application, includes basic `spring-webflux` feature, use a
 war| Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container.
 boot| Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support
 boot-routes| Use `RouterFunction` instead of the general `Controller` in **boot**
+kotlin| Convert **boot** to kotlin
 session| More features will be added here
 
 ## References
@@ -919,3 +922,8 @@ session| More features will be added here
 * [Spring-Reactive Example REST Application ](https://dzone.com/articles/spring-reactive-samples)
 * [Spring 5 WebFlux and JDBC: To Block or Not to Block ](https://dzone.com/articles/spring-5-webflux-and-jdbc-to-block-or-not-to-block)
 * [Reactive Spring 5 and Application Design Impact](https://dzone.com/articles/reactive-spring-5-and-application-design-impact)
+* [From Java To Kotlin - Your Cheat Sheet For Java To Kotlin ](https://github.com/MindorksOpenSource/from-java-to-kotlin)
+* [From Java to Kotlin](https://fabiomsr.github.io/from-java-to-kotlin/index.html)
+* [Petclinic: Spring 5 reactive version](https://github.com/ssouris/petclinic-spring5-reactive/)
+* [Spring Framework 5 Kotlin APIs, the functional way](https://spring.io/blog/2017/08/01/spring-framework-5-kotlin-apis-the-functional-way)
+* [Kotlin extensions for MongoOperations and ReactiveMongoOperations ](https://github.com/spring-projects/spring-data-mongodb/commit/2359357977e8734331a78c88e0702f50f3a3c75e)
