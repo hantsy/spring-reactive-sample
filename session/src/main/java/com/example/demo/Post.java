@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -33,5 +34,7 @@ class Post {
     private String content;
     @CreatedDate
     private LocalDateTime createdDate;
+    @CreatedBy
+    private Username author;
     
 }
