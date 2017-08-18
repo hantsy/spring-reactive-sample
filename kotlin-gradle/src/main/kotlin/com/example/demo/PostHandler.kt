@@ -44,16 +44,6 @@ class PostHandler(val posts: PostRepository) {
                 .map { it.t1.copy(title = it.t2.title, content = it.t2.content) }
                 .flatMap { this.posts.save(it) }
                 .flatMap { noContent().build() }
-
-//        return Mono
-//                .zip(
-//                        ,
-//                        ,
-//                        req.bodyToMono(Post::class.java)
-//                )
-//                .cast(Post::class.java)
-//                .flatMap({ this.posts.save(it) })
-//                .flatMap({ noContent().build() })
     }
 
     fun delete(req: ServerRequest): Mono<ServerResponse> {

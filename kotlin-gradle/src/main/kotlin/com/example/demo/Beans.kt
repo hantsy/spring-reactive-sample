@@ -38,19 +38,7 @@ fun beans() = beans {
             setDefaultEncoding("UTF-8")
         }
     }
-    bean {
-        PostRepository(it.ref())
-    }
-    bean { ReactiveMongoRepositoryFactory(it.ref()) }
-    bean {
-        ReactiveMongoTemplate(
-                SimpleReactiveMongoDatabaseFactory(
-                //ConnectionString(it.env.getProperty("mongo.uri"))
-                        ConnectionString("mongodb://localhost:27017/blog")
-                )
-        )
-    }
-//    bean {
+    //    bean {
 //        val prefix = "classpath:/templates/"
 //        val suffix = ".mustache"
 //        val loader = MustacheResourceTemplateLoader(prefix, suffix)
@@ -59,6 +47,22 @@ fun beans() = beans {
 //            setSuffix(suffix)
 //        }
 //    }
+    bean {
+        PostRepository(it.ref())
+    }
+    bean {
+        DataInitializr(it.ref())
+    }
+//    bean { ReactiveMongoRepositoryFactory(it.ref()) }
+//    bean {
+//        ReactiveMongoTemplate(
+//                SimpleReactiveMongoDatabaseFactory(
+//                //ConnectionString(it.env.getProperty("mongo.uri"))
+//                        ConnectionString("mongodb://localhost:27017/blog")
+//                )
+//        )
+//    }
+
     profile("foo") {
         bean<Foo>()
     }

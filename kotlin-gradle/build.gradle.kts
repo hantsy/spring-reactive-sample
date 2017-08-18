@@ -1,20 +1,22 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-
 plugins {
     kotlin("jvm")
-    id("com.github.johnrengelman.plugin-shadow") version "2.0.0"
     application
+    id("com.github.johnrengelman.plugin-shadow") version "2.0.0"
 }
 
 application {
     mainClassName = "com.example.demo.ApplicationKt"
 }
 
+val kotlinVersion = "1.1.4"
+val springBootVersion = "2.0.0.M3"
+
 buildscript {
-    //    ext {
-//        kotlinVersion = "1.1.4"
-//        springBootVersion = "2.0.0.M3"
+//    ext {
+//        kotlinVersion("1.1.4")
+//        springBootVersion("2.0.0.M3")
 //    }
 
     val kotlinVersion = "1.1.4"
@@ -36,12 +38,9 @@ buildscript {
     }
 }
 
-val kotlinVersion = "1.1.4"
-val springBootVersion = "2.0.0.M3"
-
 apply {
     //plugin("kotlin")
-    //plugin("kotlin-spring")
+    plugin("kotlin-spring")
     //plugin("eclipse")
     plugin("org.springframework.boot")
     plugin("io.spring.dependency-management")
@@ -72,14 +71,32 @@ repositories {
 
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-data-mongodb-reactive")
-    compile("org.springframework.boot:spring-boot-starter-webflux")
+    //spring webflux
+    compile("org.springframework:spring-webflux")
+    compile("org.springframework:spring-context")
+    compile("com.fasterxml.jackson.core:jackson-databind")
+
+    compile("io.netty:netty-buffer")
+    compile("io.projectreactor.ipc:reactor-netty")
+
+    //spring security for webflux
+    compile("org.springframework.security:spring-security-core")
+    compile("org.springframework.security:spring-security-config")
+    compile("org.springframework.security:spring-security-webflux")
+
+    //spring data mongodb reactive
+    compile("org.springframework.data:spring-data-mongodb")
+    compile("org.mongodb:mongodb-driver-reactivestreams")
+
+    //kotlin
     compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlinVersion")
     compile("org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion")
 
+    //slf4j and logback
     compile("org.slf4j:slf4j-api")
     compile("ch.qos.logback:logback-classic")
 
-    testCompile("org.springframework.boot:spring-boot-starter-test")
+    //test
+    testCompile("org.springframework:spring-test")
     testCompile("io.projectreactor:reactor-test")
 }

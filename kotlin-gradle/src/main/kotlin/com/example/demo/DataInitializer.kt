@@ -1,15 +1,16 @@
 package com.example.demo
 
 import org.slf4j.LoggerFactory
-import org.springframework.boot.CommandLineRunner
-import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
+import javax.annotation.PostConstruct
 
-@Component
-class DataInitializr(val posts: PostRepository) : CommandLineRunner {
+
+class DataInitializr(val posts: PostRepository)  {
     private val log = LoggerFactory.getLogger(DataInitializr::class.java);
 
-    override fun run(vararg strings: String) {
+   // @EventListener(ContextRefreshedEvent::class)
+    @PostConstruct
+    fun run() {
         log.info("start data initialization ...")
         this.posts
                 .deleteAll()
