@@ -876,18 +876,18 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 
 It is done secussfully, and returns the new created post.
 
-## Dive into Funcational Programming
 
-### RouterFunction
+## RouterFunction
 
-### Kotlin 
+`spring-webflux` also provides DSL like syntax to declare route rules for URI paths.
+
 
 
 ## Client
 
 ## Test
 
-## Put all together
+## Kotlin 
 
 ## Sample codes
 
@@ -899,7 +899,8 @@ vanilla| The initial application, includes basic `spring-webflux` feature, use a
 war| Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container.
 boot| Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support
 boot-routes| Use `RouterFunction` instead of the general `Controller` in **boot**
-kotlin| Convert **boot** to kotlin
+kotlin| Convert **boot** to use kotlin
+kotlin-gradle| Use kotlin functional approach to declare beans and bootstrap the application programatically
 session| More features will be added here
 
 ## References

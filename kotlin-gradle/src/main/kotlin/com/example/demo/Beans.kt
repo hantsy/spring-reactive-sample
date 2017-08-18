@@ -1,13 +1,7 @@
 package com.example.demo
 
-import com.mongodb.ConnectionString
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.context.support.beans
-import org.springframework.core.io.ClassPathResource
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate
-import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory
-import org.springframework.data.mongodb.repository.support.ReactiveMongoRepositoryFactory
 import org.springframework.web.reactive.function.server.HandlerStrategies
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebHandler

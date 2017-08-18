@@ -5,6 +5,7 @@
  */
 package com.example.demo;
 
+import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,11 @@ import reactor.core.publisher.Flux;
 class DataInitializr implements CommandLineRunner {
 
     private final PostRepository posts;
+    private final UserRepository users;
 
-    public DataInitializr(PostRepository posts) {
+    public DataInitializr(PostRepository posts, UserRepository users) {
         this.posts = posts;
+        this.users= users;
     }
 
     @Override
@@ -38,7 +41,24 @@ class DataInitializr implements CommandLineRunner {
             .subscribe(
                 null,
                 null,
-                () -> log.info("done initialization...")
+                () -> log.info("done posts initialization...")
+            );
+        
+        this.users
+            .deleteAll()
+            .thenMany(
+                Flux
+                    .just( 
+                        User.builder().username("user").password("test123").roles(Arrays.asList("USER")).build(), 
+                        User.builder().username("admin").password("test123").roles(Arrays.asList("USER, ADMIN")).build()
+                    )
+                    .flatMap((user) -> this.users.save(user))
+            ) 
+            .log()
+            .subscribe(
+                null,
+                null,
+                () -> log.info("done users initialization...")
             );
     }
 
