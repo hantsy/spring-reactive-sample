@@ -40,7 +40,7 @@ buildscript {
 
 apply {
     //plugin("kotlin")
-    plugin("kotlin-spring")
+    //plugin("kotlin-spring")
     //plugin("eclipse")
     plugin("org.springframework.boot")
     plugin("io.spring.dependency-management")
@@ -96,7 +96,7 @@ dependencies {
 
     //slf4j and logback
     compile("org.slf4j:slf4j-api")
-    conpile("org.slf4j:jcl-over-slf4j")
+    compile("org.slf4j:jcl-over-slf4j")
     compile("ch.qos.logback:logback-classic")
 
     //test
