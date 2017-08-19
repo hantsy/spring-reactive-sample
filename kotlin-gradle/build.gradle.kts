@@ -75,6 +75,8 @@ dependencies {
     compile("org.springframework:spring-webflux")
     compile("org.springframework:spring-context")
     compile("com.fasterxml.jackson.core:jackson-databind")
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
 
     compile("io.netty:netty-buffer")
     compile("io.projectreactor.ipc:reactor-netty")

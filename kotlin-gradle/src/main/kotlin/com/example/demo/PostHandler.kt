@@ -20,10 +20,12 @@ class PostHandler(val posts: PostRepository) {
         val postStream = Flux
                 .zip(Flux.interval(Duration.ofSeconds(1)), this.posts.findAll())
                 .map { it.t2 }
-        return ok().contentType(MediaType.TEXT_EVENT_STREAM).body(
-                postStream,
-                Post::class.java
-        )
+        return ok()
+                .contentType(MediaType.TEXT_EVENT_STREAM)
+                .body(
+                        postStream,
+                        Post::class.java
+                )
     }
 
     fun create(req: ServerRequest): Mono<ServerResponse> {

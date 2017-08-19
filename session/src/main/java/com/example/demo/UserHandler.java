@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
@@ -18,6 +19,7 @@ import reactor.core.publisher.Mono;
  *
  * @author hantsy
  */
+@Component
 public class UserHandler {
 
     public Mono<ServerResponse> current(ServerRequest req) {

@@ -9,8 +9,8 @@ class DataInitializr(val posts: PostRepository)  {
     private val log = LoggerFactory.getLogger(DataInitializr::class.java);
 
    // @EventListener(ContextRefreshedEvent::class)
-    @PostConstruct
-    fun run() {
+   // @PostConstruct
+    fun initData() {
         log.info("start data initialization ...")
         this.posts
                 .deleteAll()
