@@ -90,7 +90,7 @@ fun beans() = beans {
         )
     }
 
-    bean<WebFilter> {
+    bean<WebFilter>("springSecurityFilterChain") {
         WebFilterChainFilter(Flux.just(it.ref()))
     }
 

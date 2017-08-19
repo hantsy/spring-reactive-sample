@@ -96,6 +96,7 @@ dependencies {
 
     //slf4j and logback
     compile("org.slf4j:slf4j-api")
+    conpile("org.slf4j:jcl-over-slf4j")
     compile("ch.qos.logback:logback-classic")
 
     //test

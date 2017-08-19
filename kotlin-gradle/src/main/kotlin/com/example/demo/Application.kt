@@ -5,6 +5,7 @@ import org.springframework.context.support.GenericApplicationContext
 import org.springframework.http.server.reactive.HttpHandler
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter
 import org.springframework.security.web.server.WebFilterChainFilter
+import org.springframework.web.server.WebFilter
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder
 import reactor.ipc.netty.http.server.HttpServer
 import reactor.ipc.netty.tcp.BlockingNettyContext
@@ -23,7 +24,9 @@ class Application {
         context.refresh()
         context.getBean(DataInitializr::class.java).initData()
         server = HttpServer.create(port)
-        httpHandler = WebHttpHandlerBuilder.applicationContext(context).build()
+        httpHandler = WebHttpHandlerBuilder.applicationContext(context)
+                .filter(context.getBean("springSecurityFilterChain", WebFilter::class.java))
+                .build()
     }
 
     fun start() {
