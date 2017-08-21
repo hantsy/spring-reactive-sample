@@ -1,3 +1,4 @@
+import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
@@ -42,16 +43,17 @@ apply {
     //plugin("kotlin")
     //plugin("kotlin-spring")
     //plugin("eclipse")
-    plugin("org.springframework.boot")
+    //plugin("org.springframework.boot")
     plugin("io.spring.dependency-management")
     //plugin("org.junit.platform.gradle.plugin")
 }
 
-//dependencyManagement {
-//    imports {
-//        mavenBom("org.springframework.boot:spring-boot-parent:$springBootVersion")
-//    }
-//}
+// https://spring.io/blog/2016/12/16/dependency-management-plugin-1-0-0-rc1
+configure<DependencyManagementExtension> {
+    imports {
+        mavenBom("org.springframework.boot:spring-boot-parent:$springBootVersion")
+    }
+}
 
 tasks {
     withType<KotlinCompile> {
