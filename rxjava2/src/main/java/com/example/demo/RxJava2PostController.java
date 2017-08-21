@@ -39,7 +39,7 @@ class RxJava2PostController {
     
     @PostMapping(value = "")
     public Single<Post> create(Post post) {
-        return this.posts.createPost(post);
+        return this.posts.save(post);
     }
     
 }

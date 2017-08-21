@@ -5,9 +5,9 @@
  */
 package com.example.demo;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import org.springframework.stereotype.Component;
 import rx.Observable;
 import rx.Single;
@@ -19,32 +19,26 @@ import rx.Single;
 @Component
 class RxJavaPostRepository {
 
-    private static final Map<Long, Post> DATA = new HashMap<>();
-    private static long ID_COUNTER = 1L;
+    private static final List<Post> DATA = new ArrayList<>();
 
     static {
-        Arrays.asList("First Post", "Second Post")
-            .stream()
-            .forEach((java.lang.String title) -> {
-                long id = ID_COUNTER++;
-                DATA.put(Long.valueOf(id), Post.builder().id(id).title(title).content("content of " + title).build());
-            }
-            );
+        DATA.add(Post.builder().id(1L).title("post one").content("content of post one").build());
+        DATA.add(Post.builder().id(2L).title("post two").content("content of post two").build());
     }
 
     Observable<Post> findAll() {
-        return Observable.from(DATA.values());
+        return Observable.from(DATA);
     }
 
     Single<Post> findById(Long id) {
-        return Single.just(DATA.get(id));
+        return findAll().filter(p -> Objects.equals(p.getId(), id)).single().toSingle();
     }
 
-    Single<Post> createPost(Post post) {
-        long id = ID_COUNTER++;
-        post.setId(id);
-        DATA.put(id, post);
-        return Single.just(post);
+    Single<Post> save(Post post) {
+        long id = DATA.size() + 1;
+        Post saved = Post.builder().id(id).title(post.getTitle()).content(post.getContent()).build();
+        DATA.add(saved);
+        return Single.just(saved);
     }
 
 }
