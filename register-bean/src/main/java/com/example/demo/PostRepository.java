@@ -6,9 +6,9 @@
 package com.example.demo;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
  *
  * @author hantsy
  */
-@Component
 class PostRepository {
 
     private static final List<Post> DATA = new ArrayList<>();

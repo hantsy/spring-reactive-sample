@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-routes</artifactId>
+    <artifactId>spring-reactive-sample-register-bean</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-reactive-sample-routes</name>
-    <description>Spring Webflux RouteFunction demo(without Spring Boot)</description>
+    <name>spring-reactive-sample-register-bean</name>
+    <description>Spring Webflux progmatic bootsrap demo(without Spring Boot)</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

@@ -2,11 +2,13 @@ package com.example.demo;
 
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.ServletHttpHandlerAdapter;
-import org.springframework.web.reactive.DispatcherHandler;
+import org.springframework.web.reactive.function.server.HandlerStrategies;
+import org.springframework.web.reactive.function.server.RouterFunctions;
+import org.springframework.web.server.WebHandler;
+import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
 public class App {
 
@@ -14,8 +16,21 @@ public class App {
     private static final int DEFAULT_PORT = 8080;
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = new AnnotationConfigApplicationContext(WebConfig.class);  // (1)
-        HttpHandler handler = DispatcherHandler.toHttpHandler(context);  // (2)
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        PostRepository posts = new PostRepository();
+        PostHandler postHandler = new PostHandler(posts);
+        Routes routesBean = new Routes(postHandler);
+
+        context.registerBean(PostRepository.class, () -> posts);
+        context.registerBean(PostHandler.class, () -> postHandler);
+        context.registerBean(Routes.class, () -> routesBean);
+        context.registerBean(WebHandler.class, () -> RouterFunctions.toWebHandler(routesBean.routes(), HandlerStrategies.builder().build()));
+        context.refresh();
+
+        HttpHandler handler = WebHttpHandlerBuilder
+            //.webHandler(context.getBean(WebHandler.class))
+            .applicationContext(context)
+            .build();
 
         // Tomcat and Jetty (also see notes below)
         ServletHttpHandlerAdapter servlet = new ServletHttpHandlerAdapter(handler);

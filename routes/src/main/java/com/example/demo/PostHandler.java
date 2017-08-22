@@ -7,6 +7,7 @@ package com.example.demo;
 
 import java.net.URI;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.BodyExtractors;
 import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
 import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
@@ -21,31 +22,26 @@ import reactor.core.publisher.Mono;
  *
  * @author hantsy
  */
-public class PostRoutes {
+@Component
+public class PostHandler {
 
     private final PostRepository posts;
 
-    public PostRoutes(PostRepository posts) {
+    public PostHandler(PostRepository posts) {
         this.posts = posts;
     }
 
-    public RouterFunction<ServerResponse> routes() {
-        return route(GET("/posts"), this::all)
-            .andRoute(POST("/posts").and(contentType(APPLICATION_JSON)), this::create)
-            .andRoute(GET("/posts/{id}"), this::get);
-    }
-
-    private Mono<ServerResponse> all(ServerRequest req) {
+    public Mono<ServerResponse> all(ServerRequest req) {
         return ServerResponse.ok().body(this.posts.findAll(), Post.class);
     }
 
-    private Mono<ServerResponse> create(ServerRequest req) {
+    public Mono<ServerResponse> create(ServerRequest req) {
         return req.body(BodyExtractors.toMono(Post.class))
             .flatMap(post -> this.posts.save(post))
             .flatMap(p -> ServerResponse.created(URI.create("/posts/" + p.getId())).build());
     }
 
-    private Mono<ServerResponse> get(ServerRequest req) {
+    public Mono<ServerResponse> get(ServerRequest req) {
         return this.posts.findById(Long.valueOf(req.pathVariable("id")))
             .flatMap(post -> ServerResponse.ok().body(Mono.just(post), Post.class))
             .switchIfEmpty(ServerResponse.notFound().build());
