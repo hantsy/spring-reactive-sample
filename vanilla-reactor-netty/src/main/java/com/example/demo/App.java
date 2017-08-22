@@ -13,7 +13,7 @@ public class App {
     private static final int DEFAULT_PORT = 8080;
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = new AnnotationConfigApplicationContext(WebConfig.class, SecurityConfig.class);  // (1)
+        ApplicationContext context = new AnnotationConfigApplicationContext(WebConfig.class);  // (1)
 
         HttpHandler handler = DispatcherHandler.toHttpHandler(context);  // (2)
         

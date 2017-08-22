@@ -22,9 +22,6 @@ public class PostsWebSocketHandler implements WebSocketHandler {
 
     private PostRepository posts;
 
-    public PostsWebSocketHandler() {
-    }
-
     public PostsWebSocketHandler(PostRepository posts) {
         this.posts = posts;
     }
