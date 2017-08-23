@@ -35,18 +35,18 @@ public class DemoApplication {
 //    }
     @Bean
     public RouterFunction<ServerResponse> routes(PostHandler postController, UserHandler userHandler) {
-          RouterFunction<ServerResponse> postsRoutes = route(GET("/posts"), postController::all)
-            .andRoute(POST("/posts"), postController::create)
-            .andRoute(GET("/posts/{id}"), postController::get)
-            .andRoute(PUT("/posts/{id}"), postController::update)
-            .andRoute(DELETE("/posts/{id}"), postController::delete);
-          
-          RouterFunction<ServerResponse> userRoutes = route(GET("/user"), userHandler::current);
-          
-          return nest(path("/posts"), postsRoutes)
-              .andNest(path("/user"), userRoutes);
+        RouterFunction<ServerResponse> postsRoutes = route(GET("/"), postController::all)
+            .andRoute(POST("/"), postController::create)
+            .andRoute(GET("/{id}"), postController::get)
+            .andRoute(PUT("/{id}"), postController::update)
+            .andRoute(DELETE("/{id}"), postController::delete);
+
+        RouterFunction<ServerResponse> userRoutes = route(GET("/"), userHandler::current);
+
+        return nest(path("/posts"), postsRoutes)
+            .andNest(path("/user"), userRoutes);
     }
-    
+
     @Bean
     public AuditorAware<Username> auditorAware() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

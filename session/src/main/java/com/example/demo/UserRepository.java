@@ -5,10 +5,10 @@
  */
 package com.example.demo;
 
-import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.select;
 import org.springframework.data.cassandra.core.ReactiveCassandraTemplate;
+import static org.springframework.data.cassandra.core.query.Criteria.where;
 import org.springframework.data.cassandra.core.query.Query;
+import static org.springframework.data.cassandra.core.query.Query.query;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsRepository;
 import org.springframework.stereotype.Component;
@@ -31,9 +31,11 @@ public class UserRepository implements UserDetailsRepository {
     public Mono<UserDetails> findByUsername(String username) {
         return this.template
             .selectOne(
-                select()
-                    .from("users")
-                    .where(eq("username", username)),
+                query(where("username").is(username))
+//                select()
+//                    .from("users")
+//                    .where(eq("username", username)),
+                ,
                 User.class
             )
             .map(user -> org.springframework.security.core.userdetails.User.withUserDetails(user))
