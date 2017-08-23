@@ -43,8 +43,8 @@ class SecurityConfig {
 
 //    @Bean
 //    public MapUserDetailsRepository userDetailsRepository() {
-//        UserDetails rob = User.withUsername("test").password("test123").roles("USER").build();
-//        UserDetails admin = User.withUsername("admin").password("admin123").roles("USER", "ADMIN").build();
+//        UserDetails rob = User.withUsername("test").password("password").roles("USER").build();
+//        UserDetails admin = User.withUsername("admin").password("password").roles("USER", "ADMIN").build();
 //        return new MapUserDetailsRepository(rob, admin);
 //    }
 

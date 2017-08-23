@@ -49,8 +49,8 @@ class DataInitializr implements CommandLineRunner {
             .thenMany(
                 Flux
                     .just( 
-                        User.builder().username("user").password("test123").roles(Arrays.asList("USER")).build(), 
-                        User.builder().username("admin").password("test123").roles(Arrays.asList("USER, ADMIN")).build()
+                        User.builder().username("user").password("password").roles(Arrays.asList("USER")).build(), 
+                        User.builder().username("admin").password("password").roles(Arrays.asList("USER, ADMIN")).build()
                     )
                     .flatMap((user) -> this.users.save(user))
             ) 
