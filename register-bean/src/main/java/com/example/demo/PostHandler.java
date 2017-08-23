@@ -6,13 +6,7 @@
 package com.example.demo;
 
 import java.net.URI;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
 import org.springframework.web.reactive.function.BodyExtractors;
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET;
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST;
-import static org.springframework.web.reactive.function.server.RequestPredicates.contentType;
-import org.springframework.web.reactive.function.server.RouterFunction;
-import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;

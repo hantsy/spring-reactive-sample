@@ -79,12 +79,12 @@ class SecurityConfig {
             .map(granted -> new AuthorizationDecision(granted));
     }
 
-    @Bean
-    public MapUserDetailsRepository userDetailsRepository() {
-        UserDetails rob = User.withUsername("test").password("password").roles("USER").build();
-        UserDetails admin = User.withUsername("admin").password("password").roles("USER", "ADMIN").build();
-        return new MapUserDetailsRepository(rob, admin);
-    }
+	@Bean
+	public MapUserDetailsRepository userDetailsRepository() {
+		UserDetails user = User.withUsername("user").password("password").roles("USER").build();
+		UserDetails admin = User.withUsername("admin").password("password").roles("USER","ADMIN").build();
+		return new MapUserDetailsRepository(user, admin);
+	}
 
 }
 

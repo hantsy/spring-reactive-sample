@@ -77,37 +77,35 @@ class SecurityConfiguration {
                 .build();
     }
 }*/
-
 @EnableWebFluxSecurity
 class SecurityConfig {
 
-	@Bean
-	SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
-		return http
-			.authorizeExchange()
-				.pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
-				//.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-				.anyExchange().authenticated()
-				.and()
-			.build();
-	}
+    @Bean
+    SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+        return http
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+            .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
+            //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+            .anyExchange().authenticated()
+            .and()
+            .build();
+    }
 
-	private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
-		return authentication
-			.map( a -> context.getVariables().get("user").equals(a.getName()))
-			.map( granted -> new AuthorizationDecision(granted));
-	}
+    private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
+        return authentication
+            .map(a -> context.getVariables().get("user").equals(a.getName()))
+            .map(granted -> new AuthorizationDecision(granted));
+    }
 
-	@Bean
-	public MapUserDetailsRepository userDetailsRepository() {
-		UserDetails rob = User.withUsername("test").password("password").roles("USER").build();
-		UserDetails admin = User.withUsername("admin").password("password").roles("USER","ADMIN").build();
-		return new MapUserDetailsRepository(rob, admin);
-	}
+    @Bean
+    public MapUserDetailsRepository userDetailsRepository() {
+        UserDetails user = User.withUsername("user").password("password").roles("USER").build();
+        UserDetails admin = User.withUsername("admin").password("password").roles("USER", "ADMIN").build();
+        return new MapUserDetailsRepository(user, admin);
+    }
 
 }
-
 
 @Component
 @Slf4j

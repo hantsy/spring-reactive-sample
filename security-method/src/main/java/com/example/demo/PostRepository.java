@@ -7,6 +7,7 @@ package com.example.demo;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -20,47 +21,47 @@ import reactor.core.publisher.Mono;
 @Component
 class PostRepository {
 
-    private static final Map<Long, Post> DATA = new HashMap<>();
-    private static Long ID_COUNTER = 1L;
+    private Map<Long, Post> data = new HashMap<>();
+    private AtomicLong nextIdGenerator = new AtomicLong(1L);
 
-    static {
+    public PostRepository() {
         Stream.of("post one", "post two").forEach(title -> {
-            Long id = PostRepository.nextId();
-            DATA.put(id, Post.builder().id(id).title(title).content("content of " + title).build());
+            Long id = this.nextId();
+            data.put(id, Post.builder().id(id).title(title).content("content of " + title).build());
         });
     }
 
-    private static Long nextId() {
-        return ID_COUNTER++;
+    private Long nextId() {
+        return nextIdGenerator.getAndIncrement();
     }
 
     Flux<Post> findAll() {
-        return Flux.fromIterable(DATA.values());
+        return Flux.fromIterable(data.values());
     }
 
     Mono<Post> findById(Long id) {
-        return Mono.just(DATA.get(id));
+        return Mono.just(data.get(id));
     }
 
     Mono<Post> save(Post post) {
         Long id = nextId();
         Post saved = Post.builder().id(id).title(post.getTitle()).content(post.getContent()).build();
-        DATA.put(id, saved);
+        data.put(id, saved);
         return Mono.just(saved);
     }
 
     Mono<Post> update(Long id, Post post) {
-        Post updated = DATA.get(id);
+        Post updated = data.get(id);
         updated.setTitle(post.getTitle());
         updated.setContent(post.getContent());
-        DATA.put(id, updated);
+        data.put(id, updated);
         return Mono.just(updated);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
     Mono<Post> delete(Long id) {
-        Post deleted = DATA.get(id);
-        DATA.remove(id);
+        Post deleted = data.get(id);
+        data.remove(id);
         return Mono.just(deleted);
     }
 

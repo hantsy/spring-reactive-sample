@@ -5,10 +5,10 @@
  */
 package com.example.demo;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Stream;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,26 +20,47 @@ import reactor.core.publisher.Mono;
 @Component
 class PostRepository {
 
-    private static final List<Post> DATA = new ArrayList<>();
+    private Map<Long, Post> data = new HashMap<>();
+    private AtomicLong nextIdGenerator = new AtomicLong(1L);
 
-    static {
-        DATA.add(Post.builder().id(1L).title("post one").content("content of post one").build());
-        DATA.add(Post.builder().id(2L).title("post two").content("content of post two").build());
+    public PostRepository() {
+        Stream.of("post one", "post two").forEach(title -> {
+            Long id = this.nextId();
+            data.put(id, Post.builder().id(id).title(title).content("content of " + title).build());
+        });
+    }
+
+    private Long nextId() {
+        return nextIdGenerator.getAndIncrement();
     }
 
     Flux<Post> findAll() {
-        return Flux.fromIterable(DATA);
+        return Flux.fromIterable(data.values());
     }
 
     Mono<Post> findById(Long id) {
-        return findAll().filter(p -> Objects.equals(p.getId(), id)).single();
+        return Mono.just(data.get(id));
     }
 
     Mono<Post> save(Post post) {
-        long id = DATA.size() + 1;
+        Long id = nextId();
         Post saved = Post.builder().id(id).title(post.getTitle()).content(post.getContent()).build();
-        DATA.add(saved);
+        data.put(id, saved);
         return Mono.just(saved);
+    }
+
+    Mono<Post> update(Long id, Post post) {
+        Post updated = data.get(id);
+        updated.setTitle(post.getTitle());
+        updated.setContent(post.getContent());
+        data.put(id, updated);
+        return Mono.just(updated);
+    }
+
+    Mono<Post> delete(Long id) {
+        Post deleted = data.get(id);
+        data.remove(id);
+        return Mono.just(deleted);
     }
 
 }
