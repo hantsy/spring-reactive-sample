@@ -5,7 +5,12 @@ services:
   cassandra:
     image: cassandra
     ports:
-    - 7000
+    # 7000: intra-node communication
+    # 7001: TLS intra-node communication
+    # 7199: JMX
+    # 9042: CQL
+    # 9160: thrift service
+    - "9042:9042"
     volumes:
     - cassandradata:/var/lib/cassandra
     
@@ -29,4 +34,4 @@ volumes:
 #    driver_opts:
 #      mountpoint: ./data  
   cassandradata: 
-        
+       

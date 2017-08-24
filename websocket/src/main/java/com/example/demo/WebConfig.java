@@ -15,6 +15,7 @@ import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.WebSocketHandler;
+import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
 
 /**
  *
@@ -38,5 +39,10 @@ class WebConfig {
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(map);
         return mapping;
+    }
+    
+    @Bean
+    WebSocketHandlerAdapter webSocketHandlerAdapter(){
+        return new WebSocketHandlerAdapter();
     }
 }

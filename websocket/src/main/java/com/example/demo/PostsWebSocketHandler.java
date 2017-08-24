@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
  */
 public class PostsWebSocketHandler implements WebSocketHandler {
 
-    private PostRepository posts;
+    private final PostRepository posts;
 
     public PostsWebSocketHandler(PostRepository posts) {
         this.posts = posts;
