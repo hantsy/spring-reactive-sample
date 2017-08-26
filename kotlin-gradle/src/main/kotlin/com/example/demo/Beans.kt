@@ -119,15 +119,15 @@ fun beans() = beans {
     bean {
         UserDetailsRepository { username -> it.ref<UserRepository>()
                 .findByUsername(username)
-                .map { it ->
+                .map { (_, username1, password, active, roles) ->
                     org.springframework.security.core.userdetails.User
-                            .withUsername(it.username)
-                            .password(it.password)
-                            .accountExpired(!it.active)
-                            .accountLocked(!it.active)
-                            .credentialsExpired(!it.active)
-                            .disabled(!it.active)
-                            .authorities(it.roles.map(::SimpleGrantedAuthority).toList())
+                            .withUsername(username1)
+                            .password(password)
+                            .accountExpired(!active)
+                            .accountLocked(!active)
+                            .credentialsExpired(!active)
+                            .disabled(!active)
+                            .authorities(roles.map(::SimpleGrantedAuthority).toList())
                             .build()
                 }
                 .cast(UserDetails::class.java)
