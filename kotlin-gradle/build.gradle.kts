@@ -1,27 +1,19 @@
 import io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
+
 
 plugins {
     kotlin("jvm")
     application
-    id("com.github.johnrengelman.plugin-shadow") version "2.0.0"
 }
-
-application {
-    mainClassName = "com.example.demo.ApplicationKt"
-}
-
-val kotlinVersion = "1.1.4"
-val springBootVersion = "2.0.0.M3"
 
 buildscript {
-//    ext {
-//        kotlinVersion("1.1.4")
-//        springBootVersion("2.0.0.M3")
-//    }
+    extra["kotlinVersion"] = "1.1.4"
+    extra["springBootVersion"] = "2.0.0.M3"
 
-    val kotlinVersion = "1.1.4"
-    val springBootVersion = "2.0.0.M3"
+    val kotlinVersion: String by extra
+    //val springBootVersion: String by extra
 
     repositories {
         mavenCentral()
@@ -32,27 +24,50 @@ buildscript {
     }
     dependencies {
         classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+       // classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
-        //classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.0-SNAPSHOT")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion")
+        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC3")
     }
 }
 
+
 apply {
     //plugin("kotlin")
+    //plugin("application")
     //plugin("kotlin-spring")
     //plugin("eclipse")
     //plugin("org.springframework.boot")
+    plugin("kotlin-noarg")
     plugin("io.spring.dependency-management")
+    //plugin("com.github.johnrengelman.plugin-shadow") version "2.0.0"
     //plugin("org.junit.platform.gradle.plugin")
 }
+
+application {
+    mainClassName = "com.example.demo.ApplicationKt"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+version = "1.0.0-SNAPSHOT"
+
+val kotlinVersion: String by extra
+val springBootVersion: String by extra
 
 // https://spring.io/blog/2016/12/16/dependency-management-plugin-1-0-0-rc1
 configure<DependencyManagementExtension> {
     imports {
         mavenBom("org.springframework.boot:spring-boot-parent:$springBootVersion")
     }
+}
+
+configure<NoArgExtension> {
+    annotation("org.springframework.data.mongodb.core.mapping.Document")
 }
 
 tasks {

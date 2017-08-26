@@ -22,8 +22,11 @@ import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UserDetailsRepositoryAuthenticationManager
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.HttpSecurity
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.MapUserDetailsRepository
 import org.springframework.security.core.userdetails.User
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UserDetailsRepository
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.WebFilterChainFilter
 import org.springframework.security.web.server.context.WebSessionSecurityContextRepository
@@ -32,6 +35,7 @@ import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebHandler
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 fun beans() = beans {
 
@@ -72,7 +76,7 @@ fun beans() = beans {
 //    }
 
     bean {
-        DataInitializr(it.ref())
+        DataInitializr(it.ref(), it.ref())
     }
 
     bean {
@@ -113,9 +117,28 @@ fun beans() = beans {
     }
 
     bean {
-        val user = User.withUsername("user").password("test123").roles("USER").build()
-        val admin = User.withUsername("admin").password("test123").roles("USER", "ADMIN").build()
-        MapUserDetailsRepository(user, admin)
+        UserDetailsRepository { username -> it.ref<UserRepository>()
+                .findByUsername(username)
+                .map { it ->
+                    org.springframework.security.core.userdetails.User
+                            .withUsername(it.username)
+                            .password(it.password)
+                            .accountExpired(!it.active)
+                            .accountLocked(!it.active)
+                            .credentialsExpired(!it.active)
+                            .disabled(!it.active)
+                            .authorities(it.roles.map(::SimpleGrantedAuthority).toList())
+                            .build()
+                }
+                .cast(UserDetails::class.java)
+        }
+    }
+
+    bean {
+//        val user = User.withUsername("user").password("test123").roles("USER").build()
+//        val admin = User.withUsername("admin").password("test123").roles("USER", "ADMIN").build()
+//        MapUserDetailsRepository(user, admin)
+        UserRepository(it.ref())
     }
 
     profile("foo") {
