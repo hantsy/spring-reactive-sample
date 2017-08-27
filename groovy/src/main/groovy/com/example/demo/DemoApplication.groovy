@@ -2,6 +2,7 @@ package com.example.demo
 
 import groovy.transform.Immutable
 import groovy.transform.ToString
+import groovy.transform.builder.Builder
 import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.SpringApplication
@@ -88,12 +89,12 @@ class SecurityConfig {
 }
 
 @Component
-class DataInitializr implements CommandLineRunner {
-    def log = LoggerFactory.getLogger(DataInitializr)
+class DataInitializer implements CommandLineRunner {
+    def log = LoggerFactory.getLogger(DataInitializer)
 
     private final PostRepository posts
 
-    DataInitializr(PostRepository posts) {
+    DataInitializer(PostRepository posts) {
         this.posts = posts
     }
 
@@ -104,7 +105,7 @@ class DataInitializr implements CommandLineRunner {
                 .deleteAll()
                 .thenMany(
                 Flux.just("Post one", "Post two")
-                        .flatMap { it -> this.posts.save(new Post(title: it, content: "content of " + it)) }
+                        .flatMap { it -> this.posts.save(Post.builder().title(it).content("content of " + it).build()) }
 
 
         )
@@ -173,6 +174,7 @@ interface PostRepository extends ReactiveMongoRepository<Post, String> {
 }
 
 @Document
+@Builder
 class Post {
 
     @Id
