@@ -17,11 +17,11 @@ import reactor.core.publisher.Flux;
  */
 @Component
 @Slf4j
-class DataInitializr {
+class DataInitializer {
 
     private final PostRepository posts;
 
-    public DataInitializr(PostRepository posts) {
+    public DataInitializer(PostRepository posts) {
         this.posts = posts;
     }
 

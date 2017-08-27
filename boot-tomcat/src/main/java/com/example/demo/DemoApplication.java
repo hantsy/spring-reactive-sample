@@ -111,11 +111,11 @@ class SecurityConfig {
 
 @Component
 @Slf4j
-class DataInitializr implements CommandLineRunner {
+class DataInitializer implements CommandLineRunner {
 
     private final PostRepository posts;
 
-    public DataInitializr(PostRepository posts) {
+    public DataInitializer(PostRepository posts) {
         this.posts = posts;
     }
 

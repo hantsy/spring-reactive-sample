@@ -26,13 +26,13 @@ import reactor.core.publisher.Flux;
  */
 @Component
 @Slf4j
-class DataInitializr {
+class DataInitializer {
 
     private final ReactiveRedisConnectionFactory factory;
     private final PostRepository posts;
     private final RedisSerializer<String> serializer = new StringRedisSerializer();
 
-    public DataInitializr(ReactiveRedisConnectionFactory factory, PostRepository posts) {
+    public DataInitializer(ReactiveRedisConnectionFactory factory, PostRepository posts) {
         this.factory = factory;
         this.posts = posts;
     }

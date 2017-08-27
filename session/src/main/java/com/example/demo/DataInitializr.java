@@ -17,12 +17,12 @@ import reactor.core.publisher.Flux;
  */
 @Component
 @Slf4j
-class DataInitializr implements CommandLineRunner {
+class DataInitializer implements CommandLineRunner {
 
     private final PostRepository posts;
     private final UserRepository users;
 
-    public DataInitializr(PostRepository posts, UserRepository users) {
+    public DataInitializer(PostRepository posts, UserRepository users) {
         this.posts = posts;
         this.users= users;
     }
