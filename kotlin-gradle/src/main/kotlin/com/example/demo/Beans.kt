@@ -119,9 +119,9 @@ fun beans() = beans {
     bean {
         UserDetailsRepository { username -> it.ref<UserRepository>()
                 .findByUsername(username)
-                .map { (_, username1, password, active, roles) ->
+                .map { (_, username, password, active, roles) ->
                     org.springframework.security.core.userdetails.User
-                            .withUsername(username1)
+                            .withUsername(username)
                             .password(password)
                             .accountExpired(!active)
                             .accountLocked(!active)

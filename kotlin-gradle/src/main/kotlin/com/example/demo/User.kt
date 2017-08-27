@@ -4,8 +4,8 @@ import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.AuthorityUtils
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+
 
 @Document
 data class User(
@@ -15,36 +15,31 @@ data class User(
         var active: Boolean = true,
         var roles: List<String> = ArrayList()
 )
-//    : UserDetails {
+
+//@Document
+//data class User(
+//        @Id var id: String? = null,
+//        private var username: String? = null,
+//        private var password: String? = null,
+//        var active: Boolean = true,
+//        var roles: List<String> = ArrayList()
+//) : UserDetails {
 //
-//    val username: String override fun get() = username
+//    override fun getUsername() = username
 //
-//    override override fun getUsername(): String {
-//        return account;
-//    }
+//    override fun getPassword() = password
 //
-//    override fun getPassword(): String {
-//        return pwd
-//    }
+//    override fun isAccountNonExpired() = active
+//
+//    override fun isAccountNonLocked()= active
+//
+//    override fun isCredentialsNonExpired()= active
+//
+//    override fun isEnabled()= active
 //
 //    override fun getAuthorities(): Collection<out GrantedAuthority> {
-//        return roles.map(::SimpleGrantedAuthority).toList()
+//        // return roles.map(::SimpleGrantedAuthority).toList()
+//        return AuthorityUtils.createAuthorityList(* roles.toTypedArray())
 //    }
 //
-//    override fun isAccountNonExpired(): Boolean {
-//        return active;
-//    }
-//
-//
-//    override fun isAccountNonLocked(): Boolean {
-//        return active
-//    }
-//
-//    override fun isCredentialsNonExpired(): Boolean {
-//        return active
-//    }
-//
-//    override fun isEnabled(): Boolean {
-//        return active
-//    }
 //}

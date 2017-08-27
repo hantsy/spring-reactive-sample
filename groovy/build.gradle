@@ -1,0 +1,51 @@
+buildscript {
+	ext {
+		springBootVersion = '2.0.0.M3'
+	}
+	repositories {
+		mavenCentral()
+		maven { url "https://repo.spring.io/snapshot" }
+		maven { url "https://repo.spring.io/milestone" }
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+	}
+}
+
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+	maven { url "https://repo.spring.io/snapshot" }
+	maven { url "https://repo.spring.io/milestone" }
+}
+
+
+dependencies {
+	// data mongo
+	compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+
+	// security
+	compile('org.springframework.boot:spring-boot-starter-security')
+	compile('org.springframework.security:spring-security-webflux')
+
+	// webflux
+	compile('org.springframework.boot:spring-boot-starter-webflux')
+
+	// groovy
+	compile('org.codehaus.groovy:groovy')
+
+	// lombok
+	// compileOnly ('org.projectlombok:lombok')
+
+	//test
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('io.projectreactor:reactor-test')
+	testCompile('org.springframework.security:spring-security-test')
+}
