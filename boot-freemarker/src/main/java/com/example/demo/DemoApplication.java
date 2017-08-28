@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -27,6 +28,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,35 +51,6 @@ public class DemoApplication {
 
 }
 
-
-/*
-@EnableWebFluxSecurity
-class SecurityConfiguration {
-
-    @Bean
-    UserDetailsRepository userDetailsRepository() {
-        return new MapUserDetailsRepository(user("rob").build(), user("josh").roles("USER","ADMIN").build());
-    }
-
-    private User.UserBuilder user(String username) {
-        return User.withUsername(username).password("password").roles("USER");
-    }
-
-    @Bean
-    SecurityWebFilterChain springSecurity(HttpSecurity http) {
-        return http
-                .authorizeExchange()
-                    .pathMatchers("/users/me").authenticated()
-                    .pathMatchers("/users/{username}").access((auth,context) ->
-                        auth
-                                .map( a-> a.getName().equals(context.getVariables().get("username")))
-                                .map(AuthorizationDecision::new)
-                    )
-                    .anyExchange().hasRole("ADMIN")
-                    .and()
-                .build();
-    }
-}*/
 @EnableWebFluxSecurity
 class SecurityConfig {
 
@@ -100,8 +74,8 @@ class SecurityConfig {
     }
 
     @Bean
-    public MapUserDetailsRepository userDetailsRepository() {
-        UserDetails user = User.withUsername("user").password("password").roles("USER").build();
+    public MapUserDetailsRepository userDetailsService() {
+        UserDetails user = User.withUsername("test").password("password").roles("USER").build();
         UserDetails admin = User.withUsername("admin").password("password").roles("USER", "ADMIN").build();
         return new MapUserDetailsRepository(user, admin);
     }
@@ -124,8 +98,7 @@ class DataInitializer implements CommandLineRunner {
         this.posts
                 .deleteAll()
                 .thenMany(
-                        Flux
-                                .just("Post one", "Post two")
+                        Flux.just("Post one", "Post two")
                                 .flatMap(
                                         title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
                                 )
@@ -139,6 +112,27 @@ class DataInitializer implements CommandLineRunner {
 
     }
 
+}
+
+@Controller
+class HomeController{
+    private final PostRepository posts;
+
+    public HomeController(PostRepository posts) {
+        this.posts = posts;
+    }
+    
+    @GetMapping("/home")
+    public String home(Model model){
+        model.addAttribute("posts", this.posts.findAll().collectList().block(Duration.ofSeconds(100)));
+        return "home";
+    }
+    
+    @GetMapping("/hello")
+    public String hello(Model model){
+        model.addAttribute("hello", "Hi, Freemarker");
+        return "hell";
+    }
 }
 
 @RestController()
@@ -169,12 +163,14 @@ class PostController {
     @PutMapping("/{id}")
     public Mono<Post> update(@PathVariable("id") String id, @RequestBody Post post) {
         return this.posts.findById(id)
-                .map(p -> {
-                    p.setTitle(post.getTitle());
-                    p.setContent(post.getContent());
+                .map(
+                        p -> {
+                            p.setTitle(post.getTitle());
+                            p.setContent(post.getContent());
 
-                    return p;
-                })
+                            return p;
+                        }
+                )
                 .flatMap(p -> this.posts.save(p));
     }
 
