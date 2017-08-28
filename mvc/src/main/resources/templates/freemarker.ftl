@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>Simple Blog Posts</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
         <h1>All posts</h1>
@@ -17,13 +17,17 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <#list posts as e>        
-                    <tr>
-                        <td>${e.id?html}</td>
-                        <td>${e.title?html}</td>
-                        <td>${e.content?html}</td>
-                    </tr>
-                    </#list>
+
+                        <#list posts as post>        
+                        <tr>
+                            <td>${post.id}</td>
+                            <td>${post.title}</td>
+                            <td>${post.content}</td>
+                        </tr>
+                        <#else>
+                        nothing
+                        </#list>
+
                 </tbody>
             </table>  
 

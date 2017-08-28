@@ -6,6 +6,8 @@
 package com.example.demo;
 
 import java.time.Duration;
+import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import reactor.core.publisher.Flux;
  * @author hantsy
  */
 @Controller
+@Slf4j
 public class HomeController {
 
     private final PostRepository posts;
@@ -36,8 +39,10 @@ public class HomeController {
     @GetMapping("/freemarker")
     public String freemarker(final Model model) {
 
-        Flux<Post> postList = this.posts.findAll();
-        model.addAttribute("posts", postList.collectList().block(Duration.ofSeconds(10)));
+        Flux<Post> fluxPost = this.posts.findAll();
+        List<Post> postList = fluxPost.collectList().block(Duration.ofDays(1));
+        //log.info(" post list chuncked size::" + postList.size());
+        model.addAttribute("posts", postList);
         return "freemarker";
     }
 }
