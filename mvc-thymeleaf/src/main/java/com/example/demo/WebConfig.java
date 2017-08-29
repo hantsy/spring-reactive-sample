@@ -37,15 +37,6 @@ class WebConfig implements ApplicationContextAware, WebFluxConfigurer {
     }
 
     @Bean
-    public FreeMarkerConfigurer freeMarkerConfig() {
-        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
-        configurer.setPreferFileSystemAccess(false);
-        configurer.setTemplateLoaderPath("classpath:/templates/");
-        configurer.setResourceLoader(this.ctx);
-        return configurer;
-    }
-
-    @Bean
     public SpringResourceTemplateResolver thymeleafTemplateResolver() {
 
         final SpringResourceTemplateResolver resolver = new SpringResourceTemplateResolver();
@@ -74,8 +65,8 @@ class WebConfig implements ApplicationContextAware, WebFluxConfigurer {
     public ThymeleafReactiveViewResolver thymeleafChunkedAndDataDrivenViewResolver() {
         final ThymeleafReactiveViewResolver viewResolver = new ThymeleafReactiveViewResolver();
         viewResolver.setTemplateEngine(thymeleafTemplateEngine());
-        viewResolver.setOrder(1);
-        viewResolver.setViewNames(new String[]{"home"});
+//        viewResolver.setOrder(1);
+//        viewResolver.setViewNames(new String[]{"home"});
         viewResolver.setResponseMaxChunkSizeBytes(8192); // OUTPUT BUFFER size limit
         return viewResolver;
     }
@@ -83,7 +74,6 @@ class WebConfig implements ApplicationContextAware, WebFluxConfigurer {
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
         registry.viewResolver(thymeleafChunkedAndDataDrivenViewResolver());
-        registry.freeMarker();
     }
 
 }

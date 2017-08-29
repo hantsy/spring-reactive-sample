@@ -8,10 +8,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
@@ -38,6 +41,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.reactive.result.view.freemarker.FreeMarkerConfigurer;
+import org.springframework.web.reactive.result.view.freemarker.FreeMarkerViewResolver;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -47,6 +52,30 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
+    }
+
+}
+
+@Configuration
+class WebConfig {
+
+    @Autowired
+    ApplicationContext ctx;
+
+    @Bean
+    public FreeMarkerConfigurer freeMarkerConfig() {
+        FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
+        configurer.setPreferFileSystemAccess(false);
+        configurer.setTemplateLoaderPath("classpath:/templates/");
+        configurer.setResourceLoader(this.ctx);
+        return configurer;
+    }
+
+    @Bean
+    public FreeMarkerViewResolver freeMarkerViewResolver() {
+        final FreeMarkerViewResolver freeMarkerViewResolver = new FreeMarkerViewResolver("", ".ftl");
+        freeMarkerViewResolver.setOrder(1);
+        return freeMarkerViewResolver;
     }
 
 }
@@ -115,23 +144,24 @@ class DataInitializer implements CommandLineRunner {
 }
 
 @Controller
-class HomeController{
+class HomeController {
+
     private final PostRepository posts;
 
     public HomeController(PostRepository posts) {
         this.posts = posts;
     }
-    
+
     @GetMapping("/home")
-    public String home(Model model){
+    public String home(Model model) {
         model.addAttribute("posts", this.posts.findAll().collectList().block(Duration.ofSeconds(100)));
         return "home";
     }
-    
+
     @GetMapping("/hello")
-    public String hello(Model model){
+    public String hello(Model model) {
         model.addAttribute("hello", "Hi, Freemarker");
-        return "hell";
+        return "hello";
     }
 }
 

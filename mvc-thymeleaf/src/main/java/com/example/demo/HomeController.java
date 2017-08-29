@@ -36,13 +36,4 @@ public class HomeController {
         return "home";
     }
 
-    @GetMapping("/freemarker")
-    public String freemarker(final Model model) {
-
-        Flux<Post> fluxPost = this.posts.findAll();
-        List<Post> postList = fluxPost.collectList().block(Duration.ofDays(1));
-        //log.info(" post list chuncked size::" + postList.size());
-        model.addAttribute("posts", postList);
-        return "freemarker";
-    }
 }
