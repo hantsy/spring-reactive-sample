@@ -1,44 +1,49 @@
-# Spring Reactive Sample
+# Reactive programming with Spring 5
 
-[toc]
+[TOC]
 
-The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). From the offcial website of [Reactive Streams](http://www.reactive-streams.org/):
+From the official website of [Reactive Streams](http://www.reactive-streams.org/):
 
 >Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.This encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
 
 Currently, the JVM specification is completed, it includes a Java API(four simple interface), a textual Specification, a TCK and implementation examples. Check [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams) for more details.
 
-Reactor and RxJava2 implement this specification, and it is also adopted in Java 9 by the new Flow API. 
+Reactor and RxJava2 have implemented this specification, and the upcoming Java 9 also adopted in its new Flow API. 
 
-For Spring developers, it brings a complete new programming model. In this post, we will try to cover all reactive features in the Spring projects.
+The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). For Spring developers, it brings a complete new programming model. In this post, we will try to cover all reactive features in the Spring projects.
 
 * Spring core framework added a new `spring-webflux` module, and provided built-in reactive programming support via Reactor and RxJava. 
 * Spring Security 5 also added reactive feature. 
 * In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. Unluckily due to the original JDBC is desginated for blocking access, Spring Data JPA can not benefit from this feature. 
 * Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included in the latest 2.0.0.M3. 
 
-**NOTE: At the moment I am writing this post, some projects are still under active development, I will update the content and the sample codes according to the final release version. Please start [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to track it.**
- 
+**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and sample codes against the final release version when it is released. Please start [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to track and get update for it.**
+
 ## Create a Webflux application
 
 An example exceeds thousands of words. Let's begin to write some codes and enjoy the reactive programming brought by Spring 5.
 
-Generally, I would like reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application. 
+As an example, I will reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application. 
 
-In the following steps we will start with creating RESTful APIs for Post. 
+In the following steps we will start with creating RESTful APIs for `Post`. 
 
 
 ### Prerequisites
 
-Make sure you have installed:
+Before writing some real codes, make sure you have installed the essential software:
 
-* Java 8, https://java.oracle.com
+* Oracle Java 8, https://java.oracle.com
 * Apache Maven, https://maven.apache.org
-* Your favorite IDE, including NetBeans IDE, Eclipse(or Eclipse based IDE, such as Spring ToolSuite is recommended) or Intellij IDEA.
+* Gradle, [http://www.gradle.org](http://www.gradle.org)
+* Your favorite IDE, including :
+  * NetBeans IDE
+  * Eclipse IDE (or base on  Eclipse, eg. Spring ToolSuite is highly recommended) 
+  * Intellij IDEA
+  * etc
 
-**NOTE**: Do not forget to add your Java and Maven command into your system environment variable **PATH** .
+**NOTE**: Do not forget to add path which includes `java` and `mvn` command into your system environment variable **PATH** .
 
-### Prepare project skeleton
+### Generate project skeleton
 
 Execute the following command to create a general web application from Maven archetype. 
 
@@ -50,13 +55,13 @@ $ mvn archetype:generate -DgroupId=com.example
 ```
 You can import the generated codes into your IDEs for further development.
 
-Open *pom.xml* in your editor, add some modifications:
+Open *pom.xml* in your IDE editor, add some modifications:
 
 1. Add `spring-boot-starter-parent` as parent POM to manage the versions of all required dependencies for this project.
-2. Add `spring-webflux`, `jackson-databind`, `reactor-core` as dependencies for Spring Web Reactive support
+2. Add `spring-webflux`, `jackson-databind`, `reactor-core` as dependencies to get Spring Web Reactive support
 3. Add `logback` as logging framework, `jcl-over-slf4j` is a bridge for Spring jcl and slf4j.
-4. Use Lombok to erase the tedious getters, setters, etc for a simple POJO class, check the [Lombok project](http://projectlombok.org) to get more information if you have Lombok trouble in your IDEs.
-5. You have to add spring milestone repositories in `repositories` and `pluginRepositories`, because at the moment, they are still in active development, and not availble in the official Maven public repository.
+4. Add Lombok to erase the tedious getters, setters, etc for a simple POJO class, check the [Lombok project](http://projectlombok.org) to get more information about Lombok, follow the official installation guide to get Lombok support in your IDE.
+5. You have to add spring milestone repositories in `repositories` and `pluginRepositories`, because at the moment, they are still in active development, and not available in the official Maven public repository.
 
 The final pom.xml looks like:
 
@@ -181,7 +186,7 @@ The final pom.xml looks like:
 
 The project skeleton is ready, now let's add some codes to play reactive programming.
 
-Create a new class named `Post`, it includes three fields: id, title, content.
+Create a new class named `Post`, it includes three fields: `id`, `title`, `content`.
 
 ```java
 @Data
@@ -198,9 +203,9 @@ class Post {
 }
 ```
 
-`@Data`, `@ToString`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor` are from the Lombok project.
+In the above codes, `@Data`, `@ToString`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor` are from the Lombok project.
 
-When you compile `Post`, it will utilize Java compiler built-in Annotation Processing tooling to add extra facilities into the final compiled classes, including:
+When you compile `Post`, it will utilize Java compiler built-in  *Annotation Processing Tooling* feature to add extra facilities into the final compiled classes, including:
 
 1. Getters and setters of the three fields, and overrides `equals` and `hashCode` methods.
 2. Overrides `toString` method.
@@ -245,18 +250,18 @@ class PostRepository {
 }
 ```
 
-Currently we do not connect to any database, use a `Map` backed data store instead. When we talk about the Spring Data reactive feature later, we will replace it with a real Spring Data reactive implementation.
+Currently we have not connect to any database, here we use a `Map` backed data store instead. When we come to discuss the reactive features provided by Spring Data projects, we will replace it with a real Spring Data reactive implementation.
 
 If you have used Spring Data before, you will find these APIs are every similiar with `Repository` interface provided in Spring Data. 
 
-The main difference is in the current Repository class all methods return a `Flux` or `Mono` instead.
+The main difference is in the current Repository class all methods return a `Flux` or `Mono`.
 
 `Flux` and `Mono` are from Reactor, which powers the reactive support in Spring 5 by default. 
 
 * `Flux` means it could return lots of results in the stream. 
 * `Mono` means it could return 0 to 1 result. 
 
-Create a controller class named `PostController` to expose RESTful PAIs for `Post`.
+Create a controller class named `PostController` to expose RESTful PAIs for `Post` entity.
 
 ```java
 @RestController
@@ -287,7 +292,7 @@ class PostController {
 }
 ```
 
-Create a `@configuration` class, add an `@EnableWebFlux` annotation to activiate webflux in this application.
+Create a `@Configuration` class, add an `@EnableWebFlux` annotation to activiate webflux support in this application.
 
 ```java
 @Configuration
@@ -296,7 +301,7 @@ Create a `@configuration` class, add an `@EnableWebFlux` annotation to activiate
 class WebConfig {
     
 }
-``` 
+```
 
 Now we almost have done the programming work, let's try to bootstrap the application.
 
@@ -391,12 +396,12 @@ When it is done, switch to the *target* folder, besides the general jar, you wil
 ```
 spring-reactive-sample-vanilla-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 spring-reactive-sample-vanilla-0.0.1-SNAPSHOT.jar
-```  
+```
 
 Run the following command to run this application. 
 
 ```
-java -jar target/XXXX-jar-with-dependencies.jar 
+java -jar target/spring-reactive-sample-vanilla-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 ```
 
 When it is started, try to fetch posts.
@@ -406,12 +411,45 @@ When it is started, try to fetch posts.
 [{"id":1,"title":"First Post","content":"content of First Post"},{"id":2,"title":"Second Post","content":"content of Second Post"}]
 ```
 
-Alternatively, you can run the application in Reactor Netty, or JBoss Undertow.
+#### Jetty
 
+To start a Jetty server, replace the bootstrap codes with the following:
+
+```java
+ServletHttpHandlerAdapter servlet = new ServletHttpHandlerAdapter(handler);
+
+Server server = new Server(DEFAULT_PORT);
+
+ServletContextHandler contextHandler = new ServletContextHandler();
+contextHandler.setErrorHandler(null);
+contextHandler.setContextPath("");
+contextHandler.addServlet(new ServletHolder(servlet), "/");
+
+server.setHandler(contextHandler);
+server.start();
+server.join();
+```
+
+Replace `tomcat-embed-core` with the following jetty related dependencies.
+
+```xml
+<dependency>
+	<groupId>org.eclipse.jetty</groupId>
+	<artifactId>jetty-server</artifactId>
+</dependency>
+
+<dependency>
+	<groupId>org.eclipse.jetty</groupId>
+	<artifactId>jetty-servlet</artifactId>
+</dependency>
+```
+Similiarly, you can run the application directly in your IDEs.
+
+Alternatively, you can run the application in Reactor Netty, or JBoss Undertow.
 
 #### Reactor Netty
 
-For Reactor Netty, replace the above tomcat bootstraping codes with:
+For Reactor Netty, replace the above bootstraping codes with:
 
 ```java
 ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
@@ -429,7 +467,7 @@ And add `reactor-netty` in your project dependencies.
 
 #### Undertow
 
-For Undertow, replace the above tomcat bootstraping codes with:
+For Undertow, replace the bootstraping codes with:
 
 ```java
 UndertowHttpHandlerAdapter undertowAdapter = new UndertowHttpHandlerAdapter(handler);
@@ -465,10 +503,20 @@ public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInit
 }
 ```
 
-And change the project packaging from **jar** to **war** in pom.xml.
+Next change the project packaging from **jar** to **war** in pom.xml.
 
 ```xml
 <packaging>war</packaging>
+```
+
+And add `serlvet-api` to your project dependencies.
+
+```xml
+<dependency>
+	<groupId>javax.servlet</groupId>
+	<artifactId>javax.servlet-api</artifactId>
+	<scope>provided</scope>
+</dependency>
 ```
 
 Now you can run this application on a IDE managed Servlet 3.1 Container directly. 
@@ -502,7 +550,7 @@ Alternatively, if you want to run this application via `mvn` command in the deve
 		</configuration>
 	</configuration>
 </plugin>
-```			
+```
 
 Run the following command to package and deploy it into an embedded tomcat controlled by **cargo**.
 
@@ -539,10 +587,10 @@ And the `spring-boot-maven-plugin` is added in the initial pom.xml.
 
 Spring Boot starter `spring-boot-starter-webflux` will handle the `spring-webflux` related dependencies  and enable webflux support automatically. 
 
-Compare the former vanilla version,
+Compare to the former vanilla version,
 
 1. No need explicit `WebConfig`, Spring Boot configures it automatically.
-2. The former bootstraping class or `ApplicationInitializer` is no use now, the Spring Boot's `@SpringBootApplication` annotated class hands over the application bootstrap.
+2. The former bootstraping class or `ApplicationInitializer` is no use now, the Spring Boot built-in `@SpringBootApplication` annotated class hands over the application bootstrap.
 
 ```java
 @SpringBootApplication
@@ -562,24 +610,117 @@ Starts up application via:
 mvn spring-boot:run
 ```
 
-## Reactive Data Operations
+### Apache Tomcat
 
-The next generation of Spring Data will embrace Reactive Streamse, and new reactive supported `Repository` and `Template` are added in the Spring Data Commons. 
+If you want to use Apache Tomcat as target runtime environment, just exclude `spring-boot-starter-reactor-netty` from `spring-boot-starter-webflux`, and add `spring-boot-starter-tomcat` into project dependencies.
 
-Currently, three subprojects(Redis, MongoDB, Cassandra) have implemented these interfaces, and got Reactive programming at the first time.
-
-Here we use Spring Data MongoDB as an example, and convert the above `Map` based repsoitory to MongoDB driven repository.
-
-Based on the former Spring Boot sample, add `spring-boot-starter-data-mongodb-reactive` into the project dependencies.
-
-```
+```xml
 <dependency>
 	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+	<artifactId>spring-boot-starter-webflux</artifactId>
+	 <exclusions>
+		<exclusion>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+			<groupId>org.springframework.boot</groupId>
+		</exclusion>
+	</exclusions>
+</dependency>
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-tomcat</artifactId>
 </dependency>
 ```
 
-This reactive Spring Boot starter will enable reactive support for MongoDB in this project. 
+### Jetty 
+
+You can use Jetty to replace the default Reactor Netty.
+
+```xml
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-webflux</artifactId>
+	 <exclusions>
+		<exclusion>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+			<groupId>org.springframework.boot</groupId>
+		</exclusion>
+	</exclusions>
+</dependency>
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-jetty</artifactId>
+</dependency>
+```
+
+### Undertow
+
+Similiarly, you can use Undertow as target runtime.
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-webflux</artifactId>
+	<exclusions>
+		<exclusion>
+			<artifactId>spring-boot-starter-reactor-netty</artifactId>
+			<groupId>org.springframework.boot</groupId>
+		</exclusion>
+	</exclusions>
+</dependency>
+
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-undertow</artifactId>
+</dependency>
+```
+
+## Reactive Data Operations
+
+The next generation of Spring Data aslo adds Reactive Streams support.
+
+At the moment, Data Redis, Data MongoDB and Data Cassandra will be the first-class citizen to get basic reactive support.
+
+
+### Spring Data Mongo
+
+Spring Data Mongo provides reactive variants of `MongoTemplate` and `MongoRepsoitory`, aka `ReactiveMongoTemplate` and `ReactiveMongoRepository` which have reactive capablities.
+
+Add the following into project dependencies.
+
+```xml
+<dependency>
+	<groupId>org.springframework.data</groupId>
+	<artifactId>spring-data-mongodb</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.mongodb</groupId>
+	<artifactId>mongodb-driver-reactivestreams</artifactId>
+</dependency>
+```
+
+Create a `@Configuration` class to configure Mongo and enable Reactive support.
+
+```java
+@EnableReactiveMongoRepositories(basePackageClasses = {MongoConfig.class})
+public class MongoConfig extends AbstractReactiveMongoConfiguration {
+
+    @Value("${mongo.uri}")
+    String mongoUri;
+
+    @Override
+    public MongoClient mongoClient() {
+        return MongoClients.create(mongoUri);
+    }
+
+    @Override
+    protected String getDatabaseName() {
+        return "blog";
+    }
+
+}
+```
 
 Create a new `Post` MongoDB document class.
 
@@ -602,9 +743,9 @@ class Post {
 ```
 
 1. `@Document` declares it as a MongoDB document.
-2. `@Id` indicates it is the id of `Post` document.
+2. `@Id` indicates it is the identifier field of `Post` document.
 
-Delcares `PostRepository` interface to extend Sprign Data MongoDB specific `ReactiveMongoRepository`.
+Delcares a `PostRepository` interface to extend Sprign Data MongoDB specific `ReactiveMongoRepository`.
 
 ```java
 interface PostRepository extends ReactiveMongoRepository<Post, String> {
@@ -650,15 +791,32 @@ volumes:
   mongodata:  
 ```
 
-Execute `docker-compose up` to start a MongoDB instance in a Docker container.
+Execute the following command to start a Mongo instance in a Docker container.
 
-Now it is ready for starting up the application.
+```
+docker-compose up mongodb
+```
+
+When the Mongo service is started, it is ready for bootstraping the application.
 
 ```
 mvn spring-boot:run
 ```
 
-### Data Auditing Support
+#### Spring Boot
+
+If you are using Spring Boot, the configuration can be simplified. Just add `spring-boot-starter-data-mongodb-reactive` into the project dependencies.
+
+```
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+</dependency>
+```
+
+No need extra configuration class, Spring Boot will enable reactive support for MongoDB in this project. `ReactiveMongoTemplate` and `ReactiveMongoRepository` will be configured automatically.
+
+#### Data Auditing Support
 
 Spring Data Mongo supports data auditing as Spring Data JPA, it can set the current user and created/last modified timestamp to a field automatically.
 
@@ -674,9 +832,9 @@ In `Post` document, add a new field `createdDate`, annotated it with `@CreatedDa
 ```java
 @CreatedDate
 private LocalDateTime createdDate;
-```	
+```
 
-### Data initialition
+#### Data initialition
 
 Add some test datas into MongoDB when it starts up.
 
@@ -745,11 +903,189 @@ curl -v http://localhost:8080/posts
 
 As you see, the data is initialized and createdDate is inserted automatically.
 
-## Security for Webflux
- 
-Reflect to new webflux feature introduced in Spring 5, Spring Security 5 added new APIs to handle Reactive Web security.
+### Spring Data Redis
 
-Similar with Spring 5, Spring Security 5 added a new module named `spring-secuirty-webflux`.
+Spring Data Redis provides a reactive variant of `RedisConnectionFactory` aka `ReactiveRedisConnectionFactory` which return a `ReactiveConnection`.
+
+Add the following into your project dependencies.
+
+```xml
+<dependency>
+	<groupId>org.springframework.data</groupId>
+	<artifactId>spring-data-redis</artifactId>
+</dependency>
+<dependency>
+	<groupId>io.lettuce</groupId>
+	<artifactId>lettuce-core</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.apache.commons</groupId>
+	<artifactId>commons-pool2</artifactId>
+</dependency>    
+```
+
+**NOTE**: You have to use `lettuce` as redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
+
+Create a `@Configuration` class to configure Mongo and enable Reactive support for Redis.
+
+```java
+@EnableRedisRepositories
+public class RedisConfig {
+
+    @Autowired
+    RedisConnectionFactory factory;
+
+    @Bean
+    public LettuceConnectionFactory redisConnectionFactory() {
+        return new LettuceConnectionFactory();
+    }
+    
+    @Bean
+    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory){
+        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setConnectionFactory(connectionFactory);
+        return redisTemplate;
+    }
+    
+    @Bean
+    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory){
+        return new StringRedisTemplate(connectionFactory);
+    }
+
+    @PreDestroy
+    public void flushTestDb() {
+        factory.getConnection().flushDb();
+    }
+
+}
+```
+
+`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are also registered as beans. 
+
+**NOTE**: Spring Data Redis does not provides a variant for `RedisTemplate` and `Repository`.
+
+In your beans, you can inject a `ReactiveRedisConnectionFactory` and get a reactive connection.
+
+```java
+@Inject ReactiveRedisConnectionFactory factory;
+
+ReactiveRedisConnection conn = factory.getReactiveConnection();
+```
+
+`ReactiveConnection` provides some reactive methods for redis operations.
+
+For example, create a favorites list for posts.
+
+```java
+conn.setCommands()
+	.sAdd(
+		ByteBuffer.wrap("users:user:favorites".getBytes()),
+		this.posts.findAll()
+			.stream()
+			.map(p -> p.getId().getBytes())
+			.map(ByteBuffer::wrap)
+			.collect(Collectors.toList())
+	)
+	.log()
+	.subscribe(null, null, ()-> log.info("added favirates..."));
+```
+
+And show my favorites in the controller.
+
+```
+@RestController()
+@RequestMapping(value = "/favorites")
+class FavoriteController {
+
+    private final ReactiveRedisConnectionFactory factory;
+
+    public FavoriteController(ReactiveRedisConnectionFactory factory) {
+        this.factory = factory;
+    }
+
+    @GetMapping("")
+    public Mono<List<String>> all() {
+        return this.factory.getReactiveConnection()
+                .setCommands()
+                .sMembers(ByteBuffer.wrap("users:user:favorites".getBytes()))
+                .map(FavoriteController::toString)
+                .collectList();
+    }
+
+    private static String toString(ByteBuffer byteBuffer) {
+
+        byte[] bytes = new byte[byteBuffer.remaining()];
+        byteBuffer.get(bytes);
+        return new String(bytes);
+    }
+
+}
+```
+
+#### Spring Boot
+
+For Spring Boot applications, the configuration can be simplified. Just add `spring-boot-starter-data-redis-reactive` into the project dependencies.
+
+```
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+</dependency>
+```
+
+Spring boot provides auto-configuration for redis, and registers `ReactiveRedisConnectionFactory` for you automatically.
+
+#### Data Initialition
+
+Declare `Post` as a redis hash data, add `@RedisHash("posts")` to `Post` POJO.
+
+```java
+@Data
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@RedisHash("posts")
+class Post {
+    
+    @Id
+    private String id;
+    private String title;
+    private String content;
+    
+}
+```
+
+Let's have a look at the `PostRepository`.
+
+```java
+interface PostRepository extends KeyValueRepository<Post, String> {
+
+    @Override
+    public List<Post> findAll();
+}
+```
+
+`KeyValueRepository` is from `spring-data-keyvalue`, which is a generic Map based Repository implementation.
+
+```java
+private void initPosts() {
+	this.posts.deleteAll();
+	Stream.of("Post one", "Post two").forEach(
+		title -> this.posts.save(Post.builder().id(UUID.randomUUID().toString()).title(title).content("content of " + title).build())
+	);
+}
+```	
+
+### Spring Data Cassandra
+
+
+
+## Security for Webflux
+
+Reflect to new webflux feature introduced in Spring 5, Spring Security 5 added new APIs to handle Web Reactive security.
+
+Aligned with Spring 5, Spring Security 5 added a new module named `spring-secuirty-webflux`.
 
 Add it in the project dependencies aside with `spring-boot-starter-security`.
 
@@ -799,6 +1135,7 @@ class SecurityConfig {
 
 }
 ```
+
 1. Use `@EnableWebFluxSecurity` annotation to enable Security for `spring-webflux` based application.
 2. `SecurityWebFilterChain` bean is a must to configure the details of Spring Security. `HttpSecurity` is from `spring-secuirty-webflux`, similar with the general version, but handle `WebExhange` instead of Servlet based `WebRequest`.
 3. A new `UserDetailsRepository` interface is introduced which is aligned with Reactor APIs. By default, an in-memory `Map` based implementation `MapUserDetailsRepository` is provided, you can customsize yourself by implementing the `UserDetailsRepository` interface.
@@ -841,10 +1178,10 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 
 The server side rejects the client request, and sends back a 401 error(401 Unauthorized).
 
-Use the predefined **test:test123** credentials to get authenticated and send the post request again.
+Use the predefined **user:password** credentials to get authenticated and send the post request again.
 
 ```
-curl -v  -X POST http://localhost:8080/posts -u "test:test123" -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
+curl -v  -X POST http://localhost:8080/posts -u "user:password" -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
 Note: Unnecessary use of -X or --request, POST is already inferred.
 * timeout on name lookup is not supported
 *   Trying ::1...
@@ -893,15 +1230,15 @@ It is done secussfully, and returns the new created post.
 
 The following table lits all sample codes related to this post.
 
-name|description
----|---
-vanilla| The initial application, includes basic `spring-webflux` feature, use a main class to start up the application
-war| Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container.
-boot| Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support
-boot-routes| Use `RouterFunction` instead of the general `Controller` in **boot**
-kotlin| Convert **boot** to use kotlin
-kotlin-gradle| Use kotlin functional approach to declare beans and bootstrap the application programatically
-session| More features will be added here
+| name          | description                              |
+| ------------- | ---------------------------------------- |
+| vanilla       | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
+| war           | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
+| boot          | Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support |
+| boot-routes   | Use `RouterFunction` instead of the general `Controller` in **boot** |
+| kotlin        | Convert **boot** to use kotlin           |
+| kotlin-gradle | Use kotlin functional approach to declare beans and bootstrap the application programatically |
+| session       | More features will be added here         |
 
 ## References
 
