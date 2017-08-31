@@ -1774,7 +1774,7 @@ The following table lits all sample codes related to this post.
 | security-method          | Replace URI based configuration with method level constraints |
 | security-data-mongo      | Based on **data-mongo** and **security**, replace with dummy users in hard codes with Mongo driven store |
 | multipart                | Mutipart request handling and file uploading |
-| multipart-data-mongo     | (PENDING)Mutipart and store in Data Mongo, waitng for Reactive support for `GridFstemplate` |
+| multipart-data-mongo     | (PENDING)Multipart and file uploading, but data in Mongo via Spring Data Mongo, waitng for Reactive support for `GridFsTemplate` |
 | mvc-thymeleaf            | Traditinal web mvc application, use Thymeleaf specific Reactive view resolver to render view |
 | mvc-freemarker           | Traditinal web mvc application, use freemarker as template engine, currently it does not have a reactive view resolver |
 | sse                      | Server Send Event and json stream example |
