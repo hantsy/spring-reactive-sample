@@ -834,7 +834,7 @@ In `Post` document, add a new field `createdDate`, annotated it with `@CreatedDa
 private LocalDateTime createdDate;
 ```
 
-#### Data initialition
+#### Data Initialization
 
 Add some test datas into MongoDB when it starts up.
 
@@ -1035,7 +1035,7 @@ For Spring Boot applications, the configuration can be simplified. Just add `spr
 
 Spring boot provides auto-configuration for redis, and registers `ReactiveRedisConnectionFactory` for you automatically.
 
-#### Data Initialition
+#### Data Initialization
 
 Declare `Post` as a redis hash data, add `@RedisHash("posts")` to `Post` POJO.
 
@@ -1767,7 +1767,7 @@ The following table lits all sample codes related to this post.
 | data-mongo       | Demonstration of Spring Data Mongo reactive support|
 | data-redis       | Demonstration of Spring Data Redis reactive support|
 | data-cassandra       | Demonstration of Spring Data Cassandra reactive support|
-| security       | Add secuirty for spring webflux support applciations|
+| security       | Add secuirty for spring webflux support applications|
 | security-user-properties       | Same as `secuirty`, but use users.properties to store users|
 | security-method       | Add method level constraints|
 | security-data-mongo       | Based on `data-mongo` and `security`, replace with dummy users in codes with Mongo driven store|
