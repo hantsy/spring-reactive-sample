@@ -1,4 +1,4 @@
-# Reactive programming with Spring 5
+# Reactive Programming with Spring 5
 
 [TOC]
 
@@ -17,7 +17,7 @@ The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.or
 * In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. Unluckily due to the original JDBC is desginated for blocking access, Spring Data JPA can not benefit from this feature. 
 * Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included in the latest 2.0.0.M3. 
 
-**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and sample codes against the final release version when it is released. Please start [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to track and get update for it.**
+**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
 
 ## Create a Webflux application
 
@@ -807,7 +807,7 @@ mvn spring-boot:run
 
 If you are using Spring Boot, the configuration can be simplified. Just add `spring-boot-starter-data-mongodb-reactive` into the project dependencies.
 
-```
+```xml
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
@@ -822,7 +822,7 @@ Spring Data Mongo supports data auditing as Spring Data JPA, it can set the curr
 
 Add `EnableMongoAuditing` to application class to activiate auditing for MongoDB.
 
-```
+```java
 @EnableMongoAuditing
 public class DemoApplication {}
 ```
@@ -962,7 +962,7 @@ public class RedisConfig {
 
 `LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are also registered as beans. 
 
-**NOTE**: Spring Data Redis does not provides a variant for `RedisTemplate` and `Repository`.
+
 
 In your beans, you can inject a `ReactiveRedisConnectionFactory` and get a reactive connection.
 
@@ -992,7 +992,7 @@ conn.setCommands()
 
 And show my favorites in the controller.
 
-```
+```java
 @RestController()
 @RequestMapping(value = "/favorites")
 class FavoriteController {
@@ -1026,7 +1026,7 @@ class FavoriteController {
 
 For Spring Boot applications, the configuration can be simplified. Just add `spring-boot-starter-data-redis-reactive` into the project dependencies.
 
-```
+```xml
 <dependency>
 	<groupId>org.springframework.boot</groupId>
 	<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
@@ -1075,24 +1075,161 @@ private void initPosts() {
 		title -> this.posts.save(Post.builder().id(UUID.randomUUID().toString()).title(title).content("content of " + title).build())
 	);
 }
-```	
+```
+
+**NOTE**: Unlike Spring Data Mongo, Spring Data Redis does not provides a variant for `RedisTemplate` and `Repository`.
 
 ### Spring Data Cassandra
+
+Spring Data Cassandra also embraces reactive support.
+
+Firstly add the following dependencies into your project.
+
+```xml
+<dependency>
+	<groupId>org.springframework.data</groupId>
+	<artifactId>spring-data-cassandra</artifactId>
+</dependency>
+```
+
+Create a `@Configuration` class to configure Cassandra and enable reactive support.
+
+```java
+@Configuration
+@EnableReactiveCassandraRepositories(basePackageClasses = {CassandraConfig.class})
+public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
+
+    @Value("${cassandra.keyspace-name}")
+    String keySpace;
+
+    @Value("${cassandra.contact-points}")
+    String contactPoints;
+
+    @Override
+    protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
+
+        CreateKeyspaceSpecification specification = CreateKeyspaceSpecification.createKeyspace(keySpace)
+            .ifNotExists()
+            .with(KeyspaceOption.DURABLE_WRITES, true);
+        //.withNetworkReplication(DataCenterReplication.dcr("foo", 1), DataCenterReplication.dcr("bar", 2));
+
+        return Arrays.asList(specification);
+    }
+
+    @Override
+    protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
+        return Arrays.asList(DropKeyspaceSpecification.dropKeyspace(keySpace));
+    }
+
+    @Override
+    protected String getKeyspaceName() {
+        return keySpace;
+    }
+
+    @Override
+    protected String getContactPoints() {
+        return contactPoints;
+    }
+
+    @Override
+    public SchemaAction getSchemaAction() {
+        return SchemaAction.RECREATE;
+    }
+
+}
+```
+
+`getKeyspaceCreations` configures how to create the keyspace when Cassandra is started, here we create the keyspace if it does not existed.
+
+`getSchemaAction` specifies the action of schema generation.
+
+Next add `Table` annotation to the `Post` entity.
+
+```java
+@Data
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table("posts")
+class Post {
+
+    @PrimaryKey()
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
+    private String title;
+    private String content;
+
+}
+```
+
+Add `@PrimaryKey` on `id` field, it indicates `id` is the primary key of `posts` table. 
+
+Unlike Mongo, in Cassandra, you have to fill the `id` field manually before it is inserted.
+
+Next change the former `PostRepository` to the following:
+
+```java
+interface PostRepository extends ReactiveCassandraRepository<Post, String>{}
+```
+
+Cassandra has a reactive variant for `Repository`, as the above `CassandraRepository`.
+
+#### Spring Boot
+
+If you are using Spring Boot, just add `spring-boot-starter-data-cassandra-reactive` into your project dependencies.
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-cassandra-reactive</artifactId>
+</dependency>
+```
+
+No need extra configuration, Spring Boot will configure Cassandra for you and registers related beans for you.
+
+#### Data initialization
+
+As former Mongo example, it is easy to erase the existing data and import some initial data when the application is started up.
+
+```java
+public void init() {
+	log.info("start data initialization  ...");
+	this.posts
+		.deleteAll()
+		.thenMany(
+			Flux
+				.just("Post one", "Post two")
+				.flatMap(
+					title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+				)
+		)
+		.log()
+		.subscribe(
+			null,
+			null,
+			() -> log.info("done initialization...")
+		);
+
+}
+```
 
 
 
 ## Security for Webflux
 
-Reflect to new webflux feature introduced in Spring 5, Spring Security 5 added new APIs to handle Web Reactive security.
+Aligned with the reactive feature introduced in Spring 5, Spring Security 5 added a new module named `spring-secuirty-webflux`.
 
-Aligned with Spring 5, Spring Security 5 added a new module named `spring-secuirty-webflux`.
-
-Add it in the project dependencies aside with `spring-boot-starter-security`.
+Add the following into your project dependencies.
 
 ```xml
 <dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-security</artifactId>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-core</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-config</artifactId>
 </dependency>
 <dependency>
 	<groupId>org.springframework.security</groupId>
@@ -1100,9 +1237,9 @@ Add it in the project dependencies aside with `spring-boot-starter-security`.
 </dependency>
 ```
 
-**NOTE**: Currently you have to add `spring-security-webflux` explicitly, there is no specific starters for `spring-security-webflux`.
 
-Add `@EnableWebFluxSecurity` to a configuration class to enable Spring security for Webflux.
+
+Create a configuration class, add `@EnableWebFluxSecurity` annotation to enable Spring security for Webflux.
 
 ```java
 @EnableWebFluxSecurity
@@ -1214,31 +1351,444 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 It is done secussfully, and returns the new created post.
 
 
+### Spring Boot
+
+For Spring Boot applciations, add it in the project dependencies aside with `spring-boot-starter-security`.
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+<dependency>
+	<groupId>org.springframework.security</groupId>
+	<artifactId>spring-security-webflux</artifactId>
+</dependency>
+```
+
+**NOTE**: Currently you have to add `spring-security-webflux` explicitly, there is no specific starters for `spring-security-webflux`.
+
+### Method level constraints
+
+Like traditional web mvc applications, you can use a `@PreAuthorize("hasRole('ADMIN')")` annotation on your methods to prevent the execution of this method if the evaluation of the expression defined in the `PreAuthorize` is false.
+
+To enable the method level security, add an extra `@EnableReactiveMethodSecurity` to your SecurityConfig class.
+
+```java
+@EnableWebFluxSecurity
+@EnableReactiveMethodSecurity
+class SecurityConfig {
+}
+```
+
+In your business codes, add `@PreAuthorize("hasRole('ADMIN')")` annotation to your method.
+
+```java
+@PreAuthorize("hasRole('ADMIN')")
+Mono<Post> delete(Long id) {
+	Post deleted = data.get(id);
+	data.remove(id);
+	return Mono.just(deleted);
+}
+```
+
+### Load users from a properties file
+
+Spring Security provides a `UserDetailsRepositoryResourceFactoryBean` which allow you load users from a properties file to create the `UserDetailsRepository` for your applications.
+
+```java
+@Bean
+public UserDetailsRepositoryResourceFactoryBean userDetailsService() {
+	return UserDetailsRepositoryResourceFactoryBean
+		.fromResourceLocation("classpath:users.properties");
+}
+```
+
+The contnet of *users.properties* is:
+
+```
+user=password,ROLE_USER
+admin=password,ROLE_USER,ROLE_ADMIN
+```
+
+The key is username, the value is password, and it's roles.
+
+### Customize UserDetailsRepository
+
+As said before, you can easily implement your own `UserDetailsRepository`.
+
+Here let's use Mongo as backend store, create a `User` document class which implements spring secuirty specific `UserDetails` interface.
+
+```java
+@Data
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Document
+class User implements UserDetails {
+
+    @Id
+    private String id;
+    private String username;
+    private String password;
+
+    @Builder.Default()
+    private boolean active = true;
+
+    @Builder.Default()
+    private List<String> roles = new ArrayList<>();
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return AuthorityUtils.createAuthorityList(roles.toArray(new String[roles.size()]));
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return active;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return active;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return active;
+    }
+
+}
+```
+
+Create a generic purpose `Repository` for `User`, named `UserRepository`.
+
+```java
+public interface UserRepository extends ReactiveMongoRepository<User, String> {
+
+    Mono<User> findByUsername(String username);
+}
+```
+
+Replace the `UserDetailsRepository` bean declaration with the following, which connect to the real database.
+
+```java
+@Bean
+public UserDetailsRepository userDetailsRepository(UserRepository users) {
+	return (username) -> {
+		return users.findByUsername(username).cast(UserDetails.class);
+	};
+}
+```
+
+
 ## RouterFunction
 
-`spring-webflux` also provides DSL like syntax to declare route rules for URI paths.
+`spring-webflux` also provides DSL like syntax to define route rules for requests.
 
+To enable the functional routes definition support, declare a `RouterFunction` bean to replace the traditional `Controller` class.
 
+```java
+@Bean
+public RouterFunction<ServerResponse> routes(PostHandler postHandler) {
+	return route(GET("/posts"), postHandler::all)
+		.andRoute(POST("/posts").and(contentType(APPLICATION_JSON)), postHandler::create)
+		.andRoute(GET("/posts/{id}"), postHandler::get);
+}
+```
+
+A helper class `RouterFunctions` can help create a route rule easily.
+
+`route` accepts a `PredicateFunction` and `HandlerFunction`, there is `PredicateFunctions` which can help you build the predicaiton condition of the incomming request.
+
+I would like extract the `HandlerFunction` into a standalone class, here we put all handlers into a `PostHandler` class.
+
+```java
+@Component
+public class PostHandler {
+
+    private final PostRepository posts;
+
+    public PostHandler(PostRepository posts) {
+        this.posts = posts;
+    }
+
+    public Mono<ServerResponse> all(ServerRequest req) {
+        return ServerResponse.ok().body(this.posts.findAll(), Post.class);
+    }
+
+    public Mono<ServerResponse> create(ServerRequest req) {
+        return req.body(BodyExtractors.toMono(Post.class))
+            .flatMap(post -> this.posts.save(post))
+            .flatMap(p -> ServerResponse.created(URI.create("/posts/" + p.getId())).build());
+    }
+
+    public Mono<ServerResponse> get(ServerRequest req) {
+        return this.posts.findById(Long.valueOf(req.pathVariable("id")))
+            .flatMap(post -> ServerResponse.ok().body(Mono.just(post), Post.class))
+            .switchIfEmpty(ServerResponse.notFound().build());
+    }
+}
+```
+
+A `HandlerFunction` accepts a `ServerRequest` as arguments and return a `Mono<ServerResponse>`, it is easy to control the response defails, such as response body, status, etc.
 
 ## Client
 
+Similiar with `RestTemplate` and `AsyncRestTemplate`, Spring 5 provides a `WebClient` to shake hands with reactive driven APIs. 
+
+
+```java
+WebClient client = WebClient.create("http://localhost:8080");
+client
+	.get()
+	.uri("/posts")
+	.exchange()
+	.flatMapMany(res -> res.bodyToFlux(Post.class))
+	.log()
+	.subscribe(post -> System.out.println("post: " + post));
+```
+
 ## Test
 
+Spring 5 provides a `WebTestClient` to help you test reactive server side APIs. It is similar with `WebClient`, but provides more facilities to interact with server in a test environment.
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class DemoApplicationTests {
+
+    @Autowired
+    ApplicationContext context;
+
+    WebTestClient client;
+
+    @Before
+    public void setup() {
+        client = WebTestClient
+            .bindToApplicationContext(context)
+            .configureClient()
+            .baseUrl("http://localhost:8080/")
+            .build();
+    }
+	//...
+}	
+```
+
+Here we use `bindToApplicationContext` to create a `WebTestClient` for the whole application, Spring provides some other options, such as `bindToController`, `bindToRouterFunction` etc, which allow you test paritial APIs.
+
+```java
+@Test
+public void getAllPostsShouldBeOkWithAuthetication() {
+	client
+		.get()
+		.uri("/posts/")
+		.exchange()
+		.expectStatus().isOk();
+}
+```
+
+`WebTestClient` is more flexible than `WebClient`, you can do some assertions directly, eg `isOK()` in the above codes.
+
+```java
+@Test
+public void deletePostsNotAllowedWhenIsNotAdmin() {
+	client
+		.mutate().filter(basicAuthentication("test", "password")).build()
+		.delete()
+		.uri("/posts/1")
+		.exchange()
+		.expectStatus().isEqualTo(HttpStatus.FORBIDDEN);
+}
+```	
+
+`WebTestClient` can add some mutation in the web exchange process, as shown in the above codes, adding HTTP Basic header and trying to get authentication.
+
 ## Kotlin 
+
+Kotlin becomes more and more popular, especially Google announced it was the first-class citizen in Android development. 
+
+Spring 5 also brings Kotlin on board, and add a few improvements to integrate with Spring projects.
+
+`BeanDefinitionDSL` allow you declare beans in a fluent DSL file instead of XML configuration or Java annotation configuration.
+
+The following is an exmaple of beans declaration which utilizes the Kotlin specific `BeanDefinitionDSL`.
+
+```kotlin
+fun beans() = beans {
+
+    bean<ResourcePropertySource> {
+        ResourcePropertySource(EncodedResource(ClassPathResource("application.properties")))
+    }
+
+    bean {
+        PostHandler(it.ref())
+    }
+
+    bean {
+        Routes(it.ref())
+    }
+
+    bean<WebHandler>("webHandler") {
+        RouterFunctions.toWebHandler(
+                it.ref<Routes>().router(),
+                HandlerStrategies.builder().build()
+                //HandlerStrategies.builder().viewResolver(it.ref()).build()
+        )
+    }
+
+    bean("messageSource") {
+        ReloadableResourceBundleMessageSource().apply {
+            setBasename("messages")
+            setDefaultEncoding("UTF-8")
+        }
+    }
+
+    bean {
+        DataInitializr(it.ref(), it.ref())
+    }
+
+    bean {
+        PostRepository(it.ref())
+    }
+
+    bean { ReactiveMongoRepositoryFactory(it.ref()) }
+
+    bean {
+        ReactiveMongoTemplate(
+                SimpleReactiveMongoDatabaseFactory(
+                        //ConnectionString(it.env.getProperty("mongo.uri"))
+                        ConnectionString("mongodb://localhost:27017/blog")
+                )
+        )
+    }
+
+    bean<WebFilter>("springSecurityFilterChain") {
+        WebFilterChainFilter(Flux.just(it.ref()))
+    }
+
+    bean<SecurityWebFilterChain> {
+        it.ref<HttpSecurity>().authorizeExchange()
+                .pathMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
+                .pathMatchers(HttpMethod.DELETE, "/api/posts/**").hasRole("ADMIN")
+                //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+                .anyExchange().authenticated()
+                .and()
+                .build()
+    }
+
+    bean<HttpSecurity>(scope = BeanDefinitionDsl.Scope.PROTOTYPE) {
+        HttpSecurity.http().apply {
+            httpBasic()
+            authenticationManager(UserDetailsRepositoryAuthenticationManager(it.ref()))
+            securityContextRepository(WebSessionSecurityContextRepository())
+        }
+    }
+
+    bean {
+        UserDetailsRepository { username -> it.ref<UserRepository>()
+                .findByUsername(username)
+                .map { (_, username, password, active, roles) ->
+                    org.springframework.security.core.userdetails.User
+                            .withUsername(username)
+                            .password(password)
+                            .accountExpired(!active)
+                            .accountLocked(!active)
+                            .credentialsExpired(!active)
+                            .disabled(!active)
+                            .authorities(roles.map(::SimpleGrantedAuthority).toList())
+                            .build()
+                }
+                .cast(UserDetails::class.java)
+        }
+    }
+
+    bean {
+        UserRepository(it.ref())
+    }
+
+    profile("foo") {
+        bean<Foo>()
+    }
+}
+
+class Foo
+```
+
+`RouterFunctionDSL` allow you write route rules in a more fluent style.
+
+```kotlin
+fun router() = router {
+	accept(MediaType.TEXT_HTML).nest {
+		GET("/") { ServerResponse.ok().render("index") }
+		GET("/sse") { ServerResponse.ok().render("sse") }
+		//GET("/users", postHandler::findAllView)
+	}
+	"/api".nest {
+		accept(MediaType.APPLICATION_JSON).nest {
+			GET("/posts", postHandler::all)
+			GET("/posts/{id}", postHandler::get)
+		}
+		accept(MediaType.TEXT_EVENT_STREAM).nest {
+			GET("/posts", postHandler::stream)
+		}
+		POST("/posts", postHandler::create)
+		PUT("/posts/{id}", postHandler::update)
+		DELETE("/posts/{id}", postHandler::delete)
+
+	}
+	resources("/**", ClassPathResource("static/"))
+}
+```
+
+Please check out the [Source codes](https://github.com/hantsy/spring-reactive-sample) for the complete Kotlin application.
 
 ## Sample codes
 
 The following table lits all sample codes related to this post.
 
-| name          | description                              |
-| ------------- | ---------------------------------------- |
+| name          | description                          |
+| ------------- | ------------------------------------ |
 | vanilla       | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
+| vanilla-jetty       | Same as `vanilla`, but use Jetty as target runtime |
+| vanilla-reactor-netty       | Same as `vanilla`, but use Reactor Netty as target runtime |
+| vanilla-reactor-netty       | Same as `vanilla`, but use undertow as target runtime |
+| rxjava       | Same as `vanilla`, but use Rxjava instead of Reactor|
+| rxjava2       | Same as `vanilla`, but use Rxjava2 instead of Reactor|
 | war           | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
+| routes       | Use `RouterFunction` instead of controller in `vanilla` |
+| register-bean       | Programmatic approach to register all beans at start-up stage|
+| data-mongo       | Demonstration of Spring Data Mongo reactive support|
+| data-redis       | Demonstration of Spring Data Redis reactive support|
+| data-cassandra       | Demonstration of Spring Data Cassandra reactive support|
+| security       | Add secuirty for spring webflux support applciations|
+| security-user-properties       | Same as `secuirty`, but use users.properties to store users|
+| security-method       | Add method level constraints|
+| security-data-mongo       | Based on `data-mongo` and `security`, replace with dummy users in codes with Mongo driven store|
+| multipart       | Mutipart request handling and file uploading|
+| multipart-data-mongo       | (PENDING)Mutipart and store in Data Mongo, waitng for Reactive support for `GridFstemplate`|
+| mvc-thymeleaf       | Traditinal web mvc application, use Thymeleaf specific Reactive view resovler to render view|
+| mvc-freemarker       | Traditinal web mvc application, use freemarker as template engine, currently it does not have a reactive view resovler|
 | boot          | Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support |
+| sse          | Server Send Event and json stream example |
+| websocket          | Reactive Websocket example |
+| boot          | Spring boot initial example |
+| boot-jetty          | Same as `boot`, but use Jetty as target runtime |
+| boot-tomcat          | Same as `boot`, but use Tomcat as target runtime |
+| boot-undertow          | Same as `boot`, but use Undertow as target runtime |
 | boot-routes   | Use `RouterFunction` instead of the general `Controller` in **boot** |
+| boot-freemarker          | Same as `mvc-freemarker `, but based on Spring Boot |
+| groovy| A groovy based example |
+| client| `WebClient` sample |
 | kotlin        | Convert **boot** to use kotlin           |
 | kotlin-gradle | Use kotlin functional approach to declare beans and bootstrap the application programatically |
-| session       | More features will be added here         |
+| session       | (WIP)More features will be added here         |
 
 ## References
 
