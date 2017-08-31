@@ -1,5 +1,8 @@
 # Reactive Programming with Spring 5
 
+
+**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
+
 [TOC]
 
 From the official website of [Reactive Streams](http://www.reactive-streams.org/):
@@ -17,7 +20,6 @@ The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.or
 * In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. Unluckily due to the original JDBC is desginated for blocking access, Spring Data JPA can not benefit from this feature. 
 * Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included in the latest 2.0.0.M3. 
 
-**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
 
 ## Create a Webflux application
 
@@ -1606,7 +1608,7 @@ public void deletePostsNotAllowedWhenIsNotAdmin() {
 		.exchange()
 		.expectStatus().isEqualTo(HttpStatus.FORBIDDEN);
 }
-```	
+```
 
 `WebTestClient` can add some mutation in the web exchange process, as shown in the above codes, adding HTTP Basic header and trying to get authentication.
 
@@ -1753,42 +1755,42 @@ Please check out the [Source codes](https://github.com/hantsy/spring-reactive-sa
 
 The following table lits all sample codes related to this post.
 
-| name          | description                          |
-| ------------- | ------------------------------------ |
-| vanilla       | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
-| vanilla-jetty       | Same as `vanilla`, but use Jetty as target runtime |
-| vanilla-reactor-netty       | Same as `vanilla`, but use Reactor Netty as target runtime |
-| vanilla-reactor-netty       | Same as `vanilla`, but use undertow as target runtime |
-| rxjava       | Same as `vanilla`, but use Rxjava instead of Reactor|
-| rxjava2       | Same as `vanilla`, but use Rxjava2 instead of Reactor|
-| war           | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
-| routes       | Use `RouterFunction` instead of controller in `vanilla` |
-| register-bean       | Programmatic approach to register all beans at start-up stage|
-| data-mongo       | Demonstration of Spring Data Mongo reactive support|
-| data-redis       | Demonstration of Spring Data Redis reactive support|
-| data-cassandra       | Demonstration of Spring Data Cassandra reactive support|
-| security       | Add secuirty for spring webflux support applications|
-| security-user-properties       | Same as `secuirty`, but use users.properties to store users|
-| security-method       | Add method level constraints|
-| security-data-mongo       | Based on `data-mongo` and `security`, replace with dummy users in codes with Mongo driven store|
-| multipart       | Mutipart request handling and file uploading|
-| multipart-data-mongo       | (PENDING)Mutipart and store in Data Mongo, waitng for Reactive support for `GridFstemplate`|
-| mvc-thymeleaf       | Traditinal web mvc application, use Thymeleaf specific Reactive view resovler to render view|
-| mvc-freemarker       | Traditinal web mvc application, use freemarker as template engine, currently it does not have a reactive view resovler|
-| boot          | Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support |
-| sse          | Server Send Event and json stream example |
-| websocket          | Reactive Websocket example |
-| boot          | Spring boot initial example |
-| boot-jetty          | Same as `boot`, but use Jetty as target runtime |
-| boot-tomcat          | Same as `boot`, but use Tomcat as target runtime |
-| boot-undertow          | Same as `boot`, but use Undertow as target runtime |
-| boot-routes   | Use `RouterFunction` instead of the general `Controller` in **boot** |
-| boot-freemarker          | Same as `mvc-freemarker `, but based on Spring Boot |
-| groovy| A groovy based example |
-| client| `WebClient` sample |
-| kotlin        | Convert **boot** to use kotlin           |
-| kotlin-gradle | Use kotlin functional approach to declare beans and bootstrap the application programatically |
-| session       | (WIP)More features will be added here         |
+| name                     | description                              |
+| ------------------------ | ---------------------------------------- |
+| vanilla                  | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
+| vanilla-jetty            | Same as **vanilla**, but use Jetty as target runtime |
+| vanilla-reactor-netty    | Same as **vanilla**, but use Reactor Netty as target runtime |
+| vanilla-reactor-netty    | Same as **vanilla**, but use Undertow as target runtime |
+| rxjava                   | Same as **vanilla**, but use Rxjava instead of Reactor |
+| rxjava2                  | Same as **vanilla**, but use Rxjava2 instead of Reactor |
+| war                      | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
+| routes                   | Use `RouterFunction` instead of controller in **vanilla** |
+| register-bean            | Programmatic approach to register all beans in `ApplicatonContext` at application bootstrap |
+| data-mongo               | Demonstration of Spring Data Mongo reactive support |
+| data-redis               | Demonstration of Spring Data Redis reactive support |
+| data-cassandra           | Demonstration of Spring Data Cassandra reactive support |
+| security                 | Based on **vanilla**, add secuirty for spring webflux support |
+| security-user-properties | Same as **secuirty**, but use users.properties to store users |
+| security-method          | Replace URI based configuration with method level constraints |
+| security-data-mongo      | Based on **data-mongo** and **security**, replace with dummy users in hard codes with Mongo driven store |
+| multipart                | Mutipart request handling and file uploading |
+| multipart-data-mongo     | (PENDING)Mutipart and store in Data Mongo, waitng for Reactive support for `GridFstemplate` |
+| mvc-thymeleaf            | Traditinal web mvc application, use Thymeleaf specific Reactive view resolver to render view |
+| mvc-freemarker           | Traditinal web mvc application, use freemarker as template engine, currently it does not have a reactive view resolver |
+| boot                     | Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support |
+| sse                      | Server Send Event and json stream example |
+| websocket                | Reactive Websocket example               |
+| boot                     | Spring boot initial example              |
+| boot-jetty               | Same as **boot**, but use Jetty as target runtime |
+| boot-tomcat              | Same as **boot**, but use Tomcat as target runtime |
+| boot-undertow            | Same as **boot**, but use Undertow as target runtime |
+| boot-routes              | Use `RouterFunction` instead of the general `Controller` in **boot** |
+| boot-freemarker          | Same as **mvc-freemarker**, but based on Spring Boot |
+| groovy                   | Same features as **boot**, but written in groovy |
+| client                   | Demonstration of `WebClient`             |
+| kotlin                   | Same features as **boot**, but written in groovy |
+| kotlin-gradle            | Use kotlin functional approach to declare beans and bootstrap the application programatically |
+| session                  | (WIP)More features will be added here    |
 
 ## References
 
