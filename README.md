@@ -5,7 +5,7 @@
 
 [TOC]
 
-From the official website of [Reactive Streams](http://www.reactive-streams.org/):
+From the official website of Reactive Streams:
 
 >Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.This encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
 
@@ -1787,8 +1787,8 @@ The following table lits all sample codes related to this post.
 | boot-routes              | Use `RouterFunction` instead of the general `Controller` in **boot** |
 | boot-freemarker          | Same as **mvc-freemarker**, but based on Spring Boot |
 | groovy                   | Same features as **boot**, but written in groovy |
-| client                   | Demonstration of `WebClient`             |
-| kotlin                   | Same features as **boot**, but written in groovy |
+| client                   | Demonstration of `WebClient` to shake hands with backend reactive  APIs |
+| kotlin                   | Same features as **boot**, but written in kotlin |
 | kotlin-gradle            | Use kotlin functional approach to declare beans and bootstrap the application programatically |
 | session                  | (WIP)More features will be added here    |
 
