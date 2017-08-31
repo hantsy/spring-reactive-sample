@@ -1777,10 +1777,9 @@ The following table lits all sample codes related to this post.
 | multipart-data-mongo     | (PENDING)Mutipart and store in Data Mongo, waitng for Reactive support for `GridFstemplate` |
 | mvc-thymeleaf            | Traditinal web mvc application, use Thymeleaf specific Reactive view resolver to render view |
 | mvc-freemarker           | Traditinal web mvc application, use freemarker as template engine, currently it does not have a reactive view resolver |
-| boot                     | Switch to Spring Boot to get autoconfiguration of `webflux`, added Spring Data Mongo, Spring Secuirty support |
 | sse                      | Server Send Event and json stream example |
 | websocket                | Reactive Websocket example               |
-| boot                     | Spring boot initial example              |
+| boot                     | Switch to Spring Boot to get autoconfiguration of `spring-webflux`, added extra Spring Data Mongo, Spring Secuirty support |
 | boot-jetty               | Same as **boot**, but use Jetty as target runtime |
 | boot-tomcat              | Same as **boot**, but use Tomcat as target runtime |
 | boot-undertow            | Same as **boot**, but use Undertow as target runtime |
