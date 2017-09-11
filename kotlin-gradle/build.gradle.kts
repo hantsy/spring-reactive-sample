@@ -24,11 +24,11 @@ buildscript {
     }
     dependencies {
         classpath("io.spring.gradle:dependency-management-plugin:1.0.3.RELEASE")
-       // classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
+        // classpath("org.springframework.boot:spring-boot-gradle-plugin:$springBootVersion")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion")
         classpath("org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion")
         classpath("org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion")
-        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC3")
+        classpath("org.junit.platform:junit-platform-gradle-plugin:1.0.0")
     }
 }
 
@@ -42,7 +42,7 @@ apply {
     plugin("kotlin-noarg")
     plugin("io.spring.dependency-management")
     //plugin("com.github.johnrengelman.plugin-shadow") version "2.0.0"
-    //plugin("org.junit.platform.gradle.plugin")
+    plugin("org.junit.platform.gradle.plugin")
 }
 
 application {
@@ -74,7 +74,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
-            //           freeCompilerArgs = listOf("-Xjsr305-annotations=enable")
+            freeCompilerArgs = listOf("-Xjsr305-annotations=enable")
         }
     }
 }
@@ -90,7 +90,9 @@ repositories {
 dependencies {
     //spring webflux
     compile("org.springframework:spring-webflux")
-    compile("org.springframework:spring-context")
+    compile("org.springframework:spring-context") {
+        exclude(module = "spring-aop")
+    }
     compile("com.fasterxml.jackson.core:jackson-databind")
     compile("com.fasterxml.jackson.module:jackson-module-kotlin")
     compile("com.fasterxml.jackson.datatype:jackson-datatype-jdk8")
@@ -116,7 +118,13 @@ dependencies {
     compile("org.slf4j:jcl-over-slf4j")
     compile("ch.qos.logback:logback-classic")
 
+    compile("com.google.code.findbugs:jsr305:3.0.2") // Needed for now, could be removed when KT-19419 will be fixed
+
     //test
     testCompile("org.springframework:spring-test")
     testCompile("io.projectreactor:reactor-test")
+    //testCompile("io.projectreactor:reactor-test:3.1.0.RC1")
+    testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0")
+    testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0")
+    testRuntime("org.junit.platform:junit-platform-launcher:1.0.0")
 }
