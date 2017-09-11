@@ -1,29 +1,19 @@
 package com.example.demo
 
 import com.mongodb.ConnectionString
-import org.springframework.beans.factory.config.PropertiesFactoryBean
 import org.springframework.context.support.BeanDefinitionDsl
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.context.support.beans
-import org.springframework.core.env.MutablePropertySources
-import org.springframework.core.env.PropertySource
-import org.springframework.core.env.PropertySources
-import org.springframework.core.env.PropertySourcesPropertyResolver
+import org.springframework.core.env.get
 import org.springframework.core.io.ClassPathResource
-import org.springframework.core.io.support.DefaultPropertySourceFactory
-import org.springframework.core.io.support.EncodedResource
-import org.springframework.core.io.support.PropertySourceFactory
-import org.springframework.core.io.support.ResourcePropertySource
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory
 import org.springframework.data.mongodb.repository.support.ReactiveMongoRepositoryFactory
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UserDetailsRepositoryAuthenticationManager
-import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.HttpSecurity
 import org.springframework.security.core.authority.SimpleGrantedAuthority
-import org.springframework.security.core.userdetails.MapUserDetailsRepository
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsRepository
@@ -35,12 +25,15 @@ import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebHandler
 import reactor.core.publisher.Flux
-import reactor.core.publisher.Mono
 
 fun beans() = beans {
 
-    bean<ResourcePropertySource> {
-        ResourcePropertySource(EncodedResource(ClassPathResource("application.properties")))
+    bean {
+        PropertySourcesPlaceholderConfigurer().apply {
+            val resources = arrayOf(ClassPathResource("application.properties"))
+            setLocations(* resources)
+            setIgnoreUnresolvablePlaceholders(true)
+        }
     }
 
     bean {
@@ -54,7 +47,9 @@ fun beans() = beans {
     bean<WebHandler>("webHandler") {
         RouterFunctions.toWebHandler(
                 it.ref<Routes>().router(),
-                HandlerStrategies.builder().build()
+                HandlerStrategies.builder()
+                        .webFilter(it.ref("springSecurityFilterChain"))
+                        .build()
                 //HandlerStrategies.builder().viewResolver(it.ref()).build()
         )
     }
@@ -80,6 +75,10 @@ fun beans() = beans {
     }
 
     bean {
+        UserRepository(it.ref())
+    }
+
+    bean {
         PostRepository(it.ref())
     }
 
@@ -88,7 +87,7 @@ fun beans() = beans {
     bean {
         ReactiveMongoTemplate(
                 SimpleReactiveMongoDatabaseFactory(
-                        //ConnectionString(it.env.getProperty("mongo.uri"))
+                        //ConnectionString(it.env["mongo.uri"])
                         ConnectionString("mongodb://localhost:27017/blog")
                 )
         )
@@ -117,28 +116,22 @@ fun beans() = beans {
     }
 
     bean {
-        UserDetailsRepository { username -> it.ref<UserRepository>()
-                .findByUsername(username)
-                .map { (_, username, password, active, roles) ->
-                    org.springframework.security.core.userdetails.User
-                            .withUsername(username)
-                            .password(password)
-                            .accountExpired(!active)
-                            .accountLocked(!active)
-                            .credentialsExpired(!active)
-                            .disabled(!active)
-                            .authorities(roles.map(::SimpleGrantedAuthority).toList())
-                            .build()
-                }
-                .cast(UserDetails::class.java)
+        UserDetailsRepository { username ->
+            it.ref<UserRepository>()
+                    .findByUsername(username)
+                    .map { (_, username, password, active, roles) ->
+                        org.springframework.security.core.userdetails.User
+                                .withUsername(username)
+                                .password(password)
+                                .accountExpired(!active)
+                                .accountLocked(!active)
+                                .credentialsExpired(!active)
+                                .disabled(!active)
+                                .authorities(roles.map(::SimpleGrantedAuthority).toList())
+                                .build()
+                    }
+                    .cast(UserDetails::class.java)
         }
-    }
-
-    bean {
-//        val user = User.withUsername("user").password("test123").roles("USER").build()
-//        val admin = User.withUsername("admin").password("test123").roles("USER", "ADMIN").build()
-//        MapUserDetailsRepository(user, admin)
-        UserRepository(it.ref())
     }
 
     profile("foo") {

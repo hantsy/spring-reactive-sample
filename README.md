@@ -1,25 +1,28 @@
 # Reactive Programming with Spring 5
 
 
-**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
+
 
 [TOC]
 
-From the official website of Reactive Streams:
+ **Reactive** or **Reactive Streams** is a hot topic in these days, you can see it in blog entries, presentations, or some online course.
+
+What is Reactive Streams? From the official website of Reactive Streams:
 
 >Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure.This encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
 
 Currently, the JVM specification is completed, it includes a Java API(four simple interface), a textual Specification, a TCK and implementation examples. Check [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams) for more details.
 
-Reactor and RxJava2 have implemented this specification, and the upcoming Java 9 also adopted in its new Flow API. 
+Reactor and RxJava2 have implemented this specification, and the upcoming Java 9 also adopted it in the new Flow API. 
 
-The upcoming Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). For Spring developers, it brings a complete new programming model. In this post, we will try to cover all reactive features in the Spring projects.
+The Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). For Spring developers, it brings a complete new programming model. In this post, we will try to cover all reactive features in the Spring projects.
 
 * Spring core framework added a new `spring-webflux` module, and provided built-in reactive programming support via Reactor and RxJava. 
 * Spring Security 5 also added reactive feature. 
-* In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. Unluckily due to the original JDBC is desginated for blocking access, Spring Data JPA can not benefit from this feature. 
+* In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. Unluckily due to the original JDBC is designated for blocking access, Spring Data JPA can not benefit from this feature. 
 * Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included in the latest 2.0.0.M3. 
 
+**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
 
 ## Create a Webflux application
 
@@ -1753,7 +1756,7 @@ Please check out the [Source codes](https://github.com/hantsy/spring-reactive-sa
 
 ## Sample codes
 
-The following table lits all sample codes related to this post.
+The following table lits all sample codes related to this post. The  [sample  codes ](https://github.com/hantsy/spring-reactive-sample) of this post is hosted on my Github account, welcome to star and fork it.
 
 | name                     | description                              |
 | ------------------------ | ---------------------------------------- |
