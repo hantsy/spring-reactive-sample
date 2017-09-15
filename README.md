@@ -1819,3 +1819,6 @@ The following table lits all sample codes related to this post. The  [sample  co
 * [Petclinic: Spring 5 reactive version](https://github.com/ssouris/petclinic-spring5-reactive/)
 * [Spring Framework 5 Kotlin APIs, the functional way](https://spring.io/blog/2017/08/01/spring-framework-5-kotlin-apis-the-functional-way)
 * [Kotlin extensions for MongoOperations and ReactiveMongoOperations ](https://github.com/spring-projects/spring-data-mongodb/commit/2359357977e8734331a78c88e0702f50f3a3c75e)
+* [Reactive systems using Reactor](http://musigma.org/java/2016/11/21/reactor.html)
+* [Lite Rx API Hands-On with Reactor Core 3 ](https://github.com/reactor/lite-rx-api-hands-on)
+* [reactor-kotlin-workshop](https://github.com/eddumelendez/reactor-kotlin-workshop)

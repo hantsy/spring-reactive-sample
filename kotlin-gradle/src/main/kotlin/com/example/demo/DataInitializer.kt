@@ -32,7 +32,7 @@ class DataInitializr(val posts: PostRepository, val users: UserRepository) {
                         Flux
                                 .just("user", "admin")
                                 .flatMap { it ->
-                                    if(it == "user") this.users.save(User(username = it, password = "password", roles = listOf("ROLE_USER")))
+                                    if (it == "user") this.users.save(User(username = it, password = "password", roles = listOf("ROLE_USER")))
                                     else this.users.save(User(username = it, password = "password", roles = listOf("ROLE_USER", "ROLE_ADMIN")))
                                 }
                 )
