@@ -48,24 +48,25 @@ public class IntegrationTests {
             .expectStatus().isUnauthorized();
     }
 
+    //replace mutateWith(mockUser()) with mutate().mutate().filter(basicAuthentication("user", "WRONGPASSWORD")).build()
+    //in e2e tests.
     @Test
     public void deletingPostsWhenInvalidCredentialsThenUnauthorized() throws Exception {
         this.rest
-            .mutateWith(mockUser().password("WRONGPASSWORD"))
+            .mutate().filter(basicAuthentication("user", "WRONGPASSWORD")).build()
             .delete()
             .uri("/posts/1")
             .exchange()
             .expectStatus().isUnauthorized();
     }
-    
-     @Test
+
+    @Test
     public void deletingPostsWhenUserCredentialsThenForbidden() throws Exception {
         this.rest
-            .mutateWith(mockUser().password("password"))
+            .mutate().filter(basicAuthentication("user", "password")).build()
             .delete()
             .uri("/posts/1")
             .exchange()
             .expectStatus().is4xxClientError();
     }
-
 }

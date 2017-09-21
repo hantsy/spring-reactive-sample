@@ -126,27 +126,6 @@ public class IntegrationTests {
             .expectBody().isEmpty();
     }
 
-//    @Test
-//    @WithMockUser()
-//    public void deletingPostsWhenUserCredentialsThenForbidden_withMockUserAnnotation() throws Exception {
-//        this.rest
-//            .delete()
-//            .uri("/posts/1")
-//            .exchange()
-//            .expectStatus().is4xxClientError()
-//            .expectBody().isEmpty();
-//    }
-
-//    @Test
-//    public void deletingPostsWhenAdminCredentialsThenOk() throws Exception {
-//        this.rest
-//            .delete()
-//            .uri("/posts/1")
-//            .attributes(adminCredentials())
-//            .exchange()
-//            .expectStatus().isOk()
-//            .expectBody().isEmpty();
-//    }
     private Consumer<Map<String, Object>> userCredentials() {
         return basicAuthenticationCredentials("user", "password");
     }
