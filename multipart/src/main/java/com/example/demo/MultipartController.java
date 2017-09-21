@@ -21,6 +21,8 @@ import reactor.core.publisher.Mono;
 /**
  *
  * @author hantsy
+ * 
+ * //sample code: https://github.com/spring-projects/spring-framework/blob/master/spring-webflux/src/test/java/org/springframework/web/reactive/result/method/annotation/MultipartIntegrationTests.java
  */
 @RestController
 @RequestMapping("/uploads")

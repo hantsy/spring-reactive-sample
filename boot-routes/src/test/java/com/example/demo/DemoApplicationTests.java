@@ -67,9 +67,7 @@ public class DemoApplicationTests {
     @Test
     public void deletePostsNotAllowedWhenIsNotAdmin() {
         client
-            .mutate()
-            .filter(basicAuthentication("test", "password"))
-            .build()
+            .mutate().filter(basicAuthentication("user", "password")).build()
             .delete()
             .uri("/posts/1")
             .exchange()
@@ -81,9 +79,7 @@ public class DemoApplicationTests {
         int randomInt = new Random().nextInt();
         String title = "Post test " + randomInt;
         FluxExchangeResult<Void> postResult = client
-            .mutate()
-            .filter(basicAuthentication("test", "password"))
-            .build()
+            .mutate().filter(basicAuthentication("user", "password")).build()
             .post()
             .uri("/posts")
             .body(BodyInserters.fromObject(Post.builder().title(title).content("content of " + title).build()))

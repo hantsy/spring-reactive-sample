@@ -44,7 +44,6 @@
         <dependency>
             <groupId>org.synchronoss.cloud</groupId>
             <artifactId>nio-multipart-parser</artifactId>
-            <version>1.1.0</version>
         </dependency>
         <dependency>		
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -61,26 +60,6 @@
             <artifactId>reactor-netty</artifactId>
         </dependency>
         
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-        </dependency>
-        
-<!--        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-        </dependency>
-        
-        <dependency>
-            <groupId>io.undertow</groupId>
-            <artifactId>undertow-core</artifactId>
-        </dependency>-->
-
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

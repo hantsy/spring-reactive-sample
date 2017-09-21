@@ -5,8 +5,8 @@
  */
 package com.example.demo;
 
-import java.util.List;
 import java.util.UUID;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -32,20 +31,17 @@ public class MultipartController {
     }
 
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    Mono<List<String>> requestBodyFlux(@RequestBody Flux<FilePart> parts) {
+    Mono<String> uploadSingleFile(@RequestBody Mono<FilePart> part) {
 
-        return parts
-                .log()
-                .flatMap(
-                        part -> {
-                            String name = UUID.randomUUID().toString() + "-" + part.name();
-                            String contentType = part.headers().getContentType().toString();
-                            return part.content().map(data -> this.gridFsTemplate.store(data.asInputStream(), name, contentType));
-                        }
-                )
-                .map(id -> id.toString())
-                .collectList();
+        FilePart filePart = part
+            .log()
+            .block();
 
+        String name = UUID.randomUUID().toString() + "-" + filePart.name();
+        String contentType = filePart.headers().getContentType().toString();
+        ObjectId id = this.gridFsTemplate.store(filePart.content().blockFirst().asInputStream(), name, contentType);
+        
+        return Mono.just(id.toString());
     }
 
 }
