@@ -13,6 +13,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.test.context.support.WithMockUser;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -37,7 +39,7 @@ public class IntegrationTests {
     public void setup() {
         this.rest = WebTestClient
             .bindToServer()
-            .responseTimeout(Duration.ofSeconds(100))
+            .responseTimeout(Duration.ofSeconds(10))
             .baseUrl("http://localhost:" + this.port)
             .filter(basicAuthentication())
             .build();
@@ -108,6 +110,28 @@ public class IntegrationTests {
             .delete()
             .uri("/posts/1")
             .attributes(userCredentials())
+            .exchange()
+            .expectStatus().is4xxClientError()
+            .expectBody().isEmpty();
+    }
+
+    @Test
+    public void deletingPostsWhenUserCredentialsThenForbidden_mutateWith() throws Exception {
+        this.rest
+            .mutateWith(mockUser().password("password"))
+            .delete()
+            .uri("/posts/1")
+            .exchange()
+            .expectStatus().is4xxClientError()
+            .expectBody().isEmpty();
+    }
+
+    @Test
+    @WithMockUser()
+    public void deletingPostsWhenUserCredentialsThenForbidden_withMockUserAnnotation() throws Exception {
+        this.rest
+            .delete()
+            .uri("/posts/1")
             .exchange()
             .expectStatus().is4xxClientError()
             .expectBody().isEmpty();

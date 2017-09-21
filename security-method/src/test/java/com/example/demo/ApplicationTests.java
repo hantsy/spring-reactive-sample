@@ -12,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.security.test.context.support.WithMockUser;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 import org.springframework.test.context.ActiveProfiles;
@@ -55,7 +56,7 @@ public class ApplicationTests {
             .expectStatus().isOk()
             .expectBody().jsonPath("$.title").isEqualTo("post one");
     }
-    
+
     @Test
     public void getAllPostsWhenNoCredentialsThenOk() throws Exception {
         this.rest
@@ -100,13 +101,34 @@ public class ApplicationTests {
             .expectBody().isEmpty();
     }
 
-
     @Test
     public void deletingPostsWhenUserCredentialsThenForbidden() throws Exception {
         this.rest
             .delete()
             .uri("/posts/1")
             .attributes(userCredentials())
+            .exchange()
+            .expectStatus().is4xxClientError()
+            .expectBody().isEmpty();
+    }
+
+    @Test
+    public void deletingPostsWhenUserCredentialsThenForbidden_mutateWith() throws Exception {
+        this.rest
+            .mutateWith(mockUser().password("password"))
+            .delete()
+            .uri("/posts/1")
+            .exchange()
+            .expectStatus().is4xxClientError()
+            .expectBody().isEmpty();
+    }
+
+    @Test
+    @WithMockUser()
+    public void deletingPostsWhenUserCredentialsThenForbidden_withMockUserAnnotation() throws Exception {
+        this.rest
+            .delete()
+            .uri("/posts/1")
             .exchange()
             .expectStatus().is4xxClientError()
             .expectBody().isEmpty();
@@ -122,7 +144,6 @@ public class ApplicationTests {
 //            .expectStatus().isOk()
 //            .expectBody().isEmpty();
 //    }
-
     private Consumer<Map<String, Object>> userCredentials() {
         return basicAuthenticationCredentials("user", "password");
     }
