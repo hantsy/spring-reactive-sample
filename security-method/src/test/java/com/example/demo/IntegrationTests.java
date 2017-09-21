@@ -118,7 +118,7 @@ public class IntegrationTests {
     @Test
     public void deletingPostsWhenUserCredentialsThenForbidden_mutateWith() throws Exception {
         this.rest
-            .mutateWith(mockUser().password("password"))
+            .mutate().filter(basicAuthentication("user", "password")).build()
             .delete()
             .uri("/posts/1")
             .exchange()
@@ -126,16 +126,16 @@ public class IntegrationTests {
             .expectBody().isEmpty();
     }
 
-    @Test
-    @WithMockUser()
-    public void deletingPostsWhenUserCredentialsThenForbidden_withMockUserAnnotation() throws Exception {
-        this.rest
-            .delete()
-            .uri("/posts/1")
-            .exchange()
-            .expectStatus().is4xxClientError()
-            .expectBody().isEmpty();
-    }
+//    @Test
+//    @WithMockUser()
+//    public void deletingPostsWhenUserCredentialsThenForbidden_withMockUserAnnotation() throws Exception {
+//        this.rest
+//            .delete()
+//            .uri("/posts/1")
+//            .exchange()
+//            .expectStatus().is4xxClientError()
+//            .expectBody().isEmpty();
+//    }
 
 //    @Test
 //    public void deletingPostsWhenAdminCredentialsThenOk() throws Exception {
