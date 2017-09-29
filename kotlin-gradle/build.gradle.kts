@@ -9,7 +9,7 @@ plugins {
 }
 
 buildscript {
-    extra["kotlinVersion"] = "1.1.4-3"
+    extra["kotlinVersion"] = "1.1.50"
     extra["springBootVersion"] = "2.0.0.M4"
 
     val kotlinVersion: String by extra
@@ -74,7 +74,7 @@ tasks {
     withType<KotlinCompile> {
         kotlinOptions {
             jvmTarget = "1.8"
-            freeCompilerArgs = listOf("-Xjsr305-annotations=enable")
+            freeCompilerArgs = listOf("-Xjsr305=strict")
         }
     }
 }

@@ -22,7 +22,7 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
     String mongoUri;
 
     @Override
-    public MongoClient mongoClient() {
+    public MongoClient reactiveMongoClient() {
         return MongoClients.create(mongoUri);
     }
 
