@@ -316,7 +316,7 @@ According to the official documention, in [WebFlux framework](http://docs.spring
 
 >WebFlux can run on Servlet containers with support for the Servlet 3.1 Non-Blocking IO API as well as on other async runtimes such as Netty and Undertow. 
 
-![Spring Boot initializer](https://github.com/hantsy/spring-reactive-sample/blob/master/webflux.png)
+![Spring Webflux](https://github.com/hantsy/spring-reactive-sample/blob/master/webflux.png)
 
 
 #### Apache Tomcat
