@@ -125,7 +125,7 @@
 					<!-- MainClass in mainfest make a executable jar -->
 					<archive>
 						<manifest>
-							<mainClass>com.example.demo.App</mainClass>
+							<mainClass>com.example.demo.Application</mainClass>
 						</manifest>
 					</archive>
 
