@@ -1764,6 +1764,7 @@ The following table lits all sample codes related to this post. The  [sample  co
 | vanilla-jetty            | Same as **vanilla**, but use Jetty as target runtime |
 | vanilla-reactor-netty    | Same as **vanilla**, but use Reactor Netty as target runtime |
 | vanilla-reactor-netty    | Same as **vanilla**, but use Undertow as target runtime |
+| java9                    | Same as **vanilla**, Java 9 Flow API support is not ready in Spring 5.0.0.REALESE, planned in 5.0.1, see issue [SPR-16052](https://jira.spring.io/browse/SPR-16052) and the original [discussion on stackoverflow](https://stackoverflow.com/questions/46597924/spring-5-supports-java-9-flow-apis-in-its-reactive-feature/46605983#46605983) |
 | rxjava                   | Same as **vanilla**, but use Rxjava instead of Reactor |
 | rxjava2                  | Same as **vanilla**, but use Rxjava2 instead of Reactor |
 | war                      | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
