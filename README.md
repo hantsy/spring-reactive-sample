@@ -1773,6 +1773,7 @@ The following table lits all sample codes related to this post. The  [sample  co
 | data-mongo               | Demonstration of Spring Data Mongo reactive support |
 | data-redis               | Demonstration of Spring Data Redis reactive support |
 | data-cassandra           | Demonstration of Spring Data Cassandra reactive support |
+| data-couchbase           | Demonstration of Spring Data Couchbase reactive support |
 | security                 | Based on **vanilla**, add secuirty for spring webflux support |
 | security-user-properties | Same as **secuirty**, but use users.properties to store users |
 | security-method          | Replace URI based configuration with method level constraints |
