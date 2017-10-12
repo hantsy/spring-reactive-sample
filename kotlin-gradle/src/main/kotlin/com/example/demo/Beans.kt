@@ -37,20 +37,20 @@ fun beans() = beans {
     }
 
     bean {
-        PostHandler(it.ref())
+        PostHandler(ref())
     }
 
     bean {
-        Routes(it.ref())
+        Routes(ref())
     }
 
     bean<WebHandler>("webHandler") {
         RouterFunctions.toWebHandler(
-                it.ref<Routes>().router(),
+                ref<Routes>().router(),
                 HandlerStrategies.builder()
-                        .webFilter(it.ref("springSecurityFilterChain"))
+                        .webFilter(ref("springSecurityFilterChain"))
                         .build()
-                //HandlerStrategies.builder().viewResolver(it.ref()).build()
+                //HandlerStrategies.builder().viewResolver(ref()).build()
         )
     }
 
@@ -71,34 +71,34 @@ fun beans() = beans {
 //    }
 
     bean {
-        DataInitializr(it.ref(), it.ref())
+        DataInitializr(ref(), ref())
     }
 
     bean {
-        UserRepository(it.ref())
+        UserRepository(ref())
     }
 
     bean {
-        PostRepository(it.ref())
+        PostRepository(ref())
     }
 
-    bean { ReactiveMongoRepositoryFactory(it.ref()) }
+    bean { ReactiveMongoRepositoryFactory(ref()) }
 
     bean {
         ReactiveMongoTemplate(
                 SimpleReactiveMongoDatabaseFactory(
-                        //ConnectionString(it.env["mongo.uri"])
+                        //ConnectionString(env["mongo.uri"])
                         ConnectionString("mongodb://localhost:27017/blog")
                 )
         )
     }
 
     bean<WebFilter>("springSecurityFilterChain") {
-        WebFilterChainFilter(Flux.just(it.ref()))
+        WebFilterChainFilter(Flux.just(ref()))
     }
 
     bean<SecurityWebFilterChain> {
-        it.ref<HttpSecurity>().authorizeExchange()
+        ref<HttpSecurity>().authorizeExchange()
                 .pathMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                 .pathMatchers(HttpMethod.DELETE, "/api/posts/**").hasRole("ADMIN")
                 //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
@@ -110,14 +110,14 @@ fun beans() = beans {
     bean<HttpSecurity>(scope = BeanDefinitionDsl.Scope.PROTOTYPE) {
         HttpSecurity.http().apply {
             httpBasic()
-            authenticationManager(UserDetailsRepositoryAuthenticationManager(it.ref()))
+            authenticationManager(UserDetailsRepositoryAuthenticationManager(ref()))
             securityContextRepository(WebSessionSecurityContextRepository())
         }
     }
 
     bean {
         UserDetailsRepository { username ->
-            it.ref<UserRepository>()
+            ref<UserRepository>()
                     .findByUsername(username)
                     .map { (_, username, password, active, roles) ->
                         org.springframework.security.core.userdetails.User
@@ -174,7 +174,7 @@ class Foo
 //
 //    private fun currentUserMatchesPath(authentication: Mono<Authentication>, context: AuthorizationContext): Mono<AuthorizationDecision> {
 //        return authentication
-//                .map { context.variables?.get("user")?.equals(it.name) }
+//                .map { context.variables?.get("user")?.equals(name) }
 //                .map { AuthorizationDecision(it ?: false) }
 //    }
 //

@@ -42,7 +42,7 @@ class PostHandler(val posts: PostRepository) {
 
     fun update(req: ServerRequest): Mono<ServerResponse> {
         return this.posts.findById(req.pathVariable("id"))
-                .and(req.bodyToMono(Post::class.java))
+                .zipWith(req.bodyToMono(Post::class.java))
                 .map { it.t1.copy(title = it.t2.title, content = it.t2.content) }
                 .flatMap { this.posts.save(it) }
                 .flatMap { noContent().build() }

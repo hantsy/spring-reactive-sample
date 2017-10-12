@@ -9,7 +9,7 @@ plugins {
 }
 
 buildscript {
-    extra["kotlinVersion"] = "1.1.50"
+    extra["kotlinVersion"] = "1.1.51"
     extra["springBootVersion"] = "2.0.0.M5"
 
     val kotlinVersion: String by extra
@@ -123,7 +123,6 @@ dependencies {
     //test
     testCompile("org.springframework:spring-test")
     testCompile("io.projectreactor:reactor-test")
-    //testCompile("io.projectreactor:reactor-test:3.1.0.RC1")
     testCompile("org.junit.jupiter:junit-jupiter-api:5.0.0")
     testRuntime("org.junit.jupiter:junit-jupiter-engine:5.0.0")
     testRuntime("org.junit.platform:junit-platform-launcher:1.0.0")
