@@ -27,7 +27,7 @@ public class HomeController {
         this.posts = posts;
     }
 
-    @GetMapping("/home")
+    @GetMapping("/")
     public String home(final Model model) {
 
         Flux<Post> fluxPost = this.posts.findAll();
