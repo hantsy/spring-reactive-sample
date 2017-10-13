@@ -9,8 +9,8 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.UndertowHttpHandlerAdapter;
-import org.springframework.web.reactive.DispatcherHandler;
 import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
 @Configuration
 @ComponentScan
@@ -30,7 +30,7 @@ public class Application {
 
     @Bean
     public Undertow undertowServer(ApplicationContext context) {
-        HttpHandler handler = DispatcherHandler.toHttpHandler(context);  // (2)
+        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();  // (2)
 
         // Undertow
         UndertowHttpHandlerAdapter undertowAdapter = new UndertowHttpHandlerAdapter(handler);

@@ -1,6 +1,7 @@
 package com.example.demo;
 
 
+import javax.servlet.Servlet;
 import org.apache.catalina.Context;
 import org.apache.catalina.startup.Tomcat;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +11,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.http.server.reactive.ServletHttpHandlerAdapter;
-import org.springframework.web.reactive.DispatcherHandler;
+import org.springframework.http.server.reactive.TomcatHttpHandlerAdapter;
 import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
 @Configuration
 @ComponentScan
@@ -34,10 +35,10 @@ public class Application {
 
     @Bean
     public Tomcat embededTomcatServer(ApplicationContext context) throws Exception {
-        HttpHandler handler = DispatcherHandler.toHttpHandler(context); 
+        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build(); 
 
         // Tomcat and Jetty (also see notes below)
-        ServletHttpHandlerAdapter servlet = new ServletHttpHandlerAdapter(handler);
+        Servlet servlet = new TomcatHttpHandlerAdapter(handler);
 
         Tomcat tomcatServer = new Tomcat();
         tomcatServer.setHostname("localhost");

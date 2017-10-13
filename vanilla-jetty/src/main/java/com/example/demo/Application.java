@@ -1,6 +1,8 @@
 package com.example.demo;
 
+import javax.servlet.Servlet;
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,9 +12,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.http.server.reactive.ServletHttpHandlerAdapter;
-import org.springframework.web.reactive.DispatcherHandler;
+import org.springframework.http.server.reactive.JettyHttpHandlerAdapter;
 import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
 @Configuration
 @ComponentScan
@@ -33,20 +35,20 @@ public class Application {
     }
 
     @Bean
-    public Server jettyServer(ApplicationContext context) {
-        HttpHandler handler = DispatcherHandler.toHttpHandler(context);  // (2)
+    public Server jettyServer(ApplicationContext context) throws Exception {
+        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
+        Servlet servlet = new JettyHttpHandlerAdapter(handler);
 
-        // Tomcat and Jetty (also see notes below)
-        ServletHttpHandlerAdapter servlet = new ServletHttpHandlerAdapter(handler);
-
-        Server server = new Server(port);
-
-        ServletContextHandler contextHandler = new ServletContextHandler();
-        contextHandler.setErrorHandler(null);
-        contextHandler.setContextPath("");
+        Server server = new Server();
+        ServletContextHandler contextHandler = new ServletContextHandler(server, "");
         contextHandler.addServlet(new ServletHolder(servlet), "/");
+        contextHandler.start();
 
-        server.setHandler(contextHandler);
+        ServerConnector connector = new ServerConnector(server);
+        connector.setHost("localhost");
+        connector.setPort(port);
+        server.addConnector(connector);
+
         return server;
     }
 
