@@ -22,6 +22,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>9</java.version>
+        <spring.version>5.0.1.RELEASE</spring.version>
     </properties>
 
     <dependencies>     
@@ -115,6 +116,10 @@
                         <id>default-compile</id>
                         <configuration>
                             <!-- compile everything to ensure module-info contains right entries -->
+                            <!-- required when JAVA_HOME is JDK 8 or below -->
+                            <jdkToolchain>
+                                <version>9</version>
+                            </jdkToolchain>
                             <release>9</release>
                         </configuration>
                     </execution>
@@ -134,23 +139,24 @@
                 <!-- defaults for compile and testCompile -->
                 <configuration>
                     <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
-                    <jdkToolchain>
+<!--                    <jdkToolchain>
                         <version>9</version>
                     </jdkToolchain>
-                    <!--                    <release>1.8</release>-->
+                    <release>8</release>
                     <compilerArgs>
-                        <arg>-J--add-opens -Jjava.base/jdk.internal.misc=ALL-UNNAMED</arg>
-                    </compilerArgs>
+                       
+                    </compilerArgs>-->
                  
                 </configuration>
             </plugin>
             
-            <!--            <plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-toolchains-plugin</artifactId>
                 <version>1.1</version>
                 <executions>
                     <execution>
+                        <phase>validate</phase>
                         <goals>
                             <goal>toolchain</goal>
                         </goals>
@@ -159,12 +165,11 @@
                 <configuration>
                     <toolchains>
                         <jdk>
-                            <version>1.8</version>
-                            <vendor>oracle</vendor>
+                            <version>9</version>
                         </jdk>
                     </toolchains>
                 </configuration>
-            </plugin>-->
+            </plugin>
             <!-- Maven Assembly Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

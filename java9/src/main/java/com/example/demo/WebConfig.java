@@ -5,14 +5,15 @@
  */
 package com.example.demo;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.EnableWebFlux;
-import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 /**
  *
  * @author hantsy
  */
 @EnableWebFlux
-public class WebConfig implements WebFluxConfigurer {
+@Configuration
+public class WebConfig {
     
 }

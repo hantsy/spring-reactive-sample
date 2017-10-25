@@ -7,6 +7,7 @@ package com.example.demo;
 
 import java.util.concurrent.Flow;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.function.BiPredicate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,14 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/posts")
-class PostController {
+public class PostController {
 
     @GetMapping
     public Flow.Publisher<Post> all() {
         SubmissionPublisher publisher = new SubmissionPublisher();
         publisher.submit(new Post(1L, "post one", "content of post one"));
         publisher.submit(new Post(2L, "post two", "content of post two"));
-        
+
         return publisher;
     }
 
