@@ -4,7 +4,7 @@ import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
 
 
 plugins {
-    kotlin("jvm")
+    kotlin("jvm") version "1.1.51"
     application
 }
 
