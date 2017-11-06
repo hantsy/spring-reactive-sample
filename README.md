@@ -2,9 +2,6 @@
 
 
 
-
-[TOC]
-
  **Reactive** or **Reactive Streams** is a hot topic in these days, you can see it in blog entries, presentations, or some online course.
 
 What is Reactive Streams? From the official website of Reactive Streams:
@@ -23,6 +20,50 @@ The Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). For 
 * Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included in the latest 2.0.0.M3. 
 
 **NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
+
+
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Create a Webflux application](#create-a-webflux-application)
+  - [Prerequisites](#prerequisites)
+  - [Generate project skeleton](#generate-project-skeleton)
+  - [Getting started](#getting-started)
+  - [Bootstrap](#bootstrap)
+    - [Apache Tomcat](#apache-tomcat)
+    - [Jetty](#jetty)
+    - [Reactor Netty](#reactor-netty)
+    - [Undertow](#undertow)
+    - [Standalone Servlet Container](#standalone-servlet-container)
+- [Spring Boot](#spring-boot)
+  - [Apache Tomcat](#apache-tomcat-1)
+  - [Jetty](#jetty-1)
+  - [Undertow](#undertow-1)
+- [Reactive Data Operations](#reactive-data-operations)
+  - [Spring Data Mongo](#spring-data-mongo)
+    - [Spring Boot](#spring-boot-1)
+    - [Data Auditing Support](#data-auditing-support)
+    - [Data Initialization](#data-initialization)
+  - [Spring Data Redis](#spring-data-redis)
+    - [Spring Boot](#spring-boot-2)
+    - [Data Initialization](#data-initialization-1)
+  - [Spring Data Cassandra](#spring-data-cassandra)
+    - [Spring Boot](#spring-boot-3)
+    - [Data initialization](#data-initialization)
+- [Security for Webflux](#security-for-webflux)
+  - [Spring Boot](#spring-boot-4)
+  - [Method level constraints](#method-level-constraints)
+  - [Load users from a properties file](#load-users-from-a-properties-file)
+  - [Customize UserDetailsRepository](#customize-userdetailsrepository)
+- [RouterFunction](#routerfunction)
+- [Client](#client)
+- [Test](#test)
+- [Kotlin](#kotlin)
+- [Sample codes](#sample-codes)
+- [References](#references)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Create a Webflux application
 
