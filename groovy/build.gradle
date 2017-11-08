@@ -33,7 +33,7 @@ dependencies {
 
 	// security
 	compile('org.springframework.boot:spring-boot-starter-security')
-	compile('org.springframework.security:spring-security-webflux')
+	compile('org.springframework.security:spring-security-web')
 
 	// webflux
 	compile('org.springframework.boot:spring-boot-starter-webflux')

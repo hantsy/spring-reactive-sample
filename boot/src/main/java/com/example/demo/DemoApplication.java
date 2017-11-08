@@ -19,9 +19,9 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.HttpSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.MapUserDetailsRepository;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
@@ -55,7 +55,7 @@ class SecurityConfiguration {
 
     @Bean
     UserDetailsRepository userDetailsRepository() {
-        return new MapUserDetailsRepository(user("rob").build(), user("josh").roles("USER","ADMIN").build());
+        return new MapReactiveUserDetailsService(user("rob").build(), user("josh").roles("USER","ADMIN").build());
     }
 
     private User.UserBuilder user(String username) {
@@ -63,7 +63,7 @@ class SecurityConfiguration {
     }
 
     @Bean
-    SecurityWebFilterChain springSecurity(HttpSecurity http) {
+    SecurityWebFilterChain springSecurity(ServerHttpSecurity http) {
         return http
                 .authorizeExchange()
                     .pathMatchers("/users/me").authenticated()
@@ -81,7 +81,7 @@ class SecurityConfiguration {
 class SecurityConfig {
 
     @Bean
-    SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
@@ -100,10 +100,10 @@ class SecurityConfig {
     }
 
     @Bean
-    public MapUserDetailsRepository userDetailsRepository() {
+    public MapReactiveUserDetailsService userDetailsRepository() {
         UserDetails user = User.withUsername("user").password("password").roles("USER").build();
         UserDetails admin = User.withUsername("admin").password("password").roles("USER", "ADMIN").build();
-        return new MapUserDetailsRepository(user, admin);
+        return new MapReactiveUserDetailsService(user, admin);
     }
 
 }

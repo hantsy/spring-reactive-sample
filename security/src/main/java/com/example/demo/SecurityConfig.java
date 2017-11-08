@@ -9,11 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationDecision;
-import org.springframework.security.config.web.server.HttpSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.MapUserDetailsRepository;
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
@@ -28,7 +29,7 @@ import reactor.core.publisher.Mono;
 class SecurityConfig {
 
     @Bean
-    SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
             .authorizeExchange()
             .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
@@ -46,10 +47,11 @@ class SecurityConfig {
     }
 
     @Bean
-    public MapUserDetailsRepository userDetailsRepository() {
-        UserDetails user = User.withUsername("user").password("password").roles("USER").build();
-        UserDetails admin = User.withUsername("admin").password("password").roles("USER", "ADMIN").build();
-        return new MapUserDetailsRepository(user, admin);
+    public MapReactiveUserDetailsService userDetailsRepository() {
+        UserBuilder users = User.withDefaultPasswordEncoder();
+        UserDetails user = users.username("user").password("password").roles("USER").build();
+        UserDetails admin = users.username("admin").password("password").roles("USER", "ADMIN").build();
+        return new MapReactiveUserDetailsService(user, admin);
     }
 
 }

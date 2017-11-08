@@ -10,7 +10,7 @@ plugins {
 
 buildscript {
     extra["kotlinVersion"] = "1.1.51"
-    extra["springBootVersion"] = "2.0.0.M5"
+    extra["springBootVersion"] = "2.0.0.M6"
 
     val kotlinVersion: String by extra
     //val springBootVersion: String by extra
@@ -103,7 +103,7 @@ dependencies {
     //spring security for webflux
     compile("org.springframework.security:spring-security-core")
     compile("org.springframework.security:spring-security-config")
-    compile("org.springframework.security:spring-security-webflux")
+    compile("org.springframework.security:spring-security-web")
 
     //spring data mongodb reactive
     compile("org.springframework.data:spring-data-mongodb")

@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationDecision;
-import org.springframework.security.config.web.server.HttpSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.core.userdetails.UserDetailsRepositoryResourceFactoryBean;
+import org.springframework.security.config.core.userdetails.ReactiveUserDetailsServiceResourceFactoryBean;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
@@ -26,7 +26,7 @@ import reactor.core.publisher.Mono;
 class SecurityConfig {
 
     @Bean
-    SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
             .authorizeExchange()
             .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
@@ -44,8 +44,8 @@ class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsRepositoryResourceFactoryBean userDetailsService() {
-        return UserDetailsRepositoryResourceFactoryBean
+    public ReactiveUserDetailsServiceResourceFactoryBean userDetailsService() {
+        return ReactiveUserDetailsServiceResourceFactoryBean
             .fromResourceLocation("classpath:users.properties");
     }
 

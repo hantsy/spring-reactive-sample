@@ -49,7 +49,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-webflux</artifactId>
+            <artifactId>spring-security-web</artifactId>
         </dependency>
         
         <dependency>
