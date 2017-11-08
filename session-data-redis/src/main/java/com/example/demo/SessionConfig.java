@@ -5,21 +5,17 @@
  */
 package com.example.demo;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.redis.core.ReactiveRedisOperations;
-import org.springframework.session.ReactorSessionRepository;
-import org.springframework.session.data.redis.ReactiveRedisOperationsSessionRepository;
-import org.springframework.session.data.redis.config.annotation.web.reactor.EnableRedisReactorSession;
+import org.springframework.session.data.redis.config.annotation.web.server.EnableRedisWebSession;
 
 /**
  *
  * @author hantsy
  */
-@EnableRedisReactorSession
+@EnableRedisWebSession
 public class SessionConfig {
 
 //    @Bean
-//    public ReactorSessionRepository sessionRepository(ReactiveRedisOperations<String, Object> sessionRedisOperations) {
+//    public ReactiveSessionRepository sessionRepository(ReactiveRedisOperations<String, Object> sessionRedisOperations) {
 //        return new ReactiveRedisOperationsSessionRepository(sessionRedisOperations);
 //    }
 }

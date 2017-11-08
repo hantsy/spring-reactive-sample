@@ -5,10 +5,6 @@
  */
 package com.example.demo;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.core.ReactiveMongoOperations;
-import org.springframework.session.ReactorSessionRepository;
-import org.springframework.session.data.mongo.ReactiveMongoOperationsSessionRepository;
 import org.springframework.session.data.mongo.config.annotation.web.reactive.EnableMongoWebSession;
 
 /**
@@ -19,7 +15,7 @@ import org.springframework.session.data.mongo.config.annotation.web.reactive.Ena
 public class SessionConfig {
 
 //    @Bean
-//    public ReactorSessionRepository sessionRepository(ReactiveMongoOperations reactiveMongoOperations) {
+//    public ReactiveSessionRepository sessionRepository(ReactiveMongoOperations reactiveMongoOperations) {
 //        return new ReactiveMongoOperationsSessionRepository(reactiveMongoOperations);
 //    }
 }
