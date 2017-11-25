@@ -4,12 +4,12 @@ import org.jetbrains.kotlin.noarg.gradle.NoArgExtension
 
 
 plugins {
-    kotlin("jvm") version "1.1.51"
+    kotlin("jvm") version "1.1.60"
     application
 }
 
 buildscript {
-    extra["kotlinVersion"] = "1.1.51"
+    extra["kotlinVersion"] = "1.1.60"
     extra["springBootVersion"] = "2.0.0.M6"
 
     val kotlinVersion: String by extra

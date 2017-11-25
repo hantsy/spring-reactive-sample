@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
-import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 import reactor.ipc.netty.NettyContext;
 import reactor.ipc.netty.http.server.HttpServer;
@@ -18,7 +17,6 @@ import reactor.ipc.netty.http.server.HttpServer;
 
 @Configuration
 @ComponentScan
-//@EnableWebFlux
 @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
 public class Application {
 
