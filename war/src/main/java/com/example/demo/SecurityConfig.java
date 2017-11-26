@@ -30,6 +30,7 @@ class SecurityConfig {
 	@Bean
 	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
 		return http
+            .csrf().disable()
 			.authorizeExchange()
 				.pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
                 .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")

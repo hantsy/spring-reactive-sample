@@ -20,7 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  * @author hantsy
  */
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = WebConfig.class)
+@ContextConfiguration(classes = {WebConfig.class, SecurityConfig.class})
 public class ApplicationTests {
 
     @Autowired
