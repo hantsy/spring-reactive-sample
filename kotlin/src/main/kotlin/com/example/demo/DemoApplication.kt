@@ -13,9 +13,9 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository
 import org.springframework.http.HttpMethod
 import org.springframework.security.authorization.AuthorizationDecision
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
-import org.springframework.security.config.web.server.HttpSecurity
+import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.userdetails.MapUserDetailsRepository
+import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.authorization.AuthorizationContext
@@ -38,7 +38,7 @@ fun main(args: Array<String>) {
 class SecurityConfig {
     @Bean
     @Throws(Exception::class)
-    fun springWebFilterChain(http: HttpSecurity): SecurityWebFilterChain {
+    fun springWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
         return http
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
@@ -56,10 +56,10 @@ class SecurityConfig {
     }
 
     @Bean
-    fun userDetailsRepository(): MapUserDetailsRepository {
+    fun userDetailsRepository(): MapReactiveUserDetailsService {
         val rob = User.withUsername("test").password("test123").roles("USER").build()
         val admin = User.withUsername("admin").password("admin123").roles("USER", "ADMIN").build()
-        return MapUserDetailsRepository(rob, admin)
+        return MapReactiveUserDetailsService(rob, admin)
     }
 }
 

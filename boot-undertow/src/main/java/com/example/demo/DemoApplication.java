@@ -59,7 +59,7 @@ class SecurityConfiguration {
     }
 
     private User.UserBuilder user(String username) {
-        return User.withUsername(username).password("password").roles("USER");
+        return User.withDefaultPasswordEncoder().username(username).password("password").roles("USER");
     }
 
     @Bean
@@ -100,8 +100,8 @@ class SecurityConfig {
 
     @Bean
     public MapReactiveUserDetailsService userDetailsRepository() {
-        UserDetails user = User.withUsername("user").password("password").roles("USER").build();
-        UserDetails admin = User.withUsername("admin").password("password").roles("USER", "ADMIN").build();
+        UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build();
+        UserDetails admin = User.withDefaultPasswordEncoder().username("admin").password("password").roles("USER", "ADMIN").build();
         return new MapReactiveUserDetailsService(user, admin);
     }
 

@@ -11,20 +11,21 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory
 import org.springframework.data.mongodb.repository.support.ReactiveMongoRepositoryFactory
 import org.springframework.http.HttpMethod
-import org.springframework.security.authentication.UserDetailsRepositoryAuthenticationManager
-import org.springframework.security.config.web.server.HttpSecurity
+import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager
+import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.security.core.userdetails.UserDetailsRepository
+import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.web.server.SecurityWebFilterChain
-import org.springframework.security.web.server.WebFilterChainFilter
-import org.springframework.security.web.server.context.WebSessionSecurityContextRepository
+import org.springframework.security.web.server.WebFilterChainProxy
+import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository
 import org.springframework.web.reactive.function.server.HandlerStrategies
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebHandler
 import reactor.core.publisher.Flux
+import java.util.*
 
 fun beans() = beans {
 
@@ -94,11 +95,11 @@ fun beans() = beans {
     }
 
     bean<WebFilter>("springSecurityFilterChain") {
-        WebFilterChainFilter(Flux.just(ref()))
+        WebFilterChainProxy(Arrays.asList(ref()))
     }
 
     bean<SecurityWebFilterChain> {
-        ref<HttpSecurity>().authorizeExchange()
+        ref<ServerHttpSecurity>().authorizeExchange()
                 .pathMatchers(HttpMethod.GET, "/api/posts/**").permitAll()
                 .pathMatchers(HttpMethod.DELETE, "/api/posts/**").hasRole("ADMIN")
                 //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
@@ -107,21 +108,22 @@ fun beans() = beans {
                 .build()
     }
 
-    bean<HttpSecurity>(scope = BeanDefinitionDsl.Scope.PROTOTYPE) {
-        HttpSecurity.http().apply {
+    bean<ServerHttpSecurity>(scope = BeanDefinitionDsl.Scope.PROTOTYPE) {
+        ServerHttpSecurity.http().apply {
             httpBasic()
-            authenticationManager(UserDetailsRepositoryAuthenticationManager(ref()))
-            securityContextRepository(WebSessionSecurityContextRepository())
+            authenticationManager(UserDetailsRepositoryReactiveAuthenticationManager(ref()))
+            securityContextRepository(WebSessionServerSecurityContextRepository())
         }
     }
 
     bean {
-        UserDetailsRepository { username ->
+        ReactiveUserDetailsService { username ->
             ref<UserRepository>()
                     .findByUsername(username)
                     .map { (_, username, password, active, roles) ->
                         org.springframework.security.core.userdetails.User
-                                .withUsername(username)
+                                .withDefaultPasswordEncoder()
+                                .username(username)
                                 .password(password)
                                 .accountExpired(!active)
                                 .accountLocked(!active)
@@ -161,7 +163,7 @@ class Foo
 //class SecurityConfig {
 //    @Bean
 //    @Throws(Exception::class)
-//    fun springWebFilterChain(http: HttpSecurity): SecurityWebFilterChain {
+//    fun springWebFilterChain(http: ServerHttpSecurity): SecurityWebFilterChain {
 //        return http
 //                .authorizeExchange()
 //                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
