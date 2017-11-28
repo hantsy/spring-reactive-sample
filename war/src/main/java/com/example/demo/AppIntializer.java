@@ -8,8 +8,8 @@ import org.springframework.http.server.reactive.ServletHttpHandlerAdapter;
 import org.springframework.web.reactive.support.AbstractAnnotationConfigDispatcherHandlerInitializer;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
-// There is a bug to stop security registraion before 5.0.2. 
-// https://stackoverflow.com/questions/46325632/how-to-activate-spring-security-in-a-webflux-war-application
+// There is a bug to stop security WebFilter registraion before 5.0.2. 
+// A workaround: https://stackoverflow.com/questions/46325632/how-to-activate-spring-security-in-a-webflux-war-application
 public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInitializer {
 
     @Override
