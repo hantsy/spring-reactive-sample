@@ -35,7 +35,7 @@ beans {
     }
 
     routes(RouterFunction) {
-        postHandler= ref("postHandler")
+        def postHandler= ref("postHandler")
         route(GET("/posts"), postHandler.&all)
                 .andRoute(POST("/posts"), postHandler.&create)
                 .andRoute(GET("/posts/{id}"), postHandler.&get)

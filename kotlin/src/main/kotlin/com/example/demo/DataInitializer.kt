@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 
 @Component
-class DataInitializr(val posts: PostRepository) {
-    private val log = LoggerFactory.getLogger(DataInitializr::class.java);
+class DataInitializer(val posts: PostRepository) {
+    private val log = LoggerFactory.getLogger(DataInitializer::class.java);
 
     @EventListener(value = ContextRefreshedEvent::class)
     fun run() {
