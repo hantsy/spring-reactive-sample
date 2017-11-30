@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-integration</artifactId>
+    <artifactId>spring-reactive-sample-integration-dsl</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-reactive-sample-integration</name>
+    <name>spring-reactive-sample-integration-dsl</name>
     <description>Spring Integration Webflux sample</description>
 
     <parent>

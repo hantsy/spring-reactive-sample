@@ -5,18 +5,25 @@
  */
 package com.example.demo;
 
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  *
  * @author hantsy
  */
 @Data
+@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Person implements Serializable{
-    private String name;
+class Post {
+    
+    private Long id;
+    private String title;
+    private String content;
+    
 }
