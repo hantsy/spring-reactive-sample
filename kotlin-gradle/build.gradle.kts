@@ -10,7 +10,7 @@ plugins {
 
 buildscript {
     extra["kotlinVersion"] = "1.1.61"
-    extra["springBootVersion"] = "2.0.0.M6"
+    extra["springBootVersion"] = "2.0.0.M7"
 
     val kotlinVersion: String by extra
     //val springBootVersion: String by extra
