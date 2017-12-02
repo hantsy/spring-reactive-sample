@@ -1,0 +1,12 @@
+server:
+  port: 8080
+spring:
+  data:
+    cassandra:
+        keyspace-name: mykeyspace
+        contact-points: localhost
+        schema-action: RECREATE
+logging:
+  level:
+    org.springframework.web: DEBUG
+    

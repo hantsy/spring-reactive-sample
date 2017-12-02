@@ -8,15 +8,16 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @RunWith(SpringRunner.class)
-@WebFluxTest
+@WebFluxTest(controllers = PostController.class)
 public class DemoApplicationTests {
-    
+
     @Autowired
     WebTestClient client;
 
-	@Test
-	public void getAllMessagesShouldBeOk() {
-        client.get().uri("/").exchange().expectStatus().isOk();
-	}
+    @Test
+    public void getAllMessagesShouldBeOk() {
+        client.get().uri("/posts").exchange()
+            .expectStatus().isOk();
+    }
 
 }

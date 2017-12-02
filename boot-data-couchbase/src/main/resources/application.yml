@@ -1,0 +1,9 @@
+server:
+  port: 8080
+spring:
+  couchbase:
+      bootstrap-hosts: localhost
+logging:
+  level:
+    org.springframework.web: DEBUG
+    
