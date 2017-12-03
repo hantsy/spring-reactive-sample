@@ -15,7 +15,6 @@ import org.springframework.web.reactive.config.EnableWebFlux;
  * @author hantsy
  */
 @Configuration
-@ComponentScan
 @EnableWebFlux
 @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
 class WebConfig {
