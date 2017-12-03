@@ -1,16 +1,19 @@
 package com.example.demo;
 
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.ServletHttpHandlerAdapter;
-import org.springframework.web.reactive.support.AbstractAnnotationConfigDispatcherHandlerInitializer;
+import org.springframework.util.Assert;
+import org.springframework.web.server.adapter.AbstractReactiveWebInitializer;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
 // There is a bug to stop security WebFilter registraion before 5.0.2. 
 // A workaround: https://stackoverflow.com/questions/46325632/how-to-activate-spring-security-in-a-webflux-war-application
-public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInitializer {
+/*public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInitializer {
 
     @Override
     protected Class<?>[] getConfigClasses() {
@@ -40,4 +43,25 @@ public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInit
 
         customizeRegistration(registration);
     }
+}*/
+
+//in Spring 5.0.2, a new AbstractReactiveWebInitializer introduced.
+public class AppIntializer extends AbstractReactiveWebInitializer {
+    
+    @Override
+	protected ApplicationContext createApplicationContext() {
+		Class<?>[] configClasses = getConfigClasses();
+		Assert.notEmpty(configClasses, "No Spring configuration provided.");
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(configClasses);
+		return context;
+	}
+
+    @Override
+    protected Class<?>[] getConfigClasses() {
+        return new Class[]{
+            WebConfig.class,
+            SecurityConfig.class
+        };
+    }
+
 }

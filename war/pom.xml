@@ -22,7 +22,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <jetty.http.port>8080</jetty.http.port>
     </properties>
 
     <dependencies>     
@@ -128,78 +127,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20</version>
+                <version>2.20.1</version>
                 <configuration>
                     <printSummary>true</printSummary>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <excludes>
-                        <exclude>**/IntegrationTests</exclude>
+                        <exclude>**/IntegrationTests*</exclude>
                     </excludes>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.20</version>
-                <configuration>
-                    <includes>
-                        <include>**/IntegrationTests</include>
-                    </includes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>integration-test</id>
-                        <goals>
-                            <goal>integration-test</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>verify</id>
-                        <goals>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.eclipse.jetty</groupId>
-                <artifactId>jetty-maven-plugin</artifactId>
-                <version>9.4.6.v20170531</version>
-                <configuration>
-                    <scanIntervalSeconds>10</scanIntervalSeconds>
-                    <stopPort>8005</stopPort>
-                    <stopKey>STOP</stopKey>
-                    <webApp>
-                        <contextPath>/</contextPath>
-                    </webApp>
-                    <httpConnector>
-                        <port>8080</port>
-                    </httpConnector>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>start-jetty</id>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                            <goal>start</goal>
-                        </goals>
-                        <configuration>
-                            <scanIntervalSeconds>0</scanIntervalSeconds>
-                            <daemon>true</daemon>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>stop-jetty</id>
-                        <phase>post-integration-test</phase>
-                        <goals>
-                            <goal>stop</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+      
             <plugin> 
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
@@ -210,6 +147,7 @@
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
+                <version>1.6.5</version>
                 <configuration>
                     <container>
                         <containerId>tomcat8x</containerId>
@@ -218,7 +156,7 @@
 
                     <configuration>
                         <properties>
-                            <cargo.servlet.port>9000</cargo.servlet.port>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
                             <cargo.logging>high</cargo.logging>
                         </properties>
                     </configuration>
@@ -226,7 +164,79 @@
             </plugin>
         </plugins>
     </build>
+    <profiles>
+        <profile>
+            <id>integration</id>
+            <build>
 
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>2.20.1</version>
+                        <configuration>
+                            <includes>
+                                <include>**/IntegrationTests*</include>
+                            </includes>
+                            <skipITs>${skipTests}</skipITs>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>integration-test</id>
+                                <goals>
+                                    <goal>integration-test</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>verify</id>
+                                <goals>
+                                    <goal>verify</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.eclipse.jetty</groupId>
+                        <artifactId>jetty-maven-plugin</artifactId>
+                        <version>9.4.7.v20170914</version>
+                        <configuration>
+                            <scanIntervalSeconds>10</scanIntervalSeconds>
+                            <stopPort>8005</stopPort>
+                            <stopKey>STOP</stopKey>
+                            <webApp>
+                                <contextPath>/</contextPath>
+                            </webApp>
+                            <httpConnector>
+                                <port>9000</port>
+                            </httpConnector>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>start-jetty</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                    <goal>start</goal>
+                                </goals>
+                                <configuration>
+                                    <scanIntervalSeconds>0</scanIntervalSeconds>
+                                    <daemon>true</daemon>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>stop-jetty</id>
+                                <phase>post-integration-test</phase>
+                                <goals>
+                                    <goal>stop</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
     <repositories>
         <repository>
             <id>spring-snapshots</id>

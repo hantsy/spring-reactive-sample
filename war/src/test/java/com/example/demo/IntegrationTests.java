@@ -25,7 +25,7 @@ public class IntegrationTests {
         this.rest = WebTestClient
             .bindToServer()
             .responseTimeout(Duration.ofDays(1))
-            .baseUrl("http://localhost:8080")
+            .baseUrl("http://localhost:9000")
             .filter(basicAuthentication())
             .build();
     }
