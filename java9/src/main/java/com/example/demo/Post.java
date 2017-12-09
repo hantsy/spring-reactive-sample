@@ -5,12 +5,6 @@
  */
 package com.example.demo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-
 /**
  *
  * @author hantsy
@@ -20,7 +14,7 @@ import lombok.ToString;
 //@Builder
 //@NoArgsConstructor
 //@AllArgsConstructor
-class Post {
+public class Post {
     
     private Long id;
     private String title;
@@ -59,8 +53,5 @@ class Post {
     @Override
     public String toString() {
         return "Post{" + "id=" + id + ", title=" + title + ", content=" + content + '}';
-    }
-    
-    
-    
+    }   
 }
