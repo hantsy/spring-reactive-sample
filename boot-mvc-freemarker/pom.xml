@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-boot-freemarker</artifactId>
+    <artifactId>spring-reactive-sample-boot-mvc-freemarker</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-reactive-sample-boot-freemarker</name>
+    <name>spring-reactive-sample-boot-mvc-freemarker</name>
     <description>Spring Webflux demo</description>
 
     <parent>
