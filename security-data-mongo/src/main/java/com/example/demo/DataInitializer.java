@@ -10,6 +10,7 @@ import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
@@ -23,10 +24,12 @@ class DataInitializer {
 
     private final PostRepository posts;
     private final UserRepository users;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(PostRepository posts, UserRepository users) {
+    public DataInitializer(PostRepository posts, UserRepository users, PasswordEncoder passwordEncoder) {
         this.posts = posts;
         this.users = users;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @EventListener(value = ContextRefreshedEvent.class)
@@ -48,7 +51,11 @@ class DataInitializer {
                             ? Arrays.asList("ROLE_USER")
                             : Arrays.asList("ROLE_USER", "ROLE_ADMIN");
 
-                            User user = User.builder().roles(roles).username(username).password("password").build();
+                            User user = User.builder()
+                                    .roles(roles)
+                                    .username(username)
+                                    .password(passwordEncoder.encode("password"))
+                                    .build();
                             return this.users.save(user);
                         }
                     )
