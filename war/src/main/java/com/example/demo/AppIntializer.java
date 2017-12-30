@@ -42,8 +42,10 @@ public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInit
 */
 // in Spring 5.0.2, AbstractAnnotationConfigDispatcherHandlerInitializer is marked as deprecated.
 // a new AbstractReactiveWebInitializer introduced for webflux based applications.
+// But it seems AbstractReactiveWebInitializer does not refresh applicationContext, override createApplicationContext() to overcome this issue temporarily.
 public class AppIntializer extends AbstractReactiveWebInitializer {
 
+	//new AnnotationConfigApplicationContext(Class<> ...) includes an extra refresh action.
     @Override
     protected ApplicationContext createApplicationContext() {
         Class<?>[] configClasses = getConfigClasses();
