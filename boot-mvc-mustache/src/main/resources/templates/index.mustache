@@ -1,0 +1,18 @@
+{{>header}}
+	<section class="container">
+        <div class="row">
+			{{#posts}}
+            <div class="col-md-12">
+			    <div class="card">
+				  <div class="card-body">
+					<h4 class="card-title">{{title}}</h4>
+					<h6 class="card-subtitle mb-2 text-muted">{{createdDate}}</h6>
+					<p class="card-text">{{content}}</p>
+					<a href="/posts/{{id}}" class="card-link">View Details</a>
+				  </div>
+				</div>
+			</div>
+			{{/posts}}
+        </div>
+    </section>
+{{>footer}}
