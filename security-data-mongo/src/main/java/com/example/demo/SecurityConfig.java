@@ -52,9 +52,7 @@ class SecurityConfig {
 
     @Bean
     public ReactiveUserDetailsService userDetailsService(UserRepository users) {
-        return (username) -> {
-            return users.findByUsername(username).cast(UserDetails.class);
-        };
+        return (username) -> users.findByUsername(username).cast(UserDetails.class);
     }
 
 }
