@@ -46,7 +46,9 @@ public class Application {
     @Profile("default")
     @Bean
     public NettyContext nettyContext(ApplicationContext context) {
-        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
+        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context)
+            .exceptionHandler(exceptionHandler())
+            .build();
         ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
         HttpServer httpServer = HttpServer.create("localhost", this.port);
         return httpServer.newHandler(adapter).block();

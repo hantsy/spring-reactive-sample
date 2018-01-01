@@ -35,7 +35,7 @@ class PostRepository {
     }
 
     Mono<Post> findById(Long id) {
-        return Mono.just(data.get(id));
+        return Mono.just(data.get(id)).switchIfEmpty(Mono.empty());
     }
 
     Mono<Post> save(Post post) {

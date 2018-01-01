@@ -14,6 +14,8 @@ import static org.springframework.web.reactive.function.server.RequestPredicates
 import static org.springframework.web.reactive.function.server.RequestPredicates.contentType;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
+import static org.springframework.web.reactive.function.server.ServerResponse.*;
+
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
@@ -32,18 +34,18 @@ public class PostHandler {
     }
 
     public Mono<ServerResponse> all(ServerRequest req) {
-        return ServerResponse.ok().body(this.posts.findAll(), Post.class);
+        return ok().body(this.posts.findAll(), Post.class);
     }
 
     public Mono<ServerResponse> create(ServerRequest req) {
         return req.body(BodyExtractors.toMono(Post.class))
             .flatMap(post -> this.posts.save(post))
-            .flatMap(p -> ServerResponse.created(URI.create("/posts/" + p.getId())).build());
+            .flatMap(p -> created(URI.create("/posts/" + p.getId())).build());
     }
 
     public Mono<ServerResponse> get(ServerRequest req) {
         return this.posts.findById(Long.valueOf(req.pathVariable("id")))
-            .flatMap(post -> ServerResponse.ok().body(Mono.just(post), Post.class))
-            .switchIfEmpty(ServerResponse.notFound().build());
+            .flatMap(post -> ok().syncBody(post))
+            .switchIfEmpty(notFound().build());
     }
 }
