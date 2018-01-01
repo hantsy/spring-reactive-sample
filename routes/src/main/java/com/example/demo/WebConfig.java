@@ -22,7 +22,6 @@ import org.springframework.web.reactive.function.server.ServerResponse;
  * @author hantsy
  */
 @Configuration
-@ComponentScan
 @EnableWebFlux
 class WebConfig {
 
