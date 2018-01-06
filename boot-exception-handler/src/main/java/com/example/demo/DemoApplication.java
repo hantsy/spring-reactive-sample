@@ -180,7 +180,7 @@ class RestWebExceptionHandler implements WebExceptionHandler{
             // marks the response as complete and forbids writing to it
             return exchange.getResponse().setComplete();
         }
-        return Mono.empty();
+        return Mono.error(ex);
     }
 }
 

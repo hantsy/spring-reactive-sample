@@ -61,7 +61,7 @@ public class Application {
                 exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
                 return exchange.getResponse().setComplete();
             }
-            return Mono.empty();
+            return Mono.error(ex);
         };
     }
 
