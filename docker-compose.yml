@@ -25,7 +25,7 @@ services:
       - mongodata:/data/db
     ports:
       - "27017:27017"
-    command: --smallfiles --rest
+    command: --smallfiles 
 #   command: --smallfiles --rest --auth  // if there is a password set in mongo.
 
   couchbase:
