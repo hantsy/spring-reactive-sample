@@ -33,7 +33,7 @@ class PostController {
     @GetMapping("/search")
     public Flux<Post> search(
         @RequestParam() String q,
-        @RequestParam(name="page",  defaultValue = "10") Integer page,
+        @RequestParam(name="page",  defaultValue = "0") Integer page,
         @RequestParam(name="size",  defaultValue = "10") Integer size
     ) {
         return this.posts.findByTitleLike(q, PageRequest.of(page, size));
