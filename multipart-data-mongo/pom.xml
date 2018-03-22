@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>spring-reactive-sample-multipart-data-mongo</name>
-    <description>Spring Webflux multipart data mongo demo(without Spring Boot)</description>
+    <description>Spring Webflux multipart data mongo demo(Pending, waiting for reactive streams support for GridfsTemplate)</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

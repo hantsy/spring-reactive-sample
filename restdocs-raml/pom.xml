@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>spring-reactive-sample-restdocs-raml</name>
-    <description>Spring RestDocs RAML with Webflux </description>
+    <description>Spring RestDocs RAML with Webflux(Pending, waiting for restdocs-raml Maven plugin) </description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

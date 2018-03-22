@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>spring-reactive-sample-groovy-dsl</name>
-    <description>Demo project written in Groovy</description>
+    <description>Demo project written in Groovy DSL configuration(Pending)</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
