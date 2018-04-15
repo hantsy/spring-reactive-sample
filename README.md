@@ -362,7 +362,7 @@ According to the official documention, in [WebFlux framework](http://docs.spring
 
 #### Apache Tomcat
 
-Create a general main class to run the application programticially. 
+Create a general main class to run the application grammatically. 
 
 ```java
 ApplicationContext context = new AnnotationConfigApplicationContext(WebConfig.class, SecurityConfig.class);  
