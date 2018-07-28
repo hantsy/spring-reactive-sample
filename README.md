@@ -731,7 +731,7 @@ At the moment, Data Redis, Data MongoDB and Data Cassandra will be the first-cla
 
 ### Spring Data Mongo
 
-Spring Data Mongo provides reactive variants of `MongoTemplate` and `MongoRepsoitory`, aka `ReactiveMongoTemplate` and `ReactiveMongoRepository` which have reactive capablities.
+Spring Data Mongo provides reactive variants of `MongoTemplate` and `MongoRepository`, aka `ReactiveMongoTemplate` and `ReactiveMongoRepository` which have reactive capablities.
 
 Add the following into project dependencies.
 
