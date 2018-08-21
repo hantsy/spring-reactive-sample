@@ -1,0 +1,30 @@
+    version: "3"
+    services:
+      mongo1:
+        hostname: mongo1
+        container_name: localmongo1
+        image: mongo:4.0-xenial
+        environment:
+          MONGO_INITDB_DATABASE: blog
+        volumes:
+          - ./mongo-initdb.d:/docker-entrypoint-initdb.d 
+        ports:
+          - "27017:27017"
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+      mongo2:
+        hostname: mongo2
+        container_name: localmongo2
+        image: mongo:4.0-xenial
+        ports:
+          - "27018:27017"
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+      mongo3:
+        hostname: mongo3
+        container_name: localmongo3
+        image: mongo:4.0-xenial
+        ports:
+          - "27019:27017"
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
