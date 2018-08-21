@@ -40,8 +40,8 @@ class DataInitializer {
 
             )
             .subscribe(
-                null,
-                null,
+                v -> log.info("Ok"),
+                e -> log.error("error:" + e),
                 () -> log.info("done data initialization...")
             );
     }
