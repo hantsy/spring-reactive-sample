@@ -23,6 +23,11 @@ class PostRepository {
         return this.reactiveRedisOperations.opsForList().range("posts", 0, -1);
     }
 
+    public Mono<Post> findById(String id) {
+        return this.findAll().filter(p -> p.getId().equals(id)).last();
+    }
+
+
     public Mono<Long> save(Post post){
         return this.reactiveRedisOperations.opsForList().rightPush("posts", post);
     }

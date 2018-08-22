@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -26,49 +27,16 @@ import reactor.core.publisher.Flux;
  */
 @Component
 @Slf4j
+@RequiredArgsConstructor
 class DataInitializer {
 
-    private final ReactiveRedisConnectionFactory factory;
     private final PostRepository posts;
-    private final RedisSerializer<String> serializer = new StringRedisSerializer();
 
-    public DataInitializer(ReactiveRedisConnectionFactory factory, PostRepository posts) {
-        this.factory = factory;
-        this.posts = posts;
-    }
 
     @EventListener(value = ContextRefreshedEvent.class)
     public void init() {
         log.info("start data initialization  ...");
         this.initPosts();
-
-        ReactiveRedisConnection conn = this.factory.getReactiveConnection();
-        log.info("print all keys  ...");
-        conn.keyCommands() //
-            .keys(ByteBuffer.wrap(serializer.serialize("*"))) //
-            .flatMapMany(Flux::fromIterable) //
-            .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
-            .count() //
-            .doOnSuccess(count -> System.out.println(String.format("Total No. found: %s", count))) //
-            .block();
-
-        conn.setCommands()
-            .sAdd(
-                ByteBuffer.wrap("users:user:favorites".getBytes()),
-                this.posts.findAll()
-                    .map(p -> ByteBuffer.wrap(p.getId().getBytes()))
-                    .collectList().block()
-            )
-            .log()
-            .subscribe(null, null, () -> log.info("added favirates..."));
-
-        log.info("print ramdon keys  ...");
-        ReactiveKeyCommands keyCommands = conn.keyCommands();
-        keyCommands.randomKey()
-            .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
-            .flatMap(keyCommands::type)
-            .doOnSuccess(type -> System.out.println(String.format("ByteBuffer type: %s", type))) //
-            .block();
 
         log.info("done data initialization  ...");
         //conn.hashCommands().hGetAll(key)
