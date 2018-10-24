@@ -5,8 +5,8 @@ import org.springframework.context.ApplicationContext
 import org.springframework.context.annotation.*
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder
-import reactor.ipc.netty.NettyContext
-import reactor.ipc.netty.http.server.HttpServer
+import reactor.netty.DisposableServer
+import reactor.netty.http.server.HttpServer
 
 @Configuration
 @ComponentScan
@@ -18,11 +18,11 @@ class Application {
 
     @Profile("default")
     @Bean
-    fun nettyContext(context: ApplicationContext): NettyContext {
+    fun nettyHttpServer(context: ApplicationContext): DisposableServer {
         val handler = WebHttpHandlerBuilder.applicationContext(context).build()
         val adapter = ReactorHttpHandlerAdapter(handler)
-        val httpServer = HttpServer.create("localhost", this.port)
-        return httpServer.newHandler(adapter).block()
+        val httpServer = HttpServer.create().host("localhost").port(this.port)
+        return httpServer.handle(adapter).bindNow()
     }
 }
 
@@ -31,6 +31,6 @@ fun main(args: Array<String>) {
     AnnotationConfigApplicationContext {
         register(Application::class.java)
         refresh()
-        getBean(NettyContext::class.java).onClose().block()
+        getBean(DisposableServer::class.java).onDispose().block()
     }
 }
