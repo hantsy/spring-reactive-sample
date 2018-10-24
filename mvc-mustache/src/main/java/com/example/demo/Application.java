@@ -10,9 +10,9 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
+import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
-import reactor.ipc.netty.NettyContext;
-import reactor.ipc.netty.http.server.HttpServer;
+import reactor.netty.http.server.HttpServer;
 
 @Configuration
 @ComponentScan
@@ -24,18 +24,18 @@ public class Application {
 
     public static void main(String[] args) throws Exception {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
-                Application.class)) {
-            context.getBean(NettyContext.class).onClose().block();
+            Application.class)) {
+            context.getBean(HttpServer.class).bindNow().onDispose().block();
         }
     }
 
     @Profile("default")
     @Bean
-    public NettyContext nettyContext(ApplicationContext context) {
+    public HttpServer nettyHttpServer(ApplicationContext context) {
         HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
         ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
-        HttpServer httpServer = HttpServer.create("localhost", this.port);
-        return httpServer.newHandler(adapter).block();
+        HttpServer httpServer = HttpServer.create().host("localhost").port(this.port);
+        return httpServer.handle(adapter);
     }
 
 }

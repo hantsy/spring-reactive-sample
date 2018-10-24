@@ -1,9 +1,9 @@
 package com.example.demo;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @Configuration
-@EnableWebFlux
-public class WebConfig {
+@EnableAsync
+public class AsyncConfig {
 }

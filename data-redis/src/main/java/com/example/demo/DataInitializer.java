@@ -59,8 +59,9 @@ class DataInitializer {
                     .map(p -> ByteBuffer.wrap(p.getId().getBytes()))
                     .collectList().block()
             )
-            .log()
-            .subscribe(null, null, () -> log.info("added favirates..."));
+            //.log()
+            .doOnSuccess(s -> log.info("added favirates...#" + s))
+            .subscribe();
 
         log.info("print ramdon keys  ...");
         ReactiveKeyCommands keyCommands = conn.keyCommands();

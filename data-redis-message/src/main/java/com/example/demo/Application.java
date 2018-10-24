@@ -16,7 +16,6 @@ import reactor.netty.http.server.HttpServer;
 
 @Configuration
 @ComponentScan
-@EnableWebFlux
 @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
 public class Application {
 

@@ -159,7 +159,7 @@ The final pom.xml looks like:
         </dependency>
         
         <dependency>
-            <groupId>io.projectreactor.ipc</groupId>
+            <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-core</artifactId>
         </dependency>
         
@@ -506,7 +506,7 @@ And add `reactor-netty` in your project dependencies.
 
 ```xml
 <dependency>
-	<groupId>io.projectreactor.ipc</groupId>
+	<groupId>io.projectreactor.netty</groupId>
 	<artifactId>reactor-netty</artifactId>
 </dependency>
 ```
