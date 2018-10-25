@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-java9</artifactId>
+    <artifactId>spring-reactive-sample-data-r2dbc</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-reactive-sample-java9</name>
-    <description>Spring Webflux Reactor Netty demo(without Spring Boot)</description>
+    <name>spring-reactive-sample-data-r2dbc</name>
+    <description>Spring Webflux Data R2DBC demo(without Spring Boot)</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -21,10 +21,28 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!--<java.version>9</java.version>-->
+        <java.version>1.8</java.version>
+		<spring-data-r2dbc.version>1.0.0.BUILD-SNAPSHOT</spring-data-r2dbc.version>
+        <r2dbc-postgresql.version>1.0.0.M5</r2dbc-postgresql.version>
     </properties>
 
-    <dependencies>     
+    <dependencies>    
+        <dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-r2dbc</artifactId>
+			<version>${spring-data-r2dbc.version}</version>
+		</dependency>
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>io.r2dbc</groupId>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <version>${r2dbc-postgresql.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -33,7 +51,7 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webflux</artifactId>
         </dependency>
-        
+              
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -48,11 +66,11 @@
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty</artifactId>
         </dependency>
-<!--        
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>-->
+        </dependency>
         
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -82,11 +100,6 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.jayway.jsonpath</groupId>
-            <artifactId>json-path</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
             <scope>test</scope>
@@ -105,96 +118,32 @@
 
     <build>
         <plugins>
-            <!--docs: https://maven.apache.org/plugins/maven-compiler-plugin/examples/module-info.html-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <configuration>
-                            <!-- compile everything to ensure module-info contains right entries -->
-                            <!-- required when JAVA_HOME is JDK 8 or below -->
-                            <jdkToolchain>
-                                <version>9</version>
-                            </jdkToolchain>
-                            <release>9</release>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>base-compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <!-- recompile everything for target VM except the module-info.java -->
-                        <configuration>
-                            <excludes>
-                                <exclude>module-info.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                </executions>
-                <!-- defaults for compile and testCompile -->
-                <configuration>
-                    <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
-<!--                    <jdkToolchain>
-                        <version>9</version>
-                    </jdkToolchain>
-                    <release>8</release>
-                    <compilerArgs>
-                       
-                    </compilerArgs>-->
-                 
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-toolchains-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>toolchain</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <toolchains>
-                        <jdk>
-                            <version>9</version>
-                        </jdk>
-                    </toolchains>
-                </configuration>
-            </plugin>
             <!-- Maven Assembly Plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <!-- MainClass in mainfest make a executable jar -->
-                    <archive>
-                        <manifest>
-                            <mainClass>com.example.demo.Application</mainClass>
-                        </manifest>
-                    </archive>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<!-- MainClass in mainfest make a executable jar -->
+					<archive>
+						<manifest>
+							<mainClass>com.example.demo.Application</mainClass>
+						</manifest>
+					</archive>
 
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id>
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<phase>package</phase> <!-- bind to the packaging phase -->
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 
             
         </plugins>

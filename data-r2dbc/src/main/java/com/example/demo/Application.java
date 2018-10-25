@@ -12,7 +12,6 @@ import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
-import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 
 @Configuration
@@ -26,17 +25,17 @@ public class Application {
     public static void main(String[] args) throws Exception {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
             Application.class)) {
-            context.getBean(DisposableServer.class).onDispose().block();
+            context.getBean(HttpServer.class).bindNow().onDispose().block();
         }
     }
 
     @Profile("default")
     @Bean
-    public DisposableServer nettyHttpServer(ApplicationContext context) {
+    public HttpServer nettyHttpServer(ApplicationContext context) {
         HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
         ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
         HttpServer httpServer = HttpServer.create().host("localhost").port(this.port);
-        return httpServer.handle(adapter).bindNow();
+        return httpServer.handle(adapter);
     }
 
 }
