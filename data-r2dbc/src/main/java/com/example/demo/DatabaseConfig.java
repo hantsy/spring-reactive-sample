@@ -10,27 +10,41 @@ import io.r2dbc.postgresql.PostgresqlConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.r2dbc.function.DatabaseClient;
+import org.springframework.data.r2dbc.repository.support.R2dbcRepositoryFactory;
+import org.springframework.data.relational.core.mapping.RelationalMappingContext;
 
 /**
- *
  * @author hantsy
  */
 @Configuration
 public class DatabaseConfig {
 
     @Bean
-    DatabaseClient databaseClient(){
-        PostgresqlConnectionFactory connectionFactory = new PostgresqlConnectionFactory(
+    public PostgresqlConnectionFactory postgresqlConnectionFactory() {
+        return new PostgresqlConnectionFactory(
             PostgresqlConnectionConfiguration.builder()
-            .host("localhost")
-            .database("test")
-            .username("user")
-            .password("password").build()
+                .host("localhost")
+                .database("test")
+                .username("user")
+                .password("password").build()
         );
+    }
 
-        DatabaseClient databaseClient = DatabaseClient.create(connectionFactory);
+    @Bean
+    DatabaseClient databaseClient(PostgresqlConnectionFactory connectionFactory ) {
+        return DatabaseClient.create(connectionFactory);
+    }
 
-        return databaseClient;
+    @Bean
+    PostRepository repository(R2dbcRepositoryFactory factory) {
+        return factory.getRepository(PostRepository.class);
+    }
+
+    @Bean
+    R2dbcRepositoryFactory factory(DatabaseClient client) {
+        RelationalMappingContext context = new RelationalMappingContext();
+        context.afterPropertiesSet();
+        return new R2dbcRepositoryFactory(client, context);
     }
 
 }
