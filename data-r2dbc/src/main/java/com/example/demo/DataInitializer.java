@@ -47,7 +47,8 @@ class DataInitializer {
                     .fetch()
                     .all()
                     .log()
-            );
+            )
+            .subscribe(null, null, () -> log.info("initialization is done..."));
     }
 
 }
