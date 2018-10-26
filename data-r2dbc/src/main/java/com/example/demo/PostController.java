@@ -41,12 +41,12 @@ class PostController {
     }
 
     @GetMapping("/{id}")
-    public Mono<Post> get(@PathVariable("id") Long id) {
+    public Mono<Post> get(@PathVariable("id") Integer id) {
         return this.posts.findById(id);
     }
 
     @PutMapping("/{id}")
-    public Mono<Post> update(@PathVariable("id") Long id, @RequestBody Post post) {
+    public Mono<Post> update(@PathVariable("id") Integer id, @RequestBody Post post) {
         return this.posts.findById(id)
             .map(p -> {
                 p.setTitle(post.getTitle());
@@ -58,7 +58,7 @@ class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public Mono<Void> delete(@PathVariable("id") Long id) {
+    public Mono<Void> delete(@PathVariable("id") Integer id) {
         return this.posts.deleteById(id);
     }
 

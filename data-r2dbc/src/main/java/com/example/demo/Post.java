@@ -28,7 +28,7 @@ class Post {
     
     @Id
     @Column("id")
-    private Long id;
+    private Integer id;
 
     @Column("title")
     private String title;

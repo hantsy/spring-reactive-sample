@@ -33,11 +33,11 @@ class DataInitializer {
         log.info("start data initialization  ...");
         this.databaseClient.insert()
             .into("posts")
-            .nullValue("id", Long.class)
+            //.nullValue("id", Integer.class)
             .value("title", "First post title")
             .value("content", "Content of my first post")
             .exchange() //
-            .flatMapMany(it -> it.extract((r, m) -> r.get("id", Long.class)).all())
+            .flatMapMany(it -> it.extract((r, m) -> r.get("id", Integer.class)).all())
             .log()
             .thenMany(
                 this.databaseClient.select()

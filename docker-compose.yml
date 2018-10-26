@@ -28,7 +28,8 @@ services:
       POSTGRES_DB: test
       POSTGRES_USER: user
     volumes:
-      - ./data/postdb:/var/lib/postgresql
+      - ./data/postgresql:/var/lib/postgresql
+      - ./pg-initdb.d:/docker-entrypoint-initdb.d
       
   mongodb: 
     image: mongo 
