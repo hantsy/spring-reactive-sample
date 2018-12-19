@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono
 import java.time.LocalDateTime
 
 @SpringBootApplication
-@EnableMongoAuditing
 class DemoApplication
 
 fun main(args: Array<String>) {
@@ -117,5 +116,5 @@ interface PostRepository : ReactiveMongoRepository<Post, String>
 data class Post(@Id var id: String? = null,
                 var title: String? = null,
                 var content: String? = null,
-                @CreatedDate var createdDate: LocalDateTime = LocalDateTime.now()
+                var createdDate: LocalDateTime = LocalDateTime.now()
 )
