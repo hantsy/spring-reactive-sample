@@ -22,8 +22,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-		<spring-data-r2dbc.version>1.0.0.BUILD-SNAPSHOT</spring-data-r2dbc.version>
-        <r2dbc-postgresql.version>1.0.0.M5</r2dbc-postgresql.version>
+        <spring-data-r2dbc.version>1.0.0.M1</spring-data-r2dbc.version>
+        <r2dbc-postgresql.version>1.0.0.M6</r2dbc-postgresql.version>
     </properties>
 
     <dependencies>    

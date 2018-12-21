@@ -36,8 +36,8 @@ class DataInitializer {
             //.nullValue("id", Integer.class)
             .value("title", "First post title")
             .value("content", "Content of my first post")
-            .exchange() //
-            .flatMapMany(it -> it.extract((r, m) -> r.get("id", Integer.class)).all())
+            .map((r, m) -> r.get("id", Integer.class))
+            .all()
             .log()
             .thenMany(
                 this.databaseClient.select()
