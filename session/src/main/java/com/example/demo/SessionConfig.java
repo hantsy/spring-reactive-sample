@@ -8,7 +8,7 @@ package com.example.demo;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.context.annotation.Bean;
 import org.springframework.session.config.annotation.web.server.EnableSpringWebSession;
-import org.springframework.session.MapReactiveSessionRepository;
+import org.springframework.session.ReactiveMapSessionRepository;
 import org.springframework.session.ReactiveSessionRepository;
 
 /**
@@ -20,6 +20,6 @@ public class SessionConfig {
 
     @Bean
     public ReactiveSessionRepository sessionRepository() {
-        return new MapReactiveSessionRepository( new ConcurrentHashMap<>());
+        return new ReactiveMapSessionRepository( new ConcurrentHashMap<>());
     }
 }
