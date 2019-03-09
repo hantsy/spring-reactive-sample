@@ -50,6 +50,18 @@ services:
       - "11210:11210"
     volumes:
       - couchbasedata:/opt/couchbase/var
+      
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.6.1
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - esdata1:/usr/share/elasticsearch/data
+      
 volumes:
   mongodata:  
 #    driver: local-persist
@@ -57,4 +69,6 @@ volumes:
 #      mountpoint: ./data  
   cassandradata: 
   couchbasedata: 
+  esdata1:
+    driver: local
        

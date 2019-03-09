@@ -1,7 +1,6 @@
 package com.example.demo
 
-import groovy.transform.Immutable
-import groovy.transform.ToString
+
 import groovy.transform.builder.Builder
 import org.slf4j.LoggerFactory
 import org.springframework.boot.CommandLineRunner
@@ -32,12 +31,8 @@ import reactor.core.publisher.Mono
 
 import java.time.LocalDateTime
 
-import static org.springframework.web.reactive.function.server.RequestPredicates.DELETE
-import static org.springframework.web.reactive.function.server.RequestPredicates.GET
-import static org.springframework.web.reactive.function.server.RequestPredicates.POST
-import static org.springframework.web.reactive.function.server.RequestPredicates.PUT
+import static org.springframework.web.reactive.function.server.RequestPredicates.*
 import static org.springframework.web.reactive.function.server.RouterFunctions.route
-import static reactor.core.publisher.Mono.zip
 
 @SpringBootApplication
 @EnableMongoAuditing
@@ -50,10 +45,10 @@ class DemoApplication {
     @Bean
     RouterFunction<ServerResponse> routes(PostHandler postController) {
         return route(GET("/posts"), postController.&all)
-        .andRoute(POST("/posts"), postController.&create)
-        .andRoute(GET("/posts/{id}"), postController.&get)
-        .andRoute(PUT("/posts/{id}"), postController.&update)
-        .andRoute(DELETE("/posts/{id}"), postController.&delete)
+            .andRoute(POST("/posts"), postController.&create)
+            .andRoute(GET("/posts/{id}"), postController.&get)
+            .andRoute(PUT("/posts/{id}"), postController.&update)
+            .andRoute(DELETE("/posts/{id}"), postController.&delete)
     }
 
 }
@@ -64,19 +59,19 @@ class SecurityConfig {
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
-        .authorizeExchange()
-        .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
-        .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
+            .authorizeExchange()
+            .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+            .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
         //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-        .anyExchange().authenticated()
-        .and()
-        .build()
+            .anyExchange().authenticated()
+            .and()
+            .build()
     }
 
     private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
         return authentication
-        .map { (context.getVariables().get("user") == it.getName()) }
-        .map { new AuthorizationDecision(it) }
+            .map { (context.getVariables().get("user") == it.getName()) }
+            .map { new AuthorizationDecision(it) }
     }
 
     @Bean
@@ -102,15 +97,15 @@ class DataInitializer implements CommandLineRunner {
     void run(String[] args) {
         log.info("start data initialization  ...")
         this.posts
-        .deleteAll()
-        .thenMany(
+            .deleteAll()
+            .thenMany(
             Flux.just("Post one", "Post two")
-            .flatMap { it -> this.posts.save(Post.builder().title(it).content("content of " + it).build()) }
+                .flatMap { it -> this.posts.save(Post.builder().title(it).content("content of " + it).build()) }
 
 
         )
-        .log()
-        .subscribe(
+            .log()
+            .subscribe(
             null,
             null,
             { log.info("done initialization...") }
@@ -135,20 +130,20 @@ class PostHandler {
 
     Mono<ServerResponse> create(ServerRequest req) {
         return req.bodyToMono(Post.class)
-        .flatMap { this.posts.save(it) }
-        .flatMap { ServerResponse.created(URI.create("/posts/".concat(it.getId()))).build() }
+            .flatMap { this.posts.save(it) }
+            .flatMap { ServerResponse.created(URI.create("/posts/".concat(it.getId()))).build() }
     }
 
     Mono<ServerResponse> get(ServerRequest req) {
         return this.posts.findById(req.pathVariable("id"))
-        .flatMap { ServerResponse.ok().body(Mono.just(it), Post.class) }
-        .switchIfEmpty { ServerResponse.notFound().build() }
+            .flatMap { ServerResponse.ok().body(Mono.just(it), Post.class) }
+            .switchIfEmpty { ServerResponse.notFound().build() }
     }
 
     Mono<ServerResponse> update(ServerRequest req) {
 
         return Mono
-        .zip(
+            .zip(
             {
                 Post p = (Post) it[0]
                 Post p2 = (Post) it[1]
@@ -157,11 +152,11 @@ class PostHandler {
                 p
             },
             this.posts.findById(req.pathVariable("id")),
-            req.bodyToMono(Post.class)        
+            req.bodyToMono(Post.class)
         )
-        .cast(Post.class)
-        .flatMap { this.posts.save(it) }
-        .flatMap { ServerResponse.noContent().build() }
+            .cast(Post.class)
+            .flatMap { this.posts.save(it) }
+            .flatMap { ServerResponse.noContent().build() }
 
     }
 
