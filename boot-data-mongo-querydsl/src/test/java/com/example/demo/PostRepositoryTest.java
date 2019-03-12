@@ -10,6 +10,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import static java.util.Arrays.asList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
@@ -52,12 +53,18 @@ public class PostRepositoryTest {
         Post post1 = Post.builder().content("my test content").title("my test title").build();
         Post post2 = Post.builder().content("content of another post").title("another post title").build();
 
-        Flux<Post> allPosts = Flux.just(post1, post2)
-            .flatMap(this.postRepository::save)
+        Flux<Post> allPosts = this.postRepository
+            .saveAll(asList(post1, post2))
             .thenMany(this.postRepository.findAll(Sort.by((Sort.Direction.ASC), "title")));
 
         StepVerifier.create(allPosts)
             .expectNextMatches(p -> p.getTitle().equals("another post title"))
+            .expectNextMatches(p -> p.getTitle().equals("my test title"))
+            .verifyComplete();
+
+
+        this.postRepository.findAll(QPost.post.title.containsIgnoreCase("my"))
+            .as(StepVerifier::create)
             .expectNextMatches(p -> p.getTitle().equals("my test title"))
             .verifyComplete();
     }
