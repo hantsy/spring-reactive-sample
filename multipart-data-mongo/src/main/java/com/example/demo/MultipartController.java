@@ -1,47 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.demo;
 
-import java.util.UUID;
-import org.bson.types.ObjectId;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.http.MediaType;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ServerWebExchange;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
- *
- * @author hantsy
- */
-@RestController
-@RequestMapping("/uploads")
+import java.util.Map;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+import static org.springframework.data.mongodb.core.query.Query.query;
+import static org.springframework.http.ResponseEntity.ok;
+
+@RestController()
+@RequestMapping(value = "/multipart")
+@RequiredArgsConstructor
 public class MultipartController {
 
-    private final GridFsTemplate gridFsTemplate;
+    private final ReactiveGridFsTemplate gridFsTemplate;
 
-    MultipartController(GridFsTemplate gridFsTemplate) {
-        this.gridFsTemplate = gridFsTemplate;
+    @PostMapping("")
+    public Mono<ResponseEntity> upload(@RequestPart Mono<FilePart> fileParts) {
+        return fileParts
+            .flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename()))
+            .map((id) -> ok().body(Map.of("id", id.toHexString())));
     }
 
-    @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    Mono<String> uploadSingleFile(@RequestBody Mono<FilePart> part) {
 
-        FilePart filePart = part
+    @GetMapping("{id}")
+    public Flux<Void> read(@PathVariable String id, ServerWebExchange exchange) {
+        return this.gridFsTemplate.findOne(query(where("_id").is(id)))
             .log()
-            .block();
-
-        String name = UUID.randomUUID().toString() + "-" + filePart.name();
-        String contentType = filePart.headers().getContentType().toString();
-        ObjectId id = this.gridFsTemplate.store(filePart.content().blockFirst().asInputStream(), name, contentType);
-        
-        return Mono.just(id.toString());
+            .flatMap(gridFsTemplate::getResource)
+            .flatMapMany(r -> exchange.getResponse().writeWith(r.getDownloadStream()));
     }
 
 }

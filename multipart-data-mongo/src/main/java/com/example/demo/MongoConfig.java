@@ -1,39 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.demo;
 
-import com.mongodb.MongoClient;
+import com.mongodb.reactivestreams.client.MongoClient;
+import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.mongodb.config.AbstractMongoConfiguration;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
-import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
+import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 /**
- *
  * @author hantsy
  */
-@EnableMongoRepositories(basePackageClasses = {MongoConfig.class})
-public class MongoConfig extends AbstractMongoConfiguration {
+@Configuration
+@EnableReactiveMongoRepositories
+public class MongoConfig extends AbstractReactiveMongoConfiguration {
 
     @Value("${mongo.uri}")
     String mongoUri;
-
-    @Override
-    public MongoClient mongoClient() {
-        return new MongoClient("localhost");
-    }
 
     @Override
     protected String getDatabaseName() {
         return "blog";
     }
 
-    @Bean
-    public GridFsTemplate gridFsTemplate() throws Exception {
-        return new GridFsTemplate(mongoDbFactory(), mappingMongoConverter(), "blogfs");
+
+    @Override
+    public MongoClient reactiveMongoClient() {
+        return MongoClients.create(mongoUri);
     }
+
+    @Bean
+    public ReactiveGridFsTemplate reactiveGridFsTemplate() throws Exception {
+        return new ReactiveGridFsTemplate(reactiveMongoDbFactory(), mappingMongoConverter());
+    }
+
+
 }
