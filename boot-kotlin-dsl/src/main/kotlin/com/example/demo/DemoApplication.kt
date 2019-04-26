@@ -122,10 +122,10 @@ class PostRoutes(private val postHandler: PostHandler) {
     fun routes() = router {
         "/posts".nest {
             GET("", postHandler::all)
-            GET("{id}", postHandler::get)
+            GET("/{id}", postHandler::get)
             POST("", postHandler::create)
-            PUT("{id}", postHandler::update)
-            DELETE("{id}", postHandler::delete)
+            PUT("/{id}", postHandler::update)
+            DELETE("/{id}", postHandler::delete)
         }
 
     }
