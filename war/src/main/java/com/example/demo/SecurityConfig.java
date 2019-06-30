@@ -15,42 +15,52 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import reactor.core.publisher.Mono;
 
 /**
- *
  * @author hantsy
  */
 @Configuration
 @EnableWebFluxSecurity
 class SecurityConfig {
 
-	@Bean
-	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
-		return http
-            .csrf().disable()
-			.authorizeExchange()
-				.pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+    @Bean
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
+        return http
+                .csrf().disable()
+                .authorizeExchange()
+                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
                 .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
-				//.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-				.anyExchange().authenticated()
-				.and()
-			.build();
-	}
+                //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+                .anyExchange().authenticated()
+                .and()
+                .build();
+    }
 
-	private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
-		return authentication
-			.map( a -> context.getVariables().get("user").equals(a.getName()))
-			.map( granted -> new AuthorizationDecision(granted));
-	}
+    private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
+        return authentication
+                .map(a -> context.getVariables().get("user").equals(a.getName()))
+                .map(granted -> new AuthorizationDecision(granted));
+    }
 
-	@Bean
-	public MapReactiveUserDetailsService userDetailsRepository() {
-		UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build();
-		UserDetails admin = User.withDefaultPasswordEncoder().username("admin").password("password").roles("USER","ADMIN").build();
-		return new MapReactiveUserDetailsService(user, admin);
-	}
+    @Bean
+    public MapReactiveUserDetailsService userDetailsRepository() {
+        PasswordEncoder encoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
+        UserDetails user = User.withUsername("user")
+                .passwordEncoder(encoder::encode)
+                .password("password")
+                .roles("USER")
+                .build();
+        UserDetails admin = User.withUsername("admin")
+                .passwordEncoder(encoder::encode)
+                .password("password")
+                .roles("USER", "ADMIN")
+                .build();
+        return new MapReactiveUserDetailsService(user, admin);
+    }
 
 }

@@ -7,15 +7,15 @@ package com.example.demo;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.codec.ServerCodecConfigurer;
 import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.web.reactive.config.WebFluxConfigurer;
 
 /**
  *
  * @author hantsy
  */
 @Configuration
-@ComponentScan
 @EnableWebFlux
-class WebConfig {
-    
+class WebConfig implements WebFluxConfigurer {
 }

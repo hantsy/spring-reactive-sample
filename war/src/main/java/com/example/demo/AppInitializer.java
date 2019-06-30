@@ -8,7 +8,7 @@ import org.springframework.web.server.adapter.AbstractReactiveWebInitializer;
 // There is a bug to stop security WebFilter registraion before 5.0.2. 
 // A workaround: https://stackoverflow.com/questions/46325632/how-to-activate-spring-security-in-a-webflux-war-application
 /*
-public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInitializer {
+public class AppInitializer extends AbstractAnnotationConfigDispatcherHandlerInitializer {
 
     @Override
     protected Class<?>[] getConfigClasses() {
@@ -43,22 +43,23 @@ public class AppIntializer extends AbstractAnnotationConfigDispatcherHandlerInit
 // in Spring 5.0.2, AbstractAnnotationConfigDispatcherHandlerInitializer is marked as deprecated.
 // a new AbstractReactiveWebInitializer introduced for webflux based applications.
 // But it seems AbstractReactiveWebInitializer does not refresh applicationContext, override createApplicationContext() to overcome this issue temporarily.
-public class AppIntializer extends AbstractReactiveWebInitializer {
+public class AppInitializer extends AbstractReactiveWebInitializer {
 
-	//new AnnotationConfigApplicationContext(Class<> ...) includes an extra refresh action.
-    @Override
-    protected ApplicationContext createApplicationContext() {
-        Class<?>[] configClasses = getConfigClasses();
-        Assert.notEmpty(configClasses, "No Spring configuration provided.");
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(configClasses);
-        return context;
-    }
+    //new AnnotationConfigApplicationContext(Class<> ...) includes an extra refresh action.
+//    @Override
+//    protected ApplicationContext createApplicationContext() {
+//        Class<?>[] configClasses = getConfigClasses();
+//        Assert.notEmpty(configClasses, "No Spring configuration provided.");
+//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(configClasses);
+//        return context;
+//    }
 
     @Override
     protected Class<?>[] getConfigClasses() {
         return new Class[]{
-            WebConfig.class,
-            SecurityConfig.class
+                AppConfig.class,
+                WebConfig.class,
+                SecurityConfig.class
         };
     }
 
