@@ -14,6 +14,8 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 import reactor.netty.http.server.HttpServer;
 
+import java.time.Duration;
+
 @Configuration
 @ComponentScan
 @PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
@@ -25,7 +27,7 @@ public class Application {
     public static void main(String[] args) throws Exception {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
             Application.class)) {
-            context.getBean(HttpServer.class);
+            context.getBean(HttpServer.class).bindUntilJavaShutdown(Duration.ofSeconds(60), null);
         }
     }
 
