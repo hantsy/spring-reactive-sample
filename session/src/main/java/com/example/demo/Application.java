@@ -25,7 +25,7 @@ public class Application {
     public static void main(String[] args) throws Exception {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
             Application.class)) {
-            context.getBean(HttpServer.class).bindNow().onDispose().block();
+            context.getBean(HttpServer.class);
         }
     }
 
