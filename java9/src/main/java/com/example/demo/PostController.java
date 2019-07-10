@@ -5,14 +5,15 @@
  */
 package com.example.demo;
 
-import java.util.concurrent.Flow;
-import java.util.concurrent.SubmissionPublisher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.adapter.JdkFlowAdapter;
+import reactor.core.publisher.Flux;
+
+import java.util.concurrent.Flow;
 
 /**
- *
  * @author hantsy
  */
 @RestController
@@ -21,11 +22,19 @@ public class PostController {
 
     @GetMapping
     public Flow.Publisher<Post> all() {
-        SubmissionPublisher publisher = new SubmissionPublisher();
-        publisher.submit(new Post(1L, "post one", "content of post one"));
-        publisher.submit(new Post(2L, "post two", "content of post two"));
-
-        return publisher;
+//        Executor proxyExecutor = (Runnable command)-> ForkJoinPool.commonPool().execute(command);
+//        SubmissionPublisher publisher  = new SubmissionPublisher(proxyExecutor, Flow.defaultBufferSize());
+//        publisher.submit(new Post(1L, "post one", "content of post one"));
+//        publisher.submit(new Post(2L, "post two", "content of post two"));
+//
+//        return publisher;
+        // see: https://stackoverflow.com/questions/46597924/spring-5-supports-java-9-flow-apis-in-its-reactive-feature
+        return JdkFlowAdapter.publisherToFlowPublisher(
+                Flux.just(
+                        new Post(1L, "post one", "content of post one"),
+                        new Post(2L, "post two", "content of post two")
+                )
+        );
     }
 
 }

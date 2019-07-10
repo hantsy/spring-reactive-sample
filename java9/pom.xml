@@ -9,7 +9,7 @@
     <packaging>jar</packaging>
 
     <name>spring-reactive-sample-java9</name>
-    <description>Spring Webflux Reactor Netty demo(without Spring Boot)</description>
+    <description>Spring Webflux demo with Java 9 Flow.Publisher</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -21,10 +21,10 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <!--<java.version>9</java.version>-->
+        <java.version>11</java.version>
     </properties>
 
-    <dependencies>     
+    <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -33,27 +33,27 @@
             <groupId>org.springframework</groupId>
             <artifactId>spring-webflux</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-buffer</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty</artifactId>
         </dependency>
-<!--        
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>-->
-        
+        <!--
+                <dependency>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok</artifactId>
+                </dependency>-->
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -70,7 +70,7 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -106,69 +106,69 @@
     <build>
         <plugins>
             <!--docs: https://maven.apache.org/plugins/maven-compiler-plugin/examples/module-info.html-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
-                <executions>
-                    <execution>
-                        <id>default-compile</id>
-                        <configuration>
-                            <!-- compile everything to ensure module-info contains right entries -->
-                            <!-- required when JAVA_HOME is JDK 8 or below -->
-                            <jdkToolchain>
-                                <version>9</version>
-                            </jdkToolchain>
-                            <release>9</release>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>base-compile</id>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                        <!-- recompile everything for target VM except the module-info.java -->
-                        <configuration>
-                            <excludes>
-                                <exclude>module-info.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </execution>
-                </executions>
-                <!-- defaults for compile and testCompile -->
-                <configuration>
-                    <!-- Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin -->
-<!--                    <jdkToolchain>
-                        <version>9</version>
-                    </jdkToolchain>
-                    <release>8</release>
-                    <compilerArgs>
-                       
-                    </compilerArgs>-->
-                 
-                </configuration>
-            </plugin>
-            
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-toolchains-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>toolchain</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <toolchains>
-                        <jdk>
-                            <version>9</version>
-                        </jdk>
-                    </toolchains>
-                </configuration>
-            </plugin>
+            <!--            <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-compiler-plugin</artifactId>
+                            <version>3.8.0</version>
+                            <executions>
+                                <execution>
+                                    <id>default-compile</id>
+                                    <configuration>
+                                        &lt;!&ndash; compile everything to ensure module-info contains right entries &ndash;&gt;
+                                        &lt;!&ndash; required when JAVA_HOME is JDK 8 or below &ndash;&gt;
+                                        <jdkToolchain>
+                                            <version>9</version>
+                                        </jdkToolchain>
+                                        <release>9</release>
+                                    </configuration>
+                                </execution>
+                                <execution>
+                                    <id>base-compile</id>
+                                    <goals>
+                                        <goal>compile</goal>
+                                    </goals>
+                                    &lt;!&ndash; recompile everything for target VM except the module-info.java &ndash;&gt;
+                                    <configuration>
+                                        <excludes>
+                                            <exclude>module-info.java</exclude>
+                                        </excludes>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                            &lt;!&ndash; defaults for compile and testCompile &ndash;&gt;
+                            <configuration>
+                                &lt;!&ndash; Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin &ndash;&gt;
+            &lt;!&ndash;                    <jdkToolchain>
+                                    <version>9</version>
+                                </jdkToolchain>
+                                <release>8</release>
+                                <compilerArgs>
+
+                                </compilerArgs>&ndash;&gt;
+
+                            </configuration>
+                        </plugin>-->
+
+            <!--          <plugin>
+                          <groupId>org.apache.maven.plugins</groupId>
+                          <artifactId>maven-toolchains-plugin</artifactId>
+                          <version>1.1</version>
+                          <executions>
+                              <execution>
+                                  <phase>validate</phase>
+                                  <goals>
+                                      <goal>toolchain</goal>
+                                  </goals>
+                              </execution>
+                          </executions>
+                          <configuration>
+                              <toolchains>
+                                  <jdk>
+                                      <version>11</version>
+                                  </jdk>
+                              </toolchains>
+                          </configuration>
+                      </plugin>-->
             <!-- Maven Assembly Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -196,7 +196,6 @@
                 </executions>
             </plugin>
 
-            
         </plugins>
     </build>
 
