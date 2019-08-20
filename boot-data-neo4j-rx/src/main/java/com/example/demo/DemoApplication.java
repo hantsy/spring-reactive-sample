@@ -87,14 +87,14 @@ class PostController {
     }
 
     @GetMapping("/{id}")
-    public Mono<Post> get(@PathVariable("id") String id) {
+    public Mono<Post> get(@PathVariable("id") Long id) {
         return Mono.just(id)
                 .flatMap(posts::findById)
                 .switchIfEmpty(Mono.error(new PostNotFoundException(id)));
     }
 
     @PutMapping("/{id}")
-    public Mono<Post> update(@PathVariable("id") String id, @RequestBody Post post) {
+    public Mono<Post> update(@PathVariable("id") Long id, @RequestBody Post post) {
         return this.posts.findById(id)
                 .map(p -> {
                     p.setTitle(post.getTitle());
@@ -106,7 +106,7 @@ class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public Mono<Void> delete(@PathVariable("id") String id) {
+    public Mono<Void> delete(@PathVariable("id") Long id) {
         return this.posts.deleteById(id);
     }
 
@@ -127,12 +127,12 @@ class RestExceptionHandler {
 
 class PostNotFoundException extends RuntimeException {
 
-    PostNotFoundException(String id) {
+    PostNotFoundException(Long id) {
         super("Post #" + id + " was not found");
     }
 }
 
-interface PostRepository extends ReactiveNeo4jRepository<Post, String> {
+interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 }
 
 @Node
@@ -145,7 +145,7 @@ class Post {
 
     @Id
     @GeneratedValue
-    private String id;
+    private Long id;
     private String title;
     private String content;
 

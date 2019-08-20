@@ -76,6 +76,15 @@ services:
     volumes:
       - esdata1:/usr/share/elasticsearch/data
       
+  neo4j:
+    image: neo4j/neo4j-experimental:4.0.0-alpha09mr02-enterprise   # not release yet.
+    environment:
+      - "NEO4J_AUTH=neo4j/test"
+      - "NEO4J_ACCEPT_LICENSE_AGREEMENT=yes"
+    ports:
+      - 7687:7687 
+      - 7474:7474 
+      
 volumes:
   mongodata:  
 #    driver: local-persist
