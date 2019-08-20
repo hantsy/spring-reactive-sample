@@ -11,7 +11,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.ReactorHttpHandlerAdapter;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
-import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 
 import java.time.Duration;

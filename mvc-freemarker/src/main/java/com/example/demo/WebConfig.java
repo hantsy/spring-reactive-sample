@@ -5,6 +5,7 @@
  */
 package com.example.demo;
 
+import freemarker.template.utility.XmlEscape;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,9 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.ViewResolverRegistry;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.result.view.freemarker.FreeMarkerConfigurer;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -31,10 +35,15 @@ class WebConfig implements ApplicationContextAware, WebFluxConfigurer {
 
     @Bean
     public FreeMarkerConfigurer freeMarkerConfig() {
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("xml_escape", new XmlEscape());
+
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
         configurer.setPreferFileSystemAccess(false);
-        configurer.setTemplateLoaderPath("classpath:/templates/");
+        configurer.setTemplateLoaderPath("classpath:/templates");
         configurer.setResourceLoader(this.ctx);
+        configurer.setFreemarkerVariables(variables);
+
         return configurer;
     }
 
