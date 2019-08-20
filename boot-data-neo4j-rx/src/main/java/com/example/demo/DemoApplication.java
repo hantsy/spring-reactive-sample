@@ -2,6 +2,7 @@ package com.example.demo;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.neo4j.springframework.data.config.EnableNeo4jAuditing;
 import org.neo4j.springframework.data.core.ReactiveNeo4jClient;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
@@ -20,6 +21,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
+@EnableNeo4jAuditing
 public class DemoApplication {
 
     public static void main(String[] args) {
