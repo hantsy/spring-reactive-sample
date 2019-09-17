@@ -4,7 +4,7 @@ This is a sandbox project  for demonstrating  [ReactiveStream](https://reactives
 
 Specials thanks for Jetbrain's support by  contributing a  open-source license.
 
-[![our Logo](https://www.jetbrains.com/company/press/#images-logos)](https://www.jetbrains.com/?from=spring-reactive-sample)
+[![Jetbrains Logo](./jetbrains.png)](https://www.jetbrains.com/?from=spring-reactive-sample)
 
 ## Related Posts 
 
