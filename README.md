@@ -84,6 +84,6 @@ The following table lits all sample codes related to this post. The  [sample  co
 
 I appreciate all contribution from the community, not limited to reporting bugs, filing an issue, etc. 
 
-Specials thanks for Jetbrain's support by  contributing a  open-source license.
+Specials thanks for Jetbrain's support by  contributing an  open-source license.
 
 [<img src="./jetbrains.png" height="250px" width="250px"/>](https://www.jetbrains.com/?from=spring-reactive-sample)
