@@ -86,4 +86,4 @@ I appreciate all contribution from the community, not limited to reporting bugs,
 
 Specials thanks for Jetbrain's support by  contributing a  open-source license.
 
-[![Jetbrains Logo](./jetbrains.png)](https://www.jetbrains.com/?from=spring-reactive-sample)
+[<img src="./jetbrains.png" height="250px" width="250px"/>](https://www.jetbrains.com/?from=spring-reactive-sample)
