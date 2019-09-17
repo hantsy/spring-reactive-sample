@@ -2,16 +2,12 @@
 
 This is a sandbox project  for demonstrating  [ReactiveStream](https://reactivestream.io)  support in Spring framework and its ecosystem. 
 
-Specials thanks for Jetbrain's support by  contributing a  open-source license.
-
-[![Jetbrains Logo](./jetbrains.png)](https://www.jetbrains.com/?from=spring-reactive-sample)
 
 ## Related Posts 
 
 * [Reactive Programming  with Spring](./GUIDE.md)  
 * [Reactive Data Access with Neo4j](./docs/data-neo4j-rx.md)
 
-  
 
 ## Sample Codes
 
@@ -83,3 +79,11 @@ The following table lits all sample codes related to this post. The  [sample  co
 * [Reactive systems using Reactor](http://musigma.org/java/2016/11/21/reactor.html)
 * [Lite Rx API Hands-On with Reactor Core 3 ](https://github.com/reactor/lite-rx-api-hands-on)
 * [reactor-kotlin-workshop](https://github.com/eddumelendez/reactor-kotlin-workshop)
+
+## Thanks
+
+I appreciate all contribution from the community, not limited to reporting bugs, filing an issue, etc. 
+
+Specials thanks for Jetbrain's support by  contributing a  open-source license.
+
+[![Jetbrains Logo](./jetbrains.png)](https://www.jetbrains.com/?from=spring-reactive-sample)
