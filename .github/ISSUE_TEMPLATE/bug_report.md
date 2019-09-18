@@ -7,7 +7,7 @@ assignees: 'hantsy'
 
 ---
 
-** Development Environment:**
+**Development Environment:**
  - OS: [e.g. Windows 10, Linux]
  - Java version:[8, 11]
  - Build tools:[Gradle, Maven]
