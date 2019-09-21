@@ -1,6 +1,6 @@
 # Spring Reactive Sample
 
-This is a sandbox project  for demonstrating  [ReactiveStream](https://reactivestream.io)  support in Spring framework and its ecosystem. 
+This is a sandbox project  for demonstrating  [Reactive Streams](https://www.reactive-streams.org/)  support in Spring framework and its ecosystem. 
 
 
 ## Related Posts 
@@ -11,7 +11,7 @@ This is a sandbox project  for demonstrating  [ReactiveStream](https://reactives
 
 ## Sample Codes
 
-The following table lits all sample codes related to this post. The  [sample  codes ](https://github.com/hantsy/spring-reactive-sample) of this post is hosted on my Github account, welcome to star and fork it.
+The following table list all sample codes related to this post. The  [sample  codes ](https://github.com/hantsy/spring-reactive-sample) of this post is hosted on my Github account, welcome to star and fork it.
 
 | name                     | description                                                  |
 | ------------------------ | ------------------------------------------------------------ |
@@ -38,8 +38,8 @@ The following table lits all sample codes related to this post. The  [sample  co
 | mvc-thymeleaf            | Traditinal web mvc application, use Thymeleaf specific Reactive view resolver to render view |
 | mvc-freemarker           | Traditinal web mvc application, use freemarker as template engine, currently it does not have a reactive view resolver |
 | sse                      | Server Send Event and json stream example                    |
-| websocket                | Reactive Websocket example                                   |
-| boot                     | Switch to Spring Boot to get autoconfiguration of `spring-webflux`, added extra Spring Data Mongo, Spring Secuirty support |
+| websocket                | Reactive WebSocket example                                   |
+| boot                     | Switch to Spring Boot to get autoconfiguration of `spring-webflux`, added extra Spring Data Mongo, Spring Security support |
 | boot-jetty               | Same as **boot**, but use Jetty as target runtime            |
 | boot-tomcat              | Same as **boot**, but use Tomcat as target runtime           |
 | boot-undertow            | Same as **boot**, but use Undertow as target runtime         |
@@ -84,6 +84,6 @@ The following table lits all sample codes related to this post. The  [sample  co
 
 I appreciate all contribution from the community, not limited to reporting bugs, filing an issue, etc. 
 
-Specials thanks for Jetbrain's support by  contributing an  open-source license.
+Specials thanks for Jetbrains's support by  contributing an  open-source license.
 
 [<img src="./jetbrains.png" height="250px" width="250px"/>](https://www.jetbrains.com/?from=spring-reactive-sample)
