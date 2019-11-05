@@ -16,7 +16,8 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring-data-neo4j-rx.version>1.0.0-beta01</spring-data-neo4j-rx.version>
+        <spring-data-neo4j-rx.version>1.0.0-SNAPSHOT</spring-data-neo4j-rx.version>
+        <testcontainers.version>1.10.7</testcontainers.version>
     </properties>
 
     <dependencies>
@@ -54,6 +55,19 @@
             <groupId>org.neo4j.springframework.data</groupId>
             <artifactId>spring-data-neo4j-rx-spring-boot-test-autoconfigure</artifactId>
             <version>${spring-data-neo4j-rx.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>neo4j</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
