@@ -9,9 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.r2dbc.function.DatabaseClient;
+import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 
 import static org.springframework.data.domain.Sort.Order.desc;
 
