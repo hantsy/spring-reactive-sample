@@ -10,9 +10,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-boot-data-r2dbc</artifactId>
+    <artifactId>spring-reactive-sample-boot-data-r2dbc-postgresql</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-reactive-sample-boot-data-r2dbc</name>
+    <name>spring-reactive-sample-boot-data-r2dbc-postgresql</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -36,15 +36,14 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
-        <dependency>
-        <groupId>org.springframework.boot.experimental</groupId>
-        <artifactId>spring-boot-starter-data-r2dbc</artifactId>
-    </dependency>
-        <dependency>
-            <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
+		<dependency>
+			<groupId>org.springframework.boot.experimental</groupId>
+			<artifactId>spring-boot-starter-data-r2dbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>io.r2dbc</groupId>
+			<artifactId>r2dbc-postgresql</artifactId>
+		</dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
