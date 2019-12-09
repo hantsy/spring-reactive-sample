@@ -7,9 +7,12 @@ import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import reactor.test.StepVerifier;
 
+import java.time.Duration;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+// see: https://github.com/spring-projects-experimental/spring-boot-r2dbc/issues/68
 @DataR2dbcTest
 public class PostRepositoryTest {
 
@@ -36,7 +39,7 @@ public class PostRepositoryTest {
                 //.nullValue("id", Integer.class)
                 .value("title", "testtitle")
                 .value("content", "testcontent")
-                .then();
+                .then().block(Duration.ofSeconds(5));
 
         this.posts.findByTitleContains("testtitle")
                 .take(1)

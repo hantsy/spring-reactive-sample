@@ -29,7 +29,7 @@ class DataInitializer {
 
     @EventListener(value = ContextRefreshedEvent.class)
     public void init() {
-        log.info("start data initialization  ...");
+        log.info("start data initialization...");
         this.databaseClient.delete().from("posts")
                 .then().
                 and(
