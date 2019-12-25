@@ -1,25 +1,24 @@
 package com.example.demo;
 
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import org.neo4j.springframework.boot.test.autoconfigure.data.DataNeo4jTest;
 import org.neo4j.springframework.data.core.ReactiveNeo4jClient;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.util.Comparator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataNeo4jTest
-class PostRepositoryTest {
-    private final static Logger log = LoggerFactory.getLogger(PostRepositoryTest.class);
+@Slf4j
+public class PostRepositoryTest {
 
     @Autowired
     private PostRepository posts;
@@ -29,7 +28,8 @@ class PostRepositoryTest {
 
 
     @BeforeEach
-    void setup() throws IOException {
+    public void setup() throws IOException {
+        log.debug("running setup.....,");
         this.posts
                 .deleteAll()
                 .thenMany(
@@ -58,12 +58,12 @@ class PostRepositoryTest {
 
     @AfterEach
     void teardown() {
-        this.posts.deleteAll();
+        //this.posts.deleteAll();
     }
 
     @Test
     void testAllPosts() {
-        posts.findAll()
+        posts.findAll().sort(Comparator.comparing(post -> post.getId()))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
                 .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))
