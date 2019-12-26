@@ -48,12 +48,7 @@ public class PostRepositoryTest {
                                 .mappedBy((t, r) -> (Post) (r.get("p").asObject()))
                                 .all()
                                 .subscribe(System.out::println)
-                )
-                .subscribe(
-                        null,
-                        null,
-                        () -> log.info("done initialization...")
-                );
+                ).block();
     }
 
     @AfterEach
