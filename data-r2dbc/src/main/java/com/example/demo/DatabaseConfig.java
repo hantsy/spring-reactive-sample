@@ -5,12 +5,12 @@
  */
 package com.example.demo;
 
-import io.r2dbc.postgresql.PostgresqlConnectionConfiguration;
-import io.r2dbc.postgresql.PostgresqlConnectionFactory;
-import io.r2dbc.spi.ConnectionFactories;
+import io.r2dbc.h2.H2ConnectionConfiguration;
+import io.r2dbc.h2.H2ConnectionFactory;
 import io.r2dbc.spi.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.r2dbc.config.AbstractR2dbcConfiguration;
 import org.springframework.data.r2dbc.connectionfactory.R2dbcTransactionManager;
@@ -32,10 +32,10 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
     @Bean
     public ConnectionFactory connectionFactory() {
         //ConnectionFactory factory = ConnectionFactories.get("r2dbc:h2:mem:///test?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-        return new PostgresqlConnectionFactory(
-                PostgresqlConnectionConfiguration.builder()
-                        .host("localhost")
-                        .database("test")
+        return new H2ConnectionFactory(
+                H2ConnectionConfiguration.builder()
+                        //.inMemory("testdb")
+                        .file("./testdb")
                         .username("user")
                         .password("password").build()
         );
@@ -46,7 +46,7 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
         return new R2dbcTransactionManager(connectionFactory);
     }
 
-/*    @Bean
+    @Bean
     public ConnectionFactoryInitializer initializer(ConnectionFactory connectionFactory) {
 
         ConnectionFactoryInitializer initializer = new ConnectionFactoryInitializer();
@@ -58,6 +58,6 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
         initializer.setDatabasePopulator(populator);
 
         return initializer;
-    }*/
+    }
 
 }

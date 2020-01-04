@@ -6,8 +6,8 @@
 package com.example.demo;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ import static org.springframework.data.domain.Sort.Order.desc;
  */
 @Component
 @Slf4j
-class DataInitializer {
+class DataInitializer implements ApplicationRunner {
 
     private final DatabaseClient databaseClient;
 
@@ -27,9 +27,9 @@ class DataInitializer {
         this.databaseClient = databaseClient;
     }
 
-    @EventListener(value = ContextRefreshedEvent.class)
-    public void init() {
-        log.info("start data initialization  ...");
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        log.info("start data initialization...");
         this.databaseClient.insert()
             .into("posts")
             //.nullValue("id", Integer.class)
@@ -48,5 +48,4 @@ class DataInitializer {
             )
             .subscribe(null, null, () -> log.info("initialization is done..."));
     }
-
 }

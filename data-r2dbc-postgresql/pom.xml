@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-data-r2dbc</artifactId>
+    <artifactId>spring-reactive-sample-data-r2dbc-postgresql</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-reactive-sample-data-r2dbc</name>
+    <name>spring-reactive-sample-data-r2dbc-postgresql</name>
     <description>Spring Webflux Data R2DBC demo(without Spring Boot)</description>
 
     <parent>
@@ -24,7 +24,7 @@
         <java.version>11</java.version>
         <spring.framework.version>5.2.2.RELEASE</spring.framework.version>
         <spring-data-r2dbc.version>1.0.0.RELEASE</spring-data-r2dbc.version>
-        <r2dbc.version>0.8.1.RELEASE</r2dbc.version>
+        <r2dbc-postgresql.version>0.8.0.RELEASE</r2dbc-postgresql.version>
     </properties>
 
     <dependencies>    
@@ -36,8 +36,8 @@
 
         <dependency>
             <groupId>io.r2dbc</groupId>
-            <artifactId>r2dbc-h2</artifactId>
-            <version>${r2dbc.version}</version>
+            <artifactId>r2dbc-postgresql</artifactId>
+            <version>${r2dbc-postgresql.version}</version>
         </dependency>
 
         <dependency>
