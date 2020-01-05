@@ -32,13 +32,17 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
     @Bean
     public ConnectionFactory connectionFactory() {
         //ConnectionFactory factory = ConnectionFactories.get("r2dbc:h2:mem:///test?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
-        return new H2ConnectionFactory(
-                H2ConnectionConfiguration.builder()
-                        //.inMemory("testdb")
-                        .file("./testdb")
-                        .username("user")
-                        .password("password").build()
-        );
+
+        //see: https://github.com/spring-projects/spring-data-r2dbc/issues/269
+//        return new H2ConnectionFactory(
+//                H2ConnectionConfiguration.builder()
+//                        //.inMemory("testdb")
+//                        .file("./testdb")
+//                        .username("user")
+//                        .password("password").build()
+//        );
+
+        return H2ConnectionFactory.inMemory("testdb");
     }
 
     @Bean
