@@ -84,7 +84,16 @@ services:
     ports:
       - 7687:7687 
       - 7474:7474 
-      
+
+  # no entrypoint-init scripts, see: https://github.com/Microsoft/mssql-docker/issues/11 
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    environment: 
+      - SA_PASSWORD=p@ssw0rd
+      - ACCEPT_EULA=Y
+    ports:
+      - 1433:1433
+    
 volumes:
   mongodata:  
 #    driver: local-persist
