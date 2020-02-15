@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.demo;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,10 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-/**
- *
- * @author hantsy
- */
 @RestController()
 @RequestMapping(value = "/posts")
 class PostController {
@@ -48,13 +39,13 @@ class PostController {
     @PutMapping("/{id}")
     public Mono<Post> update(@PathVariable("id") Integer id, @RequestBody Post post) {
         return this.posts.findById(id)
-            .map(p -> {
-                p.setTitle(post.getTitle());
-                p.setContent(post.getContent());
+                .map(p -> {
+                    p.setTitle(post.getTitle());
+                    p.setContent(post.getContent());
 
-                return p;
-            })
-            .flatMap(p -> this.posts.save(p));
+                    return p;
+                })
+                .flatMap(p -> this.posts.save(p));
     }
 
     @DeleteMapping("/{id}")
