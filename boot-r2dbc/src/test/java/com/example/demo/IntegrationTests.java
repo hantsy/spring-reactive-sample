@@ -7,12 +7,12 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class DemoApplicationTests {
+public class IntegrationTests {
 
     @LocalServerPort
-    int port;
+    private int port;
 
-    WebTestClient webClient;
+    private WebTestClient webClient;
 
     @Before
     public void setup() {
