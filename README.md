@@ -5,7 +5,7 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 
 ## Related Posts 
 
-* [Reactive Programming  with Spring](./GUIDE.md)  
+* [Reactive Programming with Spring 5(Deprecated)](./docs/GUIDE.md)
 * [Reactive Data Access with Neo4j](./docs/data-neo4j-rx.md)
 
 
