@@ -117,7 +117,9 @@ class PostController {
 
 The above codes are easy to understand, the main difference is here the methods return a Reactor's `Flux` or `Mono` type instead.  
 
-To handle exception, you can the `ExceptionHandler` in the existing webmvc stack. For example, in the `get` method, if the  Post is not found, throw an exception `PostNotFoundException` in the reactive flow by `Mono.error`.
+Similar with WebMVC stack , to handle exception, you can define a `@RestControllerAdvice` bean and use `ExceptionHandler` method to handle specifial exceptions.
+
+For example, in the `get` method, if the  Post is not found, throw an exception `PostNotFoundException` in the reactive flow by `Mono.error`.
 
 ```java
 class PostNotFoundException extends RuntimeException {
@@ -195,7 +197,14 @@ Benefit from the Spring Boot auto-configuration mechanism, a `ReactiveNeo4jClien
 
 To experience the  new reactive features, you have to use Neo4j 4.0 which is still under development.
 
-The following is a docker-compose configuration which allow you run Neo4j server in docker containers.
+Configure the Neo4j driver properties in *application.properties* file.
+
+```pro
+org.neo4j.driver.uri=bolt://localhost:7687
+org.neo4j.driver.authentication.username=neo4j
+org.neo4j.driver.authentication.password=test
+```
+Before running this application, it requires a running Neo4j server. The following code fragment is a docker-compose configuration which allow you run Neo4j server in docker containers.
 
 ```yaml
   neo4j:
@@ -208,15 +217,13 @@ The following is a docker-compose configuration which allow you run Neo4j server
       - 7474:7474 
 ```
 
-Configure the Neo4j driver properties in *application.properties* file.
+Run the following command to start a local Neo4j server in Docker container.
 
-```pro
-org.neo4j.driver.uri=bolt://localhost:7687
-org.neo4j.driver.authentication.username=neo4j
-org.neo4j.driver.authentication.password=test
+```bash
+docker-compose up neo4j
 ```
 
-Start up the application, use `curl` to  test the APIs.
+Start up our  application, when it is ready,  use `curl` to  test the APIs.
 
 ```bash
 # Get all posts
@@ -243,6 +250,74 @@ curl -v http://localhost:8080/posts/10
 <
 * Connection #0 to host localhost left intact
 ```
+Like Spring Data Mongo, SDN Rx also provides a `@DataNeo4jTest` annotation to provide  test slice capability.
+
+Add the following dependency into the project pom.xml.
+
+```xml
+<dependency>
+    <groupId>org.neo4j.springframework.data</groupId>
+    <artifactId>spring-data-neo4j-rx-spring-boot-test-autoconfigure</artifactId>
+    <version>${spring-data-neo4j-rx.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+Create a test class to the SDN Rx features.
+
+```java
+@DataNeo4jTest
+@Slf4j
+public class PostRepositoryTest {
+
+    @Autowired
+    private PostRepository posts;
+
+    @BeforeEach
+    public void setup() throws IOException {
+        log.debug("running setup.....,");
+        this.posts.deleteAll()
+                .thenMany(testSaveMethod())
+                .log()
+                .thenMany(testFoundMethod())
+                .log()
+                .blockLast();// to make the tests work
+//                .subscribe(
+//                        (data) -> log.info("found post:" + data),
+//                        (err) -> log.error("" + err),
+//                        () -> log.info("done")
+//                );
+    }
+
+    private Flux<Post> testSaveMethod() {
+        var data = Stream.of("Post one", "Post two")
+                .map(title -> Post.builder().title(title).content("The content of " + title).build())
+                .collect(Collectors.toList());
+        return Flux.fromIterable(data)
+                .flatMap(it -> this.posts.save(it));
+    }
+
+    private Flux<Post> testFoundMethod() {
+        return this.posts
+                .findAll(Example.of(Post.builder().title("Post one").build()));
+    }
+
+    @AfterEach
+    void teardown() {
+        //this.posts.deleteAll();
+    }
+
+    @Test
+    void testAllPosts() {
+        posts.findAll().sort(Comparator.comparing(post -> post.getTitle()))
+                .as(StepVerifier::create)
+                .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
+                .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))
+                .verifyComplete();
+    }
+
+}
+```
+But you have to run a Neo4j server to run this test, currently SDN Rx does not provide an embedded Neo4j server for test scope.
 
 Get the codes from  my [Github](https://github.com/hantsy/spring-reactive-sample).
 
