@@ -77,10 +77,11 @@ services:
       - esdata1:/usr/share/elasticsearch/data
       
   neo4j:
-    image: neo4j/neo4j-experimental:4.0.0-rc01   # not release yet.
+    image: neo4j:4.0   # 4.0
     environment:
-      - "NEO4J_AUTH=neo4j/test"
-      - "NEO4J_ACCEPT_LICENSE_AGREEMENT=yes"
+      - "NEO4J_AUTH=neo4j/test" # disable authentication by passing --env=NEO4J_AUTH=none
+      - "SECURE_FILE_PERMISSIONS=yes" # To enforce stricter file permissions checking 
+    #  - "NEO4J_ACCEPT_LICENSE_AGREEMENT=yes" # required for enterprise editon: neo4j:4.0.0-enterprise
     ports:
       - 7687:7687 
       - 7474:7474 
