@@ -2,16 +2,16 @@
 
 
 
-Kickstart a Spring Boot project by [Spring Initializr](https://start.spring.io).
+Generate a Spring Boot project using [Spring Initializr](https://start.spring.io).
 
 * Project type: Maven
 * Java version : 11
-* Spring Boot : 2.2.0.M5
+* Spring Boot : 2.2.4.RELEASE
 * Dependencies: Reactive Web, Lombok
 
 > Do not add  Spring Data Neo4j  into the dependencies, we will use the new Spring Data Neo4j Rx instead.
 
-> Do not forget to add Lombok to your project dependencies.  We'll  use Lombok to get the Java codes clean as possible, esp. to generate the getters and setters, hashCode, equals, toString for you at compile time.
+Do not forget to add Lombok to your project dependencies.  We'll  use Lombok to get the Java codes clean as possible, esp. to generate the getters and setters, hashCode, equals, toString for you at compile time.
 
 Download the generated project skeleton archive and extract the files into your machine.  
 
@@ -28,7 +28,7 @@ Open the *pom.xml* file in the project root folder, add the [Spring Data Neo4j R
 Declare the property `spring-data-neo4j-rx.version` in properties. 
 
 ```xml
-<spring-data-neo4j-rx.version>1.0.0-alpha03</spring-data-neo4j-rx.version>
+<spring-data-neo4j-rx.version>1.0.0-beta03</spring-data-neo4j-rx.version>
 ```
 
 Now  let's add some codes to experience the new  Reactive features in  Spring Data Neo4j Rx.
@@ -59,7 +59,7 @@ In the above codes,  `@Node`, `@Id`, `@GeneratedValue` are located in the packag
 
 Spring Data Neo4j Rx also supports the annotations from Spring Data Commons project. For example, you can use `Id` and `Persistent` from Spring Data Commons instead of the `Id` and  `Node` annotations from the new Spring Data  Neo4j RX.
 
-Spring Data Neo4j Rx supports data auditing as well, so you can use `@CreatedDate`, `@CreatedBy`, `@LastModifiedDate`, `@LastModifiedBy` as usually, just add `@EnableNeo4jAuditing` on the application class to enable it.
+Spring Data Neo4j Rx supports data auditing as well, so you can use `@CreatedDate`, `@CreatedBy`, `@LastModifiedDate`, `@LastModifiedBy` as usually, just add `@EnableNeo4jAuditing` on the application class to enable it. Unfortunately, there is no `AuditorAware` reactive varient available  in SDN RX, thus it can not fill `CreatedBy` and `lastModifiedBy` automaticially.
 
 Create a `Repository` class for `Post`.
 
@@ -115,7 +115,9 @@ class PostController {
 }
 ```
 
-The above code is easy to understand, the main difference is here it returns Reactor's `Flux` or `Mono` type.   In the `get` method, if the  Post is not found, throw an exception `PostNotFoundException` in the reactive flow by `Mono.error`.
+The above codes are easy to understand, the main difference is here the methods return a Reactor's `Flux` or `Mono` type instead.  
+
+To handle exception, you can the `ExceptionHandler` in the existing webmvc stack. For example, in the `get` method, if the  Post is not found, throw an exception `PostNotFoundException` in the reactive flow by `Mono.error`.
 
 ```java
 class PostNotFoundException extends RuntimeException {
@@ -189,8 +191,6 @@ class DataInitializer implements CommandLineRunner {
 }
 ```
 
-
-
 Benefit from the Spring Boot auto-configuration mechanism, a `ReactiveNeo4jClient` bean is ready for use.  You can use  it to interact with the Neo4j low level APIs, such as executing [Cypher](https://neo4j.com/developer/cypher-query-language/) queries.
 
 To experience the  new reactive features, you have to use Neo4j 4.0 which is still under development.
@@ -199,10 +199,10 @@ The following is a docker-compose configuration which allow you run Neo4j server
 
 ```yaml
   neo4j:
-    image: neo4j/neo4j-experimental:4.0.0-alpha09mr02-enterprise   # not release yet.
+    image: neo4j:4
     environment:
-      - "NEO4J_AUTH=neo4j/test"
-      - "NEO4J_ACCEPT_LICENSE_AGREEMENT=yes"
+      - "NEO4J_AUTH=neo4j/test" # user none as value to disable auth setting
+ #     - "NEO4J_ACCEPT_LICENSE_AGREEMENT=yes" # only neede by enterprise version
     ports:
       - 7687:7687 
       - 7474:7474 
