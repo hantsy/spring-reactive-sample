@@ -20,16 +20,16 @@
     </properties>
 
     <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot.experimental</groupId>
-                <artifactId>spring-boot-bom-r2dbc</artifactId>
-                <version>0.1.0.M3</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot.experimental</groupId>
+            <artifactId>spring-boot-bom-r2dbc</artifactId>
+            <version>0.1.0.M3</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
 
     <dependencies>
         <dependency>

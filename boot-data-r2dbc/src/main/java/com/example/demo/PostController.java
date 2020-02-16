@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,13 +14,10 @@ import reactor.core.publisher.Mono;
 
 @RestController()
 @RequestMapping(value = "/posts")
+@RequiredArgsConstructor
 class PostController {
 
     private final PostRepository posts;
-
-    public PostController(PostRepository posts) {
-        this.posts = posts;
-    }
 
     @GetMapping("")
     public Flux<Post> all() {

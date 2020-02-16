@@ -2,7 +2,7 @@
 
 
 
-Generate a Spring Boot project using [Spring Initializr](https://start.spring.io).
+Generate a Spring Boot project using [Spring Initializr](https://start.spring.io), and make sure the following options are chosen.
 
 * Project type: Maven
 * Java version : 11
@@ -59,7 +59,7 @@ In the above codes,  `@Node`, `@Id`, `@GeneratedValue` are located in the packag
 
 Spring Data Neo4j Rx also supports the annotations from Spring Data Commons project. For example, you can use `Id` and `Persistent` from Spring Data Commons instead of the `Id` and  `Node` annotations from the new Spring Data  Neo4j RX.
 
-Spring Data Neo4j Rx supports data auditing as well, so you can use `@CreatedDate`, `@CreatedBy`, `@LastModifiedDate`, `@LastModifiedBy` as usually, just add `@EnableNeo4jAuditing` on the application class to enable it. Unfortunately, there is no `AuditorAware` reactive varient available  in SDN RX, thus it can not fill `CreatedBy` and `lastModifiedBy` automaticially.
+Spring Data Neo4j Rx supports data auditing as well, so you can use `@CreatedDate`, `@CreatedBy`, `@LastModifiedDate`, `@LastModifiedBy` as usual, just add `@EnableNeo4jAuditing` on the application class to enable it. Unfortunately, there is no `AuditorAware` reactive variant available  in SDN RX, thus it can not fill `CreatedBy` and `lastModifiedBy` automatically.
 
 Create a `Repository` class for `Post`.
 
@@ -317,9 +317,9 @@ public class PostRepositoryTest {
 
 }
 ```
-But you have to run a Neo4j server to run this test, currently SDN Rx does not provide an embedded Neo4j server for test scope.
+But you have to run a Neo4j server to serve this test, currently SDN Rx does not provide an embedded Neo4j for test scope.
 
-Get the codes from  my [Github](https://github.com/hantsy/spring-reactive-sample).
+Get the complete codes from  my [Github](https://github.com/hantsy/spring-reactive-sample).
 
 
 
