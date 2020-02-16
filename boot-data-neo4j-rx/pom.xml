@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <spring-data-neo4j-rx.version>1.0.0-beta02</spring-data-neo4j-rx.version>
+        <spring-data-neo4j-rx.version>1.0.0-beta03</spring-data-neo4j-rx.version>
         <maven-failsafe-plugin.version>3.0.0-M4</maven-failsafe-plugin.version>
     </properties>
 

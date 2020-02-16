@@ -6,8 +6,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.neo4j.springframework.boot.test.autoconfigure.data.DataNeo4jTest;
-import org.neo4j.springframework.data.core.ReactiveNeo4jOperations;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.neo4j.springframework.data.core.cypher.Cypher.*;
 
 @DataNeo4jTest
 @Slf4j
@@ -26,23 +25,20 @@ public class PostRepositoryTest {
     @Autowired
     private PostRepository posts;
 
-    @Autowired
-    private ReactiveNeo4jOperations operations;
-
-
     @BeforeEach
     public void setup() throws IOException {
         log.debug("running setup.....,");
-        this.operations.deleteAll(Post.class)
+        this.posts.deleteAll()
                 .thenMany(testSaveMethod())
                 .log()
                 .thenMany(testFoundMethod())
                 .log()
-                .subscribe(
-                        (data) -> log.info("found post:" + data),
-                        (err) -> log.error("" + err),
-                        () -> log.info("done")
-                );
+                .blockLast();// to make the tests work
+//                .subscribe(
+//                        (data) -> log.info("found post:" + data),
+//                        (err) -> log.error("" + err),
+//                        () -> log.info("done")
+//                );
     }
 
     private Flux<Post> testSaveMethod() {
@@ -50,19 +46,12 @@ public class PostRepositoryTest {
                 .map(title -> Post.builder().title(title).content("The content of " + title).build())
                 .collect(Collectors.toList());
         return Flux.fromIterable(data)
-                .flatMap(it -> this.operations.save(it));
+                .flatMap(it -> this.posts.save(it));
     }
 
     private Flux<Post> testFoundMethod() {
-        var postNode = node("Post").named("p");
-        return this.operations
-                .findAll(
-                        match(postNode)
-                                .where(postNode.property("title").contains(literalOf("one")))
-                                .returning(postNode)
-                                .build(),
-                        Post.class
-                );
+        return this.posts
+                .findAll(Example.of(Post.builder().title("Post one").build()));
     }
 
     @AfterEach

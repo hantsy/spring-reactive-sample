@@ -3,7 +3,6 @@ package com.example.demo;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.neo4j.springframework.data.config.EnableNeo4jAuditing;
-import org.neo4j.springframework.data.core.ReactiveNeo4jClient;
 import org.neo4j.springframework.data.core.schema.GeneratedValue;
 import org.neo4j.springframework.data.core.schema.Id;
 import org.neo4j.springframework.data.core.schema.Node;
@@ -14,20 +13,16 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.Random;
 
 import static org.springframework.http.ResponseEntity.notFound;
 
 @SpringBootApplication
 @EnableNeo4jAuditing
-@EnableTransactionManagement
 public class DemoApplication {
 
     public static void main(String[] args) {
@@ -41,48 +36,29 @@ public class DemoApplication {
 @RequiredArgsConstructor
 class DataInitializer implements CommandLineRunner {
 
-    private final ReactiveNeo4jClient client;
+    private final PostRepository posts;
 
     @Override
     public void run(String[] args) {
         log.info("start data initialization...");
-        this.client
-                .query("MATCH (p:Post) DETACH DELETE p")
-                .run()
-                .doOnNext(rs -> log.info("Deleted " + rs.counters().nodesDeleted() + " posts"))
+        this.posts.deleteAll()
                 .thenMany(
                         Flux
                                 .just("Post one", "Post two")
                                 .flatMap(
-                                        title ->
-                                                client.query("CREATE (p:Post {id: $id, title: $title, content: $content}) RETURN p.id as id, p.title as title, p.content as content")
-                                                        .bindAll(Map.of("id", new Random().nextInt(1000), "title", title, "content", "The post content of " + title))
-                                                        .fetchAs(Post.class)
-                                                        .mappedBy((ts, r) -> Post.builder().id(r.get("id").asLong())
-                                                                .title(r.get("title").asString())
-                                                                .content(r.get("content").asString())
-                                                                .build()
-                                                        )
-                                                        .one()
-                                                        .doOnNext(
-                                                                data -> log.info("saved post: " + data)
-                                                        )
+                                        title -> this.posts.save(Post.builder().title(title).content("The content of " + title).build())
                                 )
                 )
                 .log()
                 .thenMany(
-                        client
-                                .query("MATCH (p:Post) RETURN p")
-                                .fetchAs(Map.class)
-                                .mappedBy((t, r) -> r.get("p").asMap())
-                                .all()
-
+                        this.posts.findAll()
                 )
-                .subscribe(
-                        (data) -> log.info("found post:" + data),
-                        (error) -> log.error("error:" + error),
-                        () -> log.info("done initialization...")
-                );
+                .blockLast();// to make `IntegrationTests` work.
+//                .subscribe(
+//                        (data) -> log.info("found post:" + data),
+//                        (error) -> log.error("error:" + error),
+//                        () -> log.info("done initialization...")
+//                );
 
     }
 
@@ -128,7 +104,6 @@ class PostController {
     public Mono<Void> delete(@PathVariable("id") Long id) {
         return this.posts.deleteById(id);
     }
-
 
 }
 
