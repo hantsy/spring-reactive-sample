@@ -19,7 +19,9 @@ Lombok is helpful to make your Java codes clean as possible, with the Lombok ann
 
 Download the generated project skeleton archive and extract the files into your machine.  
 
-Open the *pom.xml* file in the project root folder, there is a `spring-boot-bom-r2dbc` to manage the r2dbc related dependencies. Currently, Spring Data R2dbc is not included in the official Spring Data release train.
+Open the *pom.xml* file in the project root folder.
+
+There is a `spring-boot-bom-r2dbc` to manage the r2dbc related dependencies. Currently, Spring Data R2dbc is not included in the official Spring Data release train.
 
 ```xml
 <dependencyManagement>
@@ -35,7 +37,7 @@ Open the *pom.xml* file in the project root folder, there is a `spring-boot-bom-
 </dependencyManagement>
 ```
 
-A `spring-boot-starter-data-r2dbc` dependency is declared in the `dependencies`.
+A Spring Boot starter `spring-boot-starter-data-r2dbc` dependency is added in the `dependencies`.
 
 ```xml
 <dependency>
@@ -43,7 +45,9 @@ A `spring-boot-starter-data-r2dbc` dependency is declared in the `dependencies`.
     <artifactId>spring-boot-starter-data-r2dbc</artifactId>
 </dependency>
 ```
-Add a r2dbc driver for the specific database you are using. Let's use H2 as an example, add the following dependency. Other drivers can found in  [R2dbc website](https://r2dbc.io/) .
+Let's add a r2dbc driver for the specific database you are using. 
+
+Use H2 as an example, add the following dependency. Other drivers can found in  [R2dbc website](https://r2dbc.io/) .
 
 ```xml
 <dependency>
@@ -52,7 +56,7 @@ Add a r2dbc driver for the specific database you are using. Let's use H2 as an e
     <scope>runtime</scope>
 </dependency>
 ```
-In a Spring Boot project, the Spring boot starter `spring-boot-starter-data-r2dbc` will auto-configure all necessary facilities to get the r2dbc work.
+In a Spring Boot based project, the `spring-boot-starter-data-r2dbc`  starter will auto-configure all necessary facilities to get the r2dbc work.
 
 In a none Spring Boot project,  you can configure R2dbc manually by declaring a custom `AbstractR2dbcConfiguration`.  
 
@@ -85,7 +89,7 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
     }
 }   
 ```
-In the above codes, it provides:
+In the above codes:
 
 * `ConnectionFactory` is required to connect to a database.
 * and `ReactiveTransactionManager` is use for reactive transaction management.
@@ -299,11 +303,11 @@ Now start up your application, and use `curl` to test `/posts` endpoints.
 [{"id":1,"title":"post one","content":"content of post one"},{"id":2,"title":"Post one","content":"The content of post one"},{"id":3,"title":"Post tow","content":"The content of post tow"}]
 ```
 
-Awesome! it works.
+Awesome! it works well.
 
 OK, let's move forward.
 
-Spring Data R2dbc also provide test slice `@DataR2dbcTest` which use test your R2dbc related facilities without load all configurations.
+Spring Data R2dbc also provide a  `@DataR2dbcTest` for test slice purpose which is use for testing your R2dbc related facilities without load all configurations.
 
 ```java
 @DataR2dbcTest
@@ -346,7 +350,7 @@ public class PostRepositoryTest {
 
 But unfortunately, it does not work as `@DataJpaTest` which can pick up an embedded H2 for test purpose, with `@DataR2dbcTest` , we have to use a runtime database, see [#issue62](https://github.com/spring-projects-experimental/spring-boot-r2dbc/issues/68).
 
-As mentioned,  a `DatabaseClient` is available for database operations in a programmatic approach instead of `Repository` interface.
+As mentioned,  a `DatabaseClient` is available for database operations in a programmatic approach instead of `Repository` interface declaring.
 
 Here is an example of `PostRepository` using `DatabaseClient`.
 
