@@ -2,7 +2,7 @@
 
 
 
-For the past years, Mongo, Redis, ElasticSearch, etc got reactive support in Spring Data project, but for RDBMS, both JDBC and JPA only support blocking access. 
+In the past years, Mongo, Redis, ElasticSearch, etc got reactive support in Spring Data project, but for RDBMS, both JDBC and JPA only support blocking access due to the limitation of JDBC specification. 
 
 As the first stable version of R2dbc was released, RDBMS is finally got reactive support.
 
