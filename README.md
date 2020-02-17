@@ -7,11 +7,12 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 
 * [Reactive Programming with Spring 5(Deprecated)](./docs/GUIDE.md)
 * [Reactive Data Access with Neo4j](./docs/data-neo4j-rx.md)
+* [Reactive Data Access with R2dbc](./docs/data-r2dbc.md)
 
 
-## Sample Codes
+## Sample code list
 
-The following table list all sample codes related to this post. The  [sample  codes ](https://github.com/hantsy/spring-reactive-sample) of this post is hosted on my Github account, welcome to star and fork it.
+The following table list all sample codes related to the above posts. 
 
 | name                     | description                                                  |
 | ------------------------ | ------------------------------------------------------------ |
@@ -84,6 +85,6 @@ The following table list all sample codes related to this post. The  [sample  co
 
 I appreciate all contribution from the community, not limited to reporting bugs, filing an issue, etc. 
 
-Specials thanks for Jetbrains's support by  contributing an  open-source license.
+Specials thanks for Jetbrains's support by contributing an open-source license.
 
 [<img src="./jetbrains.png" height="250px" width="250px"/>](https://www.jetbrains.com/?from=spring-reactive-sample)
