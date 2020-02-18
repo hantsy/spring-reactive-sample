@@ -8,7 +8,14 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.driver.springframework.boot.test.autoconfigure.Neo4jTestHarnessAutoConfiguration;
 import org.neo4j.springframework.boot.test.autoconfigure.data.DataNeo4jTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.util.TestPropertyValues;
+import org.springframework.context.ApplicationContextInitializer;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.data.domain.Example;
+import org.springframework.test.context.ContextConfiguration;
+import org.testcontainers.containers.Neo4jContainer;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -19,6 +26,8 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+
+@ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @DataNeo4jTest(excludeAutoConfiguration = Neo4jTestHarnessAutoConfiguration.class)
 @Slf4j
 public class PostRepositoryTest {
@@ -67,6 +76,25 @@ public class PostRepositoryTest {
                 .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
                 .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))
                 .verifyComplete();
+    }
+
+    /**
+     * Note: This code fragment is from Neo4j Data Rx spring boot test starter.
+     *
+     * An initializer that starts a Neo4j test container and sets {@code org.neo4j.driver.uri} to the containers
+     * bolt uri. It also registers an application listener that stops the container when the context closes.
+     */
+    static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+        @Override
+        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+            final Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0.0").withoutAuthentication();
+            neo4jContainer.start();
+            configurableApplicationContext
+                    .addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> neo4jContainer.stop());
+            TestPropertyValues.of("org.neo4j.driver.uri=" + neo4jContainer.getBoltUrl())
+                    .applyTo(configurableApplicationContext.getEnvironment());
+        }
     }
 
 }
