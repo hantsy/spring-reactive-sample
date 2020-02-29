@@ -3,54 +3,73 @@
 This is a sandbox project  for demonstrating  [Reactive Streams](https://www.reactive-streams.org/)  support in Spring framework and its ecosystem. 
 
 
-## Related Posts 
+## Docs
 
 * [Reactive Programming with Spring 5(Deprecated)](./docs/GUIDE.md)
 * [Reactive Data Access with Neo4j](./docs/data-neo4j-rx.md)
 * [Reactive Data Access with R2dbc](./docs/data-r2dbc.md)
 
 
-## Sample code list
+## Sample Codes
 
 The following table list all sample codes related to the above posts. 
 
-| name                     | description                                                  |
-| ------------------------ | ------------------------------------------------------------ |
+### Spring Samples
+
+| name            | description                                        |
+| :---------------| -------------------------------------------------- |
 | vanilla                  | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
 | vanilla-jetty            | Same as **vanilla**, but use Jetty as target runtime         |
-| vanilla-reactor-netty    | Same as **vanilla**, but use Reactor Netty as target runtime |
-| vanilla-reactor-netty    | Same as **vanilla**, but use Undertow as target runtime      |
+| vanilla-tomcat           | Same as **vanilla**, but use Reactor Netty as target runtime |
+| vanilla-undertow         | Same as **vanilla**, but use Undertow as target runtime      |
 | java9                    | Same as **vanilla**, Java 9 Flow API support is not ready in Spring 5.0.0.REALESE, planned in 5.0.1, see issue [SPR-16052](https://jira.spring.io/browse/SPR-16052) and the original [discussion on stackoverflow](https://stackoverflow.com/questions/46597924/spring-5-supports-java-9-flow-apis-in-its-reactive-feature/46605983#46605983) |
 | rxjava                   | Same as **vanilla**, but use Rxjava instead of Reactor       |
+| rxjava-jdbc                   | Accessing database with rxjava-jdbc      |
 | rxjava2                  | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
+| rxjava2-jdbc                  | Accessing database with rxjava2-jdbc      |
 | war                      | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
 | routes                   | Use `RouterFunction` instead of controller in **vanilla**    |
 | register-bean            | Programmatic approach to register all beans in `ApplicatonContext` at application bootstrap |
-| data-mongo               | Demonstration of Spring Data Mongo reactive support          |
-| data-redis               | Demonstration of Spring Data Redis reactive support          |
-| data-cassandra           | Demonstration of Spring Data Cassandra reactive support      |
-| data-couchbase           | Demonstration of Spring Data Couchbase reactive support      |
-| security                 | Based on **vanilla**, add secuirty for spring webflux support |
+| data-mongo               | Spring Data Mongo Reactive demo          |
+| data-mongo-pageable| Spring Data Mongo Reactive demo with pagiation support          |
+| data-mongo-transaction| Spring Data Mongo Reactive demo with `Transaction` support          |
+| data-redis               | Spring Data Redis Reactive demo          |
+| data-redis-message               | Spring Data Redis Reactive Example with `ReactiveRedisMessageListenerContainer`|
+| data-cassandra           | Spring Data Cassandra Reactive demo      |
+| data-couchbase           | Spring Data Couchbase Reactive demo      |
+| security                 | Based on **vanilla**, add  Spring Security Reactive support  |
+| security-form | Same as **secuirty**, login form example |
 | security-user-properties | Same as **secuirty**, but use users.properties to store users |
 | security-method          | Replace URI based configuration with method level constraints |
 | security-data-mongo      | Based on **data-mongo** and **security**, replace with dummy users in hard codes with Mongo driven store |
 | multipart                | Mutipart request handling and file uploading                 |
-| multipart-data-mongo     | (PENDING)Multipart and file uploading, but data in Mongo via Spring Data Mongo, waitng for Reactive support for `GridFsTemplate` |
-| mvc-thymeleaf            | Traditinal web mvc application, use Thymeleaf specific Reactive view resolver to render view |
-| mvc-freemarker           | Traditinal web mvc application, use freemarker as template engine, currently it does not have a reactive view resolver |
-| sse                      | Server Send Event and json stream example                    |
-| websocket                | Reactive WebSocket example                                   |
-| boot                     | Switch to Spring Boot to get autoconfiguration of `spring-webflux`, added extra Spring Data Mongo, Spring Security support |
+| multipart-data-mongo     | Multipart and file uploading, but data in Mongo via Spring Data Mongo Reactive `GridFsTemplate` |
+| mvc-thymeleaf            | Traditional web application, use Thymeleaf  as template engine |
+| mvc-mustache            | Traditional web application, use Mustache as template engine|
+| mvc-freemarker           | Traditional web application, use freemarker as template engine|
+| sse                      | Server Send Event  example               |
+| websocket                | WebSocket example                        |
+| web-filter                | `WebFilter` example                     |
+| groovy                   | Same features as **boot**, but written in groovy             |
+| client                   | Demonstration of `WebClient` to shake hands with backend reactive  APIs |
+| kotlin                   | Same features as **boot**, but written in kotlin|
+| kotlin-gradle            | Use kotlin functional approach to declare beans and bootstrap the application programatically |
+| session                  | Spring Session Example|
+| session-header           | Spring Session `WebSessionIdResolver` Example|
+| session-data-redis           | Spring Data Reids based `ReactiveSessionRepository` Example|
+| session-data-mongo           | Spring Data Mongo based `ReactiveSessionRepository` Example|
+
+
+### Spring Boot based Samples
+
+| name                     | description                                                  |
+| :----------------------- | ------------------------------------------------------------ |
+| boot                     | Switch to Spring Boot to get autoconfiguration of Spring WebFlux |
 | boot-jetty               | Same as **boot**, but use Jetty as target runtime            |
 | boot-tomcat              | Same as **boot**, but use Tomcat as target runtime           |
 | boot-undertow            | Same as **boot**, but use Undertow as target runtime         |
 | boot-routes              | Use `RouterFunction` instead of the general `Controller` in **boot** |
 | boot-freemarker          | Same as **mvc-freemarker**, but based on Spring Boot         |
-| groovy                   | Same features as **boot**, but written in groovy             |
-| client                   | Demonstration of `WebClient` to shake hands with backend reactive  APIs |
-| kotlin                   | Same features as **boot**, but written in kotlin             |
-| kotlin-gradle            | Use kotlin functional approach to declare beans and bootstrap the application programatically |
-| session                  | (WIP)More features will be added here                        |
 
 ## References
 
@@ -81,9 +100,7 @@ The following table list all sample codes related to the above posts.
 * [Lite Rx API Hands-On with Reactor Core 3 ](https://github.com/reactor/lite-rx-api-hands-on)
 * [reactor-kotlin-workshop](https://github.com/eddumelendez/reactor-kotlin-workshop)
 
-## Thanks
-
-I appreciate all contribution from the community, not limited to reporting bugs, filing an issue, etc. 
+## Special Thanks
 
 Specials thanks for Jetbrains's support by contributing an open-source license.
 
