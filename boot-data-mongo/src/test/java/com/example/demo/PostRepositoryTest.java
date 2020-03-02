@@ -1,14 +1,12 @@
 package com.example.demo;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.test.context.junit4.SpringRunner;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -16,7 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @Slf4j
-@RunWith(SpringRunner.class)
 public class PostRepositoryTest {
 
     @Autowired
@@ -25,12 +22,11 @@ public class PostRepositoryTest {
     @Autowired
     PostRepository postRepository;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.reactiveMongoTemplate.remove(Post.class).all()
             .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e), () -> log.debug("done"));
     }
-
 
     @Test
     public void testSavePost() {
@@ -39,7 +35,6 @@ public class PostRepositoryTest {
             .expectComplete()
             .verify();
     }
-
 
     @Test
     public void testSaveAndVerifyPost() {

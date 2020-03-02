@@ -6,8 +6,8 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 ## Docs
 
 * [Reactive Programming with Spring 5(Deprecated)](./docs/GUIDE.md)
-* [Reactive Data Access with Neo4j](./docs/data-neo4j-rx.md)
-* [Reactive Data Access with R2dbc](./docs/data-r2dbc.md)
+* [Accessing Neo4j with SDN Rx](./docs/data-neo4j-rx.md)
+* [Accessing RDBMS with Spring Data R2dbc](./docs/data-r2dbc.md)
 
 
 ## Sample Codes
