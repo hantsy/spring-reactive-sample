@@ -25,15 +25,25 @@ public class PostRepositoryTest {
     @BeforeEach
     public void setup() {
         this.reactiveMongoTemplate.remove(Post.class).all()
-            .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e), () -> log.debug("done"));
+                .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e), () -> log.debug("done"));
+    }
+
+    @Test
+    public void testSavePostAndFindByTitleContains() {
+        this.postRepository.save(Post.builder().content("my test content").title("my test title").build())
+                .flatMapMany(p->this.postRepository.findByTitleContains("test"))
+                .as(StepVerifier::create)
+                .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
+                .expectComplete()
+                .verify();
     }
 
     @Test
     public void testSavePost() {
         StepVerifier.create(this.postRepository.save(Post.builder().content("my test content").title("my test title").build()))
-            .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
-            .expectComplete()
-            .verify();
+                .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
+                .expectComplete()
+                .verify();
     }
 
     @Test
@@ -51,13 +61,13 @@ public class PostRepositoryTest {
         Post post2 = Post.builder().content("content of another post").title("another post title").build();
 
         Flux<Post> allPosts = Flux.just(post1, post2)
-            .flatMap(this.postRepository::save)
-            .thenMany(this.postRepository.findAll(Sort.by((Sort.Direction.ASC), "title")));
+                .flatMap(this.postRepository::save)
+                .thenMany(this.postRepository.findAll(Sort.by((Sort.Direction.ASC), "title")));
 
         StepVerifier.create(allPosts)
-            .expectNextMatches(p -> p.getTitle().equals("another post title"))
-            .expectNextMatches(p -> p.getTitle().equals("my test title"))
-            .verifyComplete();
+                .expectNextMatches(p -> p.getTitle().equals("another post title"))
+                .expectNextMatches(p -> p.getTitle().equals("my test title"))
+                .verifyComplete();
     }
 
 }

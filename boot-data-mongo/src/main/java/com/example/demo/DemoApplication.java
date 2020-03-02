@@ -107,6 +107,8 @@ class PostController {
 }
 
 interface PostRepository extends ReactiveMongoRepository<Post, String> {
+
+    Flux<PostSummary> findByTitleContains(String title);
 }
 
 @Document
@@ -125,3 +127,9 @@ class Post {
     @CreatedDate
     private LocalDateTime createdDate;
 }
+
+@Data
+class PostSummary {
+    private String title;
+}
+
