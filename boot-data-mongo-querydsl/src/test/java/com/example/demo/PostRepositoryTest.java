@@ -26,27 +26,8 @@ public class PostRepositoryTest {
     @BeforeEach
     public void setup() {
         this.reactiveMongoTemplate.remove(Post.class).all()
-            .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e), () -> log.debug("done"));
+                .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e), () -> log.debug("done"));
     }
-
-
-    @Test
-    public void testSavePost() {
-        StepVerifier.create(this.postRepository.save(Post.builder().content("my test content").title("my test title").build()))
-            .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
-            .expectComplete()
-            .verify();
-    }
-
-
-    @Test
-    public void testSaveAndVerifyPost() {
-        Post saved = this.postRepository.save(Post.builder().content("my test content").title("my test title").build()).block();
-        assertThat(saved.getId()).isNotNull();
-        assertThat(this.reactiveMongoTemplate.collectionExists(Post.class).block()).isTrue();
-        assertThat(this.reactiveMongoTemplate.findById(saved.getId(), Post.class).block().getTitle()).isEqualTo("my test title");
-    }
-
 
     @Test
     public void testGetAllPost() {
@@ -54,19 +35,19 @@ public class PostRepositoryTest {
         Post post2 = Post.builder().content("content of another post").title("another post title").build();
 
         Flux<Post> allPosts = this.postRepository
-            .saveAll(asList(post1, post2))
-            .thenMany(this.postRepository.findAll(Sort.by((Sort.Direction.ASC), "title")));
+                .saveAll(asList(post1, post2))
+                .thenMany(this.postRepository.findAll(Sort.by((Sort.Direction.ASC), "title")));
 
         StepVerifier.create(allPosts)
-            .expectNextMatches(p -> p.getTitle().equals("another post title"))
-            .expectNextMatches(p -> p.getTitle().equals("my test title"))
-            .verifyComplete();
+                .expectNextMatches(p -> p.getTitle().equals("another post title"))
+                .expectNextMatches(p -> p.getTitle().equals("my test title"))
+                .verifyComplete();
 
 
         this.postRepository.findAll(QPost.post.title.containsIgnoreCase("my"))
-            .as(StepVerifier::create)
-            .expectNextMatches(p -> p.getTitle().equals("my test title"))
-            .verifyComplete();
+                .as(StepVerifier::create)
+                .expectNextMatches(p -> p.getTitle().equals("my test title"))
+                .verifyComplete();
     }
 
 }

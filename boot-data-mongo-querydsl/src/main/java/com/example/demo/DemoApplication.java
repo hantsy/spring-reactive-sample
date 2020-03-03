@@ -41,20 +41,20 @@ class DataInitializer implements CommandLineRunner {
     public void run(String[] args) {
         log.info("start data initialization  ...");
         this.posts
-            .deleteAll()
-            .thenMany(
-                Flux
-                    .just("Post one", "Post two")
-                    .flatMap(
-                        title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-                    )
-            )
-            .log()
-            .subscribe(
-                null,
-                null,
-                () -> log.info("done initialization...")
-            );
+                .deleteAll()
+                .thenMany(
+                        Flux
+                                .just("Post one", "Post two")
+                                .flatMap(
+                                        title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+                                )
+                )
+                .log()
+                .subscribe(
+                        data -> log.info("data" + data),
+                        error -> log.error("error" + error),
+                        () -> log.info("done initialization...")
+                );
 
     }
 
@@ -73,12 +73,12 @@ class PostController {
     @GetMapping("")
     public Flux<Post> all(@RequestParam("q") String q) {
         return Optional.ofNullable(q)
-            .map(
-                keyword -> this.posts.findAll(QPost.post.title.containsIgnoreCase(keyword)
-                    .or(QPost.post.content.containsIgnoreCase(keyword)))
-            ).orElse(
-                this.posts.findAll()
-            );
+                .map(
+                        keyword -> this.posts.findAll(QPost.post.title.containsIgnoreCase(keyword)
+                                .or(QPost.post.content.containsIgnoreCase(keyword)))
+                ).orElse(
+                        this.posts.findAll()
+                );
     }
 
     @PostMapping("")
@@ -94,13 +94,13 @@ class PostController {
     @PutMapping("/{id}")
     public Mono<Post> update(@PathVariable("id") String id, @RequestBody Post post) {
         return this.posts.findById(id)
-            .map(p -> {
-                p.setTitle(post.getTitle());
-                p.setContent(post.getContent());
+                .map(p -> {
+                    p.setTitle(post.getTitle());
+                    p.setContent(post.getContent());
 
-                return p;
-            })
-            .flatMap(this.posts::save);
+                    return p;
+                })
+                .flatMap(this.posts::save);
     }
 
     @DeleteMapping("/{id}")
