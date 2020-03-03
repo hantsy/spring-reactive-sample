@@ -53,7 +53,7 @@ public class DemoApplicationTests {
         byte[] result = client
             .post()
             .uri("/multipart")
-            .syncBody(generateBody())
+            .bodyValue(generateBody())
             .exchange()
             .expectStatus().isOk()
             .expectBody().returnResult().getResponseBody();
