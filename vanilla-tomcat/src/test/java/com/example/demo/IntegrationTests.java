@@ -6,44 +6,44 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import java.time.Duration;
 
+@SpringJUnitConfig(classes = Application.class)
 public class IntegrationTests {
 
-    Tomcat tomcat = null;
+    @Autowired
+    Tomcat tomcat;
 
-    WebTestClient rest;
+    WebTestClient client;
 
     @BeforeAll
     public void beforeAll() throws LifecycleException {
-        ApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
-        tomcat = context.getBean(Tomcat.class);
         tomcat.start();
+        System.out.println("Tomcat server is running at port:" + tomcat.getConnector().getLocalPort());
     }
 
     @AfterAll
     public void afterAll() throws LifecycleException {
-        if (tomcat != null) {
-            tomcat.stop();
-        }
+        tomcat.stop();
+        tomcat.destroy();
     }
 
     @BeforeEach
     public void setup() {
-        this.rest = WebTestClient
+        this.client = WebTestClient
                 .bindToServer()
-                .responseTimeout(Duration.ofSeconds(10))
+                .responseTimeout(Duration.ofSeconds(300))
                 .baseUrl("http://localhost:8080")
                 .build();
     }
 
     @Test
     public void getAllPostsWillBeOk() throws Exception {
-        this.rest
+        this.client
                 .get()
                 .uri("/posts")
                 .exchange()
