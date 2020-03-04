@@ -39,26 +39,4 @@ public class PostControllerTest {
             .jsonPath("$.length()")
             .isEqualTo(2);
     }
-
-    @Test
-    public void getPostById() throws Exception {
-        this.client
-            .get()
-            .uri("/posts/1")
-            .accept(APPLICATION_JSON)
-            .exchange()
-            .expectBody()
-            .jsonPath("$.title")
-            .isEqualTo("post one");
-        
-        this.client
-            .get()
-            .uri("/posts/2")
-            .accept(APPLICATION_JSON)
-            .exchange()
-            .expectBody()
-            .jsonPath("$.title")
-            .isEqualTo("post two");
-    }
-
 }

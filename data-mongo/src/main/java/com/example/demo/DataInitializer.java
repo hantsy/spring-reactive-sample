@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 /**
- *
  * @author hantsy
  */
 @Component
@@ -29,20 +28,20 @@ class DataInitializer {
     public void init() {
         log.info("start data initialization  ...");
         this.posts
-            .deleteAll()
-            .thenMany(
-                Flux
-                    .just("Post one", "Post two")
-                    .flatMap(
-                        title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-                    )
-            )
-            .log()
-            .subscribe(
-                null,
-                null,
-                () -> log.info("done initialization...")
-            );
+                .deleteAll()
+                .thenMany(
+                        Flux
+                                .just("Post one", "Post two")
+                                .flatMap(
+                                        title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+                                )
+                )
+                .log()
+                .subscribe(
+                        data -> log.info("data: {}", data),
+                        error -> log.info("error: {}", error),
+                        () -> log.info("done initialization...")
+                );
 
     }
 

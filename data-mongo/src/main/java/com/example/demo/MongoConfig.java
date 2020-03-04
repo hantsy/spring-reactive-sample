@@ -8,6 +8,7 @@ package com.example.demo;
 import com.mongodb.reactivestreams.client.MongoClient;
 import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
@@ -15,6 +16,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
  *
  * @author hantsy
  */
+@Configuration
 @EnableReactiveMongoRepositories(basePackageClasses = {MongoConfig.class})
 public class MongoConfig extends AbstractReactiveMongoConfiguration {
 

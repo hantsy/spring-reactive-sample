@@ -1,18 +1,12 @@
 package com.example.demo;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
 import io.undertow.Undertow;
 import java.time.Duration;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -27,21 +21,21 @@ public class IntegrationTests {
 
     WebTestClient rest;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAll() throws Exception {
         ApplicationContext context = new AnnotationConfigApplicationContext(Application.class); 
         undertow = context.getBean(Undertow.class);
         undertow.start();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterAll() throws Exception {
         if (undertow != null) {
             undertow.stop();
         }
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.rest = WebTestClient
             .bindToServer()

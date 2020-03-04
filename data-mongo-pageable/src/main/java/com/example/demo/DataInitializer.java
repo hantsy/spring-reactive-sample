@@ -28,25 +28,25 @@ class DataInitializer {
     public void init() {
         log.info("start data initialization  ...");
         this.posts
-            .deleteAll()
-            .thenMany(
-                Flux
-                    .range(0, 100)
-                    .flatMap(
-                        n -> this.posts.save(
-                            Post.builder()
-                                .title("post title #" + n)
-                                .content("content of post " + n)
-                                .build()
-                        )
-                    )
-            )
-            .log()
-            .subscribe(
-                null,
-                null,
-                () -> log.info("done initialization...")
-            );
+                .deleteAll()
+                .thenMany(
+                        Flux
+                                .range(0, 100)
+                                .flatMap(
+                                        n -> this.posts.save(
+                                                Post.builder()
+                                                        .title("post title #" + n)
+                                                        .content("content of post " + n)
+                                                        .build()
+                                        )
+                                )
+                )
+                .log()
+                .subscribe(
+                        data -> log.info("data: {}", data),
+                        error -> log.info("error: {}", error),
+                        () -> log.info("done initialization...")
+                );
 
     }
 

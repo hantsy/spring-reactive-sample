@@ -18,7 +18,6 @@ import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
 @Configuration
 @ComponentScan
-@EnableWebFlux
 public class Application {
 
     @Value("${server.port:8080}")

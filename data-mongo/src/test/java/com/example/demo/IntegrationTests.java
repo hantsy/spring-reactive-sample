@@ -44,38 +44,13 @@ public class IntegrationTests {
     }
 
     @Test
-    public void searchPostsByKeyword_shouldBeOK() throws Exception {
+    public void getAllPostsWillBeOk() throws Exception {
         this.client
                 .get()
-                .uri("/posts/search?q=post")
+                .uri("/posts")
                 .exchange()
-                .expectStatus().isOk()
-                .expectBodyList(Post.class).hasSize(10);
+                .expectStatus()
+                .isOk();
     }
-
-    @Test
-    public void countPostsByKeyword_shouldBeOK() throws Exception {
-        this.client
-                .get()
-                .uri("/posts/count?q=0")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody().jsonPath("$.count").isEqualTo(10);
-
-        this.client
-                .get()
-                .uri("/posts/count?q=5")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody().jsonPath("$.count").isEqualTo(19);
-
-        this.client
-                .get()
-                .uri("/posts/count?q=post")
-                .exchange()
-                .expectStatus().isOk()
-                .expectBody().jsonPath("$.count").isEqualTo(100);
-    }
-
 
 }

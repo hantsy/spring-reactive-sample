@@ -1,22 +1,15 @@
 package com.example.demo;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-import java.time.Duration;
 import org.eclipse.jetty.server.Server;
-
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.time.Duration;
 
 /**
  *
@@ -26,9 +19,9 @@ public class IntegrationTests {
 
     static Server jetty = null;
 
-    WebTestClient rest;
+    WebTestClient client;
 
-    @BeforeClass
+    @BeforeAll
     public static void beforeAll() throws Exception {
         ApplicationContext context = new AnnotationConfigApplicationContext(Application.class); 
         jetty = context.getBean(Server.class);
@@ -36,16 +29,16 @@ public class IntegrationTests {
         //jetty.join();
     }
 
-    @AfterClass
+    @AfterAll
     public static void afterAll() throws Exception {
         if (jetty != null) {
             jetty.stop();
         }
     }
 
-    @Before
+    @BeforeEach
     public void setup() {
-        this.rest = WebTestClient
+        this.client = WebTestClient
             .bindToServer()
             .responseTimeout(Duration.ofDays(1))
             .baseUrl("http://localhost:8080")
@@ -54,7 +47,7 @@ public class IntegrationTests {
 
     @Test
     public void getAllPostsWillBeOk() throws Exception {
-        this.rest
+        this.client
             .get()
             .uri("/posts")
             .exchange()
