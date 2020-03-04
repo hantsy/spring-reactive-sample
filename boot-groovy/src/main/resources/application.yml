@@ -10,4 +10,4 @@ spring:
       grid-fs-database: images
 logging:
   level:
-org.springframework.web: DEBUG
+    org.springframework.web: DEBUG
