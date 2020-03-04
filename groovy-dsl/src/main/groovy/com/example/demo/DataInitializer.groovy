@@ -1,9 +1,6 @@
 package com.example.demo
 
 import org.slf4j.LoggerFactory
-import org.springframework.context.event.ContextRefreshedEvent
-import org.springframework.context.event.EventListener
-import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 
 class DataInitializer  {
