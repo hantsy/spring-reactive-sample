@@ -7,13 +7,13 @@ import org.springframework.stereotype.Component
 import reactor.core.publisher.Flux
 
 @Component
-class DataInitializer  {
+class DataInitializer {
     def log = LoggerFactory.getLogger(DataInitializer)
 
     PostRepository posts
 
-    DataInitializer(PostRepository posts){
-        this.posts= posts
+    DataInitializer(PostRepository posts) {
+        this.posts = posts
     }
 
     @EventListener(value = ContextRefreshedEvent)
@@ -22,17 +22,17 @@ class DataInitializer  {
         this.posts
                 .deleteAll()
                 .thenMany(
-                Flux.just("Post one", "Post two")
-                        .flatMap { it -> this.posts.save(Post.builder().title(it).content("content of " + it).build()) }
+                        Flux.just("Post one", "Post two")
+                                .flatMap { it -> this.posts.save(Post.builder().title(it).content("content of " + it).build()) }
 
 
-        )
+                )
                 .log()
                 .subscribe(
-                null,
-                null,
-                { log.info("done initialization...") }
-        )
+                        null,
+                        null,
+                        { log.info("done initialization...") }
+                )
 
     }
 

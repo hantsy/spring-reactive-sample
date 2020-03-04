@@ -27,7 +27,7 @@ class Application {
     }
 
     @Bean
-    def HttpServer nettyServer(ApplicationContext context) {
+    HttpServer nettyServer(ApplicationContext context) {
         HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build()
         ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler)
         HttpServer.create().host("localhost").port(8080).handle(adapter)

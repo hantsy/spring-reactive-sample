@@ -11,7 +11,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 
 @Configuration
 @EnableWebFlux
-class WebConfig{
+class WebConfig {
     @Bean
     RouterFunction<ServerResponse> routes(PostHandler postHandler) {
         route(GET("/posts"), postHandler.&all)
