@@ -24,47 +24,29 @@ import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
+import java.time.Duration;
 import java.util.Comparator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-@ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @ReactiveDataNeo4jTest(excludeAutoConfiguration = Neo4jTestHarnessAutoConfiguration.class)
-//@Testcontainers
+@Testcontainers
 @Slf4j
-public class PostRepositoryTest {
+public class PostRepositoryWithTestContainersTest {
 
-//    @Container
-//    private static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0");
-//
-//    @DynamicPropertySource
-//    static void neo4jProperties(DynamicPropertyRegistry registry) {
-//        registry.add("org.neo4j.driver.uri", neo4jContainer::getBoltUrl);
-//        registry.add("org.neo4j.driver.authentication.username", () -> "neo4j");
-//        registry.add("org.neo4j.driver.authentication.password", neo4jContainer::getAdminPassword);
-//    }
+    @Container
+    private static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0")
+            .withStartupTimeout(Duration.ofMinutes(5));
 
-    /**
-     * Note: This code fragment is from Neo4j Data Rx spring boot test starter.
-     *
-     * An initializer that starts a Neo4j test container and sets {@code org.neo4j.driver.uri} to the containers
-     * bolt uri. It also registers an application listener that stops the container when the context closes.
-     */
-    static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-        @Override
-        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            final Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0").withoutAuthentication();
-            neo4jContainer.start();
-            configurableApplicationContext
-                    .addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> neo4jContainer.stop());
-            TestPropertyValues.of("org.neo4j.driver.uri=" + neo4jContainer.getBoltUrl())
-                    .applyTo(configurableApplicationContext.getEnvironment());
-        }
+    @DynamicPropertySource
+    static void neo4jProperties(DynamicPropertyRegistry registry) {
+        registry.add("org.neo4j.driver.uri", neo4jContainer::getBoltUrl);
+        registry.add("org.neo4j.driver.authentication.username", () -> "neo4j");
+        registry.add("org.neo4j.driver.authentication.password", neo4jContainer::getAdminPassword);
     }
+
 
 
     @Autowired
