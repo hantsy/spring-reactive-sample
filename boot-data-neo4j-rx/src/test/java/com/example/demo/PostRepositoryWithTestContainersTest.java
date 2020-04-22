@@ -5,16 +5,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.neo4j.driver.springframework.boot.test.autoconfigure.Neo4jTestHarnessAutoConfiguration;
 import org.neo4j.springframework.boot.test.autoconfigure.data.ReactiveDataNeo4jTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.data.domain.Example;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.Neo4jContainer;
@@ -34,10 +29,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ReactiveDataNeo4jTest(excludeAutoConfiguration = Neo4jTestHarnessAutoConfiguration.class)
 @Testcontainers
 @Slf4j
+// Testcontainers does not work well with per_class testinstance.
+// see: https://stackoverflow.com/questions/61357116/exception-mapped-port-can-only-be-obtained-after-the-container-is-started-when/61358336#61358336
+@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    private static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0")
+    static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0")
             .withStartupTimeout(Duration.ofMinutes(5));
 
     @DynamicPropertySource

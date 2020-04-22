@@ -33,19 +33,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @ReactiveDataNeo4jTest(excludeAutoConfiguration = Neo4jTestHarnessAutoConfiguration.class)
-//@Testcontainers
 @Slf4j
 public class PostRepositoryTest {
 
 //    @Container
 //    private static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0");
-//
-//    @DynamicPropertySource
-//    static void neo4jProperties(DynamicPropertyRegistry registry) {
-//        registry.add("org.neo4j.driver.uri", neo4jContainer::getBoltUrl);
-//        registry.add("org.neo4j.driver.authentication.username", () -> "neo4j");
-//        registry.add("org.neo4j.driver.authentication.password", neo4jContainer::getAdminPassword);
-//    }
 
     /**
      * Note: This code fragment is from Neo4j Data Rx spring boot test starter.
