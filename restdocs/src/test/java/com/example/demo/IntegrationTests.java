@@ -6,6 +6,7 @@
 package com.example.demo;
 
 import java.time.Duration;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,34 +16,32 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
- *
  * @author hantsy
  */
 @RunWith(SpringRunner.class)
 @ContextConfiguration(classes = Application.class)
 public class IntegrationTests {
 
-    @Value("#{@nettyContext.address().getPort()}")
-    int port;
+    int port = 8080;
 
     WebTestClient rest;
 
     @Before
     public void setup() {
         this.rest = WebTestClient
-            .bindToServer()
-            .responseTimeout(Duration.ofDays(1))
-            .baseUrl("http://localhost:" + this.port)
-            .build();
+                .bindToServer()
+                .responseTimeout(Duration.ofDays(1))
+                .baseUrl("http://localhost:" + this.port)
+                .build();
     }
 
     @Test
     public void getAllPostsWillBeOk() throws Exception {
         this.rest
-            .get()
-            .uri("/posts")
-            .exchange()
-            .expectStatus().isOk();
+                .get()
+                .uri("/posts")
+                .exchange()
+                .expectStatus().isOk();
     }
 
 }
