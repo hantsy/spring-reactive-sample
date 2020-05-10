@@ -13,8 +13,8 @@ jobs:
     - uses: actions/stale@v1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        stale-issue-message: 'Message to comment on stale issues. If none provided, will not mark issues stale'
-        stale-pr-message: 'Message to comment on stale PRs. If none provided, will not mark PRs stale'
+        stale-issue-message: 'Please add extra info to clarify this issue, if none provided, it will be marked as stale'
+        stale-pr-message: 'Please update the pr according to feedbacks, else it will be marked as stale'
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
         days-before-stale: 30
