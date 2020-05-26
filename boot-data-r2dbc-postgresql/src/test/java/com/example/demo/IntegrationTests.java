@@ -26,7 +26,7 @@ public class IntegrationTests {
     	this.webClient.get().uri("/posts")
 				.exchange()
 				.expectStatus().is2xxSuccessful()
-				.expectBodyList(Post.class).hasSize(2);
+				.expectBodyList(Post.class).hasSize(1);
     }
 
 }
