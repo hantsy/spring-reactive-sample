@@ -5,21 +5,15 @@
 # file with configuration.  For more information, see:
 # https://github.com/actions/labeler/blob/master/README.md
 
-name: Labeler
-on: [pull_request]
+name: "Pull Request Labeler"
+on:
+- pull_request
 
 jobs:
-  label:
-
+  triage:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/labeler@v2
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
-        # Add 'boot' label to any Spring boot projects
-        repo:
-          - boot-*/**/*
-        # Add 'kotlin' label to any Spring boot projects
-        kotlin:
-          - src/**/*.kt  
+

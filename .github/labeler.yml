@@ -1,0 +1,6 @@
+# Add 'boot' label to any Spring boot projects
+boot:
+  - boot-*/**/*
+# Add 'kotlin' label to any Spring boot projects
+kotlin:
+  - src/**/*.kt  
