@@ -1,6 +1,6 @@
 # Spring Reactive Sample
 
-This is a sandbox project  for demonstrating  [Reactive Streams](https://www.reactive-streams.org/)  support in Spring framework and its ecosystem. 
+This is a sandbox project  for examplenstrating  [Reactive Streams](https://www.reactive-streams.org/)  support in Spring framework and its ecosystem. 
 
 
 ## Docs
@@ -16,60 +16,91 @@ The following table list all sample codes related to the above posts.
 
 ### Spring Samples
 
-| name            | description                                        |
-| :---------------| -------------------------------------------------- |
-| vanilla                  | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
-| vanilla-jetty            | Same as **vanilla**, but use Jetty as target runtime         |
-| vanilla-tomcat           | Same as **vanilla**, but use Reactor Netty as target runtime |
-| vanilla-undertow         | Same as **vanilla**, but use Undertow as target runtime      |
-| java9                    | Same as **vanilla**, Java 9 Flow API support is not ready in Spring 5.0.0.REALESE, planned in 5.0.1, see issue [SPR-16052](https://jira.spring.io/browse/SPR-16052) and the original [discussion on stackoverflow](https://stackoverflow.com/questions/46597924/spring-5-supports-java-9-flow-apis-in-its-reactive-feature/46605983#46605983) |
-| rxjava                   | Same as **vanilla**, but use Rxjava instead of Reactor       |
-| rxjava-jdbc                   | Accessing database with rxjava-jdbc      |
-| rxjava2                  | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
-| rxjava2-jdbc                  | Accessing database with rxjava2-jdbc      |
-| war                      | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
-| routes                   | Use `RouterFunction` instead of controller in **vanilla**    |
-| register-bean            | Programmatic approach to register all beans in `ApplicatonContext` at application bootstrap |
-| data-mongo               | Spring Data Mongo Reactive demo          |
-| data-mongo-pageable| Spring Data Mongo Reactive demo with pagiation support          |
-| data-mongo-transaction| Spring Data Mongo Reactive demo with `Transaction` support          |
-| data-redis               | Spring Data Redis Reactive demo          |
-| data-redis-message               | Spring Data Redis Reactive Example with `ReactiveRedisMessageListenerContainer`|
-| data-cassandra           | Spring Data Cassandra Reactive demo      |
-| data-couchbase           | Spring Data Couchbase Reactive demo      |
-| security                 | Based on **vanilla**, add  Spring Security Reactive support  |
-| security-form | Same as **secuirty**, login form example |
-| security-user-properties | Same as **secuirty**, but use users.properties to store users |
-| security-method          | Replace URI based configuration with method level constraints |
-| security-data-mongo      | Based on **data-mongo** and **security**, replace with dummy users in hard codes with Mongo driven store |
-| multipart                | Mutipart request handling and file uploading                 |
-| multipart-data-mongo     | Multipart and file uploading, but data in Mongo via Spring Data Mongo Reactive `GridFsTemplate` |
-| mvc-thymeleaf            | Traditional web application, use Thymeleaf  as template engine |
-| mvc-mustache            | Traditional web application, use Mustache as template engine|
-| mvc-freemarker           | Traditional web application, use freemarker as template engine|
-| sse                      | Server Send Event  example               |
-| websocket                | WebSocket example                        |
-| web-filter                | `WebFilter` example                     |
-| groovy                   | Same features as **boot**, but written in groovy             |
-| client                   | Demonstration of `WebClient` to shake hands with backend reactive  APIs |
-| kotlin                   | Same features as **boot**, but written in kotlin|
-| kotlin-gradle            | Use kotlin functional approach to declare beans and bootstrap the application programatically |
-| session                  | Spring Session Example|
-| session-header           | Spring Session `WebSessionIdResolver` Example|
-| session-data-redis           | Spring Data Reids based `ReactiveSessionRepository` Example|
-| session-data-mongo           | Spring Data Mongo based `ReactiveSessionRepository` Example|
+| name                                                         | description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| [vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla) | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
+| [vanilla-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-jetty) | Same as **vanilla**, but use Jetty as target runtime         |
+| [vanilla-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-tomcat) | Same as **vanilla**, but use Reactor Netty as target runtime |
+| [vanilla-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-undertow) | Same as **vanilla**, but use Undertow as target runtime      |
+| [java8](https://github.com/hantsy/spring-reactive-sample/tree/master/java8) | Java 8 Future, @Async example                                |
+| [java9](https://github.com/hantsy/spring-reactive-sample/tree/master/java9) | Same as **vanilla**, Java 9 Flow API support is not ready in Spring 5.0.0.REALESE, planned in 5.0.1, see issue [SPR-16052](https://jira.spring.io/browse/SPR-16052) and the original [discussion on stackoverflow](https://stackoverflow.com/questions/46597924/spring-5-supports-java-9-flow-apis-in-its-reactive-feature/46605983#46605983) |
+| [rxjava](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava) | Same as **vanilla**, but use Rxjava instead of Reactor       |
+| [rxjava-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava-jdbc) | Accessing database with rxjava-jdbc                          |
+| [rxjava2](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2) | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
+| [rxjava2-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2-jdbc) | Accessing database with rxjava2-jdbc                         |
+| [war](https://github.com/hantsy/spring-reactive-sample/tree/master/war) | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
+| [routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes) | Use `RouterFunction` instead of controller in **vanilla**    |
+| [register-bean](https://github.com/hantsy/spring-reactive-sample/tree/master/register-bean) | Programmatic approach to register all beans in `ApplicatonContext` at the application bootstrap |
+| [data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo) | Spring Data Mongo Reactive example                           |
+| [data-mongo-pageable](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo-pageable) | Spring Data Mongo Reactive example with pagination support   |
+| [data-mongo-transaction](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo-transaction) | Spring Data Mongo Reactive example with `Transaction` support |
+| [data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis) | Spring Data Redis Reactive example                           |
+| [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message) | Spring Data Redis Reactive Example with `ReactiveRedisMessageListenerContainer` |
+| [data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/data-cassandra) | Spring Data Cassandra Reactive example                       |
+| [data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase) | Spring Data Couchbase Reactive example                       |
+| [data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/data-r2dbc) | Spring Data R2dbc Example                                    |
+| [data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/data-r2dbc-postgresql) | Spring Data R2dbc Example, but use PostgreSQL instead        |
+| [security](https://github.com/hantsy/spring-reactive-sample/tree/master/security) | Based on **vanilla**, add  Spring Security Reactive support  |
+| [security-form](https://github.com/hantsy/spring-reactive-sample/tree/master/security-form) | Same as **secuirty**, login form example                     |
+| [security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties) | Same as **secuirty**, but use *users.properties* to store users |
+| [security-method](https://github.com/hantsy/spring-reactive-sample/tree/master/security-method) | Replace URI based configuration with method level constraints |
+| [security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo) | Based on **data-mongo** and **security**, replace with dummy users in hard codes with Mongo driven store |
+| [multipart](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart) | Mutipart request handling and file uploading                 |
+| [multipart-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart-data-mongo) | Multipart and file uploading, but data in Mongo via Spring Data Mongo Reactive `GridFsTemplate` |
+| [mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/tree/master/mvc-thymeleaf) | Traditional web application, use Thymeleaf  as template engine |
+| [mvc-mustache](https://github.com/hantsy/spring-reactive-sample/tree/master/mvc-mustache) | Traditional web application, use Mustache as template engine |
+| [mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/tree/master/mvc-freemarker) | Traditional web application, use freemarker as template engine |
+| [sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse) | Server Send Event  example                                   |
+| [websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket) | WebSocket example                                            |
+| [web-filter](https://github.com/hantsy/spring-reactive-sample/tree/master/web-filter) | `WebFilter` example                                          |
+| [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in groovy                                            |
+| [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example                           |
+| [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) | examplenstration of `WebClient` to shake hands with backend reactive  APIs |
+| [kotlin](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin) | Written in kotlin                                            |
+| [kotlin-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-routes) | Use kotlin functional approach to declare beans and bootstrap the application programmatically |
+| [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-dsl) | Kotlin DSL bean definition example                           |
+| [session](https://github.com/hantsy/spring-reactive-sample/tree/master/session) | Spring Session Example                                       |
+| [session-header](https://github.com/hantsy/spring-reactive-sample/tree/master/session-header) | Spring Session `WebSessionIdResolver` Example                |
+| [session-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-redis) | Spring Data Reids based `ReactiveSessionRepository` Example  |
+| [session-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-mongo) | Spring Data Mongo based `ReactiveSessionRepository` Example  |
+| [exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/exception-handler) | Exception Handler Example                                    |
+| [integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration) | Spring Integration Example                                   |
+| [integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl) | Spring Integration Java 8 DSL Example                        |
+| [restdocs](https://github.com/hantsy/spring-reactive-sample/tree/master/restdocs) | Spring RestDocs Example                                      |
 
 
 ### Spring Boot based Samples
 
-| name                     | description                                                  |
-| :----------------------- | ------------------------------------------------------------ |
-| boot                     | Switch to Spring Boot to get autoconfiguration of Spring WebFlux |
-| boot-jetty               | Same as **boot**, but use Jetty as target runtime            |
-| boot-tomcat              | Same as **boot**, but use Tomcat as target runtime           |
-| boot-undertow            | Same as **boot**, but use Undertow as target runtime         |
-| boot-routes              | Use `RouterFunction` instead of the general `Controller` in **boot** |
-| boot-freemarker          | Same as **mvc-freemarker**, but based on Spring Boot         |
+| name                                                         | description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) | Switch to Spring Boot to get autoconfiguration of Spring WebFlux |
+| [boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) | Simple `RouterFunction` example                              |
+| [boot-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-jetty) | Same as **boot**, but use Jetty as target runtime            |
+| [boot-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-tomcat) | Same as **boot**, but use Tomcat as target runtime           |
+| [boot-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-undertow) | Same as **boot**, but use Undertow as target runtime         |
+| [boot-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-routes) | Use `RouterFunction` instead of the general `Controller` in **boot** |
+| [boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-thymeleaf) | Same as mvc-thymeleaf, but based on Spring Boot              |
+| [boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-mustache) | Same as mvc-mustache, but based on Spring Boot               |
+| [boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-freemarker) | Same as mvc-freemarker,  but based on Spring Boot            |
+| [boot-groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-groovy) | Written in groovy                                            |
+| [boot-kotlin](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin) | Written in Kotlin                                            |
+| [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) | Used Kotlin DSL for configuration                            |
+| [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-r2dbc) | R2dbc example using `DatabaseClient`                         |
+| [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc) | Spring Data R2dbc example                                    |
+| [boot-data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-postgresql) | Same as boot-data-r2dbc, but use PostgresSQL instead         |
+| [boot-data-r2dbc-mysql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-mysql) | Same as boot-data-r2dbc, but use MySQL instead               |
+| [boot-data-r2dbc-mssql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-mssql) | Same as boot-data-r2dbc, but use MS SQL instead              |
+| [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-rx) | Spring Data Neo4j Rx Example but use `ReactiveNeo4jClient`.  |
+| [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-rx-cypher) | Spring Data Neo4j Rx Example using Cypher queries            |
+| [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-rx) | Spring Data Neo4j Rx Example                                 |
+| [boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-cassandra) | Spring Data Cassandra Example                                |
+| [boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-couchbase) | Spring Data Couchbase  Example                               |
+| [boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-elasticsearch) | Spring Data ElasticSearch  Example                           |
+| [boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo) | Spring Data Mongo Example                                    |
+| [boot-data-mongo-querydsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-querydsl) | Spring Data Mongo Example including QueryDSL support         |
+| [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | Spring Data Mongo Example including Gridfs support           |
+| [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler                                     |
+
 
 ## References
 
