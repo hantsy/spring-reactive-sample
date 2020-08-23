@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @DataR2dbcTest
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @ActiveProfiles("tc")
-public class TestcontrainersPostRepositoryTest {
+public class TestcontainersPostRepositoryTest {
 
     @TestConfiguration
     static class TestConfig {
