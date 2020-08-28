@@ -7,12 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.test.context.ContextConfiguration;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
+@ContextConfiguration(initializers = {MongodbContainerInitializer.class})
 @Slf4j
 public class PostRepositoryTest {
 
@@ -31,7 +33,7 @@ public class PostRepositoryTest {
     @Test
     public void testSavePostAndFindByTitleContains() {
         this.postRepository.save(Post.builder().content("my test content").title("my test title").build())
-                .flatMapMany(p->this.postRepository.findByTitleContains("test"))
+                .flatMapMany(p -> this.postRepository.findByTitleContains("test"))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
                 .expectComplete()

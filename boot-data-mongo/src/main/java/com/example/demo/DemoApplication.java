@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -16,6 +17,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -109,6 +111,7 @@ class PostController {
 interface PostRepository extends ReactiveMongoRepository<Post, String> {
 
     Flux<PostSummary> findByTitleContains(String title);
+    Flux<PostSummary> findByTitleContains(String title, Pageable page);
 }
 
 @Document
@@ -118,6 +121,7 @@ interface PostRepository extends ReactiveMongoRepository<Post, String> {
 @NoArgsConstructor
 @AllArgsConstructor
 class Post {
+
 
     @Id
     private String id;
