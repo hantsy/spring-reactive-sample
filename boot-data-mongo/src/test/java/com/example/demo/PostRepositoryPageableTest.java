@@ -9,7 +9,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
+import reactor.test.StepVerifier;
 
+import java.time.Duration;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -33,7 +35,7 @@ public class PostRepositoryPageableTest {
                         i -> Post.builder().content("my test content of #" + i).title("my test title #" + i).build()
                 )
                 .collect(Collectors.<Post>toList());
-        this.postRepository.saveAll(data).subscribe(post -> log.info("saved post: {}", post));
+        this.postRepository.saveAll(data).blockLast(Duration.ofSeconds(5));
     }
 
 
@@ -43,10 +45,16 @@ public class PostRepositoryPageableTest {
                 .skip(0)
                 .limitRequest(10)
                 .sort((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()))
-                .subscribe(postSummary -> log.info("post summary: {}", postSummary));
+                .log()
+                .as(StepVerifier::create)
+                .expectNextCount(10)
+                .verifyComplete();
 
         this.postRepository.findByTitleContains("title", PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "title")))
-                .subscribe(postSummary -> log.info("post summary using pageable: {}", postSummary));
+                .log()
+                .as(StepVerifier::create)
+                .expectNextCount(10)
+                .verifyComplete();
     }
 
 }
