@@ -43,7 +43,7 @@ public class PostRepositoryPageableTest {
     public void testFindByTitleContainsPageable() {
         this.postRepository.findByTitleContains("title")
                 .skip(0)
-                .limitRequest(10)
+                .take(10)
                 .sort((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()))
                 .log()
                 .as(StepVerifier::create)
