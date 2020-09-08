@@ -10,6 +10,7 @@ import org.springframework.data.annotation.*;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.ReactiveAuditorAware;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
+import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Component;
@@ -20,7 +21,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 
 @SpringBootApplication
-@EnableMongoAuditing
+@EnableReactiveMongoAuditing
 public class DemoApplication {
 
     public static void main(String[] args) {
