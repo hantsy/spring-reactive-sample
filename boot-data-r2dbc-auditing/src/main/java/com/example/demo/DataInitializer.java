@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.data.r2dbc.core.R2dbcEntityTemplate;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.List;
 
 @Component
@@ -14,6 +16,8 @@ import java.util.List;
 class DataInitializer implements ApplicationRunner {
 
     private final PostRepository posts;
+
+    private final R2dbcEntityTemplate template;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -29,9 +33,12 @@ class DataInitializer implements ApplicationRunner {
                 .thenMany(
                         this.posts.findAll()
                 )
-                .subscribe((data) -> log.info("found post: {}",  data),
-                        (err) -> log.error("error: {}" , err),
+                .subscribe((data) -> log.info("found post: {}", data),
+                        (err) -> log.error("error: {}", err),
                         () -> log.info("initialization is done...")
                 );
+
+        var data = Post.builder().title("testtitle by R2dbcEntityTemplate").content("testcontent").build();
+        this.template.insert(data).log().then().block(Duration.ofSeconds(5));
     }
 }
