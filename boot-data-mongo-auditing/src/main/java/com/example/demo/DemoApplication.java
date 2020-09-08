@@ -5,10 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.context.annotation.Bean;
+import org.springframework.data.annotation.*;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.ReactiveAuditorAware;
 import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -18,7 +18,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 
 @SpringBootApplication
 @EnableMongoAuditing
@@ -26,6 +25,11 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
+    }
+
+    @Bean
+    ReactiveAuditorAware<String> auditorAware() {
+        return () -> Mono.just("hantsy");
     }
 
 }
@@ -57,7 +61,7 @@ class DataInitializer implements CommandLineRunner {
                         this.posts.findAll()
                 )
                 .subscribe(
-                        data -> log.info("found posts: {}", posts),
+                        data -> log.info("found posts: {}", data),
                         error -> log.error("" + error),
                         () -> log.info("done initialization...")
                 );
@@ -111,9 +115,6 @@ class PostController {
 }
 
 interface PostRepository extends ReactiveMongoRepository<Post, String> {
-
-    Flux<PostSummary> findByTitleContains(String title);
-    Flux<PostSummary> findByTitleContains(String title, Pageable page);
 }
 
 @Document
@@ -130,10 +131,16 @@ class Post {
     private String content;
 
     @CreatedDate
-    private LocalDateTime createdDate;
+    private LocalDateTime createdAt;
 
     @LastModifiedDate
-    private LocalDateTime updatedDate;
+    private LocalDateTime updatedAt;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String updatedBy;
 }
 
 @Data

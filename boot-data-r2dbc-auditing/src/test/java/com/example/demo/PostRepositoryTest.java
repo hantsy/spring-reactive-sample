@@ -13,7 +13,6 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-// see: https://github.com/spring-projects-experimental/spring-boot-r2dbc/issues/68
 @DataR2dbcTest
 @Slf4j
 public class PostRepositoryTest {
@@ -43,12 +42,13 @@ public class PostRepositoryTest {
         this.posts.findByTitleContains("testtitle")
                 .take(1)
                 .as(StepVerifier::create)
-                .consumeNextWith(p ->
-                {
-                    log.info("saved post: {}", p);
-                    assertEquals("testtitle", p.getTitle());
-                    assertNotNull(p.getCreatedAt());
-                })
+                .consumeNextWith(p -> {
+                            log.info("saved post: {}", p);
+                            assertEquals("testtitle", p.getTitle());
+                            assertNotNull(p.getCreatedAt());
+                            assertNotNull(p.getUpdatedAt());
+                        }
+                )
                 .verifyComplete();
 
     }
