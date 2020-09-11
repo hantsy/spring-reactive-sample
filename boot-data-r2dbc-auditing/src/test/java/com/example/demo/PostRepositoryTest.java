@@ -10,6 +10,7 @@ import reactor.test.StepVerifier;
 
 import java.time.Duration;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -47,6 +48,8 @@ public class PostRepositoryTest {
                             assertEquals("testtitle", p.getTitle());
                             assertNotNull(p.getCreatedAt());
                             assertNotNull(p.getUpdatedAt());
+                            assertThat(p.getCreatedBy()).isEqualTo("hantsy");
+                            assertThat(p.getUpdatedBy()).isEqualTo("hantsy");
                         }
                 )
                 .verifyComplete();

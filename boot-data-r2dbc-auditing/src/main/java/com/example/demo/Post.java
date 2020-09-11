@@ -1,10 +1,7 @@
 package com.example.demo;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Version;
+import org.springframework.data.annotation.*;
 import org.springframework.data.relational.core.mapping.Column;
 import org.springframework.data.relational.core.mapping.Table;
 
@@ -35,6 +32,14 @@ class Post {
     @Column("updated_at")
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @Column("created_by")
+    @CreatedBy
+    private String createdBy;
+
+    @Column("updated_by")
+    @LastModifiedBy
+    private String updatedBy;
 
     @Version
     private Long version;
