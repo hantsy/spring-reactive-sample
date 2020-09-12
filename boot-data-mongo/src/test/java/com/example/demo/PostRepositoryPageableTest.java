@@ -12,9 +12,12 @@ import org.springframework.test.context.TestPropertySource;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.util.Comparator.*;
 
 @DataMongoTest
 @ContextConfiguration(initializers = {MongodbContainerInitializer.class})
@@ -42,7 +45,7 @@ public class PostRepositoryPageableTest {
     @Test
     public void testFindByTitleContainsPageable() {
         this.postRepository.findByTitleContains("title")
-                .sort((o1, o2) -> o1.getTitle().compareTo(o2.getTitle()))
+                .sort(comparing(PostSummary::getTitle))
                 .skip(0)
                 .take(10)
                 .log()
