@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.mongodb.config.EnableMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +17,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Comparator;
 
 @SpringBootApplication
 public class DemoApplication {
@@ -110,7 +109,21 @@ class PostController {
 
 interface PostRepository extends ReactiveMongoRepository<Post, String> {
 
+    @Query(value = """
+                {
+                     "title" : {
+                         "$regularExpression" : { "pattern" : ?0, "options" : ""}
+                     }
+                }
+                """,
+            sort = """
+                    { "title" : 1 , "createdDate" : -1} 
+                    """
+    )
+    Flux<Post> findByKeyword(String q);
+
     Flux<PostSummary> findByTitleContains(String title);
+
     Flux<PostSummary> findByTitleContains(String title, Pageable page);
 }
 
@@ -129,7 +142,8 @@ class Post {
     private String content;
 
     @CreatedDate
-    private LocalDateTime createdDate;
+    @Builder.Default
+    private LocalDateTime createdDate = LocalDateTime.now();
 }
 
 @Data

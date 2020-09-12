@@ -19,7 +19,7 @@
     </parent>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>14</java.version>
         <testcontainers.version>1.14.3</testcontainers.version>
     </properties>
 
@@ -87,6 +87,14 @@
 
     <build>
         <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <release>${java.version}</release>
+                    <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
