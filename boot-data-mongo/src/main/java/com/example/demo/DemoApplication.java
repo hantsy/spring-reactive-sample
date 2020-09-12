@@ -109,15 +109,19 @@ class PostController {
 
 interface PostRepository extends ReactiveMongoRepository<Post, String> {
 
-    @Query(value = """
-                {
-                     "title" : {
-                         "$regularExpression" : { "pattern" : ?0, "options" : ""}
-                     }
-                }
-                """,
+    @Query(
+            value = """
+                    {
+                         "title" : {
+                             "$regularExpression" : { "pattern" : ?0, "options" : ""}
+                         }
+                    }
+                    """,
             sort = """
-                    { "title" : 1 , "createdDate" : -1} 
+                    { 
+                        "title" : 1 , 
+                        "createdDate" : -1
+                    } 
                     """
     )
     Flux<Post> findByKeyword(String q);
