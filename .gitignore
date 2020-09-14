@@ -24,3 +24,5 @@ tomcat.8080
 build
 out
 /Kotlin_Koans
+.idea
+*.iml
