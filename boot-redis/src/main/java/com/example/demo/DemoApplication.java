@@ -39,7 +39,7 @@ public class DemoApplication {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .authorizeExchange(auth -> auth
                         .matchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
-                        .pathMatchers(HttpMethod.GET, "/posts").permitAll()
+                        .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
                         .anyExchange().authenticated()
                 )
                 .build();
