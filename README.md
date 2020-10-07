@@ -93,6 +93,8 @@ The following table list all sample codes related to the above posts.
 | [boot-groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-groovy) | Written in Groovy                                            |
 | [boot-kotlin](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin) | Written in Kotlin                                            |
 | [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) | Kotlin specific `BeanDefinitionDSL` Example                  |
+| [boot-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-redis) | Example of using `ReactiveRedisConnection` and `RouterFunction`        |
+| [boot-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis) | Spring Data Reids Example |
 | [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-r2dbc) | Spring Data R2dbc example using `DatabaseClient`             |
 | [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc) | Spring Data R2dbc example                                    |
 | [boot-data-r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-auditing) | `@EnableR2dbcAuditing` example                               |
