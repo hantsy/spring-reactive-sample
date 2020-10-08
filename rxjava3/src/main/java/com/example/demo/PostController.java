@@ -5,6 +5,8 @@ import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.core.Single;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 /**
  * @author hantsy
  */
@@ -24,7 +26,7 @@ class PostController {
     }
 
     @GetMapping(value = "/{id}")
-    public Maybe<Post> get(@PathVariable(value = "id") Long id) {
+    public Maybe<Post> get(@PathVariable(value = "id") UUID id) {
         return this.posts.findById(id);
     }
 

@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 
@@ -38,8 +37,8 @@ class PostRepository {
         return Flowable.fromIterable(DATA);
     }
 
-    Maybe<Post> findById(Long id) {
-        return findAll().filter(p -> Objects.equals(p.getId(), id)).singleElement();
+    Maybe<Post> findById(UUID id) {
+        return findAll().filter(p -> p.getId().equals(id)).singleElement();
     }
 
     Single<Post> save(Post post) {
