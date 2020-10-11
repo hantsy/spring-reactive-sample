@@ -10,10 +10,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.config.EnableNeo4jAuditing;
+import org.springframework.data.neo4j.core.ReactiveDatabaseSelectionProvider;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.transaction.ReactiveNeo4jTransactionManager;
 import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
+import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.ReactiveTransactionManager;
@@ -32,14 +34,17 @@ import static org.springframework.http.ResponseEntity.notFound;
 @EnableTransactionManagement
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
+    }
 
-	@Bean
-	public ReactiveTransactionManager reactiveTransactionManager(Driver driver) {
-		return  new ReactiveNeo4jTransactionManager(driver);
-	}
+    // see: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.4.0-M2-Release-Notes#neo4j-1
+    @Bean(ReactiveNeo4jRepositoryConfigurationExtension.DEFAULT_TRANSACTION_MANAGER_BEAN_NAME)
+    public ReactiveTransactionManager reactiveTransactionManager(
+            Driver driver,
+            ReactiveDatabaseSelectionProvider databaseNameProvider) {
+        return new ReactiveNeo4jTransactionManager(driver, databaseNameProvider);
+    }
 }
 
 @Component
@@ -47,26 +52,26 @@ public class DemoApplication {
 @RequiredArgsConstructor
 class DataInitializer implements CommandLineRunner {
 
-	private final PostRepository posts;
+    private final PostRepository posts;
 
-	@Override
-	public void run(String[] args) {
-		log.info("start data initialization...");
-		this.posts.deleteAll()
-				.thenMany(
-						Flux
-								.just("Post one", "Post two")
-								.flatMap(
-										title -> this.posts.save(Post.builder().title(title).content("The content of " + title).build())
-								)
-				)
-				.log()
-				.thenMany(
-						this.posts.findAll()
-				)
-				.blockLast(Duration.ofSeconds(5));// to make `IntegrationTests` work.
+    @Override
+    public void run(String[] args) {
+        log.info("start data initialization...");
+        this.posts.deleteAll()
+                .thenMany(
+                        Flux
+                                .just("Post one", "Post two")
+                                .flatMap(
+                                        title -> this.posts.save(Post.builder().title(title).content("The content of " + title).build())
+                                )
+                )
+                .log()
+                .thenMany(
+                        this.posts.findAll()
+                )
+                .blockLast(Duration.ofSeconds(5));// to make `IntegrationTests` work.
 
-	}
+    }
 
 }
 
@@ -75,41 +80,41 @@ class DataInitializer implements CommandLineRunner {
 @RequiredArgsConstructor
 class PostController {
 
-	private final PostRepository posts;
+    private final PostRepository posts;
 
-	@GetMapping("")
-	public Flux<Post> all() {
-		return this.posts.findAll();
-	}
+    @GetMapping("")
+    public Flux<Post> all() {
+        return this.posts.findAll();
+    }
 
-	@PostMapping("")
-	public Mono<Post> create(@RequestBody Post post) {
-		return this.posts.save(post);
-	}
+    @PostMapping("")
+    public Mono<Post> create(@RequestBody Post post) {
+        return this.posts.save(post);
+    }
 
-	@GetMapping("/{id}")
-	public Mono<Post> get(@PathVariable("id") Long id) {
-		return Mono.just(id)
-				.flatMap(posts::findById)
-				.switchIfEmpty(Mono.error(new PostNotFoundException(id)));
-	}
+    @GetMapping("/{id}")
+    public Mono<Post> get(@PathVariable("id") Long id) {
+        return Mono.just(id)
+                .flatMap(posts::findById)
+                .switchIfEmpty(Mono.error(new PostNotFoundException(id)));
+    }
 
-	@PutMapping("/{id}")
-	public Mono<Post> update(@PathVariable("id") Long id, @RequestBody Post post) {
-		return this.posts.findById(id)
-				.map(p -> {
-					p.setTitle(post.getTitle());
-					p.setContent(post.getContent());
+    @PutMapping("/{id}")
+    public Mono<Post> update(@PathVariable("id") Long id, @RequestBody Post post) {
+        return this.posts.findById(id)
+                .map(p -> {
+                    p.setTitle(post.getTitle());
+                    p.setContent(post.getContent());
 
-					return p;
-				})
-				.flatMap(this.posts::save);
-	}
+                    return p;
+                })
+                .flatMap(this.posts::save);
+    }
 
-	@DeleteMapping("/{id}")
-	public Mono<Void> delete(@PathVariable("id") Long id) {
-		return this.posts.deleteById(id);
-	}
+    @DeleteMapping("/{id}")
+    public Mono<Void> delete(@PathVariable("id") Long id) {
+        return this.posts.deleteById(id);
+    }
 
 }
 
@@ -117,19 +122,19 @@ class PostController {
 @Slf4j
 class RestExceptionHandler {
 
-	@ExceptionHandler(PostNotFoundException.class)
-	ResponseEntity postNotFound(PostNotFoundException ex) {
-		log.debug("handling exception::" + ex);
-		return notFound().build();
-	}
+    @ExceptionHandler(PostNotFoundException.class)
+    ResponseEntity postNotFound(PostNotFoundException ex) {
+        log.debug("handling exception::" + ex);
+        return notFound().build();
+    }
 
 }
 
 class PostNotFoundException extends RuntimeException {
 
-	PostNotFoundException(Long id) {
-		super("Post #" + id + " was not found");
-	}
+    PostNotFoundException(Long id) {
+        super("Post #" + id + " was not found");
+    }
 }
 
 interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
@@ -143,12 +148,12 @@ interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 @AllArgsConstructor
 class Post {
 
-	@Id
-	@GeneratedValue
-	private Long id;
-	private String title;
-	private String content;
+    @Id
+    @GeneratedValue
+    private Long id;
+    private String title;
+    private String content;
 
-	@CreatedDate
-	private LocalDateTime createdDate;
+    @CreatedDate
+    private LocalDateTime createdDate;
 }
