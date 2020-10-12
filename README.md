@@ -105,9 +105,9 @@ The following table list all sample codes related to the above posts.
 | [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example but use `ReactiveNeo4jClient`. |
 | [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-rx-cypher) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example using Cypher queries |
 | [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example            |
-| [boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j) | New Spring Data Neo4j example(Spring Boot 2.4)               |
-| [boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) | New Spring Data Neo4j using `ReactiveNeo4jOperations` (Spring Boot 2.4)               |
-| [boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-cypher) | New Spring Data Neo4j using `ReacitveNeo4jClient` (Spring Boot 2.4)               |
+| [boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j) | Spring Data Neo4j example (Spring Boot 2.4)                  |
+| [boot-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) | Spring Data Neo4j using `ReactiveNeo4jOperations` (Spring Boot 2.4) |
+| [boot-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-cypher) | Spring Data Neo4j using `ReacitveNeo4jClient` (Spring Boot 2.4) |
 | [boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-cassandra) | Spring Data Cassandra Example                                |
 | [boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-couchbase) | Spring Data Couchbase  Example                               |
 | [boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-elasticsearch) | Spring Data ElasticSearch  Example                           |
