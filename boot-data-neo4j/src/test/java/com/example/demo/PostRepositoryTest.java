@@ -7,6 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
@@ -26,7 +27,9 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataNeo4jTest()
+@SpringBootTest
+// @DataNeo4jTest does not in Spring Data Neo4j 6.0 and Spring Boot 2.4
+// see: https://github.com/spring-projects/spring-boot/issues/23630
 @ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @Slf4j
 public class PostRepositoryTest {
@@ -34,6 +37,8 @@ public class PostRepositoryTest {
 
     /**
      * Note: This code fragment is from Neo4j Data Rx spring boot test starter.
+     * In the new Spring Data Neo4j 6, use the new `spring.neo4j` namespace to configure Neo4j servers.
+     *
      * <p>
      * An initializer that starts a Neo4j test container and sets {@code org.neo4j.driver.uri} to the containers
      * bolt uri. It also registers an application listener that stops the container when the context closes.
