@@ -7,8 +7,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.*;
+import org.springframework.data.domain.ReactiveAuditorAware;
 import org.springframework.data.neo4j.config.EnableNeo4jAuditing;
 import org.springframework.data.neo4j.core.ReactiveDatabaseSelectionProvider;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
@@ -19,19 +19,15 @@ import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryC
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.ReactiveTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.springframework.http.ResponseEntity.notFound;
 
 @SpringBootApplication
-@EnableNeo4jAuditing
-@EnableTransactionManagement
 public class DemoApplication {
 
     public static void main(String[] args) {
@@ -44,6 +40,15 @@ public class DemoApplication {
             Driver driver,
             ReactiveDatabaseSelectionProvider databaseNameProvider) {
         return new ReactiveNeo4jTransactionManager(driver, databaseNameProvider);
+    }
+}
+
+@EnableNeo4jAuditing
+class DataConfig {
+
+    @Bean
+    public ReactiveAuditorAware<String> reactiveAuditorAware() {
+        return () -> Mono.just("hantsy");
     }
 }
 
@@ -69,7 +74,11 @@ class DataInitializer implements CommandLineRunner {
                 .thenMany(
                         this.posts.findAll()
                 )
-                .blockLast(Duration.ofSeconds(5));// to make `IntegrationTests` work.
+                .subscribe(
+                        data -> log.info("found post: {}", data),
+                        err -> log.error("error", err),
+                        () -> log.info("done")
+                );
 
     }
 
@@ -156,4 +165,13 @@ class Post {
 
     @CreatedDate
     private LocalDateTime createdDate;
+
+    @LastModifiedDate
+    private LocalDateTime updatedDate;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String updatedBy;
 }
