@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-// @DataNeo4jTest does not in Spring Data Neo4j 6.0 and Spring Boot 2.4
+// @DataNeo4jTest does not work in Spring Data Neo4j 6.0 RC1 and Spring Boot 2.4.0-M3
 // see: https://github.com/spring-projects/spring-boot/issues/23630
 @ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @Slf4j
