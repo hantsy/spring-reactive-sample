@@ -9,6 +9,7 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 * [Spring Kotlin DSL/Spring Fu Sample](https://github.com/hantsy/spring-kotlin-dsl-sample)
 * [Spring WebMvc Functional Example](https://github.com/hantsy/spring-webmvc-functional-sample)
 * [Angular and Spring Reactive Example](https://github.com/hantsy/angular-spring-reactive-sample)
+* [Spring R2dbc Example](https://github.com/hantsy/spring-r2dbc-sample)(updates for *Spring 5.3, Spring Data R2dbc 1.2 and Spring Boot 2.4*)
 
 
 ## Docs
