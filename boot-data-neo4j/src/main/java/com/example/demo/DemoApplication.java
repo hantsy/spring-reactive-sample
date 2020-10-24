@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static org.springframework.http.ResponseEntity.notFound;
@@ -74,11 +75,14 @@ class DataInitializer implements CommandLineRunner {
                 .thenMany(
                         this.posts.findAll()
                 )
-                .subscribe(
-                        data -> log.info("found post: {}", data),
-                        err -> log.error("error", err),
-                        () -> log.info("done")
-                );
+                .log("[Initializing data]")
+                .blockLast(Duration.ofSeconds(5));
+        //using subscribe here will cause IntegrationTests failed.
+//                .subscribe(
+//                        data -> log.info("found post: {}", data),
+//                        err -> log.error("error", err),
+//                        () -> log.info("done")
+//                );
 
     }
 

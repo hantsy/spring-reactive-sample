@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
@@ -14,7 +15,7 @@ class IntegrationTests {
 
     WebTestClient client;
 
-    @BeforeAll
+    @BeforeEach
     public void setup() {
         client = WebTestClient.bindToServer()
                 .baseUrl("http://localhost:" + port)
