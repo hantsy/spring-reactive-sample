@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.annotation.*;
 import org.springframework.data.domain.ReactiveAuditorAware;
-import org.springframework.data.neo4j.config.EnableNeo4jAuditing;
+import org.springframework.data.neo4j.config.EnableReactiveNeo4jAuditing;
 import org.springframework.data.neo4j.core.ReactiveDatabaseSelectionProvider;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -19,6 +19,7 @@ import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryC
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.ReactiveTransactionManager;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -44,7 +45,7 @@ public class DemoApplication {
     }
 }
 
-@EnableNeo4jAuditing
+@EnableReactiveNeo4jAuditing
 class DataConfig {
 
     @Bean
@@ -76,13 +77,13 @@ class DataInitializer implements CommandLineRunner {
                         this.posts.findAll()
                 )
                 .log("[Initializing data]")
-                .blockLast(Duration.ofSeconds(5));
-        //using subscribe here will cause IntegrationTests failed.
-//                .subscribe(
-//                        data -> log.info("found post: {}", data),
-//                        err -> log.error("error", err),
-//                        () -> log.info("done")
-//                );
+               // .blockLast(Duration.ofSeconds(5));
+                //  using subscribe here will cause IntegrationTests failed.
+                .subscribe(
+                        data -> log.info("found post: {}", data),
+                        err -> log.error("error", err),
+                        () -> log.info("done")
+                );
 
     }
 
