@@ -41,6 +41,7 @@ public class DemoApplication {
 
 @Configuration
 class RoutesConfig {
+
     @Bean
     public RouterFunction<ServerResponse> routes(PostHandler postController) {
         return route(GET("/posts"), postController::all)

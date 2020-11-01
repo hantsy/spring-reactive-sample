@@ -31,7 +31,7 @@ public class PostRepositoryWithTestContainersTest {
             .withStartupTimeout(Duration.ofMinutes(5));
 
     @DynamicPropertySource
-    static void neo4jProperties(DynamicPropertyRegistry registry) {
+    static void bindCassandraProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.data.cassandra.keyspace-name", () -> "demo");
         registry.add("spring.data.cassandra.contact-points", () -> "localhost:" + cassandraContainer.getMappedPort(9042));
         registry.add("spring.data.cassandra.local-datacenter", () -> "datacenter1");
