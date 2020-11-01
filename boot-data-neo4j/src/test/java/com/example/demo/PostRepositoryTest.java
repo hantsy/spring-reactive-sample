@@ -7,14 +7,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Import;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.data.domain.Example;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.Neo4jContainer;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -27,11 +29,17 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+//@SpringBootTest
+//
 // @DataNeo4jTest does not work in Spring Data Neo4j 6.0 RC1 and Spring Boot 2.4.0-M3
 // see: https://github.com/spring-projects/spring-boot/issues/23630
+// a workaround is adding a `@Transactional(propagation = Propagation.NEVER)`
+@DataNeo4jTest
+@Transactional(propagation = Propagation.NEVER)
 @ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @Slf4j
+// enable auditing.
+@Import(DataConfig.class)
 public class PostRepositoryTest {
 
 
@@ -96,7 +104,7 @@ public class PostRepositoryTest {
 
     @Test
     void testAllPosts() {
-        posts.findAll().sort(Comparator.comparing(post -> post.getTitle()))
+        posts.findAll().sort(Comparator.comparing(Post::getTitle))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
                 .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))
