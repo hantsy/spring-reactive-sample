@@ -12,7 +12,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.cassandra.config.EnableReactiveCassandraAuditing;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 import org.springframework.data.cassandra.repository.ReactiveCassandraRepository;
 import org.springframework.data.domain.ReactiveAuditorAware;
@@ -113,7 +114,7 @@ class PostHandler {
     }
 
     public Mono<ServerResponse> get(ServerRequest req) {
-        return this.posts.findById(req.pathVariable("id"))
+        return this.posts.findById(UUID.fromString(req.pathVariable("id")))
                 .flatMap(post -> ServerResponse.ok().body(Mono.just(post), Post.class))
                 .switchIfEmpty(ServerResponse.notFound().build());
     }
@@ -129,7 +130,7 @@ class PostHandler {
                             p.setContent(p2.getContent());
                             return p;
                         },
-                        this.posts.findById(req.pathVariable("id")),
+                        this.posts.findById(UUID.fromString(req.pathVariable("id"))),
                         req.bodyToMono(Post.class)
                 )
                 .cast(Post.class)
@@ -139,13 +140,13 @@ class PostHandler {
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {
-        return ServerResponse.noContent().build(this.posts.deleteById(req.pathVariable("id")));
+        return ServerResponse.noContent().build(this.posts.deleteById(UUID.fromString(req.pathVariable("id"))));
     }
 
 }
 
 
-interface PostRepository extends ReactiveCassandraRepository<Post, String> {
+interface PostRepository extends ReactiveCassandraRepository<Post, UUID> {
 }
 
 @Table("posts")
@@ -156,9 +157,9 @@ interface PostRepository extends ReactiveCassandraRepository<Post, String> {
 @AllArgsConstructor
 class Post {
 
-    @PrimaryKey()
+    @PrimaryKeyColumn(name = "id", type = PrimaryKeyType.PARTITIONED)
     @Builder.Default
-    private String id = UUID.randomUUID().toString();
+    private UUID id = UUID.randomUUID();
     private String title;
     private String content;
 
