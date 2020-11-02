@@ -10,6 +10,7 @@ import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,9 +18,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Testcontainers
 class PostRepositoryWithDynamicPropertiesTest {
+    private final static DockerImageName DEFAULT_IMAGE = DockerImageName.parse("couchbase:community").asCompatibleSubstituteFor("couchbase/server");
 
     @Container
-    final static CouchbaseContainer couchbaseContainer = new CouchbaseContainer()
+    final static CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DEFAULT_IMAGE)
             .withBucket(new BucketDefinition("demo").withPrimaryIndex(true));
 
     @DynamicPropertySource
