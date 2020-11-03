@@ -18,14 +18,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Testcontainers
 class PostRepositoryWithDynamicPropertiesTest {
-    private final static DockerImageName DEFAULT_IMAGE = DockerImageName.parse("couchbase:community").asCompatibleSubstituteFor("couchbase/server");
+    private static final String COUCHBASE_IMAGE_NAME = "couchbase:community";
+    private static final String DEFAULT_IMAGE_NAME = "couchbase/server";
+    private final static DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
+            .asCompatibleSubstituteFor(DEFAULT_IMAGE_NAME);
 
     @Container
     final static CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DEFAULT_IMAGE)
             .withBucket(new BucketDefinition("demo").withPrimaryIndex(true));
 
     @DynamicPropertySource
-    static void registerCouchbaseProperties(DynamicPropertyRegistry registry) {
+    static void bindCouchbaseProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.couchbase.connection-string", couchbaseContainer::getConnectionString);
         registry.add("spring.couchbase.username", couchbaseContainer::getUsername);
         registry.add("spring.couchbase.password", couchbaseContainer::getPassword);
@@ -40,12 +43,8 @@ class PostRepositoryWithDynamicPropertiesTest {
         this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
                 .log()
                 .as(StepVerifier::create)
-                .consumeNextWith(
-                        user -> assertThat(user.getTitle()).isEqualTo("Post one")
-                )
-                .consumeNextWith(
-                        user -> assertThat(user.getTitle()).isEqualTo("Post two")
-                )
+                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
+                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
                 //.expectNextCount(2)
                 .verifyComplete();
     }
