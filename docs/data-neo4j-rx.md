@@ -1,6 +1,6 @@
 # Reactive programming with Neo4j   
 
-
+**The effort of  [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  is merged into the official Spring Data Neo4j project, read this [doc](./data-neo4j.md) to update yourself.**
 
 Generate a Spring Boot project using [Spring Initializr](https://start.spring.io), and make sure the following options are chosen.
 
