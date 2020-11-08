@@ -1,8 +1,14 @@
 # Update: Accessing Neo4j with Spring Boot 2.4
 
-The effort of  [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  is merged into the official Spring Data Neo4j project, and we will have new updated reactive support in Spring Data Neo4j 6.0 and the upcoming Spring Boot 2.4.
+In Spring Boot 2.3, when you want to use reactive stack with Neo4j  database - the well-known Graph NoSQL database, you should have to use [the work](https://github.com/neo4j/sdn-rx/) from Neo4j team.
 
-Generally, we can start a new project using [Spring initializr](https://start.spring.io). 
+I have written [a post](https://medium.com/@hantsy/reactive-programming-with-neo4j-fb926a423d33) before to describe this project. 
+
+The effort of  [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  has been merged into the official Spring Data Neo4j project, and we will have new updated reactive support in the final Spring Data Neo4j 6.0 and the upcoming Spring Boot 2.4.
+
+In this post, will recreate our former example application using the newest Spring Boot 2.4, it will also include the points  which are useful for those are migrating from [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) .
+
+Firstly, open the http://start.spring.io page in your favorite browser, and create a Spring  WebFlux project using [Spring initializr](https://start.spring.io). 
 
 * Choose Maven as project type(If you prefer Gradle, choose Gradle please)
 * And select Spring Boot 2.4.0-RC1
@@ -12,7 +18,7 @@ Generally, we can start a new project using [Spring initializr](https://start.sp
   * Web Reactive
   * Lombok
 
-Extract the downloaded archive into your disc, and import into your IDE, such as Intellij IDEA.
+Extract the downloaded archive into your disc, and import into your IDE, such as IntelliJ IDEA.
 
 Open the `pom.xml` file in the project root, you will see the following dependencies added in the *dependencies* section.
 
@@ -65,9 +71,9 @@ class Post {
 }
 ```
 
-A Neo4j entity is annotated with a `@Node`  annotation.
+A Neo4j entity is annotated with a `@Node`  annotation. 
 
-> We use the `@Data`, `@ToString`, `@Builder` annotations provided in Lombok to erases the tedious methods, such as setters, getters, hashCode, equals, and toString in a POJO class.
+> We used the `@Data`, `@ToString`, `@Builder` annotations provided in Lombok to erases the tedious methods, such as setters, getters, hashCode, equals, and toString in a POJO class.
 
 Create a `Repository` for the  `Post` entity.
 
@@ -76,7 +82,7 @@ interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 }
 ```
 
-Create a `RestController` to expose the RESTful APIs.
+Create a `RestController` to expose the simple CRUD RESTful APIs for  the `Post` entity.
 
 ```java
 @RestController()
@@ -123,9 +129,9 @@ class PostController {
 }
 ```
 
-Let's have a look at this controller, it is very similar to the general imperative approach in Spring MVC, but here it returns a reactive specific `Mono` or `Flux` in these methods.
+Let's have a look at this controller, it is very similar to the general imperative version in Spring MVC, but here it returns a reactive specific `Mono` or `Flux` in these methods.
 
-In the `get` method, it throw a `PostNotFoundException` when the post by id is not found, create a  `@RestControllerAdvice` annotated class to handle this exception.
+In the above  `get` method, when the post by id is not found  it will throw a `PostNotFoundException`. Create a  `@RestControllerAdvice` annotated class to handle this exception.
 
 ```java
 @RestControllerAdvice
@@ -141,7 +147,7 @@ class RestExceptionHandler {
 }
 ```
 
-Add a `ReactiveTransactionManager` bean.
+Add a `ReactiveTransactionManager` bean. In the Spring Data Neo4j 6.0, it seems activate a reactive transaction manager become a must, if this is not set, it will throw exceptions at the startup stage when running the application.
 
 ```java
 // see: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.4.0-M2-Release-Notes#neo4j-1
@@ -155,7 +161,7 @@ public ReactiveTransactionManager reactiveTransactionManager(
 
 > NOTE: If you are from SDN Rx,  adding a transaction manager is a must now.
 
-Use  a  `CommandLineRunner` bean to initialize some sample data.
+Use  a  `CommandLineRunner` bean to initialize some sample data. Here we use `PostRepository` to insert two `Post` sample data.
 
 ```java
 @Component
@@ -192,15 +198,15 @@ class DataInitializer implements CommandLineRunner {
 }
 ```
 
-To run this application, you have to run a Neo4j server firstly.
+To run this application, a running Neo4j server should be provided.
 
-There is a *docker-compose.yaml* file in the [spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample) repository. Simply, run the following command to serve a Neo4j instance  in the docker container. 
+There is a *docker-compose.yaml* file prepared in the root folder of the [spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample) repository. Simply, run the following command to serve a Neo4j instance  in the Docker container. 
 
 ```bash
 docker-compose up neo4j
 ```
 
-And configure the connection settings in the *application.properties*.
+And do not forget to configure the connection settings in the *application.properties*.
 
 ```properties
 spring.neo4j.uri=bolt://localhost:7687
@@ -208,7 +214,7 @@ spring.neo4j.authentication.username=neo4j
 spring.neo4j.authentication.password=test
 ```
 
->Note: if you are migrating from [SDN RX](https://github.com/neo4j/sdn-rx/), you need to replace all namespaces with the `spring.neo4j`  prefix.
+>Note: if you are migrating from [SDN RX](https://github.com/neo4j/sdn-rx/), you need to replace all namespaces with the new `spring.neo4j`  prefix.
 
 Now, you can run the application directly in IDEs, or using the following Maven command.
 
@@ -216,7 +222,7 @@ Now, you can run the application directly in IDEs, or using the following Maven 
 mvn spring-boot:run
 ```
 
-When it is running, use `curl` command to test the exposed APIs.
+After it run successfully, try to use `curl` command to verify the exposed APIs.
 
 ```bash
 # curl http://localhost:8080/posts

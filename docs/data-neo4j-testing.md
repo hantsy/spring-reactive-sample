@@ -2,7 +2,7 @@
 
 Spring Boot provides a series of `AutoConfigureXXX` to allow developers to test against databases in an isolated environment. 
 
-For example,  adding a test scoped H2 dependency into your project and annotating your test class with `@DataJpaTest`, you are allowed to test your repository class against an embedded H2 instead of the runtime database. With the `@DataJpaTest`, Spring test context only loads the essential configuration for testing JPA facilities.  
+For example,  adding a test scoped H2 dependency into your project and annotating your test class with `@DataJpaTest`, you can test your `Repository` class against an embedded H2 instead of the runtime database. With the `@DataJpaTest`, Spring test context only loads the essential configuration for testing JPA facilities.  
 
 For Spring Data Neo4j, Spring Boot also provides a `@DataNeo4jTest` for testing Neo4j facilities, but unfortunately there is no simple embedded solution to start up a Neoj4 database.  [Testcontainers](https://www.testcontainers.org) fills the blank table.
 
