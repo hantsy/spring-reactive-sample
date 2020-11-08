@@ -17,6 +17,7 @@ import org.springframework.data.neo4j.core.schema.Node;
 import org.springframework.data.neo4j.core.transaction.ReactiveNeo4jTransactionManager;
 import org.springframework.data.neo4j.repository.ReactiveNeo4jRepository;
 import org.springframework.data.neo4j.repository.config.ReactiveNeo4jRepositoryConfigurationExtension;
+import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.ReactiveTransactionManager;
@@ -152,6 +153,8 @@ class PostNotFoundException extends RuntimeException {
 }
 
 interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
+    @Query("MATCH(post:Post) WHERE post.title =~ $title RETURN post")
+    Flux<Post> findByTitleContains(String title);
 }
 
 @Node
