@@ -1,6 +1,6 @@
 # Data Auditing with Spring Data Neo4j
 
-We have [introduced the Data Auditing feature]() in the latest Spring Data R2dbc 1.2. Spring Data Neo4j added the reactive data auditing support as what is done in Spring Data R2dbc.
+We have [introduced the Data Auditing feature](https://medium.com/swlh/data-auditing-with-spring-data-r2dbc-5d428fc94688) in the latest Spring Data R2dbc 1.2. Spring Data Neo4j added the reactive data auditing support as what is done in Spring Data R2dbc.
 
 Let's reuse the former example we have done in [this post](./boot-data-neo4j.md).
 
