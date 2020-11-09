@@ -1,10 +1,75 @@
-# Testing Spring Data Neo4j with Testcontainers
+# Testing Spring Data Neo4j 
 
-Spring Boot provides a series of `AutoConfigureXXX` to allow developers to test against databases in an isolated environment. 
+Since version 1.4,  Spring Boot provides a new test harness so-called **test slice** to test features easier than previous version,  which includes  a series of  `AutoConfigureXXX` to allow developers to test against databases in an isolated environment. 
 
-For example,  adding a test scoped H2 dependency into your project and annotating your test class with `@DataJpaTest`, you can test your `Repository` class against an embedded H2 instead of the runtime database. With the `@DataJpaTest`, Spring test context only loads the essential configuration for testing JPA facilities.  
+For example,  adding a test scoped H2 dependency into your project and annotating your test class with `@DataJpaTest`, you can test your `Repository` class against an embedded H2 instead of the real runtime database. With the `@DataJpaTest`, Spring test context only loads the essential configuration for testing JPA facilities, no need to load the all configuration for the whole application .  
 
-For Spring Data Neo4j, Spring Boot also provides a `@DataNeo4jTest` for testing Neo4j facilities, but unfortunately there is no simple embedded solution to start up a Neoj4 database.  [Testcontainers](https://www.testcontainers.org) fills the blank table.
+For Spring Data Neo4j, Spring Boot also provides a `@DataNeo4jTest` for testing Neo4j facilities, but unfortunately it does not include a utility to start up an embedded Neoj4 database for your tests. There are some solutions to overcome this barrier.
+
+* Neo4j provides a test harness which allow you kickstart an embedded Neo4j database  by programmatic approaches.
+*  [Testcontainers](https://www.testcontainers.org)  is a generic solution to run Docker containers for the testing framework, it is easy to start a Neo4j database in a Docker container when testing Spring Data Neo4j repositories.
+
+### Test with Neo4j test harness
+
+Add the following dependency into your *pom.xml*.
+
+```xml
+<dependency>
+    <groupId>org.neo4j.test</groupId>
+    <artifactId>neo4j-harness</artifactId>
+    <version>${neo4j-harness.version}</version>
+    <scope>test</scope>
+    <exclusions>
+        <exclusion>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-nop</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+```
+
+In your test, add the following codes to serve a running Neo4j server when running tests.
+
+```java
+@DataNeo4jTest
+@Transactional(propagation = Propagation.NEVER)
+@Slf4j
+public class PostRepositoryWithNeo4jHarnessTest {
+
+    private static Neo4j embeddedDatabaseServer;
+
+    @BeforeAll
+    static void initializeNeo4j() {
+
+        embeddedDatabaseServer = Neo4jBuilders.newInProcessBuilder()
+                .withDisabledServer()//disable http server
+                .build();
+    }
+
+    @DynamicPropertySource
+    static void neo4jProperties(DynamicPropertyRegistry registry) {
+
+        registry.add("spring.neo4j.uri", embeddedDatabaseServer::boltURI);
+        registry.add("spring.neo4j.authentication.username", () -> "neo4j");
+        registry.add("spring.neo4j.authentication.password", () -> null);
+    }
+
+    @AfterAll
+    static void stopNeo4j() {
+        embeddedDatabaseServer.close();
+    }
+    ...
+}
+```
+
+In the above codes,
+
+* We use the JUnit 5 lifecycle hooks, such as  `beforeAll` and `afterAll` to start and stop an embedded Neo4j server.
+* Use a static method annotated with `@DynamicPropertySource` to bind the Neo4j properties to the test runtime.
+
+Now you can add tests as general.
+
+### Test with Testcontainers
 
 Testcontainers provides a simple programmatic API abstraction for you to bootstrap a Docker container in your testing codes.
 
@@ -23,6 +88,22 @@ Or add the following dependencies into your *pom.xml* manually.
     <artifactId>neo4j</artifactId>
     <scope>test</scope>
 </dependency>
+```
+
+And import the testcontainers BOM in the `depedencyManagement`section.
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.testcontainers</groupId>
+            <artifactId>testcontainers-bom</artifactId>
+            <version>${testcontainers.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
 ```
 
 In the above code, 
