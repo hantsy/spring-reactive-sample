@@ -300,5 +300,7 @@ public class PostRepository  {
 
 It it similar to the ReactiveNeo4jClient, but more simple.  Have a look at the `findAll`, the literal queries are replaced by Java Query Criteria APIs.
 
+> Note: Please navigate to the **data-neo4j** and **boot-neo4j** repositories to check the above example codes.
+
 Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
 

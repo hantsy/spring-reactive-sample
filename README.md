@@ -14,9 +14,13 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 
 ## Docs
 
-* [Reactive Programming with Spring 5(Deprecated)](./docs/GUIDE.md)
+* [Reactive Programming with Spring 5](./docs/GUIDE.md)(Spring Boot 2.0, Deprecated)
 * [Accessing Neo4j with SDN Rx](./docs/data-neo4j-rx.md)
 * [Accessing RDBMS with Spring Data R2dbc](./docs/data-r2dbc.md)
+* [Update: Accessing Neo4j with Spring Boot 2.4](./docs/data-neo4j.md)
+* [Data Auditing with Spring Data Neo4j](./docs/data-neo4j-auditing.md)
+* [Testing Spring Data Neo4j Components](./docs/data-neo4j-testing.md)
+* [Customizing queries with Spring Data Neo4j](./docs/data-neo4j-client.md)
 
 
 ## Sample Codes
@@ -41,6 +45,7 @@ The following table list all sample codes related to the above posts.
 | [war](https://github.com/hantsy/spring-reactive-sample/tree/master/war) | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
 | [routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes) | Use `RouterFunction` instead of controller in **vanilla**    |
 | [register-bean](https://github.com/hantsy/spring-reactive-sample/tree/master/register-bean) | Programmatic approach to register all beans in `ApplicatonContext` at the application bootstrap |
+|             [data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/data-neo4j)                                                  |                  Spring Data Neo4j reactive example                                            |
 | [data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo) | Spring Data Mongo Reactive example                           |
 | [data-mongo-pageable](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo-pageable) | Spring Data Mongo Reactive example with pagination support   |
 | [data-mongo-transaction](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo-transaction) | Spring Data Mongo Reactive example with `Transaction` support |
