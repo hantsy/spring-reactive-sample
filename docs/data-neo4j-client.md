@@ -1,6 +1,6 @@
 # Customizing queries with Spring Data Neo4j
 
-In [the former post](./data-neo4j.md), we've created a simple project and used the declaration approach to create a `Repository` to access the Neo4j server. Similar to other Spring Data modules, Spring Data Neo4j provides a `ReactiveNeo4jOperations` for reactive applications to interact with Neo4j servers by a programmatic approach, and additionally, Spring Data Neo4j provides a low-level API abstraction to execute the [Cyper Query Language](https://neo4j.com/developer/cypher/) through the `ReactiveNeo4jClient` bean.
+In [the former post](./data-neo4j.md), we've created a simple project and used the declaration approach to create a `Repository` to access the Neo4j server. Similar to other Spring Data modules, Spring Data Neo4j provides a `ReactiveNeo4jOperations` for reactive applications to interact with Neo4j servers by a programmatic approach, and additionally, Spring Data Neo4j provides a low-level API abstraction to execute the [Cypher Query Language](https://neo4j.com/developer/cypher/) through the `ReactiveNeo4jClient` bean.
 
 ## Conventional derived query methods
 
@@ -31,7 +31,7 @@ Run the test, it should work as expected.
 
 ## Customizing Query by @Query annotation
 
-Like the @Query in Spring Data JPA,  Spring Data Neo4j  provides its own `@Query` annotation to attach the result of a custom Cyper Query to the method. 
+Like the @Query in Spring Data JPA,  Spring Data Neo4j  provides its own `@Query` annotation to attach the result of a custom Cypher Query to the method. 
 
 ```java
 import org.springframework.data.neo4j.repository.query.Query;
@@ -48,7 +48,7 @@ interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 
 Here we use a `regex` pattern in the where clause.
 
-> More details about the syntax of  Cyper Query Language, please check the [official Neo4j documentation](https://neo4j.com/developer/cypher/).
+> More details about the syntax of  Cypher Query Language, please check the [official Neo4j documentation](https://neo4j.com/developer/cypher/).
 
 Add a test method to verify it.
 
@@ -68,7 +68,7 @@ Here the `findByTitleContains` method has to accept a Regex pattern.
 
 Once Spring Data Neo4j is configured in a reactive application, a `ReactvieNeo4jClient` bean is available in the Spring application context. 
 
-Like the R2dbc's `DatabaseClient` , with `ReactiveNeo4jClient`, you can execute custom Cyper Queries and handle returning result freely. 
+Like the R2dbc's `DatabaseClient` , with `ReactiveNeo4jClient`, you can execute custom Cypher Queries and handle returning result freely. 
 
 For example, to find all posts, it can be done by the following method.
 
@@ -95,7 +95,7 @@ public Flux<Post> findAll() {
 
 In the above codes. 
 
-* The `query` use a multi-lined text block(available in the latest Java 15) to define a Cyper query.
+* The `query` use a multi-lined text block(available in the latest Java 15) to define a Cypher query.
 * The  `client.query` to execute the defined query.
 * The `fetchAs` to handle the returning result, similar to RowMapper in Jdbc/R2dbc to extract the result and wrap it into a POJO class.
 * The `all` will return a `Flux` , if you want to return a single result, use `one` instead.
@@ -233,7 +233,7 @@ public class PostRepository {
 
 ```
 
-> Note: Please navigate to the **data-neo4j** and **boot-neo4j-cyper** repositories to check the above example codes.
+> Note: Please navigate to the **data-neo4j** and **boot-neo4j-cypher** repositories to check the above example codes.
 
 ## ReactiveNeo4jOperations
 
