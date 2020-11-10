@@ -181,7 +181,7 @@ In the above codes,
 *  A test class is annotated with a general `@SpringBootTest` annotation(will load all configurations) or a `@DataNeo4jTest` annotation. When using `@DataNeo4jTest`, you have to add an extra `@Transactional(propagation = Propagation.NEVER)`, check  [spring-boot issue#23630](https://github.com/spring-projects/spring-boot/issues/23630) for more details.
 * A `@Testcontainers` is added on the class level, thus the Testcontainers facilities will contribute the test lifecycle.
 * A static `@Container` resource is defined, it will be initialized before the test execution.
-*  By default, JUnit 5 uses a `PER_METHOD` strategy to bootstrap a test, if you set a global ``PER_CLASS` strategy in the *junit-platform.properties*, add a `@TestInstance(TestInstance.Lifecycle.PER_METHOD)` to override it.
+*  By default, JUnit 5 uses a `PER_METHOD` strategy to bootstrap a test, if you set a global `PER_CLASS` strategy in the *junit-platform.properties*, add a `@TestInstance(TestInstance.Lifecycle.PER_METHOD)` to override it.
 * A static method annotated with `@DynamicPropertySource` is used to bind properties from the running Docker container to the Spring environmental variables before the test is running. 
 * You can inject `Repository` class, and Neo4j specific `Driver`  beans .etc, in `@DataNeo4jTest` directly.
 * Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the test lifecycle.
