@@ -1,18 +1,18 @@
 # Update: Accessing Neo4j with Spring Boot 2.4
 
-In Spring Boot 2.3, when you want to use reactive stack with Neo4j  database - the well-known Graph NoSQL database, you should have to use [the work](https://github.com/neo4j/sdn-rx/) from Neo4j team.
+In Spring Boot 2.3, if you want to use  Spring reactive stack with Neo4j  database - the well-known Graph NoSQL database, you should have to choose [the work](https://github.com/neo4j/sdn-rx/) from Neo4j team.
 
-I have written [a post](https://medium.com/@hantsy/reactive-programming-with-neo4j-fb926a423d33) before to describe this project. 
+I had written [a post](https://medium.com/@hantsy/reactive-programming-with-neo4j-fb926a423d33) before to describe this project. 
 
-The effort of  [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  has been merged into the official Spring Data Neo4j project, and we will have new updated reactive support in the final Spring Data Neo4j 6.0 and the upcoming Spring Boot 2.4.
+The effort of  [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  has been merged into the official Spring Data Neo4j project, and we will have new updated reactive support in the final Spring Data Neo4j 6.0 GA and the upcoming Spring Boot 2.4 release.
 
-In this post, will recreate our former example application using the newest Spring Boot 2.4, it will also include the points  which are useful for those are migrating from [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) .
+In this post, we will recreate our blog post example application with the newest Spring Boot 2.4/Spring Data Neo4j 6.0, and we will also cover some points that are useful for those people who are migrating from [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) .
 
-Firstly, open the http://start.spring.io page in your favorite browser, and create a Spring  WebFlux project using [Spring initializr](https://start.spring.io). 
+Firstly, open your favorite browser and navigate to http://start.spring.io , and generate a Spring  WebFlux project skeleton using [Spring initializr](https://start.spring.io). 
 
 * Choose Maven as project type(If you prefer Gradle, choose Gradle please)
 * And select Spring Boot 2.4.0-RC1
-* And select Java 11 or Java 15 
+* And select Java 11 or Java 15, personally I would like use the latest Java to experience the upcoming preview features
 * Add the following dependencies.
   * Data Neo4j
   * Web Reactive
@@ -52,7 +52,7 @@ Open the `pom.xml` file in the project root, you will see the following dependen
 </dependencies>
 ```
 
-Create an Noe4j entity class.
+Now , create a Noe4j entity class as the following.
 
 ```java
 @Node
@@ -131,7 +131,7 @@ class PostController {
 
 Let's have a look at this controller, it is very similar to the general imperative version in Spring MVC, but here it returns a reactive specific `Mono` or `Flux` in these methods.
 
-In the above  `get` method, when the post by id is not found  it will throw a `PostNotFoundException`. Create a  `@RestControllerAdvice` annotated class to handle this exception.
+In the above  `get` method, when the post is not found  it will throw a `PostNotFoundException`. Create a  `@RestControllerAdvice` annotated class to handle this exception.
 
 ```java
 @RestControllerAdvice
@@ -147,7 +147,7 @@ class RestExceptionHandler {
 }
 ```
 
-Add a `ReactiveTransactionManager` bean. In the Spring Data Neo4j 6.0, it seems activate a reactive transaction manager become a must, if this is not set, it will throw exceptions at the startup stage when running the application.
+Add a `ReactiveTransactionManager` bean. In the Spring Data Neo4j 6.0, it seems activating a reactive transaction manager becomes a must, if it is not set, you will see  an exception thrown at the startup stage when running the application.
 
 ```java
 // see: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.4.0-M2-Release-Notes#neo4j-1
@@ -198,9 +198,11 @@ class DataInitializer implements CommandLineRunner {
 }
 ```
 
-To run this application, a running Neo4j server should be provided.
+Before starting this application, make sure there is a running Neo4j server.
 
-There is a *docker-compose.yaml* file prepared in the root folder of the [spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample) repository. Simply, run the following command to serve a Neo4j instance  in the Docker container. 
+There is a *docker-compose.yaml* file in the root folder of the [spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample) repository which is prepared for bootstrapping dependent servers. 
+
+Simply, run the following command to serve a Neo4j instance  in the Docker container. 
 
 ```bash
 docker-compose up neo4j
@@ -229,5 +231,5 @@ After it run successfully, try to use `curl` command to verify the exposed APIs.
 [{"id":0,"title":"Post two","content":"The content of Post two","createdDate":"2020-11-04T10:35:14.1619567","updatedDate":"2020-11-04T10:35:14.1619567","createdBy":"hantsy","updatedBy":"hantsy"},{"id":1,"title":"Post one","content":"The content of Post one","createdDate":"2020-11-04T10:35:14.1481498","updatedDate":"2020-11-04T10:35:14.1481498","createdBy":"hantsy","updatedBy":"hantsy"}]
 ```
 
-Grab the [source code]() from my github.
+Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
 

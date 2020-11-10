@@ -1,12 +1,12 @@
 # Testing Spring Data Neo4j 
 
-Since version 1.4,  Spring Boot provides a new test harness so-called **test slice** to test features easier than previous version,  which includes  a series of  `AutoConfigureXXX` to allow developers to test against databases in an isolated environment. 
+Since version 1.4,  Spring Boot provided a new test harness so-called **test slice** to test features easier than previous version,  which included a series of  `AutoConfigureXXX` to allow developers to test desired features in an isolated environment. 
 
 For example,  adding a test scoped H2 dependency into your project and annotating your test class with `@DataJpaTest`, you can test your `Repository` class against an embedded H2 instead of the real runtime database. With the `@DataJpaTest`, Spring test context only loads the essential configuration for testing JPA facilities, no need to load the all configuration for the whole application .  
 
-For Spring Data Neo4j, Spring Boot also provides a `@DataNeo4jTest` for testing Neo4j facilities, but unfortunately it does not include a utility to start up an embedded Neoj4 database for your tests. There are some solutions to overcome this barrier.
+For Spring Data Neo4j, Spring Boot also provides a `@DataNeo4jTest` for testing Neo4j facilities, but unfortunately it does not include an utility to start up an embedded Neoj4 database for your tests. There are some solutions to overcome this barrier.
 
-* Neo4j provides a test harness which allow you kickstart an embedded Neo4j database  by programmatic approaches.
+* Neo4j provides a test harness which provides APIs to start and stop an embedded Neo4j server by programmatic approach.
 *  [Testcontainers](https://www.testcontainers.org)  is a generic solution to run Docker containers for the testing framework, it is easy to start a Neo4j database in a Docker container when testing Spring Data Neo4j repositories.
 
 ### Test with Neo4j test harness
@@ -65,7 +65,7 @@ public class PostRepositoryWithNeo4jHarnessTest {
 In the above codes,
 
 * We use the JUnit 5 lifecycle hooks, such as  `beforeAll` and `afterAll` to start and stop an embedded Neo4j server.
-* Use a static method annotated with `@DynamicPropertySource` to bind the Neo4j properties to the test runtime.
+* Use a static method annotated with `@DynamicPropertySource` to bind the Neo4j properties to the Spring test context.
 
 Now you can add tests as general.
 
@@ -73,7 +73,7 @@ Now you can add tests as general.
 
 Testcontainers provides a simple programmatic API abstraction for you to bootstrap a Docker container in your testing codes.
 
-You can add *TestContainers* as dependencies when generating new project in the [Spring initializr](https://start.spring.io).
+Testcontainers is available in the official [Spring initializr](https://start.spring.io). You can add *TestContainers* as dependencies when generating new project using [Spring initializr](https://start.spring.io).
 
 Or add the following dependencies into your *pom.xml* manually.
 
@@ -108,8 +108,8 @@ And import the testcontainers BOM in the `depedencyManagement`section.
 
 In the above code, 
 
-* The `junit-jupiter` is used to integrate *TestContainers* with JUnit 5 platform.
-* The `neo4j` provides APIs to compose a Neo4j Docker container.
+* The `junit-jupiter` artifact is used to integrate *TestContainers* with JUnit 5 platform.
+* The `neo4j` artifact provides APIs to compose a Neo4j Docker container.
 
 Create a test for `PostRepository`.
 
@@ -181,9 +181,9 @@ In the above codes,
 *  A test class is annotated with a general `@SpringBootTest` annotation(will load all configurations) or a `@DataNeo4jTest` annotation. When using `@DataNeo4jTest`, you have to add an extra `@Transactional(propagation = Propagation.NEVER)`, check  [spring-boot issue#23630](https://github.com/spring-projects/spring-boot/issues/23630) for more details.
 * A `@Testcontainers` is added on the class level, thus the Testcontainers facilities will contribute the test lifecycle.
 * A static `@Container` resource is defined, it will be initialized before the test execution.
-*  By default, JUnit 5 uses a `PER_METHOD` strategy to bootstrap a test, if you set a global strategy in the *junit-platform.properties*, add a `@TestInstance(TestInstance.Lifecycle.PER_METHOD)` to override it.
-* A static method annotated with `@DynamicPropertySource` is used to bind parameters from the running Docker container to the Spring environmental variables before the test is running. 
-* You can inject Repository class, and Neo4j specific `Driver` etc,  directly.
+*  By default, JUnit 5 uses a `PER_METHOD` strategy to bootstrap a test, if you set a global ``PER_CLASS` strategy in the *junit-platform.properties*, add a `@TestInstance(TestInstance.Lifecycle.PER_METHOD)` to override it.
+* A static method annotated with `@DynamicPropertySource` is used to bind properties from the running Docker container to the Spring environmental variables before the test is running. 
+* You can inject `Repository` class, and Neo4j specific `Driver`  beans .etc, in `@DataNeo4jTest` directly.
 * Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the test lifecycle.
 * In the `@Test` method, we usually utilizes reactor's `StepVerifier` to assert the result.
 
@@ -194,12 +194,12 @@ Run the test, it will:
 * Preparing Spring test context.
 * Check if there is a Docker image existed, if not download it firstly.
 * Startup a Docker container for the test.
-* Bind the Docker instance parameters to Spring environmental variables. 
+* Bind the Docker instance properties to Spring environmental variables. 
 * Inject Spring resources. 
 * Executing test, if there are some hooks, executing hooks before and after the test execution.
 * Shutdown the Docker container and clean up Spring test context. 
 
-Alternatively, you can create a `ApplicationContextInitializer` to start a Neo4j Docker container.
+Alternatively, you can create a `ApplicationContextInitializer` to start a Neo4j Docker container manually.
 
 ```java
 @DataNeo4jTest
@@ -231,7 +231,7 @@ public class PostRepositoryTest {
 }
 ```
 
-In the above, we use a `ContextConfiguration` to apply the context initializers.
+In the above, we use a `ContextConfiguration` to apply the context initializers. In the real world application, you can extract `TestContainerInitializer` to a standalone class, and thus it is easy to reuse in any tests that requires a running Neo4j server instance.
 
-Grab the [source code]() from my github.
+Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
 

@@ -1,10 +1,10 @@
 # Data Auditing with Spring Data Neo4j
 
-We have [introduced the Data Auditing feature](https://medium.com/swlh/data-auditing-with-spring-data-r2dbc-5d428fc94688) in the latest Spring Data R2dbc 1.2. Spring Data Neo4j added the reactive data auditing support as what is done in Spring Data R2dbc.
+We have [introduced the Data Auditing feature](https://medium.com/swlh/data-auditing-with-spring-data-r2dbc-5d428fc94688) in the latest Spring Data R2dbc 1.2. Similarly Spring Data Neo4j added the reactive data auditing support as what is done in Spring Data R2dbc.
 
 Let's reuse the former example we have done in [the last post](./data-neo4j.md).
 
-Change the original `Post` entity to the following, add fields to record the timestamp and auditor when saving and updating the entity.
+Change the original `Post` entity, add the following fields to capture the timestamp and auditor when saving and updating the entity.
 
 ```java
 @Node
@@ -15,11 +15,7 @@ Change the original `Post` entity to the following, add fields to record the tim
 @AllArgsConstructor
 class Post {
 
-    @Id
-    @GeneratedValue
-    private Long id;
-    private String title;
-    private String content;
+	//...
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -38,11 +34,11 @@ class Post {
 In the above codes, there are some annotations applied on the fields. 
 
 *  `CreatedDate` will fill the current date when saving the entity.
-* `LastModifiedDate` will fill the current date when update the entity.
+* `LastModifiedDate` will fill the current date when updating the entity.
 * `CreatedBy` will retrieve the current auditor from  `ReactiveAuditorAware`  and fill it when saving the entity.
 * `LastModifiedBy` will retrieve the current auditor from  `ReactiveAuditorAware`  and fill it when updating the entity.
 
-Add a `ReactiveAuditorAware` bean to autofill the auditor in the entity when saving and updating it.
+Add a `ReactiveAuditorAware` bean to serve the auditor in the entity when saving and updating it.
 
 ```java
 @Bean
@@ -53,7 +49,7 @@ public ReactiveAuditorAware<String> reactiveAuditorAware() {
 
 > Note : in the real world applications, you can retrieve the current user from current SecurityContextHolder.
 
-Do  not forget to add a `@EnableReactiveNeo4jAuditing`  annotation on the `@Configuration` class to enable the data auditing.
+Do not forget to add a `@EnableReactiveNeo4jAuditing`  annotation on the `@Configuration` class to activate the data auditing feature.
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -81,5 +77,5 @@ You can also verify it via `curl` .
 [{"id":2,"title":"Post one","content":"The content of Post one","createdDate":"2020-11-08T10:22:24.5543561","updatedDate":"2020-11-08T10:22:24.5543561","createdBy":"hantsy","updatedBy":"hantsy"},{"id":3,"title":"Post two","content":"The content of Post two","createdDate":"2020-11-08T10:22:24.5623567","updatedDate":"2020-11-08T10:22:24.5623567","createdBy":"hantsy","updatedBy":"hantsy"}]
 ```
 
-Grab the [source code]() from my github.
+Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
 
