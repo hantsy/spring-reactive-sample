@@ -155,6 +155,8 @@ class PostNotFoundException extends RuntimeException {
 interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
     @Query("MATCH(post:Post) WHERE post.title =~ $title RETURN post")
     Flux<Post> findByTitleContains(String title);
+
+    Flux<Post> findByTitleLike(String title);
 }
 
 @Node

@@ -36,10 +36,8 @@ public class ClientPostRepository {
                 .fetchAs(Post.class).mappedBy((ts, r) ->
                         Post.builder()
                                 .id(r.get("id").asLong())
-                                .title(
-                                        r.get("title").asString())
-                                .content(
-                                        r.get("content").asString())
+                                .title(r.get("title").asString())
+                                .content(r.get("content").asString())
                                 .createdAt(r.get("createdAt").asLocalDateTime(null))
                                 .updatedAt(r.get("updatedAt").asLocalDateTime(null))
                                 .build()
@@ -59,10 +57,8 @@ public class ClientPostRepository {
                 .fetchAs(Post.class).mappedBy((ts, r) ->
                         Post.builder()
                                 .id(r.get("id").asLong())
-                                .title(
-                                        r.get("title").asString())
-                                .content(
-                                        r.get("content").asString())
+                                .title(r.get("title").asString())
+                                .content(r.get("content").asString())
                                 .createdAt(r.get("createdAt").asLocalDateTime(null))
                                 .updatedAt(r.get("updatedAt").asLocalDateTime(null))
                                 .build()
@@ -82,10 +78,8 @@ public class ClientPostRepository {
                 .fetchAs(Post.class).mappedBy((ts, r) ->
                         Post.builder()
                                 .id(r.get("id").asLong())
-                                .title(
-                                        r.get("title").asString())
-                                .content(
-                                        r.get("content").asString())
+                                .title(r.get("title").asString())
+                                .content(r.get("content").asString())
                                 .createdAt(r.get("createdAt").asLocalDateTime(null))
                                 .updatedAt(r.get("updatedAt").asLocalDateTime(null))
                                 .build()
