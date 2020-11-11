@@ -1,4 +1,4 @@
-# Testing Spring Data Neo4j 
+# Testing Spring Data Neo4j Components
 
 Since version 1.4,  Spring Boot provided a new test harness so-called **test slice** to test features easier than previous version,  which included a series of  `AutoConfigureXXX` to allow developers to test desired features in an isolated environment. 
 
@@ -183,8 +183,8 @@ In the above codes,
 * A static `@Container` resource is defined, it will be initialized before the test execution.
 *  By default, JUnit 5 uses a `PER_METHOD` strategy to bootstrap a test, if you set a global `PER_CLASS` strategy in the *junit-platform.properties*, add a `@TestInstance(TestInstance.Lifecycle.PER_METHOD)` to override it.
 * A static method annotated with `@DynamicPropertySource` is used to bind properties from the running Docker container to the Spring environmental variables before the test is running. 
-* You can inject `Repository` class, and Neo4j specific `Driver`  beans .etc, in `@DataNeo4jTest` directly.
-* Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the test lifecycle.
+* You can inject your `Repository` beans, and the Neo4j specific `ReactiveNeo4jOperations`, `ReactiveNeo4jClient`, `Driver`  beans etc. in a  `@DataNeo4jTest` annotated test directly.
+* Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the JUnit test lifecycle.
 * In the `@Test` method, we usually utilizes reactor's `StepVerifier` to assert the result.
 
 > In the original [SDN Rx]((https://github.com/neo4j/sdn-rx/)  ), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
