@@ -38,6 +38,10 @@ In the above codes, there are some annotations applied on the fields.
 * `CreatedBy` will retrieve the current auditor from  `ReactiveAuditorAware`  and fill it when saving the entity.
 * `LastModifiedBy` will retrieve the current auditor from  `ReactiveAuditorAware`  and fill it when updating the entity.
 
+The `CreatedDate` and `LastModifiedDate` can be applied on the traditional `java.util.Date`, the new Java 8 DateTime API and [Joda](https://www.joda.org) time types.
+
+The class type of `CreatedBy` and `ModifiedBy` are dependent  on the parameterized type of the declaration of `ReactiveAuditorAware` bean.
+
 Add a `ReactiveAuditorAware` bean to serve the auditor in the entity when saving and updating it.
 
 ```java
@@ -49,7 +53,7 @@ public ReactiveAuditorAware<String> reactiveAuditorAware() {
 
 > Note : in the real world applications, you can retrieve the current user from current SecurityContextHolder.
 
-Do not forget to add a `@EnableReactiveNeo4jAuditing`  annotation on the `@Configuration` class to activate the data auditing feature.
+By default Spring Boot do not autoconfigure the auditing feature. Do not forget to add a `@EnableReactiveNeo4jAuditing`  annotation on the `@Configuration` class to activate the data auditing feature.
 
 ```java
 @Configuration(proxyBeanMethods = false)
