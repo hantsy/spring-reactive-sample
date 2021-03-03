@@ -14,13 +14,7 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 
 ## Docs
 
-* [Reactive Programming with Spring 5](./docs/GUIDE.md)(Spring Boot 2.0, Deprecated)
-* [Accessing Neo4j with SDN Rx](./docs/data-neo4j-rx.md)
-* [Accessing RDBMS with Spring Data R2dbc](./docs/data-r2dbc.md)
-* [Update: Accessing Neo4j with Spring Boot 2.4](./docs/data-neo4j.md)
-* [Data Auditing with Spring Data Neo4j](./docs/data-neo4j-auditing.md)
-* [Testing Spring Data Neo4j Components](./docs/data-neo4j-testing.md)
-* [Customizing queries with Spring Data Neo4j](./docs/data-neo4j-client.md)
+[https://hantsy.github.io/spring-reactive-sample/](https://hantsy.github.io/spring-reactive-sample/)
 
 
 ## Sample Codes
