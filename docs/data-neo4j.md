@@ -1,24 +1,20 @@
-# Update: Accessing Neo4j with Spring Boot 2.4
+# Accessing Neo4j with Spring Data Neo4j(Spring Boot 2.4)
 
-In Spring Boot 2.3, if you want to use  Spring reactive stack with Neo4j  database - the well-known Graph NoSQL database, you should have to choose [the work](https://github.com/neo4j/sdn-rx/) from Neo4j team.
+> The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0.
 
-I had written [a post](https://medium.com/@hantsy/reactive-programming-with-neo4j-fb926a423d33) before to describe this project. 
+In this post we will update the reactive support in the final Spring Data Neo4j 6.0 GA and the upcoming Spring Boot 2.4 release.
 
-The effort of  [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  has been merged into the official Spring Data Neo4j project, and we will have new updated reactive support in the final Spring Data Neo4j 6.0 GA and the upcoming Spring Boot 2.4 release.
-
-In this post, we will recreate our blog post example application with the newest Spring Boot 2.4/Spring Data Neo4j 6.0, and we will also cover some points that are useful for those people who are migrating from [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) .
-
-Firstly, open your favorite browser and navigate to http://start.spring.io , and generate a Spring  WebFlux project skeleton using [Spring initializr](https://start.spring.io). 
+Firstly, generate a Spring  WebFlux project skeleton using [Spring initializr](https://start.spring.io). 
 
 * Choose Maven as project type(If you prefer Gradle, choose Gradle please)
-* And select Spring Boot 2.4.0-RC1
+* And select Spring Boot 2.4.3
 * And select Java 11 or Java 15, personally I would like use the latest Java to experience the upcoming preview features
 * Add the following dependencies.
   * Data Neo4j
   * Web Reactive
   * Lombok
 
-Extract the downloaded archive into your disc, and import into your IDE, such as IntelliJ IDEA.
+Extract the downloaded archive into your disc, and import into your IDEs
 
 Open the `pom.xml` file in the project root, you will see the following dependencies added in the *dependencies* section.
 
@@ -129,8 +125,6 @@ class PostController {
 }
 ```
 
-Let's have a look at this controller, it is very similar to the general imperative version in Spring MVC, but here it returns a reactive specific `Mono` or `Flux` in these methods.
-
 In the above  `get` method, when the post is not found  it will throw a `PostNotFoundException`. Create a  `@RestControllerAdvice` annotated class to handle this exception.
 
 ```java
@@ -161,7 +155,7 @@ public ReactiveTransactionManager reactiveTransactionManager(
 
 > NOTE: If you are from SDN Rx,  adding a transaction manager is a must now.
 
-Use  a  `CommandLineRunner` bean to initialize some sample data. Here we use `PostRepository` to insert two `Post` sample data.
+Add a `CommandLineRunner` bean to initialize some sample data. Here we use `PostRepository` to insert two `Post` sample data.
 
 ```java
 @Component

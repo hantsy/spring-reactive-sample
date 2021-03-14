@@ -2,11 +2,13 @@
 
 Spring Data also added Reactive Streams support into the existing projects.
 
-NoSQL support, such as Redis, MongoDB, Couchbase and Cassandra are the first-class citizen in the webflux world.
+NoSQL support, such as Redis, MongoDB, Couchbase and Cassandra are the first-class citizen in the WebFlux world.
 
-RDBMS support, such as JDBC and JPA are designated for blocking access will not work under the new webflux applications. 
+RDBMS support, such as JDBC and JPA are designated for blocking access will not work under the new WebFlux applications. 
 
-To fix this issue, Spring team leads a new reactive specification [R2dbc](https://R2dbc.io) to access RDBMS. currently, MySQL(and MariaDB), MSSQL, Oracle, H2, PostgresSQL have got support.
+To resolve the problem, Spring team leads a new reactive specification [R2dbc](https://R2dbc.io) to access RDBMS. Similar to the JDBC specification, it provides a collection of standardized APIs and allow you to implement your own database drivers through `r2dbc-spi`.  Check the [R2dbc website](https://r2dbc.io/) for more info. 
+
+Currently, MySQL(and MariaDB), MSSQL, Oracle, H2, PostgresSQL have got support.
 
 ## Reactive Repository
 

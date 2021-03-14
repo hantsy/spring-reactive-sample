@@ -1,27 +1,18 @@
-# Reactive Accessing RDBMS with Spring Data R2dbc 
+# Accessing RDBMS with Spring Data R2dbc 
 
-**Move to [Spring R2dbc Sample](https://github.com/hantsy/spring-r2dbc-sample) and update yourself to the latest R2dbc .**
+> Tihs post focused on Spring Boot 2.3 and Spring Data R2dbc 1.1. For the newest Spring Boot 2.4 and Spring Data R2dbc 1.2, please go to [Spring R2dbc Sample](https://github.com/hantsy/spring-r2dbc-sample) and update yourself to the latest R2dbc .
 
-In the past years, Mongo, Redis, ElasticSearch, etc got reactive support in Spring Data project, but for RDBMS, both JDBC and JPA only support blocking access due to the limitation of JDBC specification. 
-
-As the first stable version of R2dbc was released, RDBMS is finally got reactive support.
-
-Currently R2dbc supports H2, MySQL, MS SQL and PostgresSQL databases. Similar JDBC specification, it provides a collection of standardized APIs and allow you implement your own database drivers through `r2dbc-spi`.  Check the [R2dbc website](https://r2dbc.io/) for more info.
 
 Generate a Spring Boot project using [Spring Initializr](https://start.spring.io), and select the following options.
 
 * Project type: Maven
 * Java version : 11
 * Spring Boot : 2.2.4.RELEASE
-* Dependencies: Reactive Web, Lombok, R2dbc
-
-Lombok is helpful to make your Java codes clean as possible, with the Lombok annotations, it will generate the getters and setters, hashCode, equals, toString, etc.  for you at compile time.
-
-Download the generated project skeleton archive and extract the files into your machine.  
+* Dependencies: Reactive Web, Lombok, R2dbc 
 
 Open the *pom.xml* file in the project root folder.
 
-There is a `spring-boot-bom-r2dbc` to manage the r2dbc related dependencies. Currently, Spring Data R2dbc is not included in the official Spring Data release train.
+There is a `spring-boot-bom-r2dbc` to manage the r2dbc related dependencies. 
 
 ```xml
 <dependencyManagement>
@@ -141,9 +132,9 @@ class Post {
 }
 ```
 
-In the above codes, `@Data`, `@ToString`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor` are from Lombok. `@Table` and `@Column` define the mapping rule between the POJO and  the background table and its columns, `@Id`  indicates `id` is the table primary key.
+The `@Table` and `@Column` annotations define the mapping rule between the POJO and the backing table and its columns, `@Id`  indicates `id` is the table primary key.
 
-Create a  `Repository` for `Post` entity.
+Create a `Repository` interface for the `Post` entity.
 
 ```java
 interface PostRepository extends ReactiveCrudRepository<Post, Integer> {
@@ -153,7 +144,7 @@ interface PostRepository extends ReactiveCrudRepository<Post, Integer> {
 }
 ```
 
-As you see, similar with the `Repository` working in other Spring Data projects, it also supports custom `@Query`  on method. But there is a limitation in the current 1.0.0 version of Spring Data R2dbc , the query derivation is not support, if you want to customize the query, the `@Query` is a must.
+As you see, similar to the `Repository` working in other Spring Data projects, it also supports custom `@Query`  on method. But there is a limitation in the current 1.0.0 version of Spring Data R2dbc , the query derivation is not support, if you want to customize the query, the `@Query` is a must.
 
 Next, let's create a `@RestController` to expose simple CRUD endpoints for Post.
 
@@ -349,6 +340,9 @@ public class PostRepositoryTest {
 ```
 
 But unfortunately, it does not work as `@DataJpaTest` which can pick up an embedded H2 for test purpose, with `@DataR2dbcTest` , we have to use a runtime database, see [#issue62](https://github.com/spring-projects-experimental/spring-boot-r2dbc/issues/68).
+
+
+## DatabaseClient
 
 As mentioned,  a `DatabaseClient` is available for database operations in a programmatic approach instead of `Repository` interface declaring.
 

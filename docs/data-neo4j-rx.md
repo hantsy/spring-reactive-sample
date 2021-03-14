@@ -1,6 +1,6 @@
 # Spring Data Neo4j RX  
 
->The post focused on the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/), which was maintained by Neo4j beams. Now the effort is merged into the official Spring Data Neo4j project, read this [doc](./data-neo4j.md) to update yourself.
+>The post is focused on the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/), which was maintained by Neo4j team. Now the effort is merged into the official Spring Data Neo4j project, read this [doc](./data-neo4j.md) to update yourself.
 
 Generate a Spring Boot WebFlux project using [Spring Initializr](https://start.spring.io).
 
