@@ -1,8 +1,3 @@
----
-title: Spring WebFlux Cookbook
-description:  Learning the new features of Spring WebFlux by code snippets.
----
-
 * [An introduction to Spring WebFlux](./introduction.md)
 * [Create a WebFlux application from Scratch](./first.md)
 * [Create a WebFlux application with Spring Boot](./boot-first.md)
