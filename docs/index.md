@@ -7,7 +7,6 @@ description:  Learning the new features of Spring WebFlux by code snippets.
 * [Create a WebFlux application from scratch](./first.md)
 * [Create a WebFlux application with Spring Boot](./boot-first.md)
 * [Reactive Data Operations](./data.md)
-	* [Reactive Programming with Spring 5](./GUIDE.md)(Spring Boot 2.0, Deprecated)
 	* [Accessing Neo4j with SDN Rx](./data-neo4j-rx.md)
 	* [Accessing RDBMS with Spring Data R2dbc](./data-r2dbc.md)
 	* [Update: Accessing Neo4j with Spring Boot 2.4](./data-neo4j.md)

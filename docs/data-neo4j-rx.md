@@ -1,19 +1,10 @@
-# Reactive programming with Neo4j   
+# Spring Data Neo4j RX  
 
-**The effort of  [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  is merged into the official Spring Data Neo4j project, read this [doc](./data-neo4j.md) to update yourself.**
+>The post focused on the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/), which was maintained by Neo4j beams. Now the effort is merged into the official Spring Data Neo4j project, read this [doc](./data-neo4j.md) to update yourself.
 
-Generate a Spring Boot project using [Spring Initializr](https://start.spring.io), and make sure the following options are chosen.
+Generate a Spring Boot WebFlux project using [Spring Initializr](https://start.spring.io).
 
-* Project type: Maven
-* Java version : 11
-* Spring Boot : 2.2.4.RELEASE
-* Dependencies: Reactive Web, Lombok
-
-> Do not add  Spring Data Neo4j  into the dependencies, we will use the new Spring Data Neo4j Rx instead.
-
-Do not forget to add Lombok to your project dependencies.  We'll  use Lombok to get the Java codes clean as possible, esp. to generate the getters and setters, hashCode, equals, toString for you at compile time.
-
-Download the generated project skeleton archive and extract the files into your machine.  
+> Do not add  Spring Data Neo4j  into the dependencies, we will use Spring Data Neo4j Rx instead.
 
 Open the *pom.xml* file in the project root folder, add the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  dependency from  the Neo4j  team manually. 
 
@@ -30,8 +21,6 @@ Declare the property `spring-data-neo4j-rx.version` in properties.
 ```xml
 <spring-data-neo4j-rx.version>1.0.0-beta03</spring-data-neo4j-rx.version>
 ```
-
-Now  let's add some codes to experience the new  Reactive features in  Spring Data Neo4j Rx.
 
 Create a POJO class for presenting a node in Neo4j graph. 
 
@@ -115,9 +104,6 @@ class PostController {
 }
 ```
 
-The above codes are easy to understand, the main difference is here the methods return a Reactor's `Flux` or `Mono` type instead.  
-
-Similar with WebMVC stack , to handle exception, you can define a `@RestControllerAdvice` bean and use `ExceptionHandler` method to handle specifial exceptions.
 
 For example, in the `get` method, if the  Post is not found, throw an exception `PostNotFoundException` in the reactive flow by `Mono.error`.
 
@@ -146,7 +132,7 @@ class RestExceptionHandler {
 }
 ```
 
-Almost done.  Let's try to initialize some data for demo purpose.
+Almost done.  Let's try to initialize some sample data for demo purpose.
 
 Create a `CommandLineRunner` bean to insert some data.
 
@@ -193,10 +179,6 @@ class DataInitializer implements CommandLineRunner {
 }
 ```
 
-Benefit from the Spring Boot auto-configuration mechanism, a `ReactiveNeo4jClient` bean is ready for use.  You can use  it to interact with the Neo4j low level APIs, such as executing [Cypher](https://neo4j.com/developer/cypher-query-language/) queries.
-
-To experience the  new reactive features, you have to use Neo4j 4.0 which is still under development.
-
 Configure the Neo4j driver properties in *application.properties* file.
 
 ```pro
@@ -204,6 +186,9 @@ org.neo4j.driver.uri=bolt://localhost:7687
 org.neo4j.driver.authentication.username=neo4j
 org.neo4j.driver.authentication.password=test
 ```
+
+> **Note**: SDN Rx uses a different namespace `org.neo4j.driver`.
+
 Before running this application, it requires a running Neo4j server. The following code fragment is a docker-compose configuration which allow you run Neo4j server in docker containers.
 
 ```yaml
@@ -319,9 +304,168 @@ public class PostRepositoryTest {
 ```
 But you have to run a Neo4j server to serve this test, currently SDN Rx does not provide an embedded Neo4j for test scope.
 
-Get the complete codes from  my [Github](https://github.com/hantsy/spring-reactive-sample).
+Get the complete codes, [spring-reactive-sample/boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-rx).
 
 
+## ReactiveNeo4jOperations
 
+Beside `Repository` interface declaration, SDN Rx provides a `ReactiveNeo4jOperations` to access the data storage in a programmatic approach. 
 
+In Spring Boot projects, `ReactiveNeo4jOperations` bean is autoconfigured.
+
+```java
+@Component
+@RequiredArgsConstructor
+class PostRepository {
+    private final ReactiveNeo4jOperations template;
+
+    public Mono<Long> count() {
+        return this.template.count(Post.class);
+    }
+
+    public Flux<Post> findAll() {
+        return this.template.findAll(Post.class);
+    }
+
+    public Flux<Post> findByTitleContains(String title) {
+        var postNode = node("Post").named("p");
+        return this.template.findAll(
+                match(postNode)
+                        .where(postNode.property("title").contains(literalOf(title)))
+                        .returning(postNode)
+                        .build(),
+                Post.class
+        );
+    }
+
+    public Mono<Void> deleteById(Long id) {
+        return this.template.deleteById(id, Post.class);
+    }
+
+    public Mono<Post> save(Post post) {
+        return this.template.save(post);
+    }
+
+    public Mono<Post> findById(Long id) {
+        return this.template.findById(id, Post.class);
+    }
+
+    public Mono<Void> deleteAll() {
+        return this.template.deleteAll(Post.class);
+    }
+}
+```
+
+For the complete codes, check [spring-reactive-sample/boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j-rx).
+
+## ReactiveNeo4jClient
+
+Benefit from the Spring Boot auto-configuration mechanism, a `ReactiveNeo4jClient` bean is ready for use. You can use it to interact with the Neo4j low level APIs, such as executing [Cypher](https://neo4j.com/developer/cypher-query-language/) queries.
+
+The following is a new version of `PostRepository` implemented by `ReactiveNeo4jClient`.
+
+```java
+@Component
+@RequiredArgsConstructor
+class PostRepository {
+    private final ReactiveNeo4jClient client;
+
+    public Mono<Long> count() {
+        return client.query("MATCH (p:Post) RETURN count(p)")
+                .fetchAs(Long.class)
+                .mappedBy((ts, r) -> r.get(0).asLong())
+                .one();
+    }
+
+    public Flux<Post> findAll() {
+        return client
+                .query(
+                        "MATCH (p:Post) " +
+                                " RETURN p.id as id, p.title as title, p.content as content, p.createdAt as createdAt, p.updatedAt as updatedAt"
+                )
+                .fetchAs(Post.class).mappedBy((ts, r) ->
+                        Post.builder()
+                                .id(r.get("id").asString())
+                                .title(
+                                        r.get("title").asString())
+                                .content(
+                                        r.get("content").asString())
+                                .createdAt(r.get("createdAt").asLocalDateTime(null))
+                                .updatedAt(r.get("updatedAt").asLocalDateTime(null))
+                                .build()
+                )
+                .all();
+    }
+
+    public Mono<Post> findOne(String id) {
+        return client
+                .query(
+                        "MATCH (p:Post)" +
+                                " WHERE p.id = $id" +
+                                " RETURN p.id as id, p.title as title, p.content as content, p.createdAt as createdAt, p.updatedAt as updatedAt"
+                )
+                .bind(id).to("id")
+                .fetchAs(Post.class).mappedBy((ts, r) ->
+                        Post.builder()
+                                .id(r.get("id").asString())
+                                .title(
+                                        r.get("title").asString())
+                                .content(
+                                        r.get("content").asString())
+                                .createdAt(r.get("createdAt").asLocalDateTime(null))
+                                .updatedAt(r.get("updatedAt").asLocalDateTime(null))
+                                .build()
+                )
+                .one();
+    }
+
+    public Mono<Post> save(Post post) {
+        var query = "MERGE (p:Post {id: $id}) \n" +
+                " ON CREATE SET p.createdAt=localdatetime(), p.title=$title, p.content=$content\n" +
+                " ON MATCH SET p.updatedAt=localdatetime(), p.title=$title, p.content=$content\n" +
+                " RETURN p.id as id, p.title as title, p.content as content, p.createdAt as createdAt, p.updatedAt as updatedAt";
+
+        return client.query(query)
+                .bind(post).with(data ->
+                        Map.of(
+                                "id", (data.getId() != null ? data.getId() : UUID.randomUUID().toString()),
+                                "title", data.getTitle(),
+                                "content", data.getContent()
+                        )
+                )
+                .fetchAs(Post.class).mappedBy((ts, r) ->
+                        Post.builder()
+                                .id(r.get("id").asString())
+                                .title(
+                                        r.get("title").asString())
+                                .content(
+                                        r.get("content").asString())
+                                .createdAt(r.get("createdAt").asLocalDateTime(null))
+                                .updatedAt(r.get("updatedAt").asLocalDateTime(null))
+                                .build()
+                )
+                .one();
+    }
+
+    public Mono<Integer> deleteAll() {
+        return client.query("MATCH (m:Post) DETACH DELETE m")
+                .run()
+                .map(it -> it.counters().nodesDeleted());
+
+    }
+
+    public Mono<Integer> deleteById(String id) {
+        return client
+                .query(
+                        "MATCH (p:Post) WHERE p.id = $id" +
+                                " DETACH DELETE p"
+                )
+                .bind(id).to("id")
+                .run()
+                .map(it -> it.counters().nodesDeleted());
+    }
+}
+```
+
+For the complete codes, check [spring-reactive-sample/boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j-rx-cypher).
 
