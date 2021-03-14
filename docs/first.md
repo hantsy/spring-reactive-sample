@@ -262,7 +262,7 @@ According to the official documentation, in [Web on Reactive Stack](https://docs
 
 >Spring WebFlux is supported on Tomcat, Jetty, Servlet 3.1+ containers, as well as on non-Servlet runtimes such as Netty and Undertow. 
 
-![Spring Webflux](https://github.com/hantsy/spring-reactive-sample/blob/master/webflux.png)
+![Spring Webflux](./webflux.png)
 
 
 ### Apache Tomcat
