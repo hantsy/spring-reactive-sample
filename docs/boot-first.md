@@ -1,3 +1,7 @@
+---
+sort: 3
+---
+
 # Create a WebFlux application with Spring Boot
 
 The Spring Boot 2.x targets the latest Spring technology stack, including Spring 5, Spring Security 5, Spring Session 2, etc. 

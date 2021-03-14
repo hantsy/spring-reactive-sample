@@ -1,3 +1,7 @@
+---
+sort: 2
+---
+
 # Create a WebFlux application from Scratch
 
 An example exceeds thousands of words. Let's begin to write some codes and enjoy the reactive programming brought by Spring 5.

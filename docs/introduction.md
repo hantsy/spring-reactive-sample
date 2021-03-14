@@ -1,6 +1,6 @@
 ---
 title: An introduction to Spring WebFlux
-sort: 2
+sort: 1
 ---
 
 # An introduction to Spring WebFlux
