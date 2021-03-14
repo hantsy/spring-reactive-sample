@@ -1,3 +1,7 @@
+---
+sort: 2
+---
+
 # Reactive Data Operations
 
 Spring Data also added Reactive Streams support into the existing projects.
