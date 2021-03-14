@@ -1,12 +1,16 @@
-# Spring Data Neo4j RX  
+---
+sort: 1
+---
 
->The post is focused on the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/), which was maintained by Neo4j team. Now the effort is merged into the official Spring Data Neo4j project, read this [doc](./data-neo4j.md) to update yourself.
+# Spring Data Neo4j Rx  
+
+>The post focused on the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/), which was maintained by Neo4j team. Currently this project is discontinued, the effort is merged into the official Spring Data Neo4j project, read this [doc](./data-neo4j.md) to update yourself.
 
 Generate a Spring Boot WebFlux project using [Spring Initializr](https://start.spring.io).
 
-> Do not add  Spring Data Neo4j  into the dependencies, we will use Spring Data Neo4j Rx instead.
+> Do not add Spring Data Neo4j into the dependencies, we will use Spring Data Neo4j Rx instead.
 
-Open the *pom.xml* file in the project root folder, add the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/)  dependency from  the Neo4j  team manually. 
+Open the *pom.xml* file in the project root folder, add the [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) dependency manually. 
 
 ```xml
 <dependency>
@@ -16,7 +20,7 @@ Open the *pom.xml* file in the project root folder, add the [Spring Data Neo4j R
 </dependency>
 ```
 
-Declare the property `spring-data-neo4j-rx.version` in properties. 
+Declare the property `spring-data-neo4j-rx.version` in *pom.xml*. 
 
 ```xml
 <spring-data-neo4j-rx.version>1.0.0-beta03</spring-data-neo4j-rx.version>
@@ -44,20 +48,20 @@ class Post {
 }
 ```
 
-In the above codes,  `@Node`, `@Id`, `@GeneratedValue` are located in the package `org.neo4j.springframework.data.core.schema`  which is part of the new Spring Data Neo4j Rx project.
+In the above codes,  `@Node`, `@Id`, `@GeneratedValue` are located in the package `org.neo4j.springframework.data.core.schema` which is part of the new Spring Data Neo4j Rx project.
 
-Spring Data Neo4j Rx also supports the annotations from Spring Data Commons project. For example, you can use `Id` and `Persistent` from Spring Data Commons instead of the `Id` and  `Node` annotations from the new Spring Data  Neo4j RX.
+Spring Data Neo4j Rx also supports the annotations from Spring Data Commons project. For example, you can use `Id` and `Persistent` from Spring Data Commons instead of the `Id` and  `Node` annotations from the Spring Data Neo4j Rx.
 
 Spring Data Neo4j Rx supports data auditing as well, so you can use `@CreatedDate`, `@CreatedBy`, `@LastModifiedDate`, `@LastModifiedBy` as usual, just add `@EnableNeo4jAuditing` on the application class to enable it. Unfortunately, there is no `AuditorAware` reactive variant available  in SDN RX, thus it can not fill `CreatedBy` and `lastModifiedBy` automatically.
 
-Create a `Repository` class for `Post`.
+Create a `Repository` for the `Post` entity.
 
 ```java
 interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 }
 ```
 
-Create a `Controller` to perform CRUD operations.
+Create a `Controller` to expose CRUD RESTful APIs.
 
 ```java
 @RestController()
@@ -104,6 +108,7 @@ class PostController {
 }
 ```
 
+The usage of controllers is similar to Spring WebMVC, and you can also use `RestControllerAdvice` to handle the exceptions.
 
 For example, in the `get` method, if the  Post is not found, throw an exception `PostNotFoundException` in the reactive flow by `Mono.error`.
 
@@ -132,7 +137,7 @@ class RestExceptionHandler {
 }
 ```
 
-Almost done.  Let's try to initialize some sample data for demo purpose.
+Almost done. Let's try to initialize some sample data for demo purpose.
 
 Create a `CommandLineRunner` bean to insert some data.
 
@@ -189,7 +194,9 @@ org.neo4j.driver.authentication.password=test
 
 > **Note**: SDN Rx uses a different namespace `org.neo4j.driver`.
 
-Before running this application, it requires a running Neo4j server. The following code fragment is a docker-compose configuration which allow you run Neo4j server in docker containers.
+Before running this application, it requires a running Neo4j server. 
+
+The following code fragment is a docker-compose configuration which allow you run Neo4j server in docker containers.
 
 ```yaml
   neo4j:
@@ -208,7 +215,7 @@ Run the following command to start a local Neo4j server in Docker container.
 docker-compose up neo4j
 ```
 
-Start up our  application, when it is ready,  use `curl` to  test the APIs.
+Now start up our application, when it is ready,  use `curl` to test the APIs.
 
 ```bash
 # Get all posts
@@ -235,6 +242,7 @@ curl -v http://localhost:8080/posts/10
 <
 * Connection #0 to host localhost left intact
 ```
+
 Like Spring Data Mongo, SDN Rx also provides a `@DataNeo4jTest` annotation to provide  test slice capability.
 
 Add the following dependency into the project pom.xml.

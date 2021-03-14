@@ -1,6 +1,12 @@
-# Accessing RDBMS with Spring Data R2dbc 
+---
+sort: 3
+---
 
-> Tihs post focused on Spring Boot 2.3 and Spring Data R2dbc 1.1. For the newest Spring Boot 2.4 and Spring Data R2dbc 1.2, please go to [Spring R2dbc Sample](https://github.com/hantsy/spring-r2dbc-sample) and update yourself to the latest R2dbc .
+# Spring Data R2dbc 
+
+> This post focused on Spring Boot 2.3 and Spring Data R2dbc 1.1. 
+
+For the newest Spring Boot 2.4 and Spring Data R2dbc 1.2, please go to [Spring R2dbc Sample](https://github.com/hantsy/spring-r2dbc-sample) and updateyourself to the latest R2dbc.
 
 
 Generate a Spring Boot project using [Spring Initializr](https://start.spring.io), and select the following options.
