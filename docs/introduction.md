@@ -1,4 +1,6 @@
-# An introduciton to Spring WebFlux
+---
+title: An introduciton to Spring WebFlux
+---
 
  **Reactive** or **Reactive Streams** is a hot topic in these years, you can see it in blog entries, presentations, or some online course.
 
