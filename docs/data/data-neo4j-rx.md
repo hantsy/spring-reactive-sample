@@ -1,5 +1,5 @@
 ---
-sort: 1
+sort: 9
 ---
 
 # Spring Data Neo4j Rx  

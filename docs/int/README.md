@@ -1,8 +1,9 @@
 ---
-sort: 2
+sort: 6
 ---
 
 
-# Rective Data Operations
+# Spring Integration
 
 {% include list.liquid all=true %}
+

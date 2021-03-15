@@ -8,7 +8,7 @@ An example exceeds thousands of words. Let's begin to write some codes and enjoy
 
 As an example, I will reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application. 
 
-> In this post, we  write the codes in the hard way and do not use Spring Boot autoconfiguration. It will help you to understand the essential configuration in a WebFlux application.
+> In this post, we prepare the codes manually and do not use Spring Boot autoconfiguration. I think it will help you to understand the essential configuration in a Spring WebFlux application.
 
 In the following steps we will start with creating RESTful APIs for `Post`. 
 

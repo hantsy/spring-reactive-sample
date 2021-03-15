@@ -26,3 +26,7 @@ out
 /Kotlin_Koans
 .idea
 *.iml
+
+Gemfile
+Gemfile.lock
+_site
