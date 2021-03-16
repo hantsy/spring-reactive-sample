@@ -34,7 +34,7 @@ interface PostRepository extends ReactiveSortingRepository{}
 interface PostRepository extends ReactiveMongoRepository{}
 ```
 
-## RxJava 2 and RxJava 3 support 
+## RxJava 2 and RxJava 3 Support 
 
 The reactive  `Repository` supports RxJava 2 and 3 variants.
 

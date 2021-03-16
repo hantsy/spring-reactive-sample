@@ -532,8 +532,7 @@ It it similar to the ReactiveNeo4jClient, but more simple.  Have a look at the `
 
 For the complete codes, check [spring-reactive-sample/boot-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j).
 
-
-## Data Auditing
+## Data Auditing Support
 
 Change the original `Post` entity, add the following fields to capture the timestamp and auditor when saving and updating the entity.
 
@@ -615,7 +614,7 @@ You can also verify it via `curl` .
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
 
-## Testing Spring Data Neo4j Components
+## Testing
 
 Since version 1.4,  Spring Boot provided a new test harness so-called **test slice** to test features easier than previous version,  which included a series of  `AutoConfigureXXX` to allow developers to test desired features in an isolated environment. 
 

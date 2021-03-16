@@ -4,9 +4,13 @@ sort: 3
 
 # Spring Data R2dbc 
 
-> This post focused on Spring Boot 2.3 and Spring Data R2dbc 1.1. 
+> This post focused on Spring Boot 2.3  or previous version which shipped with Spring Data R2dbc 1.1.  
 
-For the newest Spring Boot 2.4 and Spring Data R2dbc 1.2, please go to [Spring R2dbc Sample](https://github.com/hantsy/spring-r2dbc-sample) and updateyourself to the latest R2dbc.
+**Spring Data R2dbc 1.2 brought plenty of changes and broken APIs. For the newest Spring Boot 2.4 and Spring Data R2dbc 1.2, please go to [Spring R2dbc Sample](https://github.com/hantsy/spring-r2dbc-sample) and update yourself to the latest R2dbc**.
+
+
+
+## Getting Started
 
 
 Generate a Spring Boot project using [Spring Initializr](https://start.spring.io), and select the following options.
@@ -304,6 +308,10 @@ Awesome! it works well.
 
 OK, let's move forward.
 
+
+
+## Testing
+
 Spring Data R2dbc also provide a  `@DataR2dbcTest` for test slice purpose which is use for testing your R2dbc related facilities without load all configurations.
 
 ```java
@@ -411,11 +419,11 @@ public class PostRepository {
 
 The complete codes can be found in my [Github](https://github.com/hantsy/spring-reactive-sample).
 
-* [docker-compose.yaml](https://github.com/hantsy/spring-reactive-sample/blob/master/docker-compose.yml) serves MySql, MS SQL, PostgreSQL servers.
+* [docker-compose.yaml](https://github.com/hantsy/spring-reactive-sample/blob/master/docker-compose.yml) serves MySQL, MS SQL, PostgreSQL servers.
 * [data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/data-r2dbc) A none Spring Boot sample using H2
 * [data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/data-r2dbc-postgresql) A none Spring Boot sample using PostgreSQL
 * [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-r2dbc) A Spring Boot based sample using H2 and `DatabaseClient`.
 * [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc) A Spring Boot based sample using H2 and `Repository` interface.
-* [boot-data-r2dbc-mysql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-mysql) A Spring Boot based sample using mysql and `Repository` interface.
+* [boot-data-r2dbc-mysql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-mysql) A Spring Boot based sample using MySQL and `Repository` interface.
 * [boot-data-r2dbc-mssql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-mssql) A Spring Boot based sample using MSSQL and `Repository` interface.
-* [boot-data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-postgresql) A Spring Boot based sample using postgresql and `Repository` interface.
+* [boot-data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-postgresql) A Spring Boot based sample using  PostgresSQL and `Repository` interface.

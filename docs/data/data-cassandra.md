@@ -4,9 +4,14 @@ sort: 6
 
 # Spring Data Cassandra
 
-Spring Data Cassandra also embraces reactive support.
+Spring Data Cassandra adds basic Reactive support.
 
-Firstly add the following dependencies into your project.
+
+## Getting Started
+
+Follow the the [Getting Started](./start) part to create a freestyle(none Spring Boot) or Spring Boot based project skeleton.
+
+If you are not using Spring Boot, firstly add the following dependencies into your project.
 
 ```xml
 <dependency>
@@ -15,7 +20,7 @@ Firstly add the following dependencies into your project.
 </dependency>
 ```
 
-Create a `@Configuration` class to configure Cassandra and enable reactive support.
+Create a `@Configuration` class to configure Cassandra and add `@EnableReactiveCassandraRepositories` to enable reactive `Repository` support.
 
 ```java
 @Configuration
@@ -62,11 +67,11 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 }
 ```
 
-`getKeyspaceCreations` configures how to create the keyspace when Cassandra is started, here we create the keyspace if it does not existed.
+The `getKeyspaceCreations` configures how to create the keyspace when Cassandra is started, here we create the keyspace if it does not existed.
 
-`getSchemaAction` specifies the action of schema generation.
+The `getSchemaAction` specifies the action of schema generation.
 
-Next add `Table` annotation to the `Post` entity.
+Create a `Post` class to present the table in Cassandra, and add add a `@Table` annotation on this class.
 
 ```java
 @Data
@@ -88,7 +93,7 @@ class Post {
 
 Add `@PrimaryKey` on `id` field, it indicates `id` is the primary key of `posts` table. 
 
-Unlike Mongo, in Cassandra, you have to fill the `id` field manually before it is inserted.
+> Unlike Mongo and other NoSQL, in Cassandra, you have to fill the `id` field manually before it is inserted.
 
 Next change the former `PostRepository` to the following:
 
@@ -96,11 +101,9 @@ Next change the former `PostRepository` to the following:
 interface PostRepository extends ReactiveCassandraRepository<Post, String>{}
 ```
 
-Cassandra has a reactive variant for `Repository`, as the above `CassandraRepository`.
+For the complete codes, check [spring-reactive-sample/data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/data-cassandra).
 
-## Spring Boot
-
-If you are using Spring Boot, just add `spring-boot-starter-data-cassandra-reactive` into your project dependencies.
+Alternatively, for Spring Boot applications, just need to add `spring-boot-starter-data-cassandra-reactive` into your project dependencies.
 
 ```xml
 <dependency>
@@ -109,11 +112,11 @@ If you are using Spring Boot, just add `spring-boot-starter-data-cassandra-react
 </dependency>
 ```
 
-No need extra configuration, Spring Boot will configure Cassandra for you and registers related beans for you.
+No need extra configuration, Spring Boot will autoconfigure Cassandra and registers all essential beans for you.
 
-## Data initialization
+For the complete codes, check [spring-reactive-sample/boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-cassandra).
 
-As former Mongo example, it is easy to erase the existing data and import some initial data when the application is started up.
+Add some sample data via a `CommandLineRunner` bean or a `ApplicationRunner` bean.
 
 ```java
 public void init() {

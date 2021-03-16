@@ -7,7 +7,11 @@ sort: 5
 
 Spring Data Redis provides a reactive variant of `RedisConnectionFactory` aka `ReactiveRedisConnectionFactory` which return a `ReactiveConnection`.
 
-Add the following into your project dependencies.
+## Getting Started
+
+Follow the the [Getting Started](./start) part to create a freestyle or Spring Boot based project skeleton.
+
+For none Spring Boot project, add the following dependencies to the *pom.xml*.
 
 ```xml
 <dependency>
@@ -24,47 +28,46 @@ Add the following into your project dependencies.
 </dependency>    
 ```
 
-**NOTE**: You have to use `lettuce` as redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
+>**NOTE**: You have to use `lettuce` as Redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
 
 Create a `@Configuration` class to configure Mongo and enable Reactive support for Redis.
 
 ```java
-@EnableRedisRepositories
+@Configuration
+@Slf4j
 public class RedisConfig {
 
-    @Autowired
-    RedisConnectionFactory factory;
 
     @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory();
-    }
-    
-    @Bean
-    public RedisTemplate<Object, Object> redisTemplate(RedisConnectionFactory connectionFactory){
-        RedisTemplate<Object, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(connectionFactory);
-        return redisTemplate;
-    }
-    
-    @Bean
-    public StringRedisTemplate stringRedisTemplate(RedisConnectionFactory connectionFactory){
-        return new StringRedisTemplate(connectionFactory);
+    public ReactiveRedisConnectionFactory connectionFactory() {
+        return new LettuceConnectionFactory("localhost", 6379);
     }
 
-    @PreDestroy
-    public void flushTestDb() {
-        factory.getConnection().flushDb();
-    }
+//    @Bean
+//    public ReactiveRedisConnectionFactory lettuceConnectionFactory() {
+//
+//        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
+//            .useSsl().and()
+//            .commandTimeout(Duration.ofSeconds(2))
+//            .shutdownTimeout(Duration.ZERO)
+//            .build();
+//
+//        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", 6379), clientConfig);
+//    }
 
-}
+    @Bean
+    public ReactiveRedisTemplate<String, Post> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
+        return new ReactiveRedisTemplate<String, Post>(
+            factory,
+            RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer(Post.class))
+        );
+    }
+}	
 ```
 
-`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are also registered as beans. 
+`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans. 
 
-
-
-In your beans, you can inject a `ReactiveRedisConnectionFactory` and get a reactive connection.
+In your components, you can inject a `ReactiveRedisConnectionFactory` bean to get a `ReactiveConnection1`.
 
 ```java
 @Inject ReactiveRedisConnectionFactory factory;
@@ -72,7 +75,7 @@ In your beans, you can inject a `ReactiveRedisConnectionFactory` and get a react
 ReactiveRedisConnection conn = factory.getReactiveConnection();
 ```
 
-`ReactiveConnection` provides some reactive methods for redis operations.
+`ReactiveConnection` provides some reactive methods for Redis operations.
 
 For example, create a favorites list for posts.
 
@@ -122,8 +125,8 @@ class FavoriteController {
 }
 ```
 
-## Spring Boot
-
+For the complete codes, check [spring-reactive-sample/data-redis](https://github.com/hantsy/spring-reactive-sample/blob/master/data-redis).
+ 
 For Spring Boot applications, the configuration can be simplified. Just add `spring-boot-starter-data-redis-reactive` into the project dependencies.
 
 ```xml
@@ -133,11 +136,16 @@ For Spring Boot applications, the configuration can be simplified. Just add `spr
 </dependency>
 ```
 
-Spring boot provides auto-configuration for redis, and registers `ReactiveRedisConnectionFactory` for you automatically.
+Spring boot provides auto-configuration for Redis, and registers `ReactiveRedisConnectionFactory` for you automatically.
 
-## Data Initialization
+For the complete codes, check [spring-reactive-sample/boot-data-redis](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-redis).
 
-Declare `Post` as a redis hash data, add `@RedisHash("posts")` to `Post` POJO.
+
+## ReactiveRedisTemplate
+
+Beside the `ReactiveRedisConnectionFactory`, Spring Data Redis also provides a variant for `RedisTemplate`.
+
+Let's try to add some sample via a generic Repository interface. Create a `Post` class to present a Redis hash data, add `@RedisHash("posts")` to `Post` class.
 
 ```java
 @Data
@@ -156,26 +164,76 @@ class Post {
 }
 ```
 
-Let's have a look at the `PostRepository`.
+Create a `PostRepository` and use `ReactiveRedisOperations` to access the Redis database.
 
 ```java
-interface PostRepository extends KeyValueRepository<Post, String> {
+@Repository
+@RequiredArgsConstructor
+class PostRepository {
+    private final ReactiveRedisOperations<String, Post> reactiveRedisOperations;
 
-    @Override
-    public List<Post> findAll();
+    public Flux<Post> findAll(){
+        return this.reactiveRedisOperations.opsForList().range("posts", 0, -1);
+    }
+
+    public Mono<Post> findById(String id) {
+        return this.findAll().filter(p -> p.getId().equals(id)).last();
+    }
+
+
+    public Mono<Long> save(Post post){
+        return this.reactiveRedisOperations.opsForList().rightPush("posts", post);
+    }
+
+    public Mono<Boolean> deleteAll() {
+        return this.reactiveRedisOperations.opsForList().delete("posts");
+    }
 }
 ```
+## Redis Messaging
 
-`KeyValueRepository` is from `spring-data-keyvalue`, which is a generic Map based Repository implementation.
+Redis is well known as a key value database, it is also famous for a light-weight messaging broker. 
+
+Declare a `ReactiveRedisMessageListenerContainer` bean to receive messaging from Redis.
 
 ```java
-private void initPosts() {
-	this.posts.deleteAll();
-	Stream.of("Post one", "Post two").forEach(
-		title -> this.posts.save(Post.builder().id(UUID.randomUUID().toString()).title(title).content("content of " + title).build())
-	);
+@Bean
+public ReactiveRedisMessageListenerContainer redisMessageListenerContainer(PostRepository posts, ReactiveRedisConnectionFactory connectionFactory) {
+	ReactiveRedisMessageListenerContainer container = new ReactiveRedisMessageListenerContainer(connectionFactory);
+	ObjectMapper objectMapper = new ObjectMapper();
+	container.receive(ChannelTopic.of("posts"))
+		.map(p->p.getMessage())
+		.map(m -> {
+			try {
+				Post post= objectMapper.readValue(m, Post.class);
+				post.setId(UUID.randomUUID().toString());
+				return post;
+			} catch (IOException e) {
+				return null;
+			}
+		})
+		.switchIfEmpty(Mono.error(new IllegalArgumentException()))
+		.flatMap(p-> posts.save(p))
+		.subscribe(c-> log.info(" count:" + c), null , () -> log.info("saving post."));
+	return container;
 }
+```	
+
+Send a message using `ReactiveRedisOperations` bean.
+
+```java
+@RestController()
+@RequestMapping(value = "/posts")
+@RequiredArgsConstructor
+class PostController {
+
+    //...
+    @PostMapping("")
+    public Mono<Long> save(@RequestBody Post post) {
+        return this.reactiveRedisOperations.convertAndSend("posts", post );
+    }
+	
+}	
 ```
 
-**NOTE**: Unlike Spring Data Mongo, Spring Data Redis does not provides a variant for `RedisTemplate` and `Repository`.
-
+For the complete codes, check [spring-reactive-sample/data-redis-message](https://github.com/hantsy/spring-reactive-sample/blob/master/data-redis-message).
