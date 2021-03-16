@@ -16,7 +16,7 @@ The following is extracted from the official Reactive Streams website:
 
 Currently, the JVM specification is completed, it includes a Java API(four simple interfaces), a textual Specification, a TCK and implementation examples. 
 
-There are 4 core comonents provided in ReactiveStreams JVM specification.
+There are 4 core components provided in ReactiveStreams JVM specification.
 
 *  [Publisher](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html)<T> - A `Publisher` is a provider of a potentially unbounded number of sequenced elements, publishing them according to the demand received from its `Subscriber`(s). 
 *    [Subscriber](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html)<T> - Will receive call to `Subscriber.onSubscribe(Subscription)` once after passing an instance of `Subscriber` to `Publisher.subscribe(Subscriber)`.
@@ -33,8 +33,8 @@ The [Reactor project](https://projectreactor.io/) team works close to the Spring
 
 In Reactor, there are two reactive types implements `Publisher` interface.
 
-* Flux -  represents 0..N items in the sequence.
-* Mono - represents 0 or 1 item in the sequence.
+* [`Flux`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html) -  A  [`Publisher`](https://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html?is-external=true) with rx operators that emits 0 to N elements, and then completes (successfully or with an error). 
+* [`Mono`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Mono.html) - A  [`Publisher`](https://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html?is-external=true) with basic rx operators that emits at most one item *via* the `onNext` signal then terminates with an `onComplete` signal (successful Mono, with or without value), or only emits a single `onError` signal (failed Mono).  
 
 ## RxJava 2 and RxJava 3
 
@@ -42,17 +42,17 @@ RxJava 2 and 3 APIs are similar, the difference is RxJava 2 targets Java 6 and R
 
 In [RxJava](https://github.com/ReactiveX/RxJava), there are some terminologies.
 
-- Observable - emits 1 or more items.
-- Flowable - similar to `Obserable`, and provides backpressure capacity.
-- Single - emits  exact 1 item .
-- Maybe - emits  0 or 1 item.
-- Completable - execute some tasks instead of emitting items.
+- [`Observable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Observable.html) - The `Observable` class is the non-backpressured, optionally multi-valued base reactive class that offers factory methods, intermediate operators and the ability to consume synchronous and/or asynchronous reactive dataflows. 
+- [`Flowable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Flowable.html) - The `Flowable` class that implements the [Reactive Streams](https://github.com/reactive-streams/reactive-streams-jvm) [`Publisher`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html?is-external=true) Pattern and offers factory methods, intermediate operators and the ability to consume reactive dataflows. `Flowable`s support backpressure and require `Subscriber`s to signal demand via [`Subscription.request(long)`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html?is-external=true#request-long-).
+- [`Single`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Single.html) - The `Single` class implements the Reactive Pattern for a single value response.  `Single` behaves similarly to [`Observable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Observable.html) except that it can only emit either a single successful value or an error (there is no `onComplete` notification as there is for an `Observable`). 
+- [`Maybe`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Maybe.html) - The `Maybe` class represents a deferred computation and emission of a single value, no value at all or an exception. 
+- [`Completable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Completable.html) - The `Completable` class represents a deferred computation without any value but only indication for completion or exception.  `Completable` behaves similarly to [`Observable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Observable.html) except that it can only emit either a completion or error signal (there is no `onNext` or `onSuccess` as with the other reactive types). 
 
 ## Flow API in Java 9+
 
-Since Java 9,  Java platform includes a [Flow API](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html) which repackage all interfaces provided  in [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams)  and an implementation class - [SubmissionPublisher](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/SubmissionPublisher.html) .
+Since Java 9,  Java platform adds an [java.util.concurrent.Flow](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html)  interface which repackage all interfaces in [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams)  and a `Flow.Publisher` implementation class  - [SubmissionPublisher](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/SubmissionPublisher.html) .
 
-Java 11 adds a new reactive Http Client APIs which is based on the Flow APIs and free you from other 3rd party HttpClient libraries, such as Apache HttpClients, OkHttp, etc.
+Java 11 adds a new reactive [Http Client API](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html) which is based on the Flow APIs. It frees you from using other 3rd party HttpClient libraries, such as Apache HttpClients, OkHttp, etc. when interacts with remote HTTP APIs.
 
 ## Spring WebFlux
 

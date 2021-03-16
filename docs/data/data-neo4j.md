@@ -4,9 +4,11 @@ sort: 2
 
 # Spring Data Neo4j
 
-> The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0.
+> The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0. If you are using SDN Rx  it is better to upgrade to the official Spring Data Neo4j.
 
-In this post we will update the reactive support in the final Spring Data Neo4j 6.0 GA and the upcoming Spring Boot 2.4 release.
+> This post targets Spring Data Neo4j 6.0 GA and Spring Boot 2.4.x release.
+
+## Getting Started
 
 Firstly, generate a Spring  WebFlux project skeleton using [Spring initializr](https://start.spring.io). 
 
@@ -229,13 +231,9 @@ After it run successfully, try to use `curl` command to verify the exposed APIs.
 [{"id":0,"title":"Post two","content":"The content of Post two","createdDate":"2020-11-04T10:35:14.1619567","updatedDate":"2020-11-04T10:35:14.1619567","createdBy":"hantsy","updatedBy":"hantsy"},{"id":1,"title":"Post one","content":"The content of Post one","createdDate":"2020-11-04T10:35:14.1481498","updatedDate":"2020-11-04T10:35:14.1481498","createdBy":"hantsy","updatedBy":"hantsy"}]
 ```
 
-Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
+For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
-
-
-In [the former post](./data-neo4j.md), we've created a simple project and used the declaration approach to create a `Repository` to access the Neo4j server. Similar to other Spring Data modules, Spring Data Neo4j provides a `ReactiveNeo4jOperations` for reactive applications to interact with Neo4j servers by a programmatic approach, and additionally, Spring Data Neo4j provides a low-level API abstraction to execute the [Cypher Query Language](https://neo4j.com/developer/cypher/) through the `ReactiveNeo4jClient` bean.
-
-## Conventional derived query methods
+## Customizing Queries
 
 Like other Spring Data modules, Spring Data Neo4j also supports derived query methods.
 
@@ -262,9 +260,7 @@ void testFindByTitle() {
 
 Run the test, it should work as expected.
 
-## Customizing Query by @Query annotation
-
-Like the @Query in Spring Data JPA,  Spring Data Neo4j  provides its own `@Query` annotation to attach the result of a custom Cypher Query to the method. 
+Alternatively, you can use a `@Query` annotation to execute Cypher Query Language.
 
 ```java
 import org.springframework.data.neo4j.repository.query.Query;
@@ -466,7 +462,8 @@ public class PostRepository {
 
 ```
 
-> Note: Please navigate to the **data-neo4j** and **boot-neo4j-cypher** repositories to check the above example codes.
+For the complete codes, check [spring-reactive-sample/boot-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j-cypher).
+
 
 ## ReactiveNeo4jOperations
 
@@ -533,13 +530,10 @@ public class PostRepository  {
 
 It it similar to the ReactiveNeo4jClient, but more simple.  Have a look at the `findAll`, the literal queries are replaced by Java Query Criteria APIs.
 
-> Note: Please navigate to the **data-neo4j** and **boot-neo4j** repositories to check the above example codes.
+For the complete codes, check [spring-reactive-sample/boot-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j).
 
-Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
 
-We have [introduced the Data Auditing feature](https://medium.com/swlh/data-auditing-with-spring-data-r2dbc-5d428fc94688) in the latest Spring Data R2dbc 1.2. Similarly Spring Data Neo4j added the reactive data auditing support as what is done in Spring Data R2dbc.
-
-Let's reuse the former example we have done in [the last post](./data-neo4j.md).
+## Data Auditing
 
 Change the original `Post` entity, add the following fields to capture the timestamp and auditor when saving and updating the entity.
 
@@ -614,15 +608,14 @@ Run the application, you will see the following logging info printed by the `Dat
 You can also verify it via `curl` .
 
 ```bash
-# curl http://localhost:8080/posts
+> curl http://localhost:8080/posts
 [{"id":2,"title":"Post one","content":"The content of Post one","createdDate":"2020-11-08T10:22:24.5543561","updatedDate":"2020-11-08T10:22:24.5543561","createdBy":"hantsy","updatedBy":"hantsy"},{"id":3,"title":"Post two","content":"The content of Post two","createdDate":"2020-11-08T10:22:24.5623567","updatedDate":"2020-11-08T10:22:24.5623567","createdBy":"hantsy","updatedBy":"hantsy"}]
 ```
 
-Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
+For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
 
-
-# Testing Spring Data Neo4j Components
+## Testing Spring Data Neo4j Components
 
 Since version 1.4,  Spring Boot provided a new test harness so-called **test slice** to test features easier than previous version,  which included a series of  `AutoConfigureXXX` to allow developers to test desired features in an isolated environment. 
 
@@ -813,16 +806,6 @@ In the above codes,
 
 > In the original [SDN Rx]((https://github.com/neo4j/sdn-rx/)  ), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
 
-Run the test, it will:
-
-* Preparing Spring test context.
-* Check if there is a Docker image existed, if not download it firstly.
-* Startup a Docker container for the test.
-* Bind the Docker instance properties to Spring environmental variables. 
-* Inject Spring resources. 
-* Executing test, if there are some hooks, executing hooks before and after the test execution.
-* Shutdown the Docker container and clean up Spring test context. 
-
 Alternatively, you can create a `ApplicationContextInitializer` to start a Neo4j Docker container manually.
 
 ```java
@@ -857,7 +840,7 @@ public class PostRepositoryTest {
 
 In the above, we use a `ContextConfiguration` to apply the context initializers. In the real world application, you can extract `TestContainerInitializer` to a standalone class, and thus it is easy to reuse in any tests that requires a running Neo4j server instance.
 
-Grab the [source code](http://github.com/hantsy/spring-reactive-sample) from my github.
+For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
 
 
