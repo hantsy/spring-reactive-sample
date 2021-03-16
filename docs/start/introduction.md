@@ -14,20 +14,22 @@ The following is extracted from the official Reactive Streams website:
 
 >Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure. This encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
 
-Currently, the JVM specification is completed, it includes a Java API(four simple interface), a textual Specification, a TCK and implementation examples. 
+Currently, the JVM specification is completed, it includes a Java API(four simple interfaces), a textual Specification, a TCK and implementation examples. 
 
-*  [Publisher](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html)<T> - A [`Publisher`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html) is a provider of a potentially unbounded number of sequenced elements, publishing them according to the demand received from its [`Subscriber`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html)(s). 
-*    [Subscriber](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html)<T> - Will receive call to [`Subscriber.onSubscribe(Subscription)`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html#onSubscribe(org.reactivestreams.Subscription)) once after passing an instance of [`Subscriber`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html) to [`Publisher.subscribe(Subscriber)`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html#subscribe(org.reactivestreams.Subscriber)).
-*     [Subscription](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html) -  A [`Subscription`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html) represents a one-to-one lifecycle of a [`Subscriber`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html) subscribing to a [`Publisher`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html). 
-*      [Processor](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Processor.html)<T,R> -  A Processor represents a processing stage—which is both a [`Subscriber`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html) and a [`Publisher`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html) and obeys the contracts of both.
+There are 4 core comonents provided in ReactiveStreams JVM specification.
 
-Check [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams)  project and [javadoc](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/package-summary.html) for more details.
+*  [Publisher](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html)<T> - A `Publisher` is a provider of a potentially unbounded number of sequenced elements, publishing them according to the demand received from its `Subscriber`(s). 
+*    [Subscriber](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html)<T> - Will receive call to `Subscriber.onSubscribe(Subscription)` once after passing an instance of `Subscriber` to `Publisher.subscribe(Subscriber)`.
+*     [Subscription](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html) -  A `Subscription` represents a one-to-one lifecycle of a `Subscriber` subscribing to a `Publisher`. 
+*      [Processor](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Processor.html)<T,R> -  A Processor represents a processing stage—which is both a `Subscriber` and a `Publisher` and obeys the contracts of both.
+
+More info, please check  [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams)  project  and [API docs](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/package-summary.html).
 
 Reactor and RxJava 2/3 have implemented this specification, and Java 9 has already adopted it in the new Flow API. 
 
 ## Reactor
 
-The [Reactor project](https://projectreactor.io/) team works close to the Spring Team, and reactor is the default ReactiveStreams implementations support in Spring WebFlux.
+The [Reactor project](https://projectreactor.io/) team works close to the Spring Team, and Reactor is the default ReactiveStreams implementation supported in Spring WebFlux.
 
 In Reactor, there are two reactive types implements `Publisher` interface.
 
