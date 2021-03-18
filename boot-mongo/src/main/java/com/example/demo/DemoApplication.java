@@ -5,7 +5,6 @@ import static org.springframework.data.mongodb.core.query.Query.query;
 
 import com.mongodb.client.result.DeleteResult;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +19,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.stereotype.Component;
@@ -168,7 +166,8 @@ class PostRepository {
     }
 
     public Mono<Long> deleteById(String id) {
-        return template.remove(query(where("id").is(id)),Post.class).map(DeleteResult::getDeletedCount);
+        //return template.remove(Post.class).matching(query(where("id").is(id))).all().map(DeleteResult::getDeletedCount)
+        return template.remove(query(where("id").is(id)), Post.class).map(DeleteResult::getDeletedCount);
     }
 
     public Mono<Long> deleteAll() {

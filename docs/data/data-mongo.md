@@ -12,7 +12,7 @@ Spring Data Mongo provides reactive variants of `MongoTemplate` and `MongoReposi
 
 Follow the the [Getting Started](./start) part to create a freestyle or Spring Boot based project skeleton.
 
-For a  Spring project, firstly add the following into project dependencies.
+For a freestyle Spring project, add the following into project dependencies.
 
 ```xml
 <dependency>
@@ -25,7 +25,7 @@ For a  Spring project, firstly add the following into project dependencies.
 </dependency>
 ```
 
-Create a `@Configuration` class to configure Mongo and enable Reactive support.
+Create a `@Configuration` class to enable Reactive support.
 
 ```java
 @EnableReactiveMongoRepositories(basePackageClasses = {MongoConfig.class})
@@ -210,7 +210,141 @@ curl -v http://localhost:8080/posts
 [{"id":"599149d53c44062e08c58b86","title":"Post one","content":"content of Post one","createdDate":[2017,8,14,14,57,25,71000000]},{"id":"599149d53c44062e08c58b87","title":"Post two","content":"content of Post two","createdDate":[2017,8,14,14,57,25,173000000]}]* Connection #0 to host localhost left intact
 ```
 
-As you see, the data is initialized and *createdDate* is inserted automatically.
+
+
+## Customizing Queries
+
+As other Spring Data projects,  Spring Data Mongo Reactive also query derivation in the `Repository`.
+
+For example:
+
+```java
+interface PostRepository extends ReactiveMongoRepository<Post, String> {
+    
+    Flux findByTitleContains(String title);
+}
+```
+
+Or add q custom `@Query` to execute the raw query statement on Mongo directly. The following is an example writing the query string in text block(since Java 13).
+
+```java
+@Query(
+    value = """
+    {
+        "title" : {
+            "$regularExpression" : { "pattern" : ?0, "options" : ""}
+        }
+    }
+    """,
+    sort = """
+    { 
+        "title" : 1 , 
+        "createdDate" : -1
+    } 
+    """
+)
+Flux<Post> findByKeyword(String q);
+```
+
+
+
+## ReactiveMongoTemplate
+
+The `ReactiveMongoTemplate` provides a programmatic approach to execute queries in a fluent API.
+
+The following is an example of the  `Repository` rewritten with ``ReactiveMongoTemplate` .
+
+```java
+@Component
+@RequiredArgsConstructor
+class PostRepository {
+
+    private final ReactiveMongoTemplate template;
+
+    Flux<Post> findByKeyword(String q) {
+        var reg = ".*" + q + ".*";
+        return template
+                .find(query(where("title").regex(reg).orOperator(where("content").regex(reg))), Post.class);
+
+    }
+
+    Flux<Post> findByTitleContains(String title) {
+        var reg = ".*" + title + ".*";
+        return template
+                .find(query(where("title").regex(reg)), Post.class);
+    }
+
+    Flux<Post> findByTitleContains(String title, Pageable page) {
+        var reg = ".*" + title + ".*";
+        return template
+                .find(query(where("title").regex(reg)).with(page), Post.class);
+    }
+
+    public Flux<Post> findAll() {
+        return template.findAll(Post.class);
+    }
+
+    public Mono<Post> save(Post post) {
+        return template.save(post);
+    }
+
+    public Flux<Post> saveAll(List<Post> data) {
+        return Flux.fromIterable(data).flatMap(template::save);
+    }
+
+    public Mono<Post> findById(String id) {
+        return template.findById(id, Post.class);
+    }
+
+    public Mono<Long> deleteById(String id) {
+        //return template.remove(Post.class).matching(query(where("id").is(id))).all().map(DeleteResult::getDeletedCount)
+        return template.remove(query(where("id").is(id)), Post.class).map(DeleteResult::getDeletedCount);
+    }
+
+    public Mono<Long> deleteAll() {
+        return template.remove(Post.class).all().map(DeleteResult::getDeletedCount);
+    }
+}
+```
+
+
+
+## Pagination
+
+ Almost all reactive variants(Mongo, R2dbc etc.) are support `Pageable` as a method parameter  in the `Repository`.  
+
+```java
+interface PostRepository extends ReactiveMongoRepository<Post, String> {
+
+    //...
+    
+    Flux<PostSummary> findByTitleContains(String title, Pageable page);
+}
+```
+
+Note, there is no `findAll(Pageable page)` in the reactive repositories. 
+
+If you want to perform a pageable like operations on all items, use the following instead.
+
+```java
+var all = posts.findAll()
+    .take(...)
+    .skip(...)
+```
+
+And all pageable query returns a `Flux` result.
+
+To get the count of items in the Mongo, perform another `count` query.
+
+For example:
+
+```java
+Mono<Long> countByTitleContains(String title)
+```
+
+
+
+> It can not return a `Page` object in Spring Data reactive API.
 
 
 
@@ -312,3 +446,23 @@ this.postRepository.findAll(QPost.post.title.containsIgnoreCase("my"))
 ```
 
  For the complete codes, check [spring-reactive-sample/boot-data-mongo-querydsl](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo-querydsl).
+
+## Tailable Query
+
+The `tailable` query is a Mongo specific feature.  A *tailable* document works an infinite streams, performing a query on a `tailable` document is similar to connect to a message broker, when a new document is inserted, it will be emitted to all query stream connected.
+
+```java
+@Tailable
+Flux<Message> readByAll()
+```
+
+The query stream can be subscribed by a SSE endpoint, a WebSocket endpoint or a  RSocket message channel.
+
+Please check the following more comprehensive examples, all provide Mongo `tailable` documents as backend message stream.
+
+* [Angular and Websocket Sample](https://github.com/hantsy/angular-spring-websocket-sample)
+* [Angular and Server Sent Event  Sample](https://github.com/hantsy/angular-spring-sse-sample)
+* [Angular and RSocket  Sample](https://github.com/hantsy/angular-spring-rsocket-sample)
+
+
+

@@ -7,8 +7,6 @@ sort: 6
 Spring Data Cassandra adds basic Reactive support.
 
 
-## Getting Started
-
 Follow the the [Getting Started](./start) part to create a freestyle(none Spring Boot) or Spring Boot based project skeleton.
 
 If you are not using Spring Boot, firstly add the following dependencies into your project.
