@@ -26,7 +26,8 @@ class MessageController {
 
 You can write the same functionality with a  `RouterFunction` bean instead.
 
-```java    @Bean
+```java    
+@Bean
 public RouterFunction<ServerResponse> routes() {
     return route(GET("/"),(ServerRequest req)-> ok()
                  .body(
@@ -41,7 +42,9 @@ public RouterFunction<ServerResponse> routes() {
 }
 ```
 
-The  `reoute` accepts a `RequestPredicate` and `HandlerFunction`.  `HandlerFunction` is a  `@FunctionalInteface`.
+The  `reoute`(from `RouterFunctions`) accepts a `RequestPredicate` and `HandlerFunction`.  `HandlerFunction` is a  `@FunctionalInteface`.
+
+`RouterFunctions` and `RequestPredicates` are helpers to make it easy to assemble the request routes and predicates.
 
 ```java
 @FunctionalInterface
