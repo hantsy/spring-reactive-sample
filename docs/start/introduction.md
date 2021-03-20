@@ -18,10 +18,10 @@ Currently, the JVM specification is completed, it includes a Java API(four simpl
 
 There are 4 core components provided in ReactiveStreams JVM specification.
 
-*  [Publisher](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html)<T> - A `Publisher` is a provider of a potentially unbounded number of sequenced elements, publishing them according to the demand received from its `Subscriber`(s). 
-*    [Subscriber](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html)<T> - Will receive call to `Subscriber.onSubscribe(Subscription)` once after passing an instance of `Subscriber` to `Publisher.subscribe(Subscriber)`.
-*     [Subscription](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html) -  A `Subscription` represents a one-to-one lifecycle of a `Subscriber` subscribing to a `Publisher`. 
-*      [Processor](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Processor.html)<T,R> -  A Processor represents a processing stage—which is both a `Subscriber` and a `Publisher` and obeys the contracts of both.
+* [`Publisher<T>`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html) - A `Publisher` is a provider of a potentially unbounded number of sequenced elements, publishing them according to the demand received from its `Subscriber`(s). 
+* [`Subscriber<T>`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html) - Will receive call to `Subscriber.onSubscribe(Subscription)` once after passing an instance of `Subscriber` to `Publisher.subscribe(Subscriber)`.
+* [`Subscription`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html) -  A `Subscription` represents a one-to-one lifecycle of a `Subscriber` subscribing to a `Publisher`. 
+* [`Processor<T,R>`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Processor.html) -  A Processor represents a processing stage—which is both a `Subscriber` and a `Publisher` and obeys the contracts of both.
 
 More info, please check  [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams)  project  and [API docs](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/package-summary.html).
 
