@@ -30,5 +30,5 @@ You can create a configuration class to derive this interface and override the m
 class WebConfig implements WebFluxConfigurer {}
 ````
 
-> NOTE: For Spring Boot applications, no extra steps are required  to activate  **WebFlux** if *spring-boot-starter-webflux* is included in the calsspath.
+> NOTE: For Spring Boot applications, no extra steps are required  to activate  **WebFlux** if *spring-boot-starter-webflux* is included in the classpath.
 
