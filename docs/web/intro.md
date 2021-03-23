@@ -13,9 +13,9 @@ There are two important concepts in the *Reactive Web*  stack to handle web requ
 
 You can review the `Application` classes in the [Getting Started](../start) part.
 
-## Activate Reactive WebFlux
+## Enable WebFlux
 
-To activate *Reactive Web*, create a `@Configuration`class.
+To activate *Reactive Web*, create a `@Configuration`class, add an additional `@EnableWebFlux` to activate WebFlux support.
 
 ```java
 @Configuration
