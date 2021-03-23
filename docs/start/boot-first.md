@@ -81,9 +81,13 @@ Restart the application, and test the endpoints.
 
 Check the complete codes, [spring-reactive-sample/boot](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start).
 
+## Bootstrap
+
+By default, when `spring-boot-starter-webflux` is included in the classpath, it uses Netty as the embedded server to serve HTTP requests.
+
 It is easy to switch to other embedded servers.
 
-## Apache Tomcat
+### Apache Tomcat
 
 If you want to use Apache Tomcat as target runtime environment, just exclude `spring-boot-starter-reactor-netty` from `spring-boot-starter-webflux`, and add an extra dependency `spring-boot-starter-tomcat` into *pom.xml*.
 
@@ -107,7 +111,7 @@ If you want to use Apache Tomcat as target runtime environment, just exclude `sp
 
 Check the sample codes, [spring-reactive-sample/boot-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-tomcat).
 
-## Eclipse Jetty 
+### Eclipse Jetty 
 
 To use Jetty to replace the default Reactor Netty.
 
@@ -131,7 +135,7 @@ To use Jetty to replace the default Reactor Netty.
 
 Check the sample codes, [spring-reactive-sample/boot-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-jetty).
 
-## Undertow
+### Undertow
 
 Similiarly, you can use Undertow as target runtime.
 

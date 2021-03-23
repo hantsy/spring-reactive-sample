@@ -628,3 +628,37 @@ mvn verify cargo:run
 ```
 
 Check the sample codes: [spring-reactive-sample/war](https://github.com/hantsy/spring-reactive-sample/blob/master/war).
+
+### Alternative Bean Registration
+
+In the above the codes, we use `ApplicationContext` to scan components automatically. For those classes are not part of Spring context, and you want to register them as Spring beans in the  `ApplicationContext`, Spring 5 introduces a simple approach to archive this purpose.
+
+```java
+public class Application {
+
+    public static void main(String[] args) throws Exception {
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+        PostRepository posts = new PostRepository();
+        PostHandler postHandler = new PostHandler(posts);
+        Routes routesBean = new Routes(postHandler);
+
+        context.registerBean(PostRepository.class, () -> posts);
+        context.registerBean(PostHandler.class, () -> postHandler);
+        context.registerBean(Routes.class, () -> routesBean);
+        context.registerBean(WebHandler.class, () -> RouterFunctions.toWebHandler(routesBean.routes(), HandlerStrategies.builder().build()));
+        context.refresh();
+
+        nettyServer(context).onDispose().block();
+    }
+
+    public static DisposableServer nettyServer(ApplicationContext context) {
+        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
+        ReactorHttpHandlerAdapter adapter = new ReactorHttpHandlerAdapter(handler);
+        HttpServer httpServer = HttpServer.create().host("localhost").port(8080);
+        return httpServer.handle(adapter).bindNow();
+    }
+
+}
+```
+
+For the complete codes, check  [spring-reactive-sample/register-bean](https://github.com/hantsy/spring-reactive-sample/blob/master/register-bean).
