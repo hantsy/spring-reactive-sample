@@ -6,6 +6,7 @@
 package com.example.demo;
 
 import freemarker.template.utility.XmlEscape;
+import lombok.Setter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;

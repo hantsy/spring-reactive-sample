@@ -5,7 +5,7 @@
  */
 package com.example.demo;
 
-import java.util.stream.IntStream;
+import java.time.Duration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 /**
- *
  * @author hantsy
  */
 @Component
@@ -30,21 +29,21 @@ class DataInitializer {
     public void init() {
         log.info("start data initialization  ...");
         this.posts
-            .deleteAll()
-            .thenMany(
+                .deleteAll()
+                .thenMany(
 
-                Flux
-                    .range(1, 1000)
-                    .flatMap(
-                        num -> this.posts.save(Post.builder().title("Title" + num).content("content of " + "Title" + num).build())
-                    )
-            )
-            .log()
-            .subscribe(
-                null,
-                null,
-                () -> log.info("done initialization...")
-            );
+                        Flux.interval(Duration.ofSeconds(1), Duration.ofSeconds(5))
+                                .flatMap(
+                                        num -> this.posts.save(Post.builder().title("Title" + num)
+                                                .content("content of " + "Title" + num).build())
+                                )
+                )
+                .log()
+                .subscribe(
+                        null,
+                        null,
+                        () -> log.info("done initialization...")
+                );
 
     }
 
