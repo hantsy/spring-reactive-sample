@@ -1,6 +1,6 @@
-title: Spring WebFlux by Examples
+title: Spring WebFlux By Example
 lang: en
-description: Tips of using Spring WebFlux
+description: A collection of code snippets and tips of using Spring WebFlux
 
 # theme
 remote_theme: rundocs/jekyll-rtd-theme
