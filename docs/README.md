@@ -1,8 +1,8 @@
 ---
-title: Spring WebFlux by Examples
+title: Spring WebFlux By Example
 ---
 
 
-# Spring WebFlux by Examples
+# Spring WebFlux By Example
 
 {% include list.liquid all=true %}
