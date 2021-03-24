@@ -30,7 +30,7 @@ Any form of contribution is welcome.
 
 Please [file an issue](https://github.com/hantsy/spring-reactive-sample/issues) if there is an error found in the sample codes or the content of the book itself, or describe something that is missing in the book.
 
-If you found my writing is helpful to you, do not hesitate to spread it out to your circles.
+If my writing is helpful to you, help me to spread it out to your circles.
 
 ## About Me
 
