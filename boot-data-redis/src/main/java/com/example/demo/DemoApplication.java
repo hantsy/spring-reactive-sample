@@ -105,24 +105,24 @@ class DataInitializer implements CommandLineRunner {
 @Component
 class PostHandler {
 
-    private final PostRepository posts;
+    private final PostRepository postRepository;
 
-    public PostHandler(PostRepository posts) {
-        this.posts = posts;
+    public PostHandler(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
     public Mono<ServerResponse> all(ServerRequest req) {
-        return ServerResponse.ok().body(this.posts.findAll(), Post.class);
+        return ServerResponse.ok().body(this.postRepository.findAll(), Post.class);
     }
 
     public Mono<ServerResponse> create(ServerRequest req) {
         return req.bodyToMono(Post.class)
-            .flatMap(post -> this.posts.save(post))
+            .flatMap(this.postRepository::save)
             .flatMap(p -> ServerResponse.created(URI.create("/posts/" + p.getId())).build());
     }
 
     public Mono<ServerResponse> get(ServerRequest req) {
-        return this.posts.findById(req.pathVariable("id"))
+        return this.postRepository.findById(req.pathVariable("id"))
             .flatMap(post -> ServerResponse.ok().body(Mono.just(post), Post.class))
             .switchIfEmpty(ServerResponse.notFound().build());
     }
@@ -138,17 +138,17 @@ class PostHandler {
                     p.setContent(p2.getContent());
                     return p;
                 },
-                this.posts.findById(req.pathVariable("id")),
+                this.postRepository.findById(req.pathVariable("id")),
                 req.bodyToMono(Post.class)
             )
             .cast(Post.class)
-            .flatMap(post -> this.posts.save(post))
+            .flatMap(this.postRepository::save)
             .flatMap(post -> ServerResponse.noContent().build());
 
     }
 
     public Mono<ServerResponse> delete(ServerRequest req) {
-        return ServerResponse.noContent().build(this.posts.deleteById(req.pathVariable("id")));
+        return ServerResponse.noContent().build(this.postRepository.deleteById(req.pathVariable("id")));
     }
 
 }

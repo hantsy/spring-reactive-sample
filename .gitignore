@@ -30,3 +30,5 @@ out
 Gemfile
 Gemfile.lock
 _site
+/.metadata/
+boot-redis/target/

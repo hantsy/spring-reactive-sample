@@ -20,7 +20,7 @@ class Application {
         val context = GenericApplicationContext()
         beans().initialize(context)
         context.refresh()
-        context.getBean(DataInitializr::class.java).initData()
+        context.getBean(DataInitializer::class.java).initData()
         server = HttpServer.create().host("localhost").port(port)
         httpHandler = WebHttpHandlerBuilder.applicationContext(context)
                 .build()

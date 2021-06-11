@@ -2,25 +2,25 @@ package com.example.demo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.util.Comparator.*;
+import static java.util.Comparator.comparing;
 
 @DataMongoTest
-@ContextConfiguration(initializers = {MongodbContainerInitializer.class})
+@Import(PostRepository.class)
 @TestPropertySource(properties = {
         "logging.level.org.springframework.data.mongodb.core.ReactiveMongoTemplate=DEBUG",
         "logging.level.com.example.demo=DEBUG"
@@ -61,6 +61,7 @@ public class PostRepositoryPageableTest {
     }
 
     @Test
+    @Disabled
     public void testFindByKeyword() {
         this.postRepository.findByKeyword(".*title.*")
                 .skip(0)

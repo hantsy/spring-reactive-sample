@@ -8,16 +8,16 @@ import reactor.core.publisher.Flux
 
 @Component
 class DataInitializer(val posts: PostRepository) {
-    private val log = LoggerFactory.getLogger(DataInitializer::class.java);
+    private val log = LoggerFactory.getLogger(DataInitializer::class.java)
 
-    @EventListener(value = ContextRefreshedEvent::class)
+    @EventListener(value = [ContextRefreshedEvent::class])
     fun run() {
         log.info("start data initialization ...")
         this.posts
                 .deleteAll()
                 .thenMany(
                         Flux.just("Post one", "Post two")
-                                .flatMap { this.posts.save(Post(title = it, content = "content of " + it)) }
+                                .flatMap { this.posts.save(Post(title = it, content = "content of $it")) }
                 )
                 .log()
                 .subscribe(

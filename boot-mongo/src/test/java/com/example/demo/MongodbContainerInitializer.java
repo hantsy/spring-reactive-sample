@@ -7,11 +7,13 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.utility.DockerImageName;
 
 @Slf4j
 class MongodbContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        var mongoDBContainer = new MongoDBContainer();
+        final DockerImageName DEFAULT_IMAGE_NAME = DockerImageName.parse("mongo");
+        var mongoDBContainer = new MongoDBContainer(DEFAULT_IMAGE_NAME).withExposedPorts(27017);
         mongoDBContainer.start();
 
         configurableApplicationContext

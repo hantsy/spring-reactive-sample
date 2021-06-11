@@ -1,29 +1,24 @@
 package com.example.demo;
 
-import org.junit.jupiter.api.BeforeEach;
+import com.example.demo.config.CassandraContainerConfig;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class IntegrationTests {
+@Testcontainers
+@AutoConfigureWebTestClient
+class IntegrationTests extends CassandraContainerConfig {
 
-    @LocalServerPort
-    int port;
-
-    WebTestClient client;
-
-    @BeforeEach
-    public void setup() {
-        client = WebTestClient.bindToServer()
-                .baseUrl("http://localhost:" + port)
-                .build();
-    }
+    @Autowired
+    private WebTestClient webTestClient;
 
     @Test
     void contextLoads() {
-        this.client.get().uri("/posts")
+        this.webTestClient.get().uri("/posts")
                 .exchange()
                 .expectStatus().is2xxSuccessful()
                 .expectBodyList(Post.class).hasSize(2);

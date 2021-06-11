@@ -5,13 +5,14 @@ package com.example.demo;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -19,8 +20,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  *
  * @author hantsy
  */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {AppConfig.class, WebConfig.class, SecurityConfig.class})
+@SpringJUnitConfig(classes = {AppConfig.class, WebConfig.class, SecurityConfig.class})
 public class ApplicationTests {
 
     @Autowired
@@ -28,7 +28,7 @@ public class ApplicationTests {
 
     WebTestClient rest;
 
-    @Before
+    @BeforeAll
     public void setup() {
         this.rest = WebTestClient
             .bindToApplicationContext(this.context)

@@ -176,7 +176,7 @@ class PostController {
 
                 return p;
             })
-            .flatMap(p -> this.posts.save(p));
+            .flatMap(this.posts::save);
     }
 
     @DeleteMapping("/{id}")

@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 
 @RestController
-@RequestMapping(value = "/posts")
+@RequestMapping("/posts")
 class PostController(val posts: PostRepository) {
 
     @GetMapping("")

@@ -11,14 +11,15 @@ import org.springframework.test.web.reactive.server.WebTestClient
 class ApplicationTests {
 
     @Autowired
-    ApplicationContext context;
-    WebTestClient client;
+    ApplicationContext context
+
+    WebTestClient client
 
     @BeforeEach
     void setup() {
         client = WebTestClient.bindToApplicationContext(context)
                 .configureClient()
-                .build();
+                .build()
     }
 
     @Test

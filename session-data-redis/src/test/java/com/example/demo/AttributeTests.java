@@ -5,17 +5,16 @@ import com.example.demo.pages.HomePage;
 import com.example.demo.pages.HomePage.Attribute;
 import java.util.List;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @author Eddú Meléndez
  * @author Rob Winch
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Application.class)
 //@TestPropertySource(properties = { "spring.profiles.active=embedded-redis", "server.port=0" })
 public class AttributeTests {
@@ -32,12 +31,12 @@ public class AttributeTests {
 
 	private WebDriver driver;
 
-	@Before
+	@BeforeAll
 	public void setup() {
 		this.driver = new HtmlUnitDriver();
 	}
 
-	@After
+	@AfterAll
 	public void tearDown() {
 		this.driver.quit();
 	}

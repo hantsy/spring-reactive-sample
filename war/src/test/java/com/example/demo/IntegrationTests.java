@@ -8,11 +8,11 @@ package com.example.demo;
 
 import java.time.Duration;
 
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
@@ -24,7 +24,7 @@ public class IntegrationTests {
 
     WebTestClient rest;
 
-    @Before
+    @BeforeAll
     public void setup() {
         this.rest = WebTestClient
                 .bindToServer()

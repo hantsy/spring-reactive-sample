@@ -55,7 +55,7 @@ fun beans() = beans {
                             )
                     )
                     .log()
-                    .subscribe(null, null, { println("data initialization done.") })
+                    .subscribe(null, null) { println("data initialization done.") }
         }
     }
 

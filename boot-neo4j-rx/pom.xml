@@ -15,7 +15,7 @@
     <description>Spring data neo4j rx demo(ReactiveNeo4jOperations)</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>16</java.version>
         <spring-data-neo4j-rx.version>1.0.0-beta02</spring-data-neo4j-rx.version>
         <maven-failsafe-plugin.version>3.0.0-M4</maven-failsafe-plugin.version>
     </properties>

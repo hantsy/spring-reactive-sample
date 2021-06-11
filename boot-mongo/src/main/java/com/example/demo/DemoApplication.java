@@ -130,8 +130,8 @@ class PostRepository {
 
     private final ReactiveMongoTemplate template;
 
-    Flux<Post> findByKeyword(String q) {
-        var reg = ".*" + q + ".*";
+    Flux<Post> findByKeyword(String keyword) {
+        var reg = ".*" + keyword + ".*";
         return template
                 .find(query(where("title").regex(reg).orOperator(where("content").regex(reg))), Post.class);
 

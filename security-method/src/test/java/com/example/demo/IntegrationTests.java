@@ -5,20 +5,20 @@
  */
 package com.example.demo;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+
 import java.time.Duration;
 import java.util.Map;
 import java.util.function.Consumer;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.test.context.support.WithMockUser;
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserters;
+
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.Credentials.basicAuthenticationCredentials;
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
@@ -26,7 +26,7 @@ import static org.springframework.web.reactive.function.client.ExchangeFilterFun
  *
  * @author hantsy
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Application.class)
 public class IntegrationTests {
 
@@ -35,7 +35,7 @@ public class IntegrationTests {
 
     WebTestClient rest;
 
-    @Before
+    @BeforeAll
     public void setup() {
         this.rest = WebTestClient
             .bindToServer()
@@ -45,7 +45,7 @@ public class IntegrationTests {
             .build();
     }
 
-    @After
+    @AfterAll
     public void teardown() {
 
     }

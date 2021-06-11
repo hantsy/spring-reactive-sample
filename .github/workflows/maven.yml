@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        java: [ '15' ]
+        java: [ '16' ]
     name: Build on Java ${{ matrix.Java }}
     steps:
       - uses: actions/checkout@v2
@@ -22,14 +22,7 @@ jobs:
         with:
           java-version: ${{ matrix.java }}
           distribution: 'adopt'
-          
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v2.1.6
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-          
+
       - name: Cache Maven packages
         uses: actions/cache@v2.1.6
         with:
@@ -38,7 +31,7 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
           
       - name: Build with Maven
-        run: mvn -B clean package --file pom.xml
+        run: mvn -B package --file pom.xml
         
       - name: Codecov
         uses: codecov/codecov-action@v1.5.2

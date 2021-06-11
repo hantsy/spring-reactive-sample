@@ -5,7 +5,6 @@ import org.springframework.context.support.BeanDefinitionDsl
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.context.support.beans
-import org.springframework.core.env.get
 import org.springframework.core.io.ClassPathResource
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory
@@ -13,10 +12,8 @@ import org.springframework.data.mongodb.repository.support.ReactiveMongoReposito
 import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager
 import org.springframework.security.config.web.server.ServerHttpSecurity
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
 import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.WebFilterChainProxy
@@ -25,7 +22,6 @@ import org.springframework.web.reactive.function.server.HandlerStrategies
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebFilter
 import org.springframework.web.server.WebHandler
-import reactor.core.publisher.Flux
 import java.util.*
 
 fun beans() = beans {
@@ -64,7 +60,7 @@ fun beans() = beans {
     }
 
     bean {
-        DataInitializr(ref())
+        DataInitializer(ref())
     }
 
     bean {

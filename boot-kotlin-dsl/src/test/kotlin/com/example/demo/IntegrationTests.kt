@@ -9,10 +9,10 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.web.reactive.function.client.WebClient
-import reactor.test.test
+import reactor.kotlin.test.test
 
 @SpringBootTest(classes = [DemoApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = arrayOf(TestConfigInitializer::class))
+@ContextConfiguration(initializers = [TestConfigInitializer::class])
 class IntegrationTests {
 
     private lateinit var client: WebClient
@@ -29,7 +29,7 @@ class IntegrationTests {
     fun `get all posts`() {
         client.get()
                 .uri("/posts")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .test()
                 .expectNextMatches { it.statusCode() == HttpStatus.OK }

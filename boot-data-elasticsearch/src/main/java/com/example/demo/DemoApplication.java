@@ -58,7 +58,7 @@ class DataInitializer implements CommandLineRunner {
 
 }
 
-@RestController()
+@RestController
 @RequestMapping(value = "/posts")
 class PostController {
 
