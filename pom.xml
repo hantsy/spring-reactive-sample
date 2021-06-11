@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>spring-reactive-sample</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <name>spring-reactive-sample</name>
+    <description>Spring Reactive Examples</description>
+
+    <modules>
+       <!-- <module>boot-data-cassandra</module> -->
+        <module>boot-data-couchbase</module>
+        <module>boot-data-elasticsearch</module>
+        <module>boot-data-mongo</module>
+        <module>boot-data-mongo-auditing</module>
+        <module>boot-data-mongo-gridfs</module>
+        <module>boot-data-mongo-querydsl</module>
+        <module>boot-data-neo4j</module>
+        <module>boot-data-neo4j-rx</module>
+        <module>boot-data-r2dbc</module>
+        <module>boot-data-r2dbc-auditing</module>
+        <module>boot-data-r2dbc-mssql</module>
+        <module>boot-data-r2dbc-mysql</module>
+        <module>boot-data-r2dbc-postgresql</module>
+        <module>boot-data-redis</module>
+        <module>boot-exception-handler</module>
+        <module>boot-groovy</module>
+        <module>boot-jetty</module>
+        <module>boot-kotlin</module>
+        <module>boot-kotlin-dsl</module>
+        <module>boot-mongo</module>
+        <module>boot-mvc-freemarker</module>
+        <module>boot-mvc-mustache</module>
+        <module>boot-mvc-thymeleaf</module>
+        <module>boot-neo4j</module>
+        <module>boot-neo4j-cypher</module>
+        <module>boot-neo4j-rx</module>
+        <module>boot-neo4j-rx-cypher</module>
+        <module>boot-r2dbc</module>
+        <module>boot-redis</module>
+        <module>boot-start</module>
+        <module>boot-start-routes</module>
+        <module>boot-tomcat</module>
+        <module>boot-undertow</module>
+        <module>data-cassandra</module>
+        <module>data-couchbase</module>
+        <module>data-mongo</module>
+        <module>data-mongo-pageable</module>
+        <module>data-mongo-transaction</module>
+        <module>data-neo4j</module>
+        <module>data-r2dbc</module>
+        <module>data-r2dbc-postgresql</module>
+        <module>data-redis</module>
+        <module>data-redis-message</module>
+        <module>exception-handler</module>
+        <module>groovy</module>
+        <module>groovy-dsl</module>
+        <module>integration</module>
+        <module>integration-dsl</module>
+        <module>java8</module>
+        <module>java9</module>
+        <module>kotlin</module>
+        <module>kotlin-dsl</module>
+        <module>kotlin-routes</module>
+        <module>multipart</module>
+        <module>multipart-data-mongo</module>
+        <module>mvc-freemarker</module>
+        <module>mvc-mustache</module>
+        <module>mvc-thymeleaf</module>
+        <module>register-bean</module>
+        <module>restdocs</module>
+        <module>routes</module>
+        <module>rxjava</module>
+        <module>rxjava2</module>
+        <module>rxjava2-jdbc</module>
+        <module>rxjava3</module>
+        <module>rxjava-jdbc</module>
+        <module>security</module>
+        <module>security-data-mongo</module>
+        <module>security-form</module>
+        <module>security-method</module>
+        <module>security-user-properties</module>
+        <module>session</module>
+        <module>session-data-mongo</module>
+        <module>session-data-redis</module>
+        <module>session-header</module>
+        <module>sse</module>
+        <module>vanilla</module>
+        <module>vanilla-jetty</module>
+        <module>vanilla-tomcat</module>
+        <module>vanilla-undertow</module>
+        <module>war</module>
+        <module>web-filter</module>
+        <module>websocket</module>
+    </modules>
+
+
+</project>

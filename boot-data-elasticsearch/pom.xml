@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>optional</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
