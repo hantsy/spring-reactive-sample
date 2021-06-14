@@ -1,4 +1,4 @@
-CREATE SEQUENCE table_name_id_seq;
+CREATE SEQUENCE IF NOT EXISTS table_name_id_seq;
 
 CREATE TABLE IF NOT EXISTS posts(
 id integer NOT NULL PRIMARY KEY DEFAULT nextval('table_name_id_seq') ,

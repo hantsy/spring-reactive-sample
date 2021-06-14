@@ -2,24 +2,20 @@ package com.example.demo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = DemoApplication.class)
+@ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
+@AutoConfigureWebTestClient
 class IntegrationTests {
 
-    @LocalServerPort
-    int port;
-
+    @Autowired
     WebTestClient client;
-
-    @BeforeEach
-    public void setup() {
-        client = WebTestClient.bindToServer()
-                .baseUrl("http://localhost:" + port)
-                .build();
-    }
 
     @Test
     void contextLoads() {

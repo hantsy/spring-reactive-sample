@@ -15,14 +15,14 @@ import java.util.List;
 @RequiredArgsConstructor
 class DataInitializer implements ApplicationRunner {
 
-    private final PostRepository posts;
+    private final PostRepository postRepository;
 
     private final R2dbcEntityTemplate template;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
         log.info("start data initialization...");
-        this.posts
+        this.postRepository
                 .saveAll(
                         List.of(
                                 Post.builder().title("Post one").content("The content of post one").build(),
@@ -31,7 +31,7 @@ class DataInitializer implements ApplicationRunner {
                 )
                 .then()
                 .thenMany(
-                        this.posts.findAll()
+                        this.postRepository.findAll()
                 )
                 .subscribe((data) -> log.info("found post: {}", data),
                         (err) -> log.error("error: {}", err),

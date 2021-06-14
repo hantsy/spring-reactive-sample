@@ -21,9 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Testcontainers
 @Slf4j
-// Testcontainers does not work well with per_class testinstance.
-// see: https://stackoverflow.com/questions/61357116/exception-mapped-port-can-only-be-obtained-after-the-container-is-started-when/61358336#61358336
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class PostRepositoryWithTestContainersTest {
 
     @Container

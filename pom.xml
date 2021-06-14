@@ -20,12 +20,12 @@
         <module>boot-data-mongo-gridfs</module>
         <module>boot-data-mongo-querydsl</module>
         <!-- <module>boot-data-neo4j</module>
-        <module>boot-data-neo4j-rx</module>
+        <module>boot-data-neo4j-rx</module> -->
         <module>boot-data-r2dbc</module>
         <module>boot-data-r2dbc-auditing</module>
-        <module>boot-data-r2dbc-mssql</module>
-        <module>boot-data-r2dbc-mysql</module>
-        <module>boot-data-r2dbc-postgresql</module> -->
+        <!-- <module>boot-data-r2dbc-mssql</module>
+        <module>boot-data-r2dbc-mysql</module> -->
+        <module>boot-data-r2dbc-postgresql</module>
         <module>boot-data-redis</module>
         <module>boot-exception-handler</module>
         <module>boot-groovy</module>
@@ -83,11 +83,11 @@
         <module>security-data-mongo</module>
         <module>security-form</module>
         <module>security-user-properties</module>
-       <!-- <module>security-method</module>
-        <module>session</module>
-        <module>session-data-mongo</module>
-        <module>session-data-redis</module>
-        <module>session-header</module> -->
+        <!-- <module>security-method</module>
+         <module>session</module>
+         <module>session-data-mongo</module>
+         <module>session-data-redis</module>
+         <module>session-header</module> -->
         <module>sse</module>
         <module>vanilla</module>
         <module>vanilla-jetty</module>
@@ -97,6 +97,5 @@
         <module>web-filter</module>
         <module>websocket</module>
     </modules>
-
 
 </project>

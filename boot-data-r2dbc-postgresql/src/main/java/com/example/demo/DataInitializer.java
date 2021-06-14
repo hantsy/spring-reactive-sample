@@ -8,11 +8,7 @@ package com.example.demo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Component;
-
-import static org.springframework.data.domain.Sort.Order.desc;
 
 /**
  * @author hantsy
@@ -21,35 +17,25 @@ import static org.springframework.data.domain.Sort.Order.desc;
 @Slf4j
 class DataInitializer {
 
-    private final DatabaseClient databaseClient;
+    private final PostRepository postRepository;
 
-    public DataInitializer(DatabaseClient databaseClient) {
-        this.databaseClient = databaseClient;
+    public DataInitializer(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
     @EventListener(value = ContextRefreshedEvent.class)
     public void init() {
         log.info("start data initialization...");
-        this.databaseClient.delete().from("posts")
+        this.postRepository.deleteAll().log()
                 .then().
                 and(
-
-                        this.databaseClient.insert()
-                                .into("posts")
-                                //.nullValue("id", Integer.class)
-                                .value("title", "First post title")
-                                .value("content", "Content of my first post")
-                                .map((r, m) -> r.get("id", Integer.class)).all()
-                                .log()
+                        this.postRepository.save(Post.builder()
+                                .title("First post title")
+                                .content("Content of my first post")
+                                .build()).log()
                 )
                 .thenMany(
-                        this.databaseClient.select()
-                                .from("posts")
-                                .orderBy(Sort.by(desc("id")))
-                                .as(Post.class)
-                                .fetch()
-                                .all()
-                                .log()
+                        this.postRepository.findAll().log()
                 )
                 .subscribe(null, null, () -> log.info("initialization is done..."));
     }
