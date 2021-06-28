@@ -17,7 +17,7 @@
 
     <properties>
         <java.version>16</java.version>
-        <kotlin.version>1.5.10</kotlin.version>
+        <kotlin.version>1.5.20</kotlin.version>
     </properties>
 
     <dependencies>
