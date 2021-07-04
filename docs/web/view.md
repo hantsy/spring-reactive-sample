@@ -441,7 +441,7 @@ public class MustacheResourceTemplateLoader implements TemplateLoader, ResourceL
 
 An example of Mustache template file.
 
-```mustache
+
 {% highlight html %}{% raw %}
 {{>header}}
 	<section class="container">
@@ -462,6 +462,6 @@ An example of Mustache template file.
     </section>
 {{>footer}}
 {% endraw %}{% endhighlight %}
-```
+
 
 Source codes:   [spring-reactive-sample/mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-mustache) and  [spring-reactive-sample/boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-mustache) .
