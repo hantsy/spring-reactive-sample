@@ -441,7 +441,7 @@ public class MustacheResourceTemplateLoader implements TemplateLoader, ResourceL
 
 An example of Mustache template file.
 
-```html
+```mustache
 {{>header}}
 	<section class="container">
         <div class="row">
