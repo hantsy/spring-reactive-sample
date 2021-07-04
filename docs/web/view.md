@@ -217,7 +217,7 @@ Source codes:   [spring-reactive-sample/mvc-freemarker](https://github.com/hants
 
 [Mustache](https://mustache.github.io/) is  a popular template engine in the Ruby and  NodeJS world, it also provides Java implementation.
 
-Spring framework does not integrate Mustache  as Freemarker. But you can create your own `Veiw` and `ViewResolver` to adapt the Mustache compiler to the Spring world.
+Spring framework does not integrate Mustache as Freemarker. But you can create your own `Veiw` and `ViewResolver` to adapt the Mustache compiler to the Spring world.
 
 Add Mustache java into dependencies, we use `jmustache` here.
 
@@ -442,6 +442,7 @@ public class MustacheResourceTemplateLoader implements TemplateLoader, ResourceL
 An example of Mustache template file.
 
 ```mustache
+{% highlight html %}{% raw %}
 {{>header}}
 	<section class="container">
         <div class="row">
@@ -460,8 +461,7 @@ An example of Mustache template file.
         </div>
     </section>
 {{>footer}}
+{% endraw %}{% endhighlight %}
 ```
-
-
 
 Source codes:   [spring-reactive-sample/mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-mustache) and  [spring-reactive-sample/boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-mustache) .
