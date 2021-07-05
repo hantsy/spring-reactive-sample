@@ -1,6 +1,6 @@
 # Spring Reactive Sample
 
-This is a sandbox project  for demonstrating  [Reactive Streams](https://www.reactive-streams.org/)  support in Spring framework and its ecosystem. 
+This is a sandbox project  for demonstrating  [Reactive Streams](https://www.reactive-streams.org/) support in Spring framework and Spring ecosystem. 
 
 *I've also maintained a series of repos related to ReativeStreams and the latest Spring 5*.
 
@@ -14,7 +14,7 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 
 ## Docs
 
-[https://hantsy.github.io/spring-reactive-sample/](https://hantsy.github.io/spring-reactive-sample/)
+Read online: [https://hantsy.github.io/spring-reactive-sample/](https://hantsy.github.io/spring-reactive-sample/)
 
 
 ## Sample Codes
