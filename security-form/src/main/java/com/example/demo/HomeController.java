@@ -30,10 +30,8 @@ public class HomeController {
     @GetMapping("/")
     public String home(final Model model) {
 
-        Flux<Post> fluxPost = this.posts.findAll();
-        List<Post> postList = fluxPost.collectList().block(Duration.ofDays(1));
-        //log.info(" post list chuncked size::" + postList.size());
-        model.addAttribute("posts", postList);
+        Flux<Post> postsAll = this.posts.findAll();
+        model.addAttribute("posts", postsAll);
         return "home";
     }
 }
