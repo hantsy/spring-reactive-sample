@@ -106,3 +106,66 @@ public class PostController {
 ```
 
 For the complete codes, check [spring-reactive-sample/java9](https://github.com/hantsy/spring-reactive-sample/blob/master/java9).
+
+## SmallRye Mutiny 
+
+[SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) support is added in Spring Framework 5.3.10. For developers, you can use Mutiny APIs instead of Reactor to build Spring WebFlux applications.
+
+Add the following project dependencies.
+
+```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.smallrye.reactive</groupId>
+            <artifactId>mutiny-bom</artifactId>
+            <version>1.0.0</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+
+    <dependency>
+        <groupId>io.smallrye.reactive</groupId>
+        <artifactId>mutiny</artifactId>
+    </dependency>
+    ...
+
+</dependencies>
+```
+
+There is a `Controller` exmaple which is written in SmallRye Mutiny.
+
+```java
+@RestController
+@RequestMapping(value = "/posts")
+class PostController {
+
+    private final PostRepository posts;
+
+    public PostController(PostRepository posts) {
+        this.posts = posts;
+    }
+
+    @GetMapping(value = "")
+    public Multi<Post> all() {
+        return this.posts.findAll();
+    }
+
+    @GetMapping(value = "/{id}")
+    public Uni<Post> get(@PathVariable(value = "id") UUID id) {
+        return this.posts.findById(id);
+    }
+
+    @PostMapping(value = "")
+    public Uni<ResponseEntity<?>> create(@RequestBody Post post) {
+        return this.posts.save(post).map(p -> ResponseEntity.created(URI.create("/posts/" + p.getId())).build());
+    }
+
+}
+```
+
+For the complete codes, check [spring-reactive-sample/smallrye-mutiny](https://github.com/hantsy/spring-reactive-sample/blob/master/smallrye-mutiny).
