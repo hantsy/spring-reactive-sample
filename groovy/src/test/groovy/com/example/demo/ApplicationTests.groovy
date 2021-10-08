@@ -8,7 +8,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringJUnitConfig(classes = [Application.class])
-class ApplicationTests {
+class ApplicationTests extends MongoDBContainerSetUp {
 
     @Autowired
     ApplicationContext context

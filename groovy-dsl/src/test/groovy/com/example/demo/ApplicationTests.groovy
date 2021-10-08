@@ -8,17 +8,18 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
 
 @SpringJUnitConfig(classes = [Application.class])
-class ApplicationTests {
+class ApplicationTests extends MongoDBContainerSetUp {
 
     @Autowired
-    ApplicationContext context;
-    WebTestClient client;
+    ApplicationContext context
+
+    WebTestClient client
 
     @BeforeEach
     void setup() {
         client = WebTestClient.bindToApplicationContext(context)
                 .configureClient()
-                .build();
+                .build()
     }
 
     @Test

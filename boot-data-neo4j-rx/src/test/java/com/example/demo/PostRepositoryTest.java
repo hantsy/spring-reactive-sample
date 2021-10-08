@@ -1,6 +1,5 @@
 package com.example.demo;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,18 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.neo4j.driver.springframework.boot.test.autoconfigure.Neo4jTestHarnessAutoConfiguration;
 import org.neo4j.springframework.boot.test.autoconfigure.data.ReactiveDataNeo4jTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.util.TestPropertyValues;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.data.domain.Example;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.Neo4jContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -30,42 +18,16 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
-@ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @ReactiveDataNeo4jTest(excludeAutoConfiguration = Neo4jTestHarnessAutoConfiguration.class)
 @Slf4j
-public class PostRepositoryTest {
-
-//    @Container
-//    private static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0");
-
-    /**
-     * Note: This code fragment is from Neo4j Data Rx spring boot test starter.
-     *
-     * An initializer that starts a Neo4j test container and sets {@code org.neo4j.driver.uri} to the containers
-     * bolt uri. It also registers an application listener that stops the container when the context closes.
-     */
-    static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-        @Override
-        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            final Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0").withoutAuthentication();
-            neo4jContainer.start();
-            configurableApplicationContext
-                    .addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> neo4jContainer.stop());
-            TestPropertyValues.of("org.neo4j.driver.uri=" + neo4jContainer.getBoltUrl())
-                    .applyTo(configurableApplicationContext.getEnvironment());
-        }
-    }
-
-
+class PostRepositoryTest extends Neo4jContainerSetUp{
     @Autowired
-    private PostRepository posts;
+    private PostRepository postRepository;
 
     @BeforeEach
     public void setup() throws IOException {
         log.debug("running setup.....,");
-        this.posts.deleteAll()
+        this.postRepository.deleteAll()
                 .thenMany(testSaveMethod())
                 .log()
                 .thenMany(testFoundMethod())
@@ -83,11 +45,11 @@ public class PostRepositoryTest {
                 .map(title -> Post.builder().title(title).content("The content of " + title).build())
                 .collect(Collectors.toList());
         return Flux.fromIterable(data)
-                .flatMap(it -> this.posts.save(it));
+                .flatMap(it -> this.postRepository.save(it));
     }
 
     private Flux<Post> testFoundMethod() {
-        return this.posts
+        return this.postRepository
                 .findAll(Example.of(Post.builder().title("Post one").build()));
     }
 
@@ -98,7 +60,7 @@ public class PostRepositoryTest {
 
     @Test
     void testAllPosts() {
-        posts.findAll().sort(Comparator.comparing(post -> post.getTitle()))
+        postRepository.findAll().sort(Comparator.comparing(post -> post.getTitle()))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
                 .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))

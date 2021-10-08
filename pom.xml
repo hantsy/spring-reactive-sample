@@ -19,12 +19,12 @@
         <module>boot-data-mongo-auditing</module>
         <module>boot-data-mongo-gridfs</module>
         <module>boot-data-mongo-querydsl</module>
-        <!-- <module>boot-data-neo4j</module>
-        <module>boot-data-neo4j-rx</module> -->
+        <!-- <module>boot-data-neo4j</module> -->
+        <module>boot-data-neo4j-rx</module>
         <module>boot-data-r2dbc</module>
         <module>boot-data-r2dbc-auditing</module>
-        <!-- <module>boot-data-r2dbc-mssql</module> 
-        <module>boot-data-r2dbc-mysql</module> -->
+        <module>boot-data-r2dbc-mssql</module> 
+        <module>boot-data-r2dbc-mysql</module>
         <module>boot-data-r2dbc-postgresql</module>
         <module>boot-data-redis</module>
         <module>boot-exception-handler</module>
@@ -47,8 +47,8 @@
         <module>boot-tomcat</module>
         <module>boot-undertow</module>
         <module>data-cassandra</module>
-        <!-- <module>data-couchbase</module>
-        <module>data-mongo</module>
+        <module>data-couchbase</module>
+        <!-- <module>data-mongo</module>
         <module>data-mongo-pageable</module> -->
         <module>data-mongo-transaction</module>
         <!-- <module>data-neo4j</module> -->
@@ -57,13 +57,13 @@
         <!-- <module>data-redis</module>
         <module>data-redis-message</module> -->
         <module>exception-handler</module>
-        <!--<module>groovy</module>
+        <module>groovy</module>
         <module>groovy-dsl</module>
         <module>integration</module>
         <module>integration-dsl</module>
         <module>java8</module>
         <module>java9</module>
-        <module>kotlin</module>
+        <!-- <module>kotlin</module>
         <module>kotlin-dsl</module>
         <module>kotlin-routes</module> -->
         <module>multipart</module>
