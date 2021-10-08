@@ -54,6 +54,17 @@ Since Java 9,  Java platform adds an [java.util.concurrent.Flow](https://docs.or
 
 Java 11 adds a new reactive [Http Client API](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html) which is based on the Flow APIs. It frees you from using other 3rd party HttpClient libraries, such as Apache HttpClients, OkHttp, etc. when interacts with remote HTTP APIs.
 
+## SmallRye Mutiny 
+
+Since Spring Boot 2.5.5/Spring Framework 5.3.10, [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) is suppported.
+
+SmallyRye Mutiny is an Reactive Streams implementation from RedHat. 
+
+There are two core types in the SmallRye Mutiny.
+
+* `Multi` - Similar to the Reactor `Flux`, it means there are 0 to many items in the stream. The `Multi` implements `Publisher` interface.
+* `Uni` - Similar to the Reactor `Mono`, but Uni accepts `null`. *NOTE: Uni does not implements Publisher.* 
+
 ## Spring WebFlux
 
 The Spring embraces [Reactive Streams](http://www.reactive-streams.org/) in the new 5.x era
