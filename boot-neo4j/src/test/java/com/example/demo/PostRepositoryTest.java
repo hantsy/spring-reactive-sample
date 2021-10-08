@@ -2,7 +2,6 @@ package com.example.demo;
 
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +20,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataNeo4jTest
 @Slf4j
-public class PostRepositoryTest {
+public class PostRepositoryTest extends Neo4jContainerSetUp {
 
     @Autowired
-    private PostRepository posts;
+    private PostRepository postRepository;
 
     @BeforeEach
-    public void setup() throws IOException {
+    public void setup() {
         log.debug("running setup.....,");
-        this.posts.deleteAll()
+        this.postRepository.deleteAll()
                 .thenMany(testSaveMethod())
                 .log()
                 .thenMany(testFoundMethod())
@@ -42,21 +41,16 @@ public class PostRepositoryTest {
                 .map(title -> Post.builder().title(title).content("The content of " + title).build())
                 .collect(Collectors.toList());
         return Flux.fromIterable(data)
-                .flatMap(it -> this.posts.save(it));
+                .flatMap(it -> this.postRepository.save(it));
     }
 
     private Flux<Post> testFoundMethod() {
-        return this.posts.findByTitleContains("one");
-    }
-
-    @AfterEach
-    void teardown() {
-        //this.posts.deleteAll();
+        return this.postRepository.findByTitleContains("one");
     }
 
     @Test
     void testAllPosts() {
-        posts.findAll().sort(Comparator.comparing(post -> post.getTitle()))
+        postRepository.findAll().sort(Comparator.comparing(post -> post.getTitle()))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
                 .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))

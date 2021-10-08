@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
@@ -31,8 +32,8 @@ public class MongoConfig extends AbstractReactiveMongoConfiguration {
     }
 
     @Bean
-    public ReactiveGridFsTemplate reactiveGridFsTemplate() throws Exception {
-        return new ReactiveGridFsTemplate(reactiveMongoDbFactory(), mappingMongoConverter());
+    public ReactiveGridFsTemplate reactiveGridFsTemplate(MappingMongoConverter mappingMongoConverter) {
+        return new ReactiveGridFsTemplate(reactiveMongoDbFactory(), mappingMongoConverter);
     }
 
 

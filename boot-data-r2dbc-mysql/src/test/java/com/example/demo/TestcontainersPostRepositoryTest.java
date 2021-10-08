@@ -3,16 +3,15 @@ package com.example.demo;
 
 import io.r2dbc.spi.ConnectionFactory;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.r2dbc.DataR2dbcTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.data.r2dbc.connectionfactory.init.CompositeDatabasePopulator;
-import org.springframework.data.r2dbc.connectionfactory.init.ConnectionFactoryInitializer;
-import org.springframework.data.r2dbc.connectionfactory.init.ResourceDatabasePopulator;
-import org.springframework.data.r2dbc.core.DatabaseClient;
+import org.springframework.r2dbc.connection.init.CompositeDatabasePopulator;
+import org.springframework.r2dbc.connection.init.ConnectionFactoryInitializer;
+import org.springframework.r2dbc.connection.init.ResourceDatabasePopulator;
+import org.springframework.r2dbc.core.DatabaseClient;
 import org.springframework.test.context.ActiveProfiles;
 import reactor.test.StepVerifier;
 
@@ -22,11 +21,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-// see: https://github.com/spring-projects-experimental/spring-boot-r2dbc/issues/68
 @DataR2dbcTest
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @ActiveProfiles("tc")
-public class TestcontainersPostRepositoryTest {
+public class TestcontainersPostRepositoryTest extends MySQLContainerConfig {
 
     @TestConfiguration
     static class TestConfig {
@@ -61,7 +58,6 @@ public class TestcontainersPostRepositoryTest {
         assertNotNull(posts);
     }
 
-
     @Test
     public void existedOneItemInPosts() {
         assertThat(this.posts.count().block()).isEqualTo(1);
@@ -69,11 +65,7 @@ public class TestcontainersPostRepositoryTest {
 
     @Test
     public void testInsertAndQuery() {
-        this.client.insert()
-                .into("posts")
-                //.nullValue("id", Integer.class)
-                .value("title", "mytesttitle")
-                .value("content", "testcontent")
+        this.client.sql("insert into posts (title , content ) values ('mytesttitle','testcontent')")
                 .then().block(Duration.ofSeconds(5));
 
         this.posts.findByTitleContains("%testtitle")
