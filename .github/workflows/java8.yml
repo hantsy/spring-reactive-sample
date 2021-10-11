@@ -1,0 +1,33 @@
+name: spring-graphql-java8
+
+on:
+  push:
+    paths:
+      - "java8/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "java8/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v2.3.1
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+    - name: Build with Maven
+      run: |
+        cd java8
+        mvn -B package --file pom.xml
