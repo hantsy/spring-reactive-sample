@@ -66,13 +66,13 @@ services:
       - couchbasedata:/opt/couchbase/var
       
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.3
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.2.2
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"
+      - "9300:9300"
     volumes:
       - esdata1:/usr/share/elasticsearch/data
       
@@ -83,8 +83,8 @@ services:
       - "SECURE_FILE_PERMISSIONS=yes" # To enforce stricter file permissions checking 
     #  - "NEO4J_ACCEPT_LICENSE_AGREEMENT=yes" # required for enterprise editon: neo4j:4.0.0-enterprise
     ports:
-      - 7687:7687 
-      - 7474:7474 
+      - "7687:7687"
+      - "7474:7474"
 
   # no entrypoint-init scripts, see: https://github.com/Microsoft/mssql-docker/issues/11 
   mssql:
@@ -93,7 +93,7 @@ services:
       - SA_PASSWORD=p@ssw0rd
       - ACCEPT_EULA=Y
     ports:
-      - 1433:1433
+      - "1433:1433"
     
 volumes:
   mongodata:  

@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.9.3");
+    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:6.2.2");
+    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:6.2.2");
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {

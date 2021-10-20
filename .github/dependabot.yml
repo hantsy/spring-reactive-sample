@@ -15,3 +15,8 @@ updates:
     directory: "/"
     schedule:
       interval: "daily"
+
+  - directory: "/boot-data-elasticsearch"
+    schedule:
+      interval: "daily"
+    package-ecosystem: "maven"
