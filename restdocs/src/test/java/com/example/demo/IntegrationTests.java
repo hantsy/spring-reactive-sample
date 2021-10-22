@@ -5,28 +5,29 @@
  */
 package com.example.demo;
 
-import java.time.Duration;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.time.Duration;
 
 /**
  * @author hantsy
  */
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Application.class)
+@Disabled
 public class IntegrationTests {
 
     int port = 8080;
 
     WebTestClient rest;
 
-    @Before
+    @BeforeAll
     public void setup() {
         this.rest = WebTestClient
                 .bindToServer()
