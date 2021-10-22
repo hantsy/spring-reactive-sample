@@ -6,8 +6,6 @@
 package com.example.demo;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -34,7 +32,7 @@ class PostController {
     }
 
     @GetMapping("/count")
-    public Mono<Map> count(@RequestParam() String q) {
+    public Mono<Map<String,Long>> count(@RequestParam() String q) {
         return this.posts.countByTitleLike(q)
             .map(c -> Collections.singletonMap("count", c));
     }
