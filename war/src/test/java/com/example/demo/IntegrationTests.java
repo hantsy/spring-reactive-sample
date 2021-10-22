@@ -8,11 +8,11 @@ package com.example.demo;
 
 import java.time.Duration;
 
-import org.junit.Before;
-import org.junit.Test;
 
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
 
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
@@ -20,11 +20,11 @@ import static org.springframework.web.reactive.function.client.ExchangeFilterFun
 /**
  * @author hantsy
  */
-public class IntegrationTests {
+class IntegrationTests {
 
     WebTestClient rest;
 
-    @Before
+    @BeforeAll
     public void setup() {
         this.rest = WebTestClient
                 .bindToServer()
@@ -35,7 +35,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void getAllPostsWhenNoCredentialsThenOk() throws Exception {
+    void getAllPostsWhenNoCredentialsThenOk() {
         this.rest
                 .get()
                 .uri("/posts")
@@ -44,7 +44,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void deletingPostsWhenNoCredentialsThenUnauthorized() throws Exception {
+    void deletingPostsWhenNoCredentialsThenUnauthorized() {
         this.rest
                 .delete()
                 .uri("/posts/1")
@@ -55,7 +55,7 @@ public class IntegrationTests {
     //replace mutateWith(mockUser()) with mutate().mutate().filter(basicAuthentication("user", "WRONGPASSWORD")).build()
     //in e2e tests.
     @Test
-    public void deletingPostsWhenInvalidCredentialsThenUnauthorized() throws Exception {
+    void deletingPostsWhenInvalidCredentialsThenUnauthorized() {
         this.rest
                 .mutate().filter(basicAuthentication("user", "WRONGPASSWORD")).build()
                 .delete()
@@ -65,7 +65,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void deletingPostsWhenUserCredentialsThenForbidden() throws Exception {
+    void deletingPostsWhenUserCredentialsThenForbidden() {
         this.rest
                 .mutate().filter(basicAuthentication("user", "password")).build()
                 .delete()
