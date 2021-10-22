@@ -16,8 +16,8 @@ import reactor.core.publisher.Mono;
 @Component
 class PostRepository {
 
-    private Map<Long, Post> data = new HashMap<>();
-    private AtomicLong nextIdGenerator = new AtomicLong(1L);
+    private final Map<Long, Post> data = new HashMap<>();
+    private final AtomicLong nextIdGenerator = new AtomicLong(1L);
 
     public PostRepository() {
         Stream.of("post one", "post two").forEach(title -> {

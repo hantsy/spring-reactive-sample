@@ -5,86 +5,100 @@
  */
 package com.example.demo;
 
-import java.time.Duration;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
-import static org.assertj.core.api.Java6Assertions.assertThat;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.netty.DisposableServer;
+import reactor.netty.http.server.HttpServer;
 
-/**
- *
- * @author hantsy
- */
-@RunWith(SpringRunner.class)
+import java.time.Duration;
+import java.util.Base64;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+/** @author hantsy */
+@ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = Application.class)
 @TestPropertySource(properties = "server.session.timeout:1")
-public class ApplicationTests {
+class ApplicationTests {
 
-    @Value("#{@nettyContext.address().getPort()}")
-    int port;
+  @Value("${server.port:8080}")
+  int port;
 
-    WebTestClient rest;
+  @Autowired HttpServer httpServer;
+  private DisposableServer disposableServer;
 
-    @Before
-    public void setup() {
-        this.rest = WebTestClient
-            .bindToServer()
+  WebTestClient rest;
+
+  @BeforeAll
+  public void setup() {
+    this.disposableServer = httpServer.bindNow();
+    this.rest =
+        WebTestClient.bindToServer()
             .responseTimeout(Duration.ofMinutes(1))
             .baseUrl("http://localhost:" + this.port)
             .build();
-    }
+  }
 
-    @Test
-    public void getAllPostsWillBeOk() throws Exception {
+  @AfterAll
+  void tearDown() {
+    this.disposableServer.dispose();
+  }
+
+  @Test
+  void getAllPostsWillBeOk() throws Exception {
+    this.rest
+        .get()
+        .uri("/posts")
+        .header("Authorization", getBasicAuth())
+        .exchange()
+        .expectStatus()
+        .isOk();
+  }
+
+  @Test
+  void userDefinedMappingsSecureByDefault() {
+
+    FluxExchangeResult<Map<String, String>> result =
         this.rest
-            .get()
-            .uri("/posts")
-            .header("Authorization", getBasicAuth())
-            .exchange()
-            .expectStatus().isOk();
-    }
-
-    @Test
-    public void userDefinedMappingsSecureByDefault() throws Exception {
-
-        FluxExchangeResult<Map<String, String>> result = this.rest
             .get()
             .uri("/sessionId")
             .header("Authorization", getBasicAuth())
             .exchange()
-            .returnResult(new ParameterizedTypeReference<Map<String, String>>() {
-            });
+            .returnResult(new ParameterizedTypeReference<Map<String, String>>() {});
 
-        assertThat(result.getStatus()).isEqualTo(HttpStatus.OK);
+    assertThat(result.getStatus()).isEqualTo(HttpStatus.OK);
 
-        List<String> sessionHeaders = result.getResponseHeaders().get("X-SESSION-ID");
-        assertThat(sessionHeaders.size()).isEqualTo(1);
+    List<String> sessionHeaders = result.getResponseHeaders().get("X-SESSION-ID");
+    assertThat(sessionHeaders).isNotEmpty();
+    assertThat(sessionHeaders.size()).isEqualTo(1);
 
-        String sessionId = result.getResponseBody().blockFirst().get("id");
+    String sessionId = result.getResponseBody().blockFirst().get("id");
 
-        assertThat(sessionHeaders.get(0)).isEqualTo(sessionId);
+    assertThat(sessionHeaders.get(0)).isEqualTo(sessionId);
 
-        this.rest
-            .get()
-            .uri("/posts")
-            .header("X-SESSION-ID", sessionId)
-            .exchange()
-            .expectStatus().isOk();
-    }
+    this.rest
+        .get()
+        .uri("/posts")
+        .header("X-SESSION-ID", sessionId)
+        .exchange()
+        .expectStatus()
+        .isOk();
+  }
 
-    private String getBasicAuth() {
-        return "Basic " + Base64.getEncoder().encodeToString("user:password".getBytes());
-    }
-
+  private String getBasicAuth() {
+    return "Basic " + Base64.getEncoder().encodeToString("user:password".getBytes());
+  }
 }
