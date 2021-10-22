@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
  *
  * @author hantsy
  */
-@RestController()
+@RestController
 @RequestMapping(value = "/posts")
 class PostController {
 
