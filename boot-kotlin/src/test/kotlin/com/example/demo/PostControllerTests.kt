@@ -13,11 +13,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
 
 @WebFluxTest(
-        controllers = arrayOf(PostController::class),
-        excludeAutoConfiguration = arrayOf(
-                ReactiveUserDetailsServiceAutoConfiguration::class,
-                ReactiveSecurityAutoConfiguration::class
-        )
+        controllers = [PostController::class],
+        excludeAutoConfiguration = [ReactiveUserDetailsServiceAutoConfiguration::class, ReactiveSecurityAutoConfiguration::class]
 )
 class PostControllerTests {
 

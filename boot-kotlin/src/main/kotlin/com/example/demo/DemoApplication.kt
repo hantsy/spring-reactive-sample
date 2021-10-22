@@ -63,7 +63,7 @@ class SecurityConfig {
 }
 
 @RestController
-@RequestMapping(value = "/posts")
+@RequestMapping("/posts")
 class PostController(val posts: PostRepository) {
 
     @GetMapping("")
