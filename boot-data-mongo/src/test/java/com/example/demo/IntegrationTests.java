@@ -16,15 +16,15 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 @EnableAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
 @ContextConfiguration(initializers = {MongodbContainerInitializer.class})
 @AutoConfigureWebTestClient
-public class IntegrationTests {
+class IntegrationTests {
 
     @Autowired
-     WebTestClient client;
+    WebTestClient client;
 
     @Test
-    public void getAllMessagesShouldBeOk() {
+    void getAllMessagesShouldBeOk() {
         client.get().uri("/posts").exchange()
-            .expectStatus().isOk();
+                .expectStatus().isOk();
     }
 
 }
