@@ -1,40 +1,52 @@
 package com.example.demo
 
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.HttpStatus
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit4.SpringRunner
-import org.springframework.web.reactive.function.client.WebClient
-import reactor.test.test
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
+import org.springframework.test.context.junit.jupiter.SpringExtension
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.testcontainers.containers.MongoDBContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.utility.DockerImageName
 
-@RunWith(SpringRunner::class)
-@ContextConfiguration(classes = arrayOf(Application::class))
+@ExtendWith(SpringExtension::class)
+@ContextConfiguration(classes = [Application::class])
+@AutoConfigureWebTestClient
+@Testcontainers
 class ApplicationTests {
 
-    @Value("#{@nettyHttpServer.port()}")
-    var port = 8080
+    companion object {
 
-    lateinit var client: WebClient
+        private val dockerImageName: DockerImageName = DockerImageName.parse("mongo:latest")
 
-    @Before
-    fun setup() {
-        client = WebClient.create("http://localhost:" + this.port)
+        @Container
+        private val mongoDBContainer: MongoDBContainer = MongoDBContainer(dockerImageName)
+            .apply { start() }
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun addProperties(registry: DynamicPropertyRegistry) {
+            registry.add("mongo.uri", mongoDBContainer::getReplicaSetUrl)
+        }
     }
+
+    @Autowired
+    lateinit var client: WebTestClient
 
     @Test
     fun getPostsShouldBeOK() {
         client
-                .get()
-                .uri("/posts")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
-                .exchange()
-                .test()
-                .expectNextMatches { it.statusCode() == HttpStatus.OK }
-                .verifyComplete()
+            .get()
+            .uri("/posts")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectStatus().isOk
     }
 
 }

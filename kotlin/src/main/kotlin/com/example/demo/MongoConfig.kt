@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.example.demo;
+package com.example.demo
 
 import com.mongodb.reactivestreams.client.MongoClient
 import com.mongodb.reactivestreams.client.MongoClients
@@ -18,7 +18,7 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
  * @author hantsy
  */
 @Configuration
-@EnableReactiveMongoRepositories(basePackageClasses = arrayOf(MongoConfig::class))
+@EnableReactiveMongoRepositories(basePackageClasses = [MongoConfig::class])
 @EnableMongoAuditing
 class MongoConfig : AbstractReactiveMongoConfiguration() {
 
