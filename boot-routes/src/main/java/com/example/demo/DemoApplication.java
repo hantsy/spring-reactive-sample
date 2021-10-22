@@ -62,7 +62,7 @@ public class DemoApplication {
 class SecurityConfig {
 
     @Bean
-    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
         return http
             .authorizeExchange()
             .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
@@ -76,7 +76,7 @@ class SecurityConfig {
     private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
         return authentication
             .map(a -> context.getVariables().get("user").equals(a.getName()))
-            .map(granted -> new AuthorizationDecision(granted));
+            .map(AuthorizationDecision::new);
     }
 
 	@Bean
@@ -136,7 +136,7 @@ class PostHandler {
 
     public Mono<ServerResponse> create(ServerRequest req) {
         return req.bodyToMono(Post.class)
-            .flatMap(post -> this.posts.save(post))
+            .flatMap(this.posts::save)
             .flatMap(p -> ServerResponse.created(URI.create("/posts/" + p.getId())).build());
     }
 
@@ -161,7 +161,7 @@ class PostHandler {
                 req.bodyToMono(Post.class)
             )
             .cast(Post.class)
-            .flatMap(post -> this.posts.save(post))
+            .flatMap(this.posts::save)
             .flatMap(post -> ServerResponse.noContent().build());
 
     }
