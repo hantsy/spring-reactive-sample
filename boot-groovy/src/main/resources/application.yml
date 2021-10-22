@@ -1,6 +1,9 @@
 server:
   port: 8080
 spring:
+  mongodb:
+    embedded:
+      version: 4.0.12
   data:
     mongodb:
 #      host: localhost

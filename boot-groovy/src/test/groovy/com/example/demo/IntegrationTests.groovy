@@ -1,30 +1,18 @@
 package com.example.demo
 
 
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.web.server.LocalServerPort
 import org.springframework.test.web.reactive.server.WebTestClient
 
-import java.time.Duration
-
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
 class IntegrationTests {
 
-    @LocalServerPort
-    int port;
-
+    @Autowired
     WebTestClient client
-
-    @BeforeEach
-    void setup() {
-        this.client = WebTestClient
-                .bindToServer()
-                .responseTimeout(Duration.ofSeconds(10))
-                .baseUrl("http://localhost:" + this.port)
-                .build();
-    }
 
     @Test
     void getAllPostsWillBeOk() throws Exception {
