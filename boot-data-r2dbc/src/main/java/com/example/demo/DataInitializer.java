@@ -20,7 +20,7 @@ class DataInitializer implements ApplicationRunner {
     private final PostRepository posts;
 
     @Override
-    public void run(ApplicationArguments args) throws Exception {
+    public void run(ApplicationArguments args) {
         log.info("start data initialization...");
         this.posts
                 .saveAll(
