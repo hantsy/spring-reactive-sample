@@ -5,30 +5,35 @@
  */
 package com.example.demo;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 
-/**
- *
- * @author hantsy
- */
+/** @author hantsy */
 @Configuration
-//@EnableRedisRepositories
+// @EnableRedisRepositories
 public class RedisConfig {
 
-    @Bean
-    public LettuceConnectionFactory redisConnectionFactory() {
-        return new LettuceConnectionFactory();
-    }
+  @Value("${spring.redis.host}")
+  String host;
 
-//    @Bean
-//    public ReactiveRedisTemplate<Object, Object> reactiveRedisTemplate(ReactiveRedisConnectionFactory connectionFactory) {
-//        ReactiveRedisTemplate<Object, Object> redisTemplate = new ReactiveRedisTemplate(
-//            connectionFactory,
-//            RedisSerializationContext.newSerializationContext().build()
-//        );
-//        return redisTemplate;
-//    }
+  @Value("${spring.redis.port}")
+  int port;
+
+  @Bean
+  public LettuceConnectionFactory redisConnectionFactory() {
+    return new LettuceConnectionFactory(host, port);
+  }
+
+  //    @Bean
+  //    public ReactiveRedisTemplate<Object, Object>
+  // reactiveRedisTemplate(ReactiveRedisConnectionFactory connectionFactory) {
+  //        ReactiveRedisTemplate<Object, Object> redisTemplate = new ReactiveRedisTemplate(
+  //            connectionFactory,
+  //            RedisSerializationContext.newSerializationContext().build()
+  //        );
+  //        return redisTemplate;
+  //    }
 
 }

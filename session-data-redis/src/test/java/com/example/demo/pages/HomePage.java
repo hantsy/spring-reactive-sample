@@ -1,14 +1,14 @@
 package com.example.demo.pages;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,102 +18,94 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 public class HomePage {
 
-	private WebDriver driver;
+  @FindBy(css = "form")
+  WebElement form;
+  @FindBy(css = "table tbody tr")
+  List<WebElement> trs;
+  List<Attribute> attributes;
+  private WebDriver driver;
 
-	@FindBy(css = "form")
-	WebElement form;
+  public HomePage(WebDriver driver) {
+    this.driver = driver;
+    this.attributes = new ArrayList<>();
+  }
 
-	@FindBy(css = "table tbody tr")
-	List<WebElement> trs;
+  private static void get(WebDriver driver, int port, String get) {
+    String baseUrl = "http://localhost:" + port;
+    driver.get(baseUrl + get);
+  }
 
-	List<Attribute> attributes;
+  public static HomePage go(WebDriver driver, int port) {
+    get(driver, port, "/");
+    return PageFactory.initElements(driver, HomePage.class);
+  }
 
-	public HomePage(WebDriver driver) {
-		this.driver = driver;
-		this.attributes = new ArrayList<>();
-	}
+  public void assertAt() {
+    assertThat(this.driver.getTitle()).isEqualTo("Session Attributes");
+  }
 
-	private static void get(WebDriver driver, int port, String get) {
-		String baseUrl = "http://localhost:" + port;
-		driver.get(baseUrl + get);
-	}
+  public List<Attribute> attributes() {
+    List<Attribute> rows = new ArrayList<>();
+    for (WebElement tr : this.trs) {
+      rows.add(new Attribute(tr));
+    }
+    this.attributes.addAll(rows);
+    return this.attributes;
+  }
 
-	public static HomePage go(WebDriver driver, int port) {
-		get(driver, port, "/");
-		return PageFactory.initElements(driver, HomePage.class);
-	}
+  public Form form() {
+    return new Form(this.form);
+  }
 
-	public void assertAt() {
-		assertThat(this.driver.getTitle()).isEqualTo("Session Attributes");
-	}
+  public static class Attribute {
+    @FindBy(xpath = ".//td[1]")
+    WebElement attributeName;
 
-	public List<Attribute> attributes() {
-		List<Attribute> rows = new ArrayList<>();
-		for (WebElement tr : this.trs) {
-			rows.add(new Attribute(tr));
-		}
-		this.attributes.addAll(rows);
-		return this.attributes;
-	}
+    @FindBy(xpath = ".//td[2]")
+    WebElement attributeValue;
 
-	public Form form() {
-		return new Form(this.form);
-	}
+    public Attribute(SearchContext context) {
+      PageFactory.initElements(new DefaultElementLocatorFactory(context), this);
+    }
 
-	public class Form {
-		@FindBy(name = "attributeName")
-		WebElement attributeName;
+    /** @return the attributeName */
+    public String getAttributeName() {
+      return this.attributeName.getText();
+    }
 
-		@FindBy(name = "attributeValue")
-		WebElement attributeValue;
+    /** @return the attributeValue */
+    public String getAttributeValue() {
+      return this.attributeValue.getText();
+    }
+  }
 
-		@FindBy(css = "input[type=\"submit\"]")
-		WebElement submit;
+  public class Form {
+    @FindBy(name = "attributeName")
+    WebElement attributeName;
 
-		public Form(SearchContext context) {
-			PageFactory.initElements(new DefaultElementLocatorFactory(context), this);
-		}
+    @FindBy(name = "attributeValue")
+    WebElement attributeValue;
 
-		public Form attributeName(String text) {
-			this.attributeName.sendKeys(text);
-			return this;
-		}
+    @FindBy(css = "input[type=\"submit\"]")
+    WebElement submit;
 
-		public Form attributeValue(String text) {
-			this.attributeValue.sendKeys(text);
-			return this;
-		}
+    public Form(SearchContext context) {
+      PageFactory.initElements(new DefaultElementLocatorFactory(context), this);
+    }
 
-		public <T> T submit(Class<T> page) {
-			this.submit.click();
-			return PageFactory.initElements(HomePage.this.driver, page);
-		}
-	}
+    public Form attributeName(String text) {
+      this.attributeName.sendKeys(text);
+      return this;
+    }
 
-	public static class Attribute {
-		@FindBy(xpath = ".//td[1]")
-		WebElement attributeName;
+    public Form attributeValue(String text) {
+      this.attributeValue.sendKeys(text);
+      return this;
+    }
 
-		@FindBy(xpath = ".//td[2]")
-		WebElement attributeValue;
-
-		public Attribute(SearchContext context) {
-			PageFactory.initElements(new DefaultElementLocatorFactory(context), this);
-		}
-
-		/**
-		 * @return the attributeName
-		 */
-		public String getAttributeName() {
-			return this.attributeName.getText();
-		}
-
-		/**
-		 * @return the attributeValue
-		 */
-		public String getAttributeValue() {
-			return this.attributeValue.getText();
-		}
-	}
-
+    public <T> T submit(Class<T> page) {
+      this.submit.click();
+      return PageFactory.initElements(HomePage.this.driver, page);
+    }
+  }
 }

@@ -14,25 +14,28 @@ import org.springframework.web.server.WebSession;
 
 /**
  * Copied from Spring Session sample codes.
- * 
+ *
  * @author hantsy
  */
 // tag::class[]
 @Controller
 public class SessionController {
 
-	@PostMapping("/session")
-	public String setAttribute(@ModelAttribute SessionAttributeForm sessionAttributeForm, WebSession session) {
-		session.getAttributes().put(sessionAttributeForm.getAttributeName(), sessionAttributeForm.getAttributeValue());
-		return "redirect:/";
-	}
+  private static final long serialVersionUID = 2878267318695777395L;
 
-	@GetMapping("/")
-	public String index(Model model, WebSession webSession) {
-		model.addAttribute("webSession", webSession);
-		return "index";
-	}
+  @PostMapping("/session")
+  public String setAttribute(
+      @ModelAttribute SessionAttributeForm sessionAttributeForm, WebSession session) {
+    session
+        .getAttributes()
+        .put(sessionAttributeForm.getAttributeName(), sessionAttributeForm.getAttributeValue());
+    return "redirect:/";
+  }
 
-	private static final long serialVersionUID = 2878267318695777395L;
+  @GetMapping("/")
+  public String index(Model model, WebSession webSession) {
+    model.addAttribute("webSession", webSession);
+    return "index";
+  }
 }
 // tag::end[]

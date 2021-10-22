@@ -7,15 +7,13 @@ package com.example.demo;
 
 import org.springframework.session.data.redis.config.annotation.web.server.EnableRedisWebSession;
 
-/**
- *
- * @author hantsy
- */
+/** @author hantsy */
 @EnableRedisWebSession
 public class SessionConfig {
 
-//    @Bean
-//    public ReactiveSessionRepository sessionRepository(ReactiveRedisOperations<String, Object> sessionRedisOperations) {
-//        return new ReactiveRedisOperationsSessionRepository(sessionRedisOperations);
-//    }
+  //    @Bean
+  //    public ReactiveSessionRepository sessionRepository(ReactiveRedisOperations<String, Object>
+  // sessionRedisOperations) {
+  //        return new ReactiveRedisOperationsSessionRepository(sessionRedisOperations);
+  //    }
 }
