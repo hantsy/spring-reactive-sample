@@ -5,36 +5,21 @@
  */
 package com.example.demo;
 
-import javax.annotation.PreDestroy;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.reactivestreams.Publisher;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.DataType;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.ReactiveSubscription;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
-import org.springframework.data.redis.core.*;
-import org.springframework.data.redis.core.script.RedisScript;
+import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.ReactiveRedisMessageListenerContainer;
-import org.springframework.data.redis.listener.Topic;
-import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
-import org.springframework.data.redis.serializer.RedisElementReader;
-import org.springframework.data.redis.serializer.RedisElementWriter;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -75,7 +60,7 @@ public class RedisConfig {
         ReactiveRedisMessageListenerContainer container = new ReactiveRedisMessageListenerContainer(connectionFactory);
         ObjectMapper objectMapper = new ObjectMapper();
         container.receive(ChannelTopic.of("posts"))
-            .map(p->p.getMessage())
+            .map(ReactiveSubscription.Message::getMessage)
             .map(m -> {
                 try {
                     Post post= objectMapper.readValue(m, Post.class);
@@ -86,7 +71,7 @@ public class RedisConfig {
                 }
             })
             .switchIfEmpty(Mono.error(new IllegalArgumentException()))
-            .flatMap(p-> posts.save(p))
+            .flatMap(posts::save)
             .subscribe(c-> log.info(" count:" + c), null , () -> log.info("saving post."));
         return container;
     }
