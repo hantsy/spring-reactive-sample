@@ -13,10 +13,10 @@ import reactor.netty.http.server.HttpServer
 import java.time.Duration
 
 @SpringJUnitConfig(classes = [Application.class])
-class IntegrationTests {
+class IntegrationTests extends MongoDBContainerSetUp {
 
     @Value('${server.port:8080}')
-    int port;
+    int port
 
     WebTestClient rest
 
@@ -32,7 +32,7 @@ class IntegrationTests {
                 .bindToServer()
                 .responseTimeout(Duration.ofSeconds(10))
                 .baseUrl("http://localhost:" + this.port)
-                .build();
+                .build()
     }
 
     @AfterEach
@@ -47,7 +47,7 @@ class IntegrationTests {
                 .uri("/posts")
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isOk()
     }
 
 }
