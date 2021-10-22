@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -58,46 +59,46 @@ class DataInitializer implements CommandLineRunner {
 
 }
 
-@RestController()
+@RestController
 @RequestMapping(value = "/posts")
 class PostController {
 
-    private final PostRepository posts;
+    private final PostRepository postRepository;
 
-    public PostController(PostRepository posts) {
-        this.posts = posts;
+    public PostController(PostRepository postRepository) {
+        this.postRepository = postRepository;
     }
 
     @GetMapping("")
     public Flux<Post> all() {
-        return this.posts.findAll();
+        return this.postRepository.findAll();
     }
 
     @PostMapping("")
     public Mono<Post> create(@RequestBody Post post) {
-        return this.posts.save(post);
+        return this.postRepository.save(post);
     }
 
     @GetMapping("/{id}")
     public Mono<Post> get(@PathVariable("id") String id) {
-        return this.posts.findById(id);
+        return this.postRepository.findById(id);
     }
 
     @PutMapping("/{id}")
     public Mono<Post> update(@PathVariable("id") String id, @RequestBody Post post) {
-        return this.posts.findById(id)
+        return this.postRepository.findById(id)
                 .map(p -> {
                     p.setTitle(post.getTitle());
                     p.setContent(post.getContent());
 
                     return p;
                 })
-                .flatMap(this.posts::save);
+                .flatMap(this.postRepository::save);
     }
 
     @DeleteMapping("/{id}")
     public Mono<Void> delete(@PathVariable("id") String id) {
-        return this.posts.deleteById(id);
+        return this.postRepository.deleteById(id);
     }
 
 }
@@ -114,10 +115,10 @@ class Post {
     @Id
     private String id;
 
-    @Field(store = true)
+    @Field(store = true, type = FieldType.Text)
     private String title;
 
-    @Field(store = true)
+    @Field(store = true, type = FieldType.Text)
     private String content;
 
 }
