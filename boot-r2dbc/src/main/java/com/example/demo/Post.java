@@ -19,7 +19,7 @@ import org.springframework.data.relational.core.mapping.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table("posts")
-class Post {
+public class Post {
     
     @Id
     @Column("id")
