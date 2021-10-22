@@ -2,31 +2,31 @@ package com.example.demo;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.util.Comparator.*;
+import static java.util.Comparator.comparing;
 
 @DataMongoTest
-@ContextConfiguration(initializers = {MongodbContainerInitializer.class})
+@Import(PostRepository.class)
 @TestPropertySource(properties = {
         "logging.level.org.springframework.data.mongodb.core.ReactiveMongoTemplate=DEBUG",
         "logging.level.com.example.demo=DEBUG"
 })
 @Slf4j
-public class PostRepositoryPageableTest {
+class PostRepositoryPageableTest {
 
     @Autowired
     PostRepository postRepository;
@@ -43,7 +43,7 @@ public class PostRepositoryPageableTest {
 
 
     @Test
-    public void testFindByTitleContainsPageable() {
+    void testFindByTitleContainsPageable() {
         this.postRepository.findByTitleContains("title")
                 .sort(comparing(Post::getTitle))
                 .skip(0)
@@ -61,7 +61,8 @@ public class PostRepositoryPageableTest {
     }
 
     @Test
-    public void testFindByKeyword() {
+    @Disabled
+    void testFindByKeyword() {
         this.postRepository.findByKeyword(".*title.*")
                 .skip(0)
                 .take(10)
