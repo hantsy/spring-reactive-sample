@@ -15,9 +15,10 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 class PostRepositoryWithDynamicPropertiesTest {
+
     private static final String COUCHBASE_IMAGE_NAME = "couchbase:community";
     private static final String DEFAULT_IMAGE_NAME = "couchbase/server";
     private final static DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
