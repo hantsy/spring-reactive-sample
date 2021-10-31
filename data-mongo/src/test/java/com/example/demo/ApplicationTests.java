@@ -6,8 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 
 /**
  *
@@ -15,7 +21,23 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  */
 @SpringJUnitConfig(classes = Application.class)
 @ActiveProfiles("test")
-public class ApplicationTests {
+@Testcontainers
+class ApplicationTests {
+
+    static DockerImageName mongoDockerImageName = DockerImageName.parse("mongo");
+
+    @Container
+    protected static final MongoDBContainer MONGO_DB_CONTAINER =
+            new MongoDBContainer(mongoDockerImageName).withExposedPorts(27017);
+
+    static {
+        MONGO_DB_CONTAINER.start();
+    }
+
+    @DynamicPropertySource
+    static void setMongoDbContainerURI(DynamicPropertyRegistry propertyRegistry) {
+        propertyRegistry.add("mongo.uri", MONGO_DB_CONTAINER::getReplicaSetUrl);
+    }
 
     @Autowired
     ApplicationContext context;
@@ -31,7 +53,7 @@ public class ApplicationTests {
     }
 
     @Test
-    public void getAllPostsWillBeOk() throws Exception {
+    void getAllPostsWillBeOk() {
         this.rest
             .get()
             .uri("/posts")
