@@ -5,10 +5,11 @@
  */
 package com.example.demo;
 
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  *
@@ -18,7 +19,7 @@ public class PostRepositoryTest {
 
     PostRepository posts;
 
-    @Before
+    @BeforeAll
     public void setup() {
         posts = new PostRepository();
     }
@@ -27,8 +28,8 @@ public class PostRepositoryTest {
     public void testGetAllPosts() {
 
         StepVerifier.create(posts.findAll())
-            .consumeNextWith(p -> assertTrue(p.getTitle().equals("post one")))
-            .consumeNextWith(p -> assertTrue(p.getTitle().equals("post two")))
+            .consumeNextWith(p -> assertThat(p.getTitle().equals("post one")).isTrue())
+            .consumeNextWith(p -> assertThat(p.getTitle().equals("post two")).isTrue())
             .expectComplete()
             .verify();
     }
