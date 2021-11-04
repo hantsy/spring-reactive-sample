@@ -1,26 +1,44 @@
 package com.example.demo
 
-import org.junit.Before
-import org.junit.Test
-import org.junit.runner.RunWith
-import org.springframework.beans.factory.annotation.Value
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.test.context.ContextConfiguration
-import org.springframework.test.context.junit4.SpringRunner
+import org.springframework.test.context.DynamicPropertyRegistry
+import org.springframework.test.context.DynamicPropertySource
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.web.reactive.function.client.WebClient
+import org.testcontainers.containers.MongoDBContainer
+import org.testcontainers.junit.jupiter.Container
+import org.testcontainers.junit.jupiter.Testcontainers
+import org.testcontainers.utility.DockerImageName
 import reactor.test.test
 
-@RunWith(SpringRunner::class)
-@ContextConfiguration(classes = arrayOf(Application::class))
+@ExtendWith(SpringExtension::class)
+@ContextConfiguration(classes = [Application::class])
+@Testcontainers
 class ApplicationTests {
 
-    @Value("#{@nettyContext.address().getPort()}")
-    var port = 8080
+    companion object {
+
+        private val dockerImageName: DockerImageName = DockerImageName.parse("mongo:latest")
+
+        @Container
+        private val mongoDBContainer: MongoDBContainer = MongoDBContainer(dockerImageName)
+            .apply { start() }
+
+        @JvmStatic
+        @DynamicPropertySource
+        fun addProperties(registry: DynamicPropertyRegistry) {
+            registry.add("mongo.uri", mongoDBContainer::getReplicaSetUrl)
+        }
+    }
 
     lateinit var client: WebClient
 
-    @Before
+    @BeforeEach
     fun setup() {
         client = WebClient.create("http://localhost:8080")
     }
@@ -30,7 +48,7 @@ class ApplicationTests {
         client
                 .get()
                 .uri("/posts")
-                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON)
                 .exchange()
                 .test()
                 .expectNextMatches { it.statusCode() == HttpStatus.OK }
