@@ -1,32 +1,32 @@
 package com.example.demo;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class IntegrationTests {
+import java.util.concurrent.TimeUnit;
 
-    @LocalServerPort
-    int port;
+@SpringBootTest(
+    webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    classes = {DemoApplication.class})
+@AutoConfigureWebTestClient
+class IntegrationTests extends Neo4jContainerSetUp {
 
-    WebTestClient client;
+  @Autowired WebTestClient webTestClient;
 
-    @BeforeAll
-    public void setup() {
-        client = WebTestClient.bindToServer()
-                .baseUrl("http://localhost:" + port)
-                .build();
-    }
-
-    @Test
-    void contextLoads() {
-        this.client.get().uri("/posts")
-                .exchange()
-                .expectStatus().is2xxSuccessful()
-                .expectBodyList(Post.class).hasSize(2);
-    }
-
+  @Test
+  void contextLoads() throws InterruptedException {
+    // waiting so that posts are inserted
+    TimeUnit.SECONDS.sleep(3);
+    this.webTestClient
+        .get()
+        .uri("/posts")
+        .exchange()
+        .expectStatus()
+        .is2xxSuccessful()
+        .expectBodyList(Post.class)
+        .hasSize(2);
+  }
 }
