@@ -22,10 +22,10 @@ public class Application {
     @Value("${server.port:8080}")
     private int port = 8080;
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         try (AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(
             Application.class)) {
-            context.getBean(HttpServer.class).bindNow().onDispose().block();
+            context.getBean(HttpServer.class);
         }
     }
 
