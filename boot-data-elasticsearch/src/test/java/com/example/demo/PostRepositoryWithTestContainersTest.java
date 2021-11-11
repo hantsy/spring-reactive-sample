@@ -1,7 +1,6 @@
 package com.example.demo;
 
-
-import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +12,8 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.test.StepVerifier;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import java.util.Comparator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 //@DataElasticsearchTest
 @SpringBootTest
 @Testcontainers
-@Slf4j
 public class PostRepositoryWithTestContainersTest {
 
     @Container
@@ -28,11 +28,20 @@ public class PostRepositoryWithTestContainersTest {
         new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.15.1")
             .withStartupTimeout(Duration.ofMinutes(5));
 
+	static {
+		elasticsearchContainer.start();
+	}
 
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.elasticsearch.uris", elasticsearchContainer::getHttpHostAddress);
+    }
+	
+	@BeforeAll
+    void setUp() throws InterruptedException {
+        // waiting so that posts are inserted
+        TimeUnit.SECONDS.sleep(3);
     }
 
     @Autowired
