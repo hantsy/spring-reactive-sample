@@ -3,10 +3,14 @@ package com.example.demo;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.neo4j.springframework.data.config.EnableNeo4jAuditing;
-import org.neo4j.springframework.data.core.ReactiveNeo4jClient;
+import org.neo4j.springframework.data.core.ReactiveNeo4jOperations;
+import org.neo4j.springframework.data.core.schema.GeneratedValue;
+import org.neo4j.springframework.data.core.schema.Id;
+import org.neo4j.springframework.data.core.schema.Node;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -15,9 +19,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Map;
-import java.util.UUID;
 
+import static org.neo4j.springframework.data.core.cypher.Cypher.*;
 import static org.springframework.http.ResponseEntity.notFound;
 
 @SpringBootApplication
@@ -46,14 +49,15 @@ class DataInitializer implements CommandLineRunner {
                         Flux
                                 .just("Post one", "Post two")
                                 .flatMap(
-                                        title -> this.posts.save(Post.builder().title(title).content("The content of " + title).build())
+                                        title ->
+                                                this.posts.save(Post.builder().title(title).content("The content of " + title).build())
                                 )
                 )
                 .log()
                 .thenMany(
                         this.posts.findAll()
                 )
-                .blockLast();//to make `IntegrationTests` work.
+                .blockLast();
 //                .subscribe(
 //                        (data) -> log.info("found post:" + data),
 //                        (error) -> log.error("error:" + error),
@@ -82,15 +86,15 @@ class PostController {
     }
 
     @GetMapping("/{id}")
-    public Mono<Post> get(@PathVariable("id") String id) {
+    public Mono<Post> get(@PathVariable("id") Long id) {
         return Mono.just(id)
-                .flatMap(posts::findOne)
+                .flatMap(posts::findById)
                 .switchIfEmpty(Mono.error(new PostNotFoundException(id)));
     }
 
     @PutMapping("/{id}")
-    public Mono<Post> update(@PathVariable("id") String id, @RequestBody Post post) {
-        return this.posts.findOne(id)
+    public Mono<Post> update(@PathVariable("id") Long id, @RequestBody Post post) {
+        return this.posts.findById(id)
                 .map(p -> {
                     p.setTitle(post.getTitle());
                     p.setContent(post.getContent());
@@ -101,7 +105,7 @@ class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public Mono<Integer> delete(@PathVariable("id") String id) {
+    public Mono<Void> delete(@PathVariable("id") Long id) {
         return this.posts.deleteById(id);
     }
 
@@ -121,7 +125,7 @@ class RestExceptionHandler {
 
 class PostNotFoundException extends RuntimeException {
 
-    PostNotFoundException(String id) {
+    PostNotFoundException(Long id) {
         super("Post #" + id + " was not found");
     }
 }
@@ -129,113 +133,58 @@ class PostNotFoundException extends RuntimeException {
 @Component
 @RequiredArgsConstructor
 class PostRepository {
-    private final ReactiveNeo4jClient client;
+    private final ReactiveNeo4jOperations template;
 
     public Mono<Long> count() {
-        return client.query("MATCH (p:Post) RETURN count(p)")
-                .fetchAs(Long.class)
-                .mappedBy((ts, r) -> r.get(0).asLong())
-                .one();
+        return this.template.count(Post.class);
     }
 
     public Flux<Post> findAll() {
-        return client
-                .query(
-                        "MATCH (p:Post) " +
-                                " RETURN p.id as id, p.title as title, p.content as content, p.createdAt as createdAt, p.updatedAt as updatedAt"
-                )
-                .fetchAs(Post.class).mappedBy((ts, r) ->
-                        Post.builder()
-                                .id(r.get("id").asString())
-                                .title(
-                                        r.get("title").asString())
-                                .content(
-                                        r.get("content").asString())
-                                .createdAt(r.get("createdAt").asLocalDateTime(null))
-                                .updatedAt(r.get("updatedAt").asLocalDateTime(null))
-                                .build()
-                )
-                .all();
+        return this.template.findAll(Post.class);
     }
 
-    public Mono<Post> findOne(String id) {
-        return client
-                .query(
-                        "MATCH (p:Post)" +
-                                " WHERE p.id = $id" +
-                                " RETURN p.id as id, p.title as title, p.content as content, p.createdAt as createdAt, p.updatedAt as updatedAt"
-                )
-                .bind(id).to("id")
-                .fetchAs(Post.class).mappedBy((ts, r) ->
-                        Post.builder()
-                                .id(r.get("id").asString())
-                                .title(
-                                        r.get("title").asString())
-                                .content(
-                                        r.get("content").asString())
-                                .createdAt(r.get("createdAt").asLocalDateTime(null))
-                                .updatedAt(r.get("updatedAt").asLocalDateTime(null))
-                                .build()
-                )
-                .one();
+    public Flux<Post> findByTitleContains(String title) {
+        var postNode = node("Post").named("p");
+        return this.template.findAll(
+                match(postNode)
+                        .where(postNode.property("title").contains(literalOf(title)))
+                        .returning(postNode)
+                        .build(),
+                Post.class
+        );
+    }
+
+    public Mono<Void> deleteById(Long id) {
+        return this.template.deleteById(id, Post.class);
     }
 
     public Mono<Post> save(Post post) {
-        var query = "MERGE (p:Post {id: $id}) \n" +
-                " ON CREATE SET p.createdAt=localdatetime(), p.title=$title, p.content=$content\n" +
-                " ON MATCH SET p.updatedAt=localdatetime(), p.title=$title, p.content=$content\n" +
-                " RETURN p.id as id, p.title as title, p.content as content, p.createdAt as createdAt, p.updatedAt as updatedAt";
-
-        return client.query(query)
-                .bind(post).with(data ->
-                        Map.of(
-                                "id", (data.getId() != null ? data.getId() : UUID.randomUUID().toString()),
-                                "title", data.getTitle(),
-                                "content", data.getContent()
-                        )
-                )
-                .fetchAs(Post.class).mappedBy((ts, r) ->
-                        Post.builder()
-                                .id(r.get("id").asString())
-                                .title(
-                                        r.get("title").asString())
-                                .content(
-                                        r.get("content").asString())
-                                .createdAt(r.get("createdAt").asLocalDateTime(null))
-                                .updatedAt(r.get("updatedAt").asLocalDateTime(null))
-                                .build()
-                )
-                .one();
+        return this.template.save(post);
     }
 
-    public Mono<Integer> deleteAll() {
-        return client.query("MATCH (m:Post) DETACH DELETE m")
-                .run()
-                .map(it -> it.counters().nodesDeleted());
-
+    public Mono<Post> findById(Long id) {
+        return this.template.findById(id, Post.class);
     }
 
-    public Mono<Integer> deleteById(String id) {
-        return client
-                .query(
-                        "MATCH (p:Post) WHERE p.id = $id" +
-                                " DETACH DELETE p"
-                )
-                .bind(id).to("id")
-                .run()
-                .map(it -> it.counters().nodesDeleted());
+    public Mono<Void> deleteAll() {
+        return this.template.deleteAll(Post.class);
     }
 }
 
+@Node
 @Data
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 class Post {
-    private String id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
     private String title;
     private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+
+    @CreatedDate
+    private LocalDateTime createdDate;
 }
