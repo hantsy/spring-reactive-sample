@@ -21,17 +21,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest
 @Testcontainers
 @Slf4j
-// Testcontainers does not work well with per_class testinstance.
-// see: https://stackoverflow.com/questions/61357116/exception-mapped-port-can-only-be-obtained-after-the-container-is-started-when/61358336#61358336
-@TestInstance(TestInstance.Lifecycle.PER_METHOD)
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.9.3");
+    static final ElasticsearchContainer elasticsearchContainer =
+        new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.15.1")
+            .withStartupTimeout(Duration.ofMinutes(5));
+
+
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.elasticsearch.client.reactive.endpoints", esContainer::getHttpHostAddress);
+        registry.add("spring.elasticsearch.uris", elasticsearchContainer::getHttpHostAddress);
     }
 
     @Autowired
