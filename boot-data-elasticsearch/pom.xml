@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>15</java.version>
-        <testcontainers.version>1.15.0</testcontainers.version>
+        <testcontainers.version>1.16.2</testcontainers.version>
     </properties>
 
     <dependencies>
