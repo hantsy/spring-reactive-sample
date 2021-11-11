@@ -9,10 +9,10 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-boot-neo4j-rx-cypher</artifactId>
+    <artifactId>spring-reactive-sample-boot-neo4j-rx</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-reactive-sample-boot-neo4j-rx-cypher</name>
-    <description>Spring data neo4j rx demo(ReactiveNeo4jOperations)</description>
+    <name>spring-reactive-sample-boot-neo4j-rx</name>
+    <description>Spring data neo4j rx demo(ReactiveNeo4jClient)</description>
 
     <properties>
         <java.version>11</java.version>
