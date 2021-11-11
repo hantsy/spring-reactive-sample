@@ -48,7 +48,6 @@ The following table list all sample codes related to the above posts.
 | [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message) | Spring Data Redis Reactive Example with `ReactiveRedisMessageListenerContainer` |
 | [data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/data-cassandra) | Spring Data Cassandra Reactive example                       |
 | [data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase) | Spring Data Couchbase Reactive example                       |
-
 | [security](https://github.com/hantsy/spring-reactive-sample/tree/master/security) | Based on **vanilla**, add  Spring Security Reactive support  |
 | [security-form](https://github.com/hantsy/spring-reactive-sample/tree/master/security-form) | Same as security, login form example                         |
 | [security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties) | Same as security, but use *users.properties* to store users  |
@@ -109,7 +108,9 @@ The following table list all sample codes related to the above posts.
 | [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler  
 
 ### Legacy Codes
-Some example are becoming deprecated as time goes by, eg. the SDN Rx which was maintained by Neo4j team is discontinued, it is highly recommended to migrate the offficial Spring Data Neo4j. And R2dbc added a lot of breaking changes in 1.2, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new Spring Data R2dbc feature.                                   |
+Some example codes are becoming deprecated as time goes by, eg. the SDN Rx project which was maintained by the Neo4j team is discontinued now, it is highly recommended to migrate to the official Spring Data Neo4j. 
+
+And Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.                                   |
 
 | name                                                         | description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
