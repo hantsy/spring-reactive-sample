@@ -108,7 +108,7 @@ The following table list all sample codes related to the above posts.
 | [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler  
 
 ### Legacy Codes
-Some example codes are becoming deprecated as time goes by, eg. the SDN Rx project which was maintained by the Neo4j team is discontinued now, it is highly recommended to migrate to the official Spring Data Neo4j. 
+Some example codes are becoming deprecated as time goes by, eg. the [SDN Rx project](https://github.com/neo4j/sdn-rx) which was maintained by the Neo4j team is discontinued now, it is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). 
 
 And Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.                                   |
 
