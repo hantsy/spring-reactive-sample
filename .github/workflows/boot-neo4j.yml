@@ -1,0 +1,34 @@
+name: spring-reactive-boot-neo4j
+
+on:
+  push:
+    paths:
+      - "boot-neo4j/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "boot-neo4j/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v2.3.1
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        cd boot-neo4j
+        mvn -B package --file pom.xml
