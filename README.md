@@ -48,8 +48,7 @@ The following table list all sample codes related to the above posts.
 | [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message) | Spring Data Redis Reactive Example with `ReactiveRedisMessageListenerContainer` |
 | [data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/data-cassandra) | Spring Data Cassandra Reactive example                       |
 | [data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase) | Spring Data Couchbase Reactive example                       |
-| [data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/data-r2dbc) | Spring Data R2dbc Example. (*Deprecated*, go to [hantsy/spring-r2dbc-sample](https://github.com/hantsy/spring-r2dbc-sample) to update yourself) |
-| [data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/data-r2dbc-postgresql) | Spring Data R2dbc Example, but use PostgreSQL instead(*Deprecated*) |
+
 | [security](https://github.com/hantsy/spring-reactive-sample/tree/master/security) | Based on **vanilla**, add  Spring Security Reactive support  |
 | [security-form](https://github.com/hantsy/spring-reactive-sample/tree/master/security-form) | Same as security, login form example                         |
 | [security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties) | Same as security, but use *users.properties* to store users  |
@@ -97,15 +96,6 @@ The following table list all sample codes related to the above posts.
 | [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) | Kotlin specific `BeanDefinitionDSL` Example                  |
 | [boot-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-redis) | Example of using `ReactiveRedisConnection` and `RouterFunction` |
 | [boot-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis) | Spring Data Redis Example                                    |
-| [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-r2dbc) | Spring Data R2dbc example using `DatabaseClient`(*Deprecated*) |
-| [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc) | Spring Data R2dbc example(*Deprecated*)                      |
-| [boot-data-r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-auditing) | `@EnableR2dbcAuditing` example(*Deprecated*)                 |
-| [boot-data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-postgresql) | Same as boot-data-r2dbc, but use PostgresSQL instead(*Deprecated*) |
-| [boot-data-r2dbc-mysql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-mysql) | Same as boot-data-r2dbc, but use MySQL instead(*Deprecated*) |
-| [boot-data-r2dbc-mssql](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc-mssql) | Same as boot-data-r2dbc, but use MS SQL instead(*Deprecated*) |
-| [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example but use `ReactiveNeo4jClient`(*Deprecated*) |
-| [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-rx-cypher) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example using Cypher queries(*Deprecated*) |
-| [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example(*Deprecated*) |
 | [boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j) | Spring Data Neo4j example (Spring Boot 2.4)                  |
 | [boot-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) | Spring Data Neo4j using `ReactiveNeo4jOperations` (Spring Boot 2.4) |
 | [boot-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j-cypher) | Spring Data Neo4j using `ReacitveNeo4jClient` (Spring Boot 2.4) |
@@ -116,8 +106,24 @@ The following table list all sample codes related to the above posts.
 | [boot-data-mongo-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-auditing) | `@EnableReactiveMongoAuditing` and `ReactiveAuditorAware` example |
 | [boot-data-mongo-querydsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-querydsl) | Spring Data Mongo Example with QueryDSL support              |
 | [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | Spring Data Mongo Example with Gridfs support                |
-| [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler                                     |
+| [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler  
 
+### Legacy Codes
+Some example are becoming deprecated as time goes by, eg. the SDN Rx which was maintained by Neo4j team is discontinued, it is highly recommended to migrate the offficial Spring Data Neo4j. And R2dbc added a lot of breaking changes in 1.2, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new Spring Data R2dbc feature.                                   |
+
+| name                                                         | description                                                  |
+| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| [data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/data-r2dbc) | Spring Data R2dbc Example. (*Deprecated*, go to [hantsy/spring-r2dbc-sample](https://github.com/hantsy/spring-r2dbc-sample) to update yourself) |
+| [data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/data-r2dbc-postgresql) | Spring Data R2dbc Example, but use PostgreSQL instead(*Deprecated*) |
+| [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-r2dbc) | Spring Data R2dbc example using `DatabaseClient`(*Deprecated*) |
+| [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc) | Spring Data R2dbc example(*Deprecated*)                      |
+| [boot-data-r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-auditing) | `@EnableR2dbcAuditing` example(*Deprecated*)                 |
+| [boot-data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-postgresql) | Same as boot-data-r2dbc, but use PostgresSQL instead(*Deprecated*) |
+| [boot-data-r2dbc-mysql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-mysql) | Same as boot-data-r2dbc, but use MySQL instead(*Deprecated*) |
+| [boot-data-r2dbc-mssql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-mssql) | Same as boot-data-r2dbc, but use MS SQL instead(*Deprecated*) |
+| [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example but use `ReactiveNeo4jClient`(*Deprecated*) |
+| [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx-cypher) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example using Cypher queries(*Deprecated*) |
+| [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example(*Deprecated*) |
 
 ## References
 
