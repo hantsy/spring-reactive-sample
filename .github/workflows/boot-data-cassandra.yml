@@ -1,0 +1,34 @@
+name: spring-reactive-boot-data-cassandra
+
+on:
+  push:
+    paths:
+      - "boot-data-cassandra/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "boot-data-cassandra/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v2.3.1
+      with:
+        java-version: '17'
+        distribution: 'adopt'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        cd boot-data-cassandra
+        mvn -B package --file pom.xml
