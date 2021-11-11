@@ -42,30 +42,6 @@ updates:
     schedule:
       interval: "daily"
   - package-ecosystem: "maven"
-    directory: "/boot-data-neo4j-rx"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-r2dbc"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-r2dbc-auditing"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-r2dbc-mssql"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-r2dbc-mysql"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-r2dbc-postgresql"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
     directory: "/boot-data-redis"
     schedule:
       interval: "daily"
@@ -111,18 +87,6 @@ updates:
       interval: "daily"
   - package-ecosystem: "maven"
     directory: "/boot-neo4j-cypher"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-neo4j-rx"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-neo4j-rx-cypher"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/boot-r2dbc"
     schedule:
       interval: "daily"
   - package-ecosystem: "maven"
@@ -175,14 +139,6 @@ updates:
       interval: "daily"
   - package-ecosystem: "maven"
     directory: "/data-neo4j"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/data-r2dbc"
-    schedule:
-      interval: "daily"
-  - package-ecosystem: "maven"
-    directory: "/data-r2dbc-postgresql"
     schedule:
       interval: "daily"
   - package-ecosystem: "maven"
