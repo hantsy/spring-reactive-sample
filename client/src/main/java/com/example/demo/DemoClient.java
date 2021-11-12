@@ -5,16 +5,15 @@
  */
 package com.example.demo;
 
-import java.io.IOException;
-
-import org.springframework.http.client.Netty4ClientHttpRequestFactory;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
-import org.springframework.web.reactive.function.client.*;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import java.io.IOException;
 
 /**
- *
  * @author hantsy
  */
 public class DemoClient {
@@ -25,7 +24,7 @@ public class DemoClient {
                 //.clientConnector(new JettyClientHttpConnector())
                 .clientConnector(new ReactorClientHttpConnector())
                 .codecs(
-                        clientCodecConfigurer ->{
+                        clientCodecConfigurer -> {
                             // use defaultCodecs() to apply DefaultCodecs
                             // clientCodecConfigurer.defaultCodecs();
 
@@ -47,12 +46,11 @@ public class DemoClient {
                 .baseUrl("http://localhost:8080")
                 .build();
         client
-            .get()
-            .uri("/posts")
-            .exchange()
-            .flatMapMany(res -> res.bodyToFlux(Post.class))
-            .log()
-            .subscribe(post -> System.out.println("post: " + post));
+                .get()
+                .uri("/posts")
+                .exchangeToFlux(it -> it.bodyToFlux(Post.class))
+                .log()
+                .subscribe(post -> System.out.println("post: " + post));
 
         System.out.println("Client is started!");
         System.in.read();

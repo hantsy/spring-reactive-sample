@@ -31,4 +31,4 @@ jobs:
     - name: Build with Maven
       run: |
         cd war
-        mvn -B package --file pom.xml
+        mvn -B clean verify --file pom.xml -Pintegration

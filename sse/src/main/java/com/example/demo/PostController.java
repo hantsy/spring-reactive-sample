@@ -28,15 +28,15 @@ class PostController {
         this.posts = posts;
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public Flux<Post> all() {
         return this.posts.findAll();
     }
 
-    @GetMapping(produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
-    public Flux<Post> stream() {
-        return Flux.interval(Duration.ofSeconds(1L)).flatMap((oneSecond) -> this.posts.findAll());
-    }
+//    @GetMapping(produces = MediaType.APPLICATION_STREAM_JSON_VALUE)
+//    public Flux<Post> stream() {
+//        return Flux.interval(Duration.ofSeconds(1L)).flatMap((oneSecond) -> this.posts.findAll());
+//    }
 
     @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Post> sse() {
@@ -45,7 +45,12 @@ class PostController {
                 .map(Tuple2::getT2);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/latest", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Post> trackLatestPost() {
+        return this.posts.latestPost();
+    }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Post> create(@RequestBody Post post) {
         return this.posts.save(post);
     }
