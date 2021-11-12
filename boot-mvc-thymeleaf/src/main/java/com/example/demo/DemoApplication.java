@@ -1,75 +1,35 @@
 package com.example.demo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.context.event.EventListener;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class DemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
-	}
-}
-
-@Component
-@Slf4j
-class DataInitializer {
-
-    private final PostRepository posts;
-
-    public DataInitializer(PostRepository posts) {
-        this.posts = posts;
+    public static void main(String[] args) {
+        SpringApplication.run(DemoApplication.class, args);
     }
-
-    @EventListener(value = ContextRefreshedEvent.class)
-    public void init() {
-        log.info("start data initialization  ...");
-        this.posts
-            .deleteAll()
-            .thenMany(
-
-                Flux
-                    .range(1, 1000)
-                    .flatMap(
-                        num -> this.posts.save(Post.builder().title("Title" + num).content("content of " + "Title" + num).build())
-                    )
-            )
-            .log()
-            .subscribe(
-                null,
-                null,
-                () -> log.info("done initialization...")
-            );
-
-    }
-
 }
 
 @Controller
+@RequiredArgsConstructor
 class HomeController {
 
     private final PostRepository posts;
-
-    HomeController(PostRepository posts) {
-        this.posts = posts;
-    }
 
     @GetMapping("/")
     public String home(final Model model) {
@@ -82,20 +42,48 @@ class HomeController {
 }
 
 
-interface PostRepository extends ReactiveMongoRepository<Post, String>{}
+@Slf4j
+@Component
+class PostRepository {
+
+    private static final List<Post> DATA = new ArrayList<>();
+
+    static {
+        IntStream.of(1, 100)
+                .forEachOrdered(i -> DATA.add(
+                        Post.builder().id(UUID.randomUUID()).title("post #" + i).content("content of post#" + i)
+                                .build()));
+
+    }
+
+    Flux<Post> findAll() {
+        return Flux.fromIterable(DATA);
+    }
+
+    Mono<Post> findById(UUID id) {
+        return findAll().filter(p -> p.getId().equals(id)).last();
+    }
+
+    Mono<Post> save(Post post) {
+        Post saved = Post.builder().id(UUID.randomUUID()).title(post.getTitle())
+                .content(post.getContent()).build();
+        log.debug("saved post: {}", saved);
+        DATA.add(saved);
+        return Mono.just(saved);
+    }
+
+}
 
 @Data
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
 class Post {
-    
-    @Id
-    private String id;
+
+    private UUID id;
     private String title;
     private String content;
-    
 }
+
 
