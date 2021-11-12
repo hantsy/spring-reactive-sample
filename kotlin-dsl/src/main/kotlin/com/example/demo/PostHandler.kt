@@ -11,7 +11,6 @@ import java.time.Duration
 
 class PostHandler(val posts: PostRepository) {
 
-
     fun all(req: ServerRequest): Mono<ServerResponse> {
         return ok().body(this.posts.findAll(), Post::class.java)
     }
@@ -31,7 +30,7 @@ class PostHandler(val posts: PostRepository) {
     fun create(req: ServerRequest): Mono<ServerResponse> {
         return req.bodyToMono(Post::class.java)
                 .flatMap { post -> this.posts.save(post) }
-                .flatMap { (id) -> created(URI.create("/posts/" + id)).build() }
+                .flatMap { (id) -> created(URI.create("/posts/$id")).build() }
     }
 
     fun get(req: ServerRequest): Mono<ServerResponse> {

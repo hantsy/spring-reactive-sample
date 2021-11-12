@@ -10,7 +10,7 @@ import reactor.netty.http.server.HttpServer
 
 @Configuration
 @ComponentScan
-@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
+@PropertySource(value = ["classpath:application.properties"], ignoreResourceNotFound = true)
 class Application {
 
     @Value("\${server.port:8080}")
@@ -28,7 +28,7 @@ class Application {
 
 @Throws(Exception::class)
 fun main(args: Array<String>) {
-    AnnotationConfigApplicationContext {
+    AnnotationConfigApplicationContext().apply {
         register(Application::class.java)
         refresh()
         getBean(DisposableServer::class.java).onDispose().block()

@@ -8,13 +8,6 @@ import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository
-import org.springframework.http.HttpMethod
-import org.springframework.security.config.web.server.ServerHttpSecurity
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService
-import org.springframework.security.core.userdetails.User
-import org.springframework.security.crypto.factory.PasswordEncoderFactories
-import org.springframework.security.crypto.password.PasswordEncoder
-import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.reactive.CorsWebFilter
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
@@ -46,52 +39,21 @@ fun beans() = beans {
 //                    )
 //            )
             posts.deleteAll()
-                    .thenMany<Post>(
-                            posts.saveAll(
-                                    arrayListOf(
-                                            Post(null, "my first post", "content of my first post"),
-                                            Post(null, "my second post", "content of my second post")
-                                    )
-                            )
+                .thenMany<Post>(
+                    posts.saveAll(
+                        arrayListOf(
+                            Post(null, "my first post", "content of my first post"),
+                            Post(null, "my second post", "content of my second post")
+                        )
                     )
-                    .log()
-                    .subscribe(null, null, { println("data initialization done.") })
+                )
+                .log()
+                .subscribe { println("data initialization done.") }
         }
     }
 
     bean {
         PostRoutes(PostHandler(ref())).routes()
-    }
-
-
-    bean<PasswordEncoder> {
-        PasswordEncoderFactories.createDelegatingPasswordEncoder()
-    }
-
-    bean<SecurityWebFilterChain> {
-        ref<ServerHttpSecurity>().authorizeExchange()
-                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
-                .pathMatchers("/posts/**").authenticated()
-                //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-                .anyExchange().permitAll()
-                .and()
-                .csrf().disable()
-                .build()
-    }
-
-    bean {
-        val passwordEncoder = ref<PasswordEncoder>()
-        val user = User.withUsername("user")
-                .passwordEncoder { it -> passwordEncoder.encode(it) }
-                .password("password")
-                .roles("USER").build()
-        val admin = User.withUsername("admin")
-                .password("password")
-                .passwordEncoder { it -> passwordEncoder.encode(it) }
-                .roles("USER", "ADMIN")
-                .build()
-        MapReactiveUserDetailsService(user, admin)
     }
 
     bean {
@@ -139,36 +101,36 @@ class PostHandler(private val posts: PostRepository) {
 
     fun create(req: ServerRequest): Mono<ServerResponse> {
         return req.bodyToMono(Post::class.java)
-                .flatMap { this.posts.save(it) }
-                .flatMap { created(URI.create("/posts/" + it.id)).build() }
+            .flatMap { this.posts.save(it) }
+            .flatMap { created(URI.create("/posts/" + it.id)).build() }
     }
 
     fun get(req: ServerRequest): Mono<ServerResponse> {
         return this.posts.findById(req.pathVariable("id"))
-                .flatMap { ok().body(Mono.just(it), Post::class.java) }
-                .switchIfEmpty(notFound().build())
+            .flatMap { ok().body(Mono.just(it), Post::class.java) }
+            .switchIfEmpty(notFound().build())
     }
 
     fun update(req: ServerRequest): Mono<ServerResponse> {
         return this.posts.findById(req.pathVariable("id"))
-                .zipWith(req.bodyToMono(Post::class.java))
-                .map { it.t1.copy(title = it.t2.title, content = it.t2.content) }
-                .flatMap { this.posts.save(it) }
-                .flatMap { noContent().build() }
+            .zipWith(req.bodyToMono(Post::class.java))
+            .map { it.t1.copy(title = it.t2.title, content = it.t2.content) }
+            .flatMap { this.posts.save(it) }
+            .flatMap { noContent().build() }
     }
 
     fun delete(req: ServerRequest): Mono<ServerResponse> {
         return this.posts.deleteById(req.pathVariable("id"))
-                .flatMap { noContent().build() }
+            .flatMap { noContent().build() }
     }
 }
 
 @Document
 data class Post(
-        @Id var id: String? = null,
-        var title: String? = null,
-        var content: String? = null,
-        @CreatedDate var createdDate: LocalDateTime = LocalDateTime.now()
+    @Id var id: String? = null,
+    var title: String? = null,
+    var content: String? = null,
+    @CreatedDate var createdDate: LocalDateTime = LocalDateTime.now()
 )
 
 interface PostRepository : ReactiveMongoRepository<Post, String>

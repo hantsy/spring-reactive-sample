@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.reactive.server.WebTestClient
 
-@SpringBootTest(classes = arrayOf(DemoApplication::class))
+@SpringBootTest(classes = [DemoApplication::class])
 class ApplicationTests {
 
     @Autowired
@@ -17,15 +17,15 @@ class ApplicationTests {
 
 
     @BeforeAll
-    fun setup(){
+    fun setup() {
         client = WebTestClient.bindToController(controller).build()
     }
-
 
     @Test
     fun `get all posts`() {
         client.get().uri("/posts")
-                .exchange().expectStatus().isOk
+            .exchange()
+            .expectStatus().isOk
     }
 
 }

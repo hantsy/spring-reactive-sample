@@ -7,5 +7,4 @@ class TestConfigInitializer: ApplicationContextInitializer<GenericApplicationCon
     override fun initialize(applicationContext: GenericApplicationContext) {
        beans().initialize(applicationContext)
     }
-
 }
