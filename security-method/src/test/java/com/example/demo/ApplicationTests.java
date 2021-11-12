@@ -18,8 +18,7 @@ import org.springframework.web.reactive.function.BodyInserters;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.Credentials.basicAuthenticationCredentials;
 
 /**
@@ -39,6 +38,7 @@ public class ApplicationTests {
         this.rest = WebTestClient
                 .bindToApplicationContext(this.context)
                 .apply(springSecurity())
+                //.apply(csrf())
                 .configureClient()
                 //.defaultHeaders( headers ->headers.setBasicAuth("user", "password"))
                 .build();
@@ -83,8 +83,7 @@ public class ApplicationTests {
                 .body(BodyInserters.fromValue(Post.builder().title("title test").content("content test").build()))
                 .attributes(invalidCredentials())
                 .exchange()
-                .expectStatus().isUnauthorized()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -94,8 +93,7 @@ public class ApplicationTests {
                 .uri("/posts")
                 .body(BodyInserters.fromValue(Post.builder().title("title test").content("content test").build()))
                 .exchange()
-                .expectStatus().isUnauthorized()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -105,8 +103,7 @@ public class ApplicationTests {
                 .uri("/posts/1")
                 .attributes(userCredentials())
                 .exchange()
-                .expectStatus().is4xxClientError()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -116,8 +113,7 @@ public class ApplicationTests {
                 .delete()
                 .uri("/posts/1")
                 .exchange()
-                .expectStatus().is4xxClientError()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -127,8 +123,7 @@ public class ApplicationTests {
                 .delete()
                 .uri("/posts/1")
                 .exchange()
-                .expectStatus().is4xxClientError()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
 //    @Test
