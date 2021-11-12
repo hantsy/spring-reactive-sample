@@ -5,17 +5,20 @@
  */
 package com.example.demo;
 
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.restdocs.JUnitRestDocumentation;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.document;
 import static org.springframework.restdocs.webtestclient.WebTestClientRestDocumentation.documentationConfiguration;
+
+import org.springframework.restdocs.RestDocumentationContextProvider;
+import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -23,21 +26,18 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  *
  * @author hantsy
  */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = Application.class)
+@SpringJUnitConfig(classes = Application.class)
 @ActiveProfiles("test")
+@ExtendWith(RestDocumentationExtension.class)
 public class ApiDocumentation {
-
-    @Rule
-    public final JUnitRestDocumentation restDocumentation = new JUnitRestDocumentation();
 
     @Autowired
     ApplicationContext context;
 
     WebTestClient client;
 
-    @Before
-    public void setup() {
+    @BeforeEach
+    public void setup(RestDocumentationContextProvider restDocumentation) {
         this.client = WebTestClient
             .bindToApplicationContext(this.context)
             .configureClient()

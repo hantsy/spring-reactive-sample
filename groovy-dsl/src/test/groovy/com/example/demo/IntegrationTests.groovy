@@ -16,7 +16,7 @@ import java.time.Duration
 class IntegrationTests {
 
     @Value('${server.port:8080}')
-    int port;
+    int port
 
     WebTestClient rest
 
