@@ -7,14 +7,12 @@ package com.example.demo;
 
 import java.time.Duration;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
@@ -23,8 +21,7 @@ import reactor.netty.http.server.HttpServer;
  *
  * @author hantsy
  */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = Application.class)
+@SpringJUnitConfig(Application.class)
 public class IntegrationTests {
 
     @Value("${server.port:8080}")
@@ -37,7 +34,7 @@ public class IntegrationTests {
 
     private DisposableServer disposableServer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.disposableServer = this.httpServer.bindNow();
         this.rest = WebTestClient
@@ -47,7 +44,7 @@ public class IntegrationTests {
             .build();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         this.disposableServer.dispose();
     }
