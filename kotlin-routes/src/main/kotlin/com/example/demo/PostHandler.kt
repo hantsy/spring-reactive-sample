@@ -1,6 +1,7 @@
 package com.example.demo
 
 import org.springframework.http.MediaType
+import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.ServerResponse.*
@@ -9,8 +10,8 @@ import reactor.core.publisher.Mono
 import java.net.URI
 import java.time.Duration
 
+@Component
 class PostHandler(val posts: PostRepository) {
-
 
     fun all(req: ServerRequest): Mono<ServerResponse> {
         return ok().body(this.posts.findAll(), Post::class.java)
@@ -31,7 +32,7 @@ class PostHandler(val posts: PostRepository) {
     fun create(req: ServerRequest): Mono<ServerResponse> {
         return req.bodyToMono(Post::class.java)
                 .flatMap { post -> this.posts.save(post) }
-                .flatMap { (id) -> created(URI.create("/posts/" + id)).build() }
+                .flatMap { (id) -> created(URI.create("/posts/$id")).build() }
     }
 
     fun get(req: ServerRequest): Mono<ServerResponse> {

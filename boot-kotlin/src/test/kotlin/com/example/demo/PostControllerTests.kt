@@ -3,7 +3,9 @@ package com.example.demo
 
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
-import org.mockito.BDDMockito.given
+import org.mockito.BDDMockito.*
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration
@@ -13,11 +15,8 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import reactor.core.publisher.Flux
 
 @WebFluxTest(
-        controllers = arrayOf(PostController::class),
-        excludeAutoConfiguration = arrayOf(
-                ReactiveUserDetailsServiceAutoConfiguration::class,
-                ReactiveSecurityAutoConfiguration::class
-        )
+        controllers = [PostController::class],
+        excludeAutoConfiguration = [ReactiveUserDetailsServiceAutoConfiguration::class, ReactiveSecurityAutoConfiguration::class]
 )
 class PostControllerTests {
 
@@ -45,6 +44,8 @@ class PostControllerTests {
                 .exchange()
                 .expectStatus()
                 .isOk
+        verify(posts, times(1)).findAll()
+        verifyNoMoreInteractions(this.posts)
     }
 
 }

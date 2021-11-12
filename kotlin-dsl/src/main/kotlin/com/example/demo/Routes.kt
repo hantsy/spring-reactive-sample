@@ -1,14 +1,11 @@
 package com.example.demo
 
-import org.slf4j.LoggerFactory
 import org.springframework.core.io.ClassPathResource
 import org.springframework.http.MediaType
 import org.springframework.web.reactive.function.server.ServerResponse
 import org.springframework.web.reactive.function.server.router
-import reactor.core.publisher.toMono
 
-class Routes(val postHandler: PostHandler) {
-    val log = LoggerFactory.getLogger(Routes::class.java);
+class Routes(private val postHandler: PostHandler) {
 
     fun router() = router {
         accept(MediaType.TEXT_HTML).nest {
