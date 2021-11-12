@@ -7,6 +7,7 @@ package com.example.demo;
 
 import java.time.Duration;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,13 +21,10 @@ import reactor.core.publisher.Flux;
  */
 @Controller
 @Slf4j
+@RequiredArgsConstructor
 public class HomeController {
 
     private final PostRepository posts;
-
-    HomeController(PostRepository posts) {
-        this.posts = posts;
-    }
 
     @GetMapping("/home")
     public String home(final Model model) {

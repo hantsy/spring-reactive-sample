@@ -7,70 +7,33 @@ package com.example.demo;
  */
 
 import java.time.Duration;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
-
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.test.web.reactive.server.WebTestClient;
-
-import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
 /**
  * @author hantsy
  */
 public class IntegrationTests {
 
-    WebTestClient rest;
+  WebTestClient rest;
 
-    @Before
-    public void setup() {
-        this.rest = WebTestClient
-                .bindToServer()
-                //.defaultHeaders(headers -> headers.setBasicAuth("user", "password"))
-                .responseTimeout(Duration.ofDays(1))
-                .baseUrl("http://localhost:9000")
-                .build();
-    }
+  @BeforeEach
+  public void setup() {
+    this.rest = WebTestClient
+        .bindToServer()
+        //.defaultHeaders(headers -> headers.setBasicAuth("user", "password"))
+        .responseTimeout(Duration.ofDays(1))
+        .baseUrl("http://localhost:9000")
+        .build();
+  }
 
-    @Test
-    public void getAllPostsWhenNoCredentialsThenOk() throws Exception {
-        this.rest
-                .get()
-                .uri("/posts")
-                .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    public void deletingPostsWhenNoCredentialsThenUnauthorized() throws Exception {
-        this.rest
-                .delete()
-                .uri("/posts/1")
-                .exchange()
-                .expectStatus().isUnauthorized();
-    }
-
-    //replace mutateWith(mockUser()) with mutate().mutate().filter(basicAuthentication("user", "WRONGPASSWORD")).build()
-    //in e2e tests.
-    @Test
-    public void deletingPostsWhenInvalidCredentialsThenUnauthorized() throws Exception {
-        this.rest
-                .mutate().filter(basicAuthentication("user", "WRONGPASSWORD")).build()
-                .delete()
-                .uri("/posts/1")
-                .exchange()
-                .expectStatus().isUnauthorized();
-    }
-
-    @Test
-    public void deletingPostsWhenUserCredentialsThenForbidden() throws Exception {
-        this.rest
-                .mutate().filter(basicAuthentication("user", "password")).build()
-                .delete()
-                .uri("/posts/1")
-                .exchange()
-                .expectStatus().is4xxClientError();
-    }
+  @Test
+  public void getAllPosts() throws Exception {
+    this.rest
+        .get()
+        .uri("/posts")
+        .exchange()
+        .expectStatus().isOk();
+  }
 }

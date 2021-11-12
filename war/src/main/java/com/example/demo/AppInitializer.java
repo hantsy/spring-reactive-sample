@@ -58,8 +58,7 @@ public class AppInitializer extends AbstractReactiveWebInitializer {
     protected Class<?>[] getConfigClasses() {
         return new Class[]{
                 AppConfig.class,
-                WebConfig.class,
-                SecurityConfig.class
+                WebConfig.class
         };
     }
 

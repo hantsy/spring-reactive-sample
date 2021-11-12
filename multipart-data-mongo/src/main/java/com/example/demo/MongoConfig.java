@@ -5,7 +5,9 @@ import com.mongodb.reactivestreams.client.MongoClients;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguration;
+import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
@@ -16,24 +18,26 @@ import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRep
 @EnableReactiveMongoRepositories
 public class MongoConfig extends AbstractReactiveMongoConfiguration {
 
-    @Value("${mongo.uri}")
-    String mongoUri;
+  @Value("${mongo.uri}")
+  String mongoUri;
 
-    @Override
-    protected String getDatabaseName() {
-        return "blog";
-    }
+  @Override
+  protected String getDatabaseName() {
+    return "blog";
+  }
 
 
-    @Override
-    public MongoClient reactiveMongoClient() {
-        return MongoClients.create(mongoUri);
-    }
+  @Override
+  public MongoClient reactiveMongoClient() {
+    return MongoClients.create(mongoUri);
+  }
 
-    @Bean
-    public ReactiveGridFsTemplate reactiveGridFsTemplate() throws Exception {
-        return new ReactiveGridFsTemplate(reactiveMongoDbFactory(), mappingMongoConverter());
-    }
+  @Bean
+  public ReactiveGridFsTemplate reactiveGridFsTemplate(
+      ReactiveMongoDatabaseFactory databaseFactory,
+      MappingMongoConverter mongoConverter) {
+    return new ReactiveGridFsTemplate(databaseFactory, mongoConverter);
+  }
 
 
 }
