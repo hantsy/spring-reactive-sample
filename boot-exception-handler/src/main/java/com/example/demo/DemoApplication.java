@@ -59,37 +59,6 @@ public class DemoApplication {
 
 }
 
-@EnableWebFluxSecurity
-class SecurityConfig {
-
-    @Bean
-    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
-        return http
-            .authorizeExchange()
-            .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
-            .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
-            .pathMatchers("/posts/**").authenticated()
-            //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-            .anyExchange().permitAll()
-            .and()
-            .build();
-    }
-
-    private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
-        return authentication
-            .map(a -> context.getVariables().get("user").equals(a.getName()))
-            .map(granted -> new AuthorizationDecision(granted));
-    }
-
-    @Bean
-    public MapReactiveUserDetailsService userDetailsRepository() {
-        UserDetails user = User.withDefaultPasswordEncoder().username("user").password("password").roles("USER").build();
-        UserDetails admin = User.withDefaultPasswordEncoder().username("admin").password("password").roles("USER", "ADMIN").build();
-        return new MapReactiveUserDetailsService(user, admin);
-    }
-
-}
-
 @Component
 @Slf4j
 class DataInitializer implements CommandLineRunner {
