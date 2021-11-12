@@ -8,10 +8,13 @@ package com.example.demo;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
+import reactor.netty.DisposableServer;
+import reactor.netty.http.server.HttpServer;
 
 import java.time.Duration;
 import java.util.Map;
@@ -31,19 +34,27 @@ public class IntegrationTests {
 
     WebTestClient rest;
 
+    @Autowired
+    HttpServer httpServer;
+
+    DisposableServer disposableServer;
+
     @BeforeEach
     public void setup() {
+        this.disposableServer = this.httpServer.bindNow();
         this.rest = WebTestClient
                 .bindToServer()
                 .responseTimeout(Duration.ofSeconds(10))
                 .baseUrl("http://localhost:" + this.port)
-                .filter(basicAuthentication())
+                //.defaultHeaders(headers -> headers.setBasicAuth("user", "password"))
                 .build();
     }
 
     @AfterEach
     public void teardown() {
-
+        if (!this.disposableServer.isDisposed()) {
+            this.disposableServer.disposeNow();
+        }
     }
 
     @Test
@@ -85,8 +96,7 @@ public class IntegrationTests {
                 .attributes(invalidCredentials())
                 .body(BodyInserters.fromValue(Post.builder().title("title test").content("content test").build()))
                 .exchange()
-                .expectStatus().isUnauthorized()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -96,8 +106,7 @@ public class IntegrationTests {
                 .uri("/posts")
                 .body(BodyInserters.fromValue(Post.builder().title("title test").content("content test").build()))
                 .exchange()
-                .expectStatus().isUnauthorized()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -107,8 +116,7 @@ public class IntegrationTests {
                 .uri("/posts/1")
                 .attributes(userCredentials())
                 .exchange()
-                .expectStatus().is4xxClientError()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     @Test
@@ -118,8 +126,7 @@ public class IntegrationTests {
                 .delete()
                 .uri("/posts/1")
                 .exchange()
-                .expectStatus().is4xxClientError()
-                .expectBody().isEmpty();
+                .expectStatus().is4xxClientError();
     }
 
     private Consumer<Map<String, Object>> userCredentials() {
