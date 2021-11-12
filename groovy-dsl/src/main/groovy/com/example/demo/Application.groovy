@@ -15,7 +15,7 @@ class Application {
 
     static void main(String[] args) {
 
-        GenericGroovyApplicationContext context
+        AnnotationConfigApplicationContext context
         try {
             context = new AnnotationConfigApplicationContext(Application.class)
             context.getBean(HttpServer.class).bindNow().onDispose().block()
