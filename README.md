@@ -81,12 +81,8 @@ The following table list all sample codes related to the above posts.
 
 | name                                                         | description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) | Switch to Spring Boot to get autoconfiguration of Spring WebFlux |
+| [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) | Spring Boot example, including 3 Maven profiles to switch to Jetty, Tomcat, Undertow as target runtime |
 | [boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) | Simple `RouterFunction` example                              |
-| [boot-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-jetty) | Example using Jetty as target runtime                        |
-| [boot-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-tomcat) | Example using Tomcat as target runtime                       |
-| [boot-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-undertow) | Example using Undertow as target runtime                     |
-| [boot-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-routes) | `RouterFunction` CRUD Example                                |
 | [boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-thymeleaf) | Same as mvc-thymeleaf, but based on Spring Boot              |
 | [boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-mustache) | Same as mvc-mustache, but based on Spring Boot               |
 | [boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-freemarker) | Same as mvc-freemarker,  but based on Spring Boot            |
