@@ -65,7 +65,7 @@
         <dependency>
             <groupId>com.github.davidmoten</groupId>
             <artifactId>rxjava2-jdbc</artifactId>
-            <version>0.1-RC23</version>
+            <version>0.2.9</version>
         </dependency>
         
         <dependency>
