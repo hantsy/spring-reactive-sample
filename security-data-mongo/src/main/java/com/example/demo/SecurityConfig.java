@@ -47,7 +47,7 @@ class SecurityConfig {
     private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
         return authentication
                 .map(a -> context.getVariables().get("user").equals(a.getName()))
-                .map(granted -> new AuthorizationDecision(granted));
+                .map(AuthorizationDecision::new);
     }
 
     @Bean
