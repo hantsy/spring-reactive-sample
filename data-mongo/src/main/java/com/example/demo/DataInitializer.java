@@ -5,6 +5,8 @@
  */
 package com.example.demo;
 
+import com.example.demo.domain.Post;
+import com.example.demo.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
