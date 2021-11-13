@@ -71,7 +71,7 @@ class PostController {
     }
 
     @GetMapping("")
-    public Flux<Post> all(@RequestParam("q") String q) {
+    public Flux<Post> all(@RequestParam(value = "q", required = false) String q) {
         return Optional.ofNullable(q)
                 .map(
                         keyword -> this.posts.findAll(QPost.post.title.containsIgnoreCase(keyword)

@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.example.demo;
+package com.example.demo.web;
 
+import com.example.demo.domain.Post;
+import com.example.demo.repository.PostRepository;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +24,7 @@ import reactor.core.publisher.Mono;
  */
 @RestController()
 @RequestMapping(value = "/posts")
-class PostController {
+public class PostController {
 
     private final PostRepository posts;
 
