@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @Testcontainers
 @ActiveProfiles("test")
+@Slf4j
 class PostRepositoryWithDynamicPropertiesTest {
     private static final String COUCHBASE_IMAGE_NAME = "couchbase";
     private static final String DEFAULT_IMAGE_NAME = "couchbase/server";
@@ -33,7 +35,8 @@ class PostRepositoryWithDynamicPropertiesTest {
     final static CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DEFAULT_IMAGE)
             .withCredentials("Administrator", "password")
             .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
-            .withStartupTimeout(Duration.ofSeconds(60));
+            .withStartupAttempts(30)
+            .withStartupTimeout(Duration.ofSeconds(100));
 
     @DynamicPropertySource
     static void bindCouchbaseProperties(DynamicPropertyRegistry registry) {
@@ -55,8 +58,7 @@ class PostRepositoryWithDynamicPropertiesTest {
                                 Post.builder().title("Post two").content("content of post two").build()
                         )
                 )
-                .then()
-                .block(Duration.ofSeconds(5));
+                .subscribe(data -> log.debug("saved data: {}", data));
     }
 
     @Test
