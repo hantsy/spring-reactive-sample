@@ -5,11 +5,6 @@
  */
 package com.example.demo;
 
-import java.nio.ByteBuffer;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
@@ -20,6 +15,9 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+
+import java.nio.ByteBuffer;
+import java.util.UUID;
 
 /**
  * @author hantsy
@@ -45,31 +43,31 @@ class DataInitializer {
         ReactiveRedisConnection conn = this.factory.getReactiveConnection();
         log.info("print all keys  ...");
         conn.keyCommands() //
-            .keys(ByteBuffer.wrap(serializer.serialize("*"))) //
-            .flatMapMany(Flux::fromIterable) //
-            .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
-            .count() //
-            .doOnSuccess(count -> System.out.println(String.format("Total No. found: %s", count))) //
-            .block();
+                .keys(ByteBuffer.wrap(serializer.serialize("*"))) //
+                .flatMapMany(Flux::fromIterable) //
+                .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
+                .count() //
+                .doOnSuccess(count -> System.out.println(String.format("Total No. found: %s", count))) //
+                .block();
 
         conn.setCommands()
-            .sAdd(
-                ByteBuffer.wrap("users:user:favorites".getBytes()),
-                this.posts.findAll()
-                    .map(p -> ByteBuffer.wrap(p.getId().getBytes()))
-                    .collectList().block()
-            )
-            //.log()
-            .doOnSuccess(s -> log.info("added favirates...#" + s))
-            .subscribe();
+                .sAdd(
+                        ByteBuffer.wrap("users:user:favorites".getBytes()),
+                        this.posts.findAll()
+                                .map(p -> ByteBuffer.wrap(p.getId().getBytes()))
+                                .collectList().block()
+                )
+                //.log()
+                .doOnSuccess(s -> log.info("added favirates...#" + s))
+                .subscribe();
 
         log.info("print ramdon keys  ...");
         ReactiveKeyCommands keyCommands = conn.keyCommands();
         keyCommands.randomKey()
-            .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
-            .flatMap(keyCommands::type)
-            .doOnSuccess(type -> System.out.println(String.format("ByteBuffer type: %s", type))) //
-            .block();
+                .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
+                .flatMap(keyCommands::type)
+                .doOnSuccess(type -> System.out.println(String.format("ByteBuffer type: %s", type))) //
+                .block();
 
         log.info("done data initialization  ...");
         //conn.hashCommands().hGetAll(key)
@@ -77,11 +75,11 @@ class DataInitializer {
 
     private void initPosts() {
         this.posts.deleteAll()
-            .thenMany(
-                Flux.just("Post one", "Post two")
-                    .flatMap(title -> this.posts.save(Post.builder().id(UUID.randomUUID().toString()).title(title).content("content of " + title).build()))
-            );
-            //.subscribe(null, null, () -> log.info("done posts initialization..."));
+                .thenMany(
+                        Flux.just("Post one", "Post two")
+                                .flatMap(title -> this.posts.save(Post.builder().id(UUID.randomUUID().toString()).title(title).content("content of " + title).build()))
+                )
+                .subscribe(null, null, () -> log.info("done posts initialization..."));
     }
 
     private static String toString(ByteBuffer byteBuffer) {

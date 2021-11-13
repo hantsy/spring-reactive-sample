@@ -28,6 +28,11 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
         cache: 'maven'
+    - name: Start up databases via Docker Compose 
+      run: |
+        docker-compose up -d redis
+        sleep 5
+        docker ps -a   
     - name: Build with Maven
       run: |
         cd data-redis-message
