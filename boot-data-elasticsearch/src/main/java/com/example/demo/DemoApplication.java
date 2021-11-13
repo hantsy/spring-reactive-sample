@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.repository.ReactiveElasticsearchRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -110,14 +111,12 @@ interface PostRepository extends ReactiveElasticsearchRepository<Post, String> {
 @ToString
 @Builder
 class Post {
-
     @Id
     private String id;
 
-    @Field(store = true)
+    @Field(store = true, type = FieldType.Text)
     private String title;
 
-    @Field(store = true)
+    @Field(store = true, type = FieldType.Text)
     private String content;
-
 }

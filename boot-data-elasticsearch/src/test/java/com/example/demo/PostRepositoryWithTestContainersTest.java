@@ -27,11 +27,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.9.3");
+    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.15.2")
+            .withEnv("discovery.type", "single-node");
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.elasticsearch.client.reactive.endpoints", esContainer::getHttpHostAddress);
+        registry.add("spring.elasticsearch.uris", esContainer::getHttpHostAddress);
     }
 
     @Autowired

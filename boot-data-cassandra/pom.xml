@@ -19,7 +19,7 @@
     </parent>
 
     <properties>
-        <java.version>15</java.version>
+        <java.version>17</java.version>
 		<testcontainers.version>1.16.2</testcontainers.version>
     </properties>
 
