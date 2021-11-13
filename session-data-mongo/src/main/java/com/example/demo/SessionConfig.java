@@ -5,12 +5,13 @@
  */
 package com.example.demo;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.mongo.config.annotation.web.reactive.EnableMongoWebSession;
 
 /**
- *
  * @author hantsy
  */
+@Configuration
 @EnableMongoWebSession
 public class SessionConfig {
 

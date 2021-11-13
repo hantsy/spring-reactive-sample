@@ -3,33 +3,22 @@ package com.example.demo;
 
 import com.example.demo.pages.HomePage;
 import com.example.demo.pages.HomePage.Attribute;
-
-import java.util.List;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-/**
- * @author Eddú Meléndez
- * @author Rob Winch
- */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = Application.class)
-//@TestPropertySource(properties = { "spring.profiles.active=embedded-redis", "server.port=0" })
+@SpringJUnitConfig(classes = Application.class)
 public class AttributeTests {
     @Value("${server.port:8080}")
     int port;
@@ -41,13 +30,13 @@ public class AttributeTests {
 
     private DisposableServer disposableServer;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.disposableServer = this.httpServer.bindNow();
         this.driver = new HtmlUnitDriver();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         this.driver.quit();
         this.disposableServer.dispose();

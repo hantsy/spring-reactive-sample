@@ -20,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionConfig {
 
     @Bean
-    public ReactiveSessionRepository sessionRepository() {
+    public ReactiveSessionRepository<?> sessionRepository() {
         return new ReactiveMapSessionRepository( new ConcurrentHashMap<>());
     }
 }

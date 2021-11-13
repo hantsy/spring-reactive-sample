@@ -24,7 +24,7 @@ import org.springframework.web.server.session.WebSessionIdResolver;
 public class SessionConfig {
 
     @Bean
-    public ReactiveSessionRepository sessionRepository() {
+    public ReactiveSessionRepository<?> sessionRepository() {
         return new ReactiveMapSessionRepository(new ConcurrentHashMap<>());
     }
 
