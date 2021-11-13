@@ -8,6 +8,7 @@ import org.neo4j.harness.Neo4jBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.data.domain.Example;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Propagation;
@@ -31,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataNeo4jTest
 @Transactional(propagation = Propagation.NEVER)
 @Slf4j
+@ActiveProfiles("test")
 public class PostRepositoryWithNeo4jHarnessTest {
 
     private static Neo4j embeddedDatabaseServer;
@@ -63,8 +65,9 @@ public class PostRepositoryWithNeo4jHarnessTest {
     public void setup() throws IOException {
         log.debug("running setup.....,");
         this.posts.deleteAll()
+                .then()
                 .thenMany(testSaveMethod())
-                .log()
+                .then()
                 .thenMany(testFoundMethod())
                 .log()
                 .blockLast(Duration.ofSeconds(5));// to make the tests work

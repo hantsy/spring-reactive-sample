@@ -23,7 +23,6 @@ public class Post {
 
     private String content;
 
-
     @CreatedDate
     private LocalDateTime createdAt;
 

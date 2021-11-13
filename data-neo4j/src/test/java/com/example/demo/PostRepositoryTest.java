@@ -43,7 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 public class PostRepositoryTest {
 
-
     static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         @Override
@@ -58,7 +57,7 @@ public class PostRepositoryTest {
             var env = configurableApplicationContext.getEnvironment();
             var props = env.getPropertySources();
             props.addFirst(
-                    new MapPropertySource("MY_MAP",
+                    new MapPropertySource("testproperties",
                             Map.of(
                                     "spring.neo4j.uri", neo4jContainer.getBoltUrl(),
                                     "spring.neo4j.authentication.username", "neo4j",

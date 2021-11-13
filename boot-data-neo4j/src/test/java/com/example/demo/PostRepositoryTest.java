@@ -14,6 +14,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.data.domain.Example;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Slf4j
 // enable auditing.
 @Import(DataConfig.class)
+@ActiveProfiles("test")
 public class PostRepositoryTest {
 
 
@@ -77,10 +79,10 @@ public class PostRepositoryTest {
     public void setup() throws IOException {
         log.debug("running setup.....,");
         this.posts.deleteAll()
+                .then()
                 .thenMany(testSaveMethod())
-                .log()
-                .thenMany(testFoundMethod())
-                .log()
+                .then()
+                .thenMany(testFoundMethod()).log()
                 .blockLast(Duration.ofSeconds(5));// to make the tests work
     }
 
