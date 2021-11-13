@@ -43,8 +43,6 @@ public class TemplatePostRepository  {
         );
     }
 
-
-
     public Mono<Post> save(Post post) {
         return this.template.save(post);
     }
