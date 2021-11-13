@@ -5,13 +5,13 @@
  */
 package com.example.demo;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -19,8 +19,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
  *
  * @author hantsy
  */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = Application.class)
+@SpringJUnitConfig(classes = Application.class)
 @ActiveProfiles("test")
 public class PostControllerTest {
 
@@ -29,7 +28,7 @@ public class PostControllerTest {
 
     WebTestClient rest;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.rest = WebTestClient
             .bindToController(this.ctrl)

@@ -1,48 +1,64 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.example.demo;
 
-import java.time.Duration;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.netty.DisposableServer;
+import reactor.netty.http.server.HttpServer;
+
+import java.time.Duration;
 
 /**
- *
  * @author hantsy
  */
-@RunWith(SpringRunner.class)
-@ContextConfiguration(classes = Application.class)
+@SpringJUnitConfig(classes = Application.class)
 public class IntegrationTests {
 
-    @Value("#{@nettyContext.address().getPort()}")
+    @Value("${server.port:8080}")
     int port;
 
-    WebTestClient rest;
+    private WebTestClient rest;
 
-    @Before
+    @Autowired
+    HttpServer httpServer;
+
+    private DisposableServer disposableServer;
+
+    @BeforeEach
     public void setup() {
+        this.disposableServer = this.httpServer.bindNow(Duration.ofMillis(1000));
         this.rest = WebTestClient
-            .bindToServer()
-            .responseTimeout(Duration.ofDays(1))
-            .baseUrl("http://localhost:" + this.port)
-            .build();
+                .bindToServer()
+                .responseTimeout(Duration.ofMillis(5000))
+                .baseUrl("http://localhost:" + this.port)
+                .build();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        this.disposableServer.dispose();
     }
 
     @Test
     public void getAllPostsWillBeOk() throws Exception {
         this.rest
-            .get()
-            .uri("/posts")
-            .exchange()
-            .expectStatus().isOk();
+                .get()
+                .uri("/posts")
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    public void getAllPostsWillBeOk_viaIntegration() throws Exception {
+        this.rest
+                .get()
+                .uri("/all")
+                .exchange()
+                .expectStatus().isOk();
     }
 
 }

@@ -5,10 +5,12 @@
  */
 package com.example.demo;
 
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  *
@@ -18,7 +20,7 @@ public class PostRepositoryTest {
 
     PostRepository posts;
 
-    @Before
+    @BeforeEach
     public void setup() {
         posts = new PostRepository();
     }
