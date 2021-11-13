@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -21,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataNeo4jTest
 @Slf4j
+@ActiveProfiles("test")
 public class PostRepositoryTest {
 
     @Autowired

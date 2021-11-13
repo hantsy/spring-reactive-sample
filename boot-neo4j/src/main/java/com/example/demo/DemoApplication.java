@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.config.EnableNeo4jAuditing;
@@ -37,6 +38,7 @@ public class DemoApplication {
 @Component
 @Slf4j
 @RequiredArgsConstructor
+@Profile("default")
 class DataInitializer implements CommandLineRunner {
 
     private final PostRepository posts;
@@ -57,7 +59,8 @@ class DataInitializer implements CommandLineRunner {
                 .thenMany(
                         this.posts.findAll()
                 )
-                .subscribe(post -> log.info("saved post: {}", post));
+                //.blockLast();
+               .subscribe(post -> log.info("saved post: {}", post));//this will fail test.
 
     }
 

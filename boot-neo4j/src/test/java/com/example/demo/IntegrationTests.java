@@ -4,9 +4,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
 class IntegrationTests {
 
     @LocalServerPort
@@ -26,7 +28,7 @@ class IntegrationTests {
         this.client.get().uri("/posts")
                 .exchange()
                 .expectStatus().is2xxSuccessful()
-                .expectBodyList(Post.class).hasSize(2);
+                .expectBodyList(Post.class).hasSize(0);
     }
 
 }
