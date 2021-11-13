@@ -10,8 +10,6 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@EnableAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
-//@AutoConfigureWebTestClient
 public class IntegrationTests {
 
     @LocalServerPort

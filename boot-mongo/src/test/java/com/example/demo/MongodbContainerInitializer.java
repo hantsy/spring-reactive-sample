@@ -9,16 +9,20 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.testcontainers.containers.MongoDBContainer;
 
 @Slf4j
-class MongodbContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        var mongoDBContainer = new MongoDBContainer();
-        mongoDBContainer.start();
+class MongodbContainerInitializer implements
+    ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-        configurableApplicationContext
-                .addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> mongoDBContainer.stop());
-        log.debug("mongoDBContainer.getReplicaSetUrl():" + mongoDBContainer.getReplicaSetUrl());
-        TestPropertyValues
-                .of("spring.data.mongodb.uri=" + mongoDBContainer.getReplicaSetUrl())
-                .applyTo(configurableApplicationContext.getEnvironment());
-    }
+  public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+    var container = new MongoDBContainer("mongo:4");
+    container.start();
+
+    configurableApplicationContext
+        .addApplicationListener(
+            (ApplicationListener<ContextClosedEvent>) event -> container.stop());
+    log.debug("container.getFirstMappedPort():" + container.getFirstMappedPort());
+    TestPropertyValues
+        .of("spring.data.mongodb.uri=mongodb://localhost:" + container.getFirstMappedPort()
+            + "/blog")
+        .applyTo(configurableApplicationContext.getEnvironment());
+  }
 }
