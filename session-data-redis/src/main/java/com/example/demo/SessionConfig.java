@@ -5,12 +5,14 @@
  */
 package com.example.demo;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.annotation.web.server.EnableRedisWebSession;
 
 /**
  *
  * @author hantsy
  */
+@Configuration
 @EnableRedisWebSession
 public class SessionConfig {
 
