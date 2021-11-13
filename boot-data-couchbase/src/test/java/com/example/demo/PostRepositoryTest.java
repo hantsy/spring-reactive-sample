@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ContextConfiguration(initializers = PostRepositoryTest.TestContainerInitializer.class)
 @ActiveProfiles("test")
+@Slf4j
 class PostRepositoryTest {
 
     static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -66,8 +68,7 @@ class PostRepositoryTest {
                                 Post.builder().title("Post two").content("content of post two").build()
                         )
                 )
-                .then()
-                .block(Duration.ofSeconds(5));
+                .subscribe(data -> log.debug("saved data: {}", data));
     }
 
     @Test
