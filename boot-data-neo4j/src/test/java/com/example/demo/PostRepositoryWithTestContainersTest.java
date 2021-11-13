@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.Sort;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.Neo4jContainer;
@@ -33,6 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 // Testcontainers does not work well with per_class testinstance.
 // see: https://stackoverflow.com/questions/61357116/exception-mapped-port-can-only-be-obtained-after-the-container-is-started-when/61358336#61358336
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
+@ActiveProfiles("test")
 public class PostRepositoryWithTestContainersTest {
 
     @Container
@@ -46,7 +49,6 @@ public class PostRepositoryWithTestContainersTest {
         registry.add("spring.neo4j.authentication.password", neo4jContainer::getAdminPassword);
     }
 
-
     @Autowired
     private PostRepository posts;
 
@@ -54,10 +56,10 @@ public class PostRepositoryWithTestContainersTest {
     public void setup() throws IOException {
         log.debug("running setup.....,");
         this.posts.deleteAll()
+                .then()
                 .thenMany(testSaveMethod())
-                .log()
+                .then()
                 .thenMany(testFoundMethod())
-                .log()
                 .blockLast(Duration.ofSeconds(5));// to make the tests work
     }
 
@@ -81,7 +83,7 @@ public class PostRepositoryWithTestContainersTest {
 
     @Test
     void testAllPosts() {
-        posts.findAll().sort(Comparator.comparing(post -> post.getTitle()))
+        posts.findAll(Sort.by("title"))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
                 .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))
