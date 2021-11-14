@@ -35,8 +35,8 @@ class PostRepositoryWithDynamicPropertiesTest {
     final static CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DEFAULT_IMAGE)
             .withCredentials("Administrator", "password")
             .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
-            .withStartupAttempts(30)
-            .withStartupTimeout(Duration.ofSeconds(100));
+            //.withStartupAttempts(30)
+            .withStartupTimeout(Duration.ofSeconds(60));
 
     @DynamicPropertySource
     static void bindCouchbaseProperties(DynamicPropertyRegistry registry) {
