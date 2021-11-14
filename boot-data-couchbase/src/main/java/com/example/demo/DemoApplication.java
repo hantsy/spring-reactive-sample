@@ -13,7 +13,7 @@ import org.springframework.data.couchbase.core.mapping.Document;
 import org.springframework.data.couchbase.core.mapping.id.GeneratedValue;
 import org.springframework.data.couchbase.core.mapping.id.GenerationStrategy;
 import org.springframework.data.couchbase.repository.ReactiveCouchbaseRepository;
-import org.springframework.data.couchbase.repository.auditing.EnableCouchbaseAuditing;
+import org.springframework.data.couchbase.repository.auditing.EnableReactiveCouchbaseAuditing;
 import org.springframework.data.domain.ReactiveAuditorAware;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -50,7 +50,7 @@ public class DemoApplication {
 
 @Configuration(proxyBeanMethods = false)
 // see: https://jira.spring.io/browse/DATACOUCH-644
-//@EnableReactiveCouchbaseAuditing
+@EnableReactiveCouchbaseAuditing
 class DataConfig {
 
     @Bean
