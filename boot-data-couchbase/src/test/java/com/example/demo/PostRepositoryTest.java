@@ -76,7 +76,12 @@ class PostRepositoryTest {
         this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
                 .log()
                 .as(StepVerifier::create)
-                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
+                .consumeNextWith(user -> {
+                    assertThat(user.getTitle()).isEqualTo("Post one");
+                    //verify data auditing
+                    assertThat(user.getCreatedBy()).isEqualTo("hantsy");
+                    assertThat(user.getCreatedAt()).isNotNull();
+                })
                 .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
                 //.expectNextCount(2)
                 .verifyComplete();
