@@ -97,8 +97,7 @@ The following table list all sample codes related to the above posts.
 | [boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-cassandra) | Spring Data Cassandra Example                                |
 | [boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-couchbase) | Spring Data Couchbase  Example                               |
 | [boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-elasticsearch) | Spring Data ElasticSearch  Example                        |
-| [boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo) | Spring Data Mongo Example                                    |
-| [boot-data-mongo-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-auditing) | `@EnableReactiveMongoAuditing` and `ReactiveAuditorAware` example |
+| [boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo) | Spring Data Mongo Example(Repository, Auditing, testcontainers)                                   |
 | [boot-data-mongo-querydsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-querydsl) | Spring Data Mongo Example with QueryDSL support         |
 | [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | Spring Data Mongo Example with Gridfs support             |
 | [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler  |

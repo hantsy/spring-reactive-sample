@@ -5,9 +5,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.data.annotation.*;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.ReactiveAuditorAware;
+import org.springframework.data.mongodb.config.EnableReactiveMongoAuditing;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
@@ -27,9 +31,19 @@ public class DemoApplication {
 
 }
 
+@Configuration
+@EnableReactiveMongoAuditing
+class DataConfig{
+
+    @Bean
+    ReactiveAuditorAware<String> auditorAware() {
+        return () -> Mono.just("hantsy");
+    }
+}
 
 @Component
 @Slf4j
+@Profile("default")
 class DataInitializer implements CommandLineRunner {
 
     private final PostRepository posts;
@@ -146,8 +160,19 @@ class Post {
     private String content;
 
     @CreatedDate
-    @Builder.Default
-    private LocalDateTime createdDate = LocalDateTime.now();
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
+    @CreatedBy
+    private String createdBy;
+
+    @LastModifiedBy
+    private String updatedBy;
+
+    @Version
+    Long version;
 }
 
 @Data
