@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-boot-data-mongo-querydsl</artifactId>
+    <artifactId>spring-reactive-sample-boot-data-mongo-tailable</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>spring-reactive-sample-boot-data-mongo-querydsl</name>
+    <name>spring-reactive-sample-boot-data-mongo-tailable</name>
     <description>Spring Data Mongo reactive Tailable example</description>
     <properties>
         <java.version>17</java.version>
