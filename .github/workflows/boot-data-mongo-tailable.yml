@@ -1,13 +1,13 @@
-name: spring-reactive-boot-data-mongo-gridfs
+name: spring-reactive-boot-data-mongo-tailable
 
 on:
   push:
     paths:
-      - "boot-data-mongo-gridfs/**"
+      - "boot-data-mongo-tailable/**"
     branches: [ master ]
   pull_request:
     paths:
-      - "boot-data-mongo-gridfs/**"
+      - "boot-data-mongo-tailable/**"
     types:
       - opened
       - synchronize
@@ -35,5 +35,5 @@ jobs:
         docker ps -a      
     - name: Build with Maven
       run: |
-        cd boot-data-mongo-gridfs
+        cd boot-data-mongo-tailable
         mvn -B package --file pom.xml
