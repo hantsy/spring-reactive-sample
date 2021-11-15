@@ -18,6 +18,8 @@ import java.util.UUID;
 import static org.mockito.Mockito.*;
 
 @SpringBootTest
+// create a `WebTestClient` with essential options from application context automaticially, it works on both mock env or a real server.
+// @AutoConfigureWebTestClient
 public class ApplicationTest {
 
     @Autowired
@@ -30,14 +32,16 @@ public class ApplicationTest {
 
     @BeforeEach
     void setUp() {
+        // build from Spring `ApplicationContext`        
 //        this.client = WebTestClient.bindToApplicationContext(context)
 //            .configureClient()
 //            .build();
 //
 
-        this.client = WebTestClient.bindToWebHandler(RouterFunctions.toWebHandler(this.routerFunction))
-                .configureClient()
-                .build();
+        // build from a `WebHandler` bean
+//        this.client = WebTestClient.bindToWebHandler(RouterFunctions.toWebHandler(this.routerFunction))
+//                .configureClient()
+//                .build();
 
         this.client = WebTestClient.bindToRouterFunction(this.routerFunction)
                 .configureClient()
