@@ -15,6 +15,7 @@ import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.test.StepVerifier;
 
+import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
@@ -63,8 +64,12 @@ class RepositoryTests {
                 .thenCancel()
                 .verifyLater();
 
-        this.messages.save(Message.builder().body("message one").build()).subscribe();
-        this.messages.save(Message.builder().body("message two").build()).subscribe();
+        this.messages.saveAll(
+                        List.of(Message.builder().body("message one").build(),
+                                Message.builder().body("message two").build()
+                        )
+                )
+                .subscribe(s -> log.debug("saved data: {}", s));
 
         TimeUnit.MILLISECONDS.sleep(500);
         verifier.verify();
