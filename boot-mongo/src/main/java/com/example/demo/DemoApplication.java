@@ -132,8 +132,8 @@ class PostRepository {
 
   Flux<Post> findByKeyword(String q) {
     var reg = ".*" + q + ".*";
-    return template.find(query(where("title").regex(reg).orOperator(where("content").regex(reg))),
-        Post.class);
+    var criteria = where("title").regex(reg).orOperator(where("content").regex(reg));
+    return template.find(query(criteria), Post.class);
   }
 
   Flux<Post> findByTitleContains(String title) {
