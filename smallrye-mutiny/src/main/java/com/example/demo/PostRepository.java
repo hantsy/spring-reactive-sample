@@ -10,6 +10,7 @@ import io.smallrye.mutiny.Uni;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -35,7 +36,9 @@ class PostRepository {
 
 
     Uni<Post> findById(UUID id) {
-        return findAll().filter(p -> p.getId().equals(id)).toUni();
+        return findAll().filter(p -> p.getId().equals(id)).toUni()
+                .log()
+                .onItem().ifNull().failWith(new PostNotFoundException(id));
     }
 
     Uni<Post> save(Post post) {
