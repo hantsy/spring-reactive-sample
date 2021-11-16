@@ -21,12 +21,32 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 tomcat.8080
-build
-out
-/Kotlin_Koans
-.idea
-*.iml
 
 Gemfile
 Gemfile.lock
 _site
+
+# eclipse project files
+.project
+.classpath
+.settings/
+.factorypath
+
+# netbeans project files
+nbproject
+*-nb.properties
+
+# idea project files
+.idea
+*.iml
+*.ipr
+*.iws
+*.iws.iml
+
+# Maven project files
+target/
+
+# Gradle project files
+build/
+bin/
+out/
