@@ -389,7 +389,7 @@ class Post {
 }        
 ```
 
- For the complete codes, check [spring-reactive-sample/boot-data-mongo-auditing](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo-auditing).
+ For the complete codes, check [spring-reactive-sample/boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo).
 
 ## QueryDSL 
 
@@ -457,6 +457,8 @@ Flux<Message> readByAll()
 ```
 
 The query stream can be subscribed by a SSE endpoint, a WebSocket endpoint or a  RSocket message channel.
+
+There is a simple example to expose data via SSE endpoint, check [spring-reactive-sample/boot-data-mongo-tailable](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo-tailable).
 
 Please check the following more comprehensive examples, all provide Mongo `tailable` documents as backend message stream.
 
