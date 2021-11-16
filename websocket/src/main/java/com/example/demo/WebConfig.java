@@ -5,44 +5,48 @@
  */
 package com.example.demo;
 
-import java.util.HashMap;
-import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
- *
  * @author hantsy
  */
 @Configuration
-@ComponentScan
 @EnableWebFlux
 class WebConfig {
-    
-    @Autowired 
-    private PostRepository posts;
 
     @Bean
-    public HandlerMapping handlerMapping() {
+    public HandlerMapping handlerMapping(ObjectMapper objectMapper) {
         Map<String, WebSocketHandler> map = new HashMap<>();
-        map.put("/echo", new EchoWebSocketHandler());
-	    map.put("/posts", new PostsWebSocketHandler(this.posts));
+        map.put("/echo", new EchoHandler());
+        map.put("/ws/messages", new MessagetHandler(objectMapper));
 //			map.put("/custom-header", new CustomHeaderHandler());
 
         SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
         mapping.setUrlMap(map);
         return mapping;
     }
-    
+
     @Bean
-    WebSocketHandlerAdapter webSocketHandlerAdapter(){
+    WebSocketHandlerAdapter webSocketHandlerAdapter() {
         return new WebSocketHandlerAdapter();
+    }
+
+    @Bean
+    ObjectMapper jackson2ObjectMapper() {
+        Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
+        builder.indentOutput(true);
+
+        return builder.build();
     }
 }
