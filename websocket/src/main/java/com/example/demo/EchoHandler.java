@@ -11,17 +11,18 @@ import org.springframework.web.reactive.socket.WebSocketSession;
 import reactor.core.publisher.Mono;
 
 /**
- *
  * @author hantsy
  */
-public class EchoWebSocketHandler implements WebSocketHandler {
+public class EchoHandler implements WebSocketHandler {
 
-    public EchoWebSocketHandler() {
+    public EchoHandler() {
     }
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
-        // Use retain() for Reactor Netty
-        return session.send(session.receive().doOnNext(WebSocketMessage::retain));
+
+        return session.send(session.receive()
+                .doOnNext(WebSocketMessage::retain)// Use retain() for Reactor Netty
+                .map(m -> session.textMessage("received:" + m.getPayloadAsText())));
     }
 }
