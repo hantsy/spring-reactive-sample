@@ -38,7 +38,9 @@ class PostRepository {
     }
 
     Maybe<Post> findById(UUID id) {
-        return findAll().filter(p -> p.getId().equals(id)).singleElement();
+        return findAll().filter(p -> p.getId().equals(id))
+                .singleElement()
+                .switchIfEmpty(Maybe.error(new PostNotFoundException(id)));
     }
 
     Single<Post> save(Post post) {
