@@ -31,20 +31,6 @@ services:
       - ./data/postgresql:/var/lib/postgresql
       - ./pg-initdb.d:/docker-entrypoint-initdb.d
       
-  mysql:
-    image: mysql:5.7
-    ports:
-      - "3306:3306"
- #   command: --default-authentication-plugin=mysql_native_password  
-    environment:
-      MYSQL_ROOT_PASSWORD: mysecret
-      MYSQL_USER: user
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: test
-    volumes:
- #     - ./data/mysql:/var/lib/mysql    
-      - ./mysql-initdb.d:/docker-entrypoint-initdb.d
-      
   mongodb: 
     image: mongo 
     volumes:
@@ -83,17 +69,9 @@ services:
       - "SECURE_FILE_PERMISSIONS=yes" # To enforce stricter file permissions checking 
     #  - "NEO4J_ACCEPT_LICENSE_AGREEMENT=yes" # required for enterprise editon: neo4j:4.0.0-enterprise
     ports:
-      - 7687:7687 
-      - 7474:7474 
+      - "7687:7687" 
+      - "7474:7474" 
 
-  # no entrypoint-init scripts, see: https://github.com/Microsoft/mssql-docker/issues/11 
-  mssql:
-    image: mcr.microsoft.com/mssql/server:2019-latest
-    environment: 
-      - SA_PASSWORD=p@ssw0rd
-      - ACCEPT_EULA=Y
-    ports:
-      - 1433:1433
     
 volumes:
   mongodata:  

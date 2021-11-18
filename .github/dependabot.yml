@@ -222,23 +222,7 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/rxjava"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/rxjava2"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/rxjava2-jdbc"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
     directory: "/rxjava3"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/rxjava-jdbc"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
