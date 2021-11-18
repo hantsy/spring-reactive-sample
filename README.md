@@ -31,10 +31,6 @@ The following table list all sample codes related to the above posts.
 | [vanilla-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-undertow) | Same as **vanilla**, but use Undertow as target runtime      |
 | [java8](https://github.com/hantsy/spring-reactive-sample/tree/master/java8) | Java 8 `CompletableFuture` and `@Async` example              |
 | [java9](https://github.com/hantsy/spring-reactive-sample/tree/master/java9) | Same as **vanilla**, Java 9 Flow API support is not ready in Spring 5.0.0.REALESE, planned in 5.0.1, see issue [SPR-16052](https://jira.spring.io/browse/SPR-16052) and the original [discussion on stackoverflow](https://stackoverflow.com/questions/46597924/spring-5-supports-java-9-flow-apis-in-its-reactive-feature/46605983#46605983) |
-| [rxjava](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava) | Same as **vanilla**, but use Rxjava instead of Reactor       |
-| [rxjava-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava-jdbc) | Accessing database with rxjava-jdbc.  **NOTE: rxjava-jdbc is a wrapper of blocking Jdbc APIs** |
-| [rxjava2](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2) | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
-| [rxjava2-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2-jdbc) | Accessing database with rxjava2-jdbc. **NOTE: rxjava2-jdbc is a wrapper of blocking Jdbc APIs** |
 | [rxjava3](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava3) | Same as **vanilla**, but use Rxjava3 instead of Reactor, since Spring 5.3.0 |
 | [smallrye-mutiny](https://github.com/hantsy/spring-reactive-sample/tree/master/smallrye-mutiny) | Same as **vanilla**, but use [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) instead of Reactor, since Spring 5.3.10 |
 | [war](https://github.com/hantsy/spring-reactive-sample/tree/master/war) | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
@@ -121,6 +117,10 @@ And Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another 
 | [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example but use `ReactiveNeo4jClient`(*Deprecated*) |
 | [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx-cypher) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example using Cypher queries(*Deprecated*) |
 | [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example(*Deprecated*) |
+| [rxjava](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava) | Same as **vanilla**, but use Rxjava instead of Reactor       |
+| [rxjava-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava-jdbc) | Accessing database with rxjava-jdbc.  **NOTE: rxjava-jdbc is a wrapper of blocking Jdbc APIs** |
+| [rxjava2](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2) | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
+| [rxjava2-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2-jdbc) | Accessing database with rxjava2-jdbc. **NOTE: rxjava2-jdbc is a wrapper of blocking Jdbc APIs** |
 
 ## References
 
