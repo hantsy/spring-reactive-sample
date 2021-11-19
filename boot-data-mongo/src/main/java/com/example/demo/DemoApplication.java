@@ -145,7 +145,7 @@ interface PostRepository extends ReactiveMongoRepository<Post, String> {
     Flux<PostSummary> findByTitleContains(String title, Pageable page);
 }
 
-@Document
+@Document(collection = "posts")
 @Data
 @ToString
 @Builder

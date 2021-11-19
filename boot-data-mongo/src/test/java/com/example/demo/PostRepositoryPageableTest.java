@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,13 +12,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import reactor.test.StepVerifier;
 
-import java.time.Duration;
-import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import static java.util.Comparator.*;
+import static java.util.Comparator.comparing;
 
 @DataMongoTest
 @ContextConfiguration(initializers = {MongodbContainerInitializer.class})
@@ -31,14 +32,20 @@ public class PostRepositoryPageableTest {
     @Autowired
     PostRepository postRepository;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() {
+        CountDownLatch latch = new CountDownLatch(1);
         List<Post> data = IntStream.range(1, 50)
                 .mapToObj(
                         i -> Post.builder().content("my test content of #" + i).title("my test title #" + i).build()
                 )
                 .collect(Collectors.<Post>toList());
-        this.postRepository.saveAll(data).blockLast(Duration.ofSeconds(5));
+        this.postRepository.saveAll(data)
+                .doOnComplete(latch::countDown)
+                .subscribe();
+
+        latch.await(5000, TimeUnit.MILLISECONDS);
     }
 
 

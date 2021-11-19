@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -7,14 +8,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.test.context.ActiveProfiles;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+
 import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @Slf4j
+@ActiveProfiles("test")
 public class PostRepositoryTest {
 
     @Autowired
@@ -23,10 +28,15 @@ public class PostRepositoryTest {
     @Autowired
     PostRepository postRepository;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() {
+        CountDownLatch latch = new CountDownLatch(1);
         this.reactiveMongoTemplate.remove(Post.class).all()
+                .doOnTerminate(latch::countDown)
                 .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e), () -> log.debug("done"));
+
+        latch.await(5000, TimeUnit.MILLISECONDS);
     }
 
     @Test
