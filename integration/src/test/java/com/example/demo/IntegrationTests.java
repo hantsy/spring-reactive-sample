@@ -21,7 +21,7 @@ public class IntegrationTests {
     @Value("${server.port:8080}")
     int port;
 
-    private WebTestClient rest;
+    private WebTestClient client;
 
     @Autowired
     HttpServer httpServer;
@@ -31,7 +31,7 @@ public class IntegrationTests {
     @BeforeEach
     public void setup() {
         this.disposableServer = this.httpServer.bindNow();
-        this.rest = WebTestClient
+        this.client = WebTestClient
                 .bindToServer()
                 .responseTimeout(Duration.ofMillis(5000))
                 .baseUrl("http://localhost:" + this.port)
@@ -40,12 +40,14 @@ public class IntegrationTests {
 
     @AfterEach
     public void tearDown() {
-        this.disposableServer.dispose();
+        if (!this.disposableServer.isDisposed()) {
+            this.disposableServer.dispose();
+        }
     }
 
     @Test
     public void getAllPostsWillBeOk() throws Exception {
-        this.rest
+        this.client
                 .get()
                 .uri("/posts")
                 .exchange()
@@ -54,7 +56,7 @@ public class IntegrationTests {
 
     @Test
     public void getAllPostsWillBeOk_viaIntegration() throws Exception {
-        this.rest
+        this.client
                 .get()
                 .uri("/all")
                 .exchange()
