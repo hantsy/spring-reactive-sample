@@ -102,7 +102,9 @@ The following table list all sample codes related to the above posts.
 ### Legacy Codes
 Some example codes are becoming deprecated as time goes by, eg. the [SDN Rx project](https://github.com/neo4j/sdn-rx) which was maintained by the Neo4j team is discontinued now, it is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). 
 
-And Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.                                   
+And Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.      
+
+Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/spring-framework/issues/27443), and other projects, such as Spring Data will remove RxJava/RxJava2 support soon.
 
 | name                                                         | description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
