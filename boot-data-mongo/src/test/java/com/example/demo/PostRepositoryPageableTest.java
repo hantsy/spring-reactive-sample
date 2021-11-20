@@ -22,13 +22,11 @@ import java.util.stream.IntStream;
 
 import static java.util.Comparator.comparing;
 
-@DataMongoTest
-@ContextConfiguration(initializers = {MongodbContainerInitializer.class})
+@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
 @TestPropertySource(properties = {
         "logging.level.org.springframework.data.mongodb.core.ReactiveMongoTemplate=DEBUG",
         "logging.level.com.example.demo=DEBUG"
 })
-@EnableAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
 @Slf4j
 public class PostRepositoryPageableTest {
 

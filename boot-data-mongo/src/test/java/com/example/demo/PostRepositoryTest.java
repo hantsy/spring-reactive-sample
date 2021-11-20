@@ -16,9 +16,8 @@ import reactor.test.StepVerifier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataMongoTest
+@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
 @ContextConfiguration(initializers = {MongodbContainerInitializer.class})
-@EnableAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
 @Slf4j
 @ActiveProfiles("test")
 public class PostRepositoryTest {

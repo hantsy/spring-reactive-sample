@@ -27,8 +27,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataMongoTest
-@EnableAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
+@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
 @Testcontainers
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
