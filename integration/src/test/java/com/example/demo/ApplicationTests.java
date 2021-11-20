@@ -10,13 +10,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 /**
- *
  * @author hantsy
  */
 @SpringJUnitConfig(classes = Application.class)
@@ -31,18 +28,18 @@ public class ApplicationTests {
     @BeforeEach
     public void setup() {
         this.rest = WebTestClient
-            .bindToApplicationContext(this.context)
-            .configureClient()
-            .build();
+                .bindToApplicationContext(this.context)
+                .configureClient()
+                .build();
     }
 
     @Test
     public void getAllPostsWillBeOk() throws Exception {
         this.rest
-            .get()
-            .uri("/posts")
-            .exchange()
-            .expectStatus().isOk();  
+                .get()
+                .uri("/posts")
+                .exchange()
+                .expectStatus().isOk();
     }
 
 }
