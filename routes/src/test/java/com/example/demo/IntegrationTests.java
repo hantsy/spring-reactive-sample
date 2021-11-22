@@ -1,7 +1,7 @@
 package com.example.demo;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,46 +21,36 @@ public class IntegrationTests {
     @Value("${server.port:8080}")
     int port;
 
-    private WebTestClient client;
+    WebTestClient rest;
 
     @Autowired
     HttpServer httpServer;
 
     private DisposableServer disposableServer;
 
-    @BeforeEach
+    @BeforeAll
     public void setup() {
         this.disposableServer = this.httpServer.bindNow();
-        this.client = WebTestClient
+        this.rest = WebTestClient
                 .bindToServer()
-                .responseTimeout(Duration.ofMillis(5000))
+                .responseTimeout(Duration.ofDays(1))
                 .baseUrl("http://localhost:" + this.port)
                 .build();
     }
 
-    @AfterEach
-    public void tearDown() {
-        if (!this.disposableServer.isDisposed()) {
-            this.disposableServer.dispose();
-        }
+    @AfterAll
+    public void teardown() {
+        this.disposableServer.dispose();
     }
 
     @Test
     public void getAllPostsWillBeOk() throws Exception {
-        this.client
+        this.rest
                 .get()
                 .uri("/posts")
                 .exchange()
-                .expectStatus().isOk();
-    }
-
-    @Test
-    public void getAllPostsWillBeOk_viaIntegration() throws Exception {
-        this.client
-                .get()
-                .uri("/all")
-                .exchange()
-                .expectStatus().isOk();
+                .expectStatus()
+                .isOk();
     }
 
 }

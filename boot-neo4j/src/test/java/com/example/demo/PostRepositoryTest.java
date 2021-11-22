@@ -1,6 +1,7 @@
 package com.example.demo;
 
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,8 @@ import reactor.test.StepVerifier;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -28,15 +31,19 @@ public class PostRepositoryTest {
     @Autowired
     private PostRepository posts;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() throws IOException {
         log.debug("running setup.....,");
+        CountDownLatch latch = new CountDownLatch(1);
         this.posts.deleteAll()
                 .thenMany(testSaveMethod())
                 .log()
                 .thenMany(testFoundMethod())
                 .log()
-                .blockLast();
+                .doOnComplete(latch::countDown)
+                .subscribe();
+        latch.await(5000, TimeUnit.MILLISECONDS);
     }
 
     private Flux<Post> testSaveMethod() {
@@ -58,7 +65,7 @@ public class PostRepositoryTest {
 
     @Test
     void testAllPosts() {
-        posts.findAll().sort(Comparator.comparing(post -> post.getTitle()))
+        posts.findAll().sort(Comparator.comparing(Post::getTitle))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
                 .consumeNextWith(p -> assertEquals("Post two", p.getTitle()))

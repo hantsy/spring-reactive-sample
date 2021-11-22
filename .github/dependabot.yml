@@ -38,6 +38,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/boot-data-mongo-tailable"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/boot-data-neo4j"
     schedule:
       interval: "monthly"
