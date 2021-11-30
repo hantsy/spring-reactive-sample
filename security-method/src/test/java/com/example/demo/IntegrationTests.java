@@ -82,7 +82,8 @@ public class IntegrationTests {
         this.rest
                 .get()
                 .uri("/posts")
-                .attributes(userCredentials())
+                .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
+                //.attributes(userCredentials())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody().jsonPath("$.length()").isEqualTo(2);
