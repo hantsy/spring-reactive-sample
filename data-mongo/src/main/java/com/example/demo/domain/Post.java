@@ -22,7 +22,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(value = "posts")
 public class Post {
     
     @Id
