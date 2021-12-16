@@ -16,24 +16,25 @@
 
     <properties>
         <java.version>17</java.version>
-        <neo4j-harness.version>4.4.0</neo4j-harness.version>
+        <neo4j.version>4.4.0</neo4j.version>
         <testcontainers.version>1.16.2</testcontainers.version>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
     </properties>
 
     <dependencies>
-         <dependency>
-           <groupId>org.neo4j.driver</groupId>
-           <artifactId>neo4j-java-driver-slim</artifactId>
-         </dependency>
+        <dependency>
+            <groupId>org.neo4j.driver</groupId>
+            <artifactId>neo4j-java-driver-slim</artifactId>
+            <version>${neo4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-neo4j</artifactId>
             <exclusions>
-               <exclusion>
+                <exclusion>
                     <groupId>org.neo4j.driver</groupId>
                     <artifactId>neo4j-java-driver</artifactId>
-               </exclusion>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -61,7 +62,7 @@
         <dependency>
             <groupId>org.neo4j.test</groupId>
             <artifactId>neo4j-harness</artifactId>
-            <version>${neo4j-harness.version}</version>
+            <version>${neo4j.version}</version>
             <scope>test</scope>
             <exclusions>
                 <exclusion>
