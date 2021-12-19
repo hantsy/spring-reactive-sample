@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Range;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.stereotype.Component;
@@ -10,6 +11,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 import java.nio.ByteBuffer;
+import java.security.Principal;
 import java.util.Collections;
 
 import static org.springframework.web.reactive.function.server.ServerResponse.noContent;
@@ -17,6 +19,7 @@ import static org.springframework.web.reactive.function.server.ServerResponse.ok
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 class FavoriteHandler {
 
     private final ReactiveRedisConnectionFactory connectionFactory;
@@ -25,7 +28,7 @@ class FavoriteHandler {
 
         String slug = req.pathVariable("slug");
         return req.principal()
-                .map(p -> p.getName())
+                .map(Principal::getName)
                 .flatMap(
                         name -> this.connectionFactory.getReactiveConnection().zSetCommands()
                                 .zRange(
@@ -35,7 +38,9 @@ class FavoriteHandler {
                                 .map(this::toString)
                                 .collectList()
                                 .map(f -> Collections.singletonMap("favorited", f.contains(name)))
+                                .doOnNext(it -> log.debug("favoriated: {}", it))
                 )
+               // .doOnNext(it -> log.debug("favoriated: {}", it))
                 .flatMap(f -> ok().body(BodyInserters.fromValue(f)));
 
     }
