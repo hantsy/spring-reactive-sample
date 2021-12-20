@@ -34,6 +34,24 @@ public class DemoApplicationTests {
     }
 
     @Test
+    public void getAllPosts() {
+        client
+                .get()
+                .uri("/posts/")
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    public void getANoneExistedPostShouldReturn404() {
+        client
+                .get()
+                .uri("/posts/"+UUID.randomUUID().toString())
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     public void getFavoritedWithoutAuthWillReturn401() {
         String slug = UUID.randomUUID().toString();
         client
