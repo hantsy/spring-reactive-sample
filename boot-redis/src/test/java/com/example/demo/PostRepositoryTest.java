@@ -16,6 +16,7 @@ import org.testcontainers.utility.DockerImageName;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
+import java.util.Comparator;
 import java.util.UUID;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
@@ -63,7 +64,7 @@ class PostRepositoryTest {
                 .map(it -> Post.builder().id(UUID.randomUUID().toString()).title("Post " + it).content("Content of post " + it).build())
                 .toList();
         this.postRepository.saveAll(data).block(Duration.ofMillis(5000));
-        this.postRepository.findAll()
+        this.postRepository.findAll().sort(Comparator.comparing(Post::getTitle))
                 .as(StepVerifier::create)
                 .consumeNextWith(it -> assertThat(it.getTitle()).isEqualTo("Post one"))
                 .consumeNextWith(it -> assertThat(it.getTitle()).isEqualTo("Post two"))
