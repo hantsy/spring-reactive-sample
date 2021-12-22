@@ -5,6 +5,9 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Component
@@ -33,6 +36,13 @@ class PostRepository {
         .log()
         .map(p -> post);
 
+  }
+
+  Mono<Boolean> saveAll(List<Post> data) {
+    Map<String , Post> dataMap = new HashMap<>();
+    data.forEach(p -> dataMap.putIfAbsent(p.getId(), p));
+    return template.<String, Post>opsForHash().putAll("posts", dataMap)
+            .log();
   }
 
   Mono<Void> deleteById(String id) {
