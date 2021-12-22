@@ -1,6 +1,7 @@
 package com.example.demo;
 
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
 @SpringBootTest
+@Slf4j
 //@DataRedisTest works for blocking RedisRepository
 class PostRepositoryTest {
     @Container
@@ -32,8 +34,11 @@ class PostRepositoryTest {
 
     @DynamicPropertySource
     static void setupRedisProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.redis.host", () -> redis.getHost());
-        registry.add("spring.redis.port", () -> redis.getFirstMappedPort());
+        var host = redis.getHost();
+        var port = redis.getFirstMappedPort();
+        log.debug("Connecting to Redis@Testcontainers, host:{}, port:{}", host, port);
+        registry.add("spring.redis.host", () -> host);
+        registry.add("spring.redis.port", () -> port);
     }
 
     @Autowired
