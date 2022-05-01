@@ -18,7 +18,7 @@
         <java.version>17</java.version>
         <neo4j.version>4.4.5</neo4j.version>
         <testcontainers.version>1.16.3</testcontainers.version>
-        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
     </properties>
 
     <dependencies>
