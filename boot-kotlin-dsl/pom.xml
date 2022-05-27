@@ -62,11 +62,6 @@
             <scope>test</scope>
         </dependency>
 
-        <!--<dependency>
-            <groupId>de.flapdoodle.embed</groupId>
-            <artifactId>de.flapdoodle.embed.mongo</artifactId>
-            <scope>test</scope>
-        </dependency>-->
     </dependencies>
 
     <build>
@@ -87,7 +82,7 @@
                     <compilerPlugins>
                         <plugin>spring</plugin>
                     </compilerPlugins>
-                    <jvmTarget>11</jvmTarget>
+                    <jvmTarget>17</jvmTarget>
                 </configuration>
                 <dependencies>
                     <dependency>
