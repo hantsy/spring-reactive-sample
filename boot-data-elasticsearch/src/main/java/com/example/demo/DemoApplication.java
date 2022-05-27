@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
@@ -28,6 +29,7 @@ public class DemoApplication {
 
 @Component
 @Slf4j
+@Profile("default")
 class DataInitializer implements CommandLineRunner {
 
     private final PostRepository posts;
@@ -114,9 +116,9 @@ class Post {
     @Id
     private String id;
 
-    @Field(store = true, type = FieldType.Text)
+    @Field(store = true, type = FieldType.Text, fielddata = true)
     private String title;
 
-    @Field(store = true, type = FieldType.Text)
+    @Field(store = true, type = FieldType.Text, fielddata = true)
     private String content;
 }
