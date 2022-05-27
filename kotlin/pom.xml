@@ -182,7 +182,7 @@
 					</compilerPlugins>
 					<jvmTarget>17</jvmTarget>
 				</configuration>
-				<!--<executions>
+				<executions>
 					<execution>
 						<id>compile</id>
 						<phase>compile</phase>
@@ -197,7 +197,7 @@
 							<goal>test-compile</goal>
 						</goals>
 					</execution>
-				</executions>-->
+				</executions>
 				<dependencies>
 					<dependency>
 						<groupId>org.jetbrains.kotlin</groupId>
