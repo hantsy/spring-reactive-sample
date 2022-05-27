@@ -1,10 +1,13 @@
 package com.example.demo;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.data.couchbase.DataCouchbaseTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -18,14 +21,22 @@ import reactor.test.StepVerifier;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
+@DataCouchbaseTest
 @Testcontainers
 @ActiveProfiles("test")
 @Slf4j
 class PostRepositoryWithDynamicPropertiesTest {
+
+
+    @TestConfiguration
+    @Import(DataConfig.class)
+    static class TestConfig {
+    }
+
     private static final String COUCHBASE_IMAGE_NAME = "couchbase";
     private static final String DEFAULT_IMAGE_NAME = "couchbase/server";
     private static final DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
@@ -49,8 +60,10 @@ class PostRepositoryWithDynamicPropertiesTest {
     @Autowired
     private PostRepository posts;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() {
+        var countDownLatch = new CountDownLatch(1);
         this.posts
                 .saveAll(
                         List.of(
@@ -58,7 +71,10 @@ class PostRepositoryWithDynamicPropertiesTest {
                                 Post.builder().title("Post two").content("content of post two").build()
                         )
                 )
+                .doOnTerminate(countDownLatch::countDown)
                 .subscribe(data -> log.debug("saved data: {}", data));
+
+        countDownLatch.await(1000, java.util.concurrent.TimeUnit.MILLISECONDS);
     }
 
     @Test

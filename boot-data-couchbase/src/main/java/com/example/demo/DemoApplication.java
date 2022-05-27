@@ -36,17 +36,19 @@ public class DemoApplication {
         SpringApplication.run(DemoApplication.class, args);
     }
 
-    @Bean
-    public RouterFunction<ServerResponse> routes(PostHandler postController) {
-        return route(GET("/posts"), postController::all)
-                .andRoute(POST("/posts"), postController::create)
-                .andRoute(GET("/posts/{id}"), postController::get)
-                .andRoute(PUT("/posts/{id}"), postController::update)
-                .andRoute(DELETE("/posts/{id}"), postController::delete);
-    }
-
 }
 
+@Configuration
+class WebConfig {
+    @Bean
+    public RouterFunction<ServerResponse> routes(PostHandler handler) {
+        return route(GET("/posts"), handler::all)
+                .andRoute(POST("/posts"), handler::create)
+                .andRoute(GET("/posts/{id}"), handler::get)
+                .andRoute(PUT("/posts/{id}"), handler::update)
+                .andRoute(DELETE("/posts/{id}"), handler::delete);
+    }
+}
 
 @Configuration(proxyBeanMethods = false)
 // see: https://jira.spring.io/browse/DATACOUCH-644
@@ -94,13 +96,9 @@ class DataInitializer implements CommandLineRunner {
 }
 
 @Component
+@RequiredArgsConstructor
 class PostHandler {
-
     private final PostRepository posts;
-
-    public PostHandler(PostRepository posts) {
-        this.posts = posts;
-    }
 
     public Mono<ServerResponse> all(ServerRequest req) {
         return ServerResponse.ok().body(this.posts.findAll(), Post.class);
@@ -153,7 +151,6 @@ interface PostRepository extends ReactiveCouchbaseRepository<Post, String> {
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-
 class Post {
 
     @Id
