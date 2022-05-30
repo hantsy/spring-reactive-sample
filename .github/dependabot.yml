@@ -1,0 +1,303 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-cassandra"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-couchbase"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-elasticsearch"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-mongo-auditing"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-mongo"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-mongo-gridfs"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-mongo-querydsl"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-mongo-tailable"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-neo4j"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-redis"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-exception-handler"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-groovy"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-jetty"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-kotlin"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-kotlin-dsl"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-mongo"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-mvc-freemarker"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-mvc-mustache"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-mvc-thymeleaf"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-neo4j"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-neo4j-cypher"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-redis"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-routes"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-start"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-start-routes"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-tomcat"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-undertow"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/client"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-cassandra"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-couchbase"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-mongo"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-mongo-pageable"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-mongo-transaction"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-neo4j"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-redis"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/data-redis-message"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/exception-handler"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/groovy-dsl"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/groovy"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/integration"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/integration-dsl"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/java8"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/java9"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/kotlin"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/kotlin-dsl"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/kotlin-routes"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/multipart"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/multipart-data-mongo"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/mvc-freemarker"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/mvc-mustache"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/mvc-thymeleaf"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/register-bean"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/restdocs"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/routes"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/rxjava3"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/security"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/security-data-mongo"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/security-form"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/security-user-properties"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/security-method"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/session"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/session-data-mongo"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/session-data-redis"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/session-header"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/smallrye-mutiny"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/sse"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/vanilla"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/vanilla-jetty"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/vanilla-tomcat"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/vanilla-undertow"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/war"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/web-filter"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/websocket"
+    schedule:
+      interval: "monthly"
