@@ -19,19 +19,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-      with:
-          fetch-depth: 0
-    - name: Set up JDK
-      uses: actions/setup-java@v3
-      with:
-        java-version: '17'
-        distribution: 'temurin'
-        cache: 'maven'
-    - name: Build with Maven
-      # see: https://github.com/testcontainers/testcontainers-java/discussions/4676
-      run: |
-        cd boot-data-couchbase
-        mvn -q clean test -Dtest=PostRepositoryWithDynamicPropertiesTest
-        docker rm $(docker ps -aq) -f
-        mvn -q clean test -Dtest=PostRepositoryTest
+      - uses: actions/checkout@v3
+        with:
+            fetch-depth: 0
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: 'maven'
+      - name: Build with Maven
+        # see: https://github.com/testcontainers/testcontainers-java/discussions/4676
+        run: |
+          cd boot-data-couchbase
+          mvn -q clean test -Dtest=PostRepositoryWithDynamicPropertiesTest
+          docker rm $(docker ps -aq) -f
+          mvn -q clean test -Dtest=PostRepositoryTest
