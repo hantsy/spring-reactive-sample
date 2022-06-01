@@ -1,11 +1,10 @@
 package com.example.demo;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.Sort;
@@ -14,6 +13,9 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
+
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,15 +68,23 @@ public class PostRepositoryTest {
     }
 
 
+    @SneakyThrows
     @Test
     public void testGetAllPost() {
         Post post1 = Post.builder().content("my test content").title("my test title").build();
         Post post2 = Post.builder().content("content of another post").title("another post title").build();
 
-        Flux<Post> allPosts = Flux.just(post1, post2)
+        var countDownLatch = new CountDownLatch(1);
+        Flux.just(post1, post2)
                 .flatMap(this.postRepository::save)
-                .thenMany(this.postRepository.findAll(Sort.by((Sort.Direction.ASC), "title")));
+                .doOnTerminate(countDownLatch::countDown)
+                .subscribe(
+                        data -> log.debug("saved: {} ", data)
+                );
 
+        countDownLatch.await(1000, TimeUnit.MILLISECONDS);
+
+        var allPosts = this.postRepository.findAll(Sort.by((Sort.Direction.ASC), "title"));
         StepVerifier.create(allPosts)
                 .expectNextMatches(p -> p.getTitle().equals("another post title"))
                 .expectNextMatches(p -> p.getTitle().equals("my test title"))
