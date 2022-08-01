@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <neo4j.version>4.4.6</neo4j.version>
+        <neo4j.version>4.4.9</neo4j.version>
         <testcontainers.version>1.17.3</testcontainers.version>
         <maven-surefire-plugin.version>3.0.0-M7</maven-surefire-plugin.version>
     </properties>
