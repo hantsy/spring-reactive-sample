@@ -72,7 +72,12 @@ services:
       - "7687:7687" 
       - "7474:7474" 
 
-    
+  rabbitmq:
+    image: rabbitmq:3.7-management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+      
 volumes:
   mongodata:  
 #    driver: local-persist
