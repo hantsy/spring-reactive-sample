@@ -118,6 +118,24 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/boot-reactor-kafka/sender"
+    schedule:
+      interval: "monthly"   
+  - package-ecosystem: "maven"
+    directory: "/boot-reactor-kafka/receiver"
+    schedule:
+      interval: "monthly"  
+
+  - package-ecosystem: "maven"
+    directory: "/boot-reactor-rabbitmq/sender"
+    schedule:
+      interval: "monthly"  
+  - package-ecosystem: "maven"
+    directory: "/boot-reactor-rabbitmq/receiver"
+    schedule:
+      interval: "monthly"  
+      
+  - package-ecosystem: "maven"
     directory: "/client"
     schedule:
       interval: "monthly"
