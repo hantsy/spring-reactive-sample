@@ -14,7 +14,7 @@ To resolve the problem, Spring team leads a new reactive specification [R2dbc](h
 
 ## Reactive Repository
 
-Similar to the existing `Repository` and it derived interfaces for blocking cases such as `PagingAndSortingRepository` and `CurdRepository`. Spring Data Commons add variants for reactive cases, such as `ReactiveSortingRepository` and `ReactiveCurdRepository`.
+Similar to the existing `Repository` and it derived interfaces for blocking cases such as `PagingAndSortingRepository` and `CrudRepository`. Spring Data Commons add variants for reactive cases, such as `ReactiveSortingRepository` and `ReactiveCrudRepository`.
 
 > Note: There is no `Paging` variant for reactive interfaces.
 
@@ -26,10 +26,10 @@ public interface ReactiveMongoRepository<T,ID>
 extends ReactiveSortingRepository<T,ID>, ReactiveQueryByExampleExecutor<T>{...}
 ```
 
-To create  your `Repsoitory` ,  create an interface to extend `ReactiveCurdRepository` or `ReactiveSortingRepository`  or a subproject specific `Repsoitory`.  For example:
+To create  your `Repository` ,  create an interface to extend `ReactiveCrudRepository` or `ReactiveSortingRepository`  or a subproject specific `Repository`.  For example:
 
 ```java
-interface PostRepository extends ReactiveCurdRepository{}
+interface PostRepository extends ReactiveCrudRepository{}
 interface PostRepository extends ReactiveSortingRepository{}
 interface PostRepository extends ReactiveMongoRepository{}
 ```
@@ -38,10 +38,10 @@ interface PostRepository extends ReactiveMongoRepository{}
 
 The reactive  `Repository` supports RxJava 2 and 3 variants.
 
-* For RxJava 2, there is a `RxJava2CurdRepository` and `RxJava2SortingRepository`.
-* For RxJava 3, there is a `RxJava3CurdRepository` and `RxJava3SortingRepository`. 
+* For RxJava 2, there is a `RxJava2CrudRepository` and `RxJava2SortingRepository`.
+* For RxJava 3, there is a `RxJava3CrudRepository` and `RxJava3SortingRepository`. 
 
-To use RxJava 2/3 instead of Reactor, just need to declare your `Repository`to extends  `RxJava3CurdRepository` or `RxJava3SortingRepository`. For example:
+To use RxJava 2/3 instead of Reactor, just need to declare your `Repository`to extends  `RxJava3CrudRepository` or `RxJava3SortingRepository`. For example:
 
 ```java
 interface PostRepository extends RxJava3SortingRepository{}
