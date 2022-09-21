@@ -52,13 +52,13 @@ services:
       - couchbasedata:/opt/couchbase/var
       
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.15.2
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.17.4
     environment:
       - discovery.type=single-node
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"
+      - "9300:9300"
     volumes:
       - esdata1:/usr/share/elasticsearch/data
       

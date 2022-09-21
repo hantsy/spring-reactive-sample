@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.15.2")
+    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.4")
             .withEnv("discovery.type", "single-node");
 
     @DynamicPropertySource
