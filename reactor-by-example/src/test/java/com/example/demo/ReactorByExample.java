@@ -4,9 +4,70 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 
+import java.util.stream.IntStream;
+
 
 @Slf4j
 public class ReactorByExample {
+
+    @Test
+    public void testZipWith() {
+        var flux = Flux.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        var abc = Flux.just("a", "b", "z");
+
+        flux.zipWith(abc, (integer, s) -> integer + "" + s)
+                .subscribe(data -> log.debug("received: {}", data),
+                        error -> log.error("error:" + error.getMessage()),
+                        () -> log.debug("done")
+                );
+
+        log.debug("another zip order.");
+
+        abc.zipWith(flux, (s, i) -> i + "" + s)
+                .subscribe(data -> log.debug("received: {}", data),
+                        error -> log.error("error:" + error.getMessage()),
+                        () -> log.debug("done")
+                );
+
+    }
+
+    @Test
+    public void testWindow() {
+        var flux = Flux.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        flux.window(4)
+                .concatMap(integerFlux -> {
+                    log.debug("contact map boundary::");
+                    return integerFlux;
+                })
+                .subscribe(data -> log.debug("received: {}", data),
+                        error -> log.error("error:" + error.getMessage()),
+                        () -> log.debug("done")
+                );
+    }
+
+    @Test
+    public void testWindowUntil() {
+        var flux = Flux.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        flux.windowUntil(i -> i % 2 == 0)
+                .concatMap(integerFlux -> {
+                    log.debug("contact map boundary::");
+                    return integerFlux;
+                })
+                .subscribe(data -> log.debug("received: {}", data),
+                        error -> log.error("error:" + error.getMessage()),
+                        () -> log.debug("done")
+                );
+    }
+
+    @Test
+    public void testContactMap() {
+        var flux = Flux.just(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        flux.concatMap(i -> Flux.fromStream(IntStream.rangeClosed(1, i).boxed()))
+                .subscribe(data -> log.debug("received: {}", data),
+                        error -> log.error("error:" + error.getMessage()),
+                        () -> log.debug("done")
+                );
+    }
 
     @Test
     public void testSwitchOnFirst() {
@@ -30,7 +91,7 @@ public class ReactorByExample {
                             return flux;
                         }
                 )
-                .subscribe(integer -> log.debug("received: {}", integer),
+                .subscribe(data -> log.debug("received: {}", data),
                         error -> log.error("error:" + error.getMessage()),
                         () -> log.debug("done")
                 );
@@ -40,7 +101,7 @@ public class ReactorByExample {
     public void testSwitchIfEmpty() {
         var flux = Flux.empty();
         flux.switchIfEmpty(Flux.just(1, 2, 3, 4))
-                .subscribe(integer -> log.debug("received: {}", integer),
+                .subscribe(data -> log.debug("received: {}", data),
                         error -> log.error("error:" + error.getMessage()),
                         () -> log.debug("done")
                 );
