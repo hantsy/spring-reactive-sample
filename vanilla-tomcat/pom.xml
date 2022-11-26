@@ -136,8 +136,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-
         </plugins>
     </build>
 
@@ -178,6 +176,4 @@
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
-
-
 </project>
