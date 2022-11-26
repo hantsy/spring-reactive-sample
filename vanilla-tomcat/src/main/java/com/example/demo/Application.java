@@ -10,7 +10,7 @@ import org.springframework.http.server.reactive.HttpHandler;
 import org.springframework.http.server.reactive.TomcatHttpHandlerAdapter;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import java.io.File;
 
 @Configuration
