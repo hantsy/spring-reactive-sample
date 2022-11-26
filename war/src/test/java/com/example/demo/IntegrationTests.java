@@ -23,7 +23,7 @@ public class IntegrationTests {
     this.rest = WebTestClient
         .bindToServer()
         //.defaultHeaders(headers -> headers.setBasicAuth("user", "password"))
-        .responseTimeout(Duration.ofDays(1))
+        .responseTimeout(Duration.ofMillis(1000))
         .baseUrl("http://localhost:9000")
         .build();
   }
