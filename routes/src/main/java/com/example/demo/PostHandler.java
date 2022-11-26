@@ -39,13 +39,13 @@ public class PostHandler {
 
     public Mono<ServerResponse> create(ServerRequest req) {
         return req.body(BodyExtractors.toMono(Post.class))
-            .flatMap(post -> this.posts.save(post))
+            .flatMap(this.posts::save)
             .flatMap(p -> created(URI.create("/posts/" + p.getId())).build());
     }
 
     public Mono<ServerResponse> get(ServerRequest req) {
         return this.posts.findById(Long.valueOf(req.pathVariable("id")))
-            .flatMap(post -> ok().syncBody(post))
+            .flatMap(post -> ok().bodyValue(post))
             .switchIfEmpty(notFound().build());
     }
 }
