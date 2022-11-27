@@ -5,18 +5,15 @@
  */
 package com.example.demo;
 
-import java.time.Duration;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.thymeleaf.spring5.context.webflux.ReactiveDataDriverContextVariable;
+import org.thymeleaf.spring6.context.webflux.ReactiveDataDriverContextVariable;
 import reactor.core.publisher.Flux;
 
 /**
- *
  * @author hantsy
  */
 @Controller
@@ -24,14 +21,14 @@ import reactor.core.publisher.Flux;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final PostRepository posts;
+  private final PostRepository posts;
 
-    @GetMapping("/home")
-    public String home(final Model model) {
+  @GetMapping("/home")
+  public String home(final Model model) {
 
-        Flux<Post> postList = this.posts.findAll();
-        model.addAttribute("posts", new ReactiveDataDriverContextVariable(postList, 100));
-        return "home";
-    }
+    Flux<Post> postList = this.posts.findAll();
+    model.addAttribute("posts", new ReactiveDataDriverContextVariable(postList, 100));
+    return "home";
+  }
 
 }
