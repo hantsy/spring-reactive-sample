@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import reactor.test.StepVerifier;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -59,8 +61,10 @@ class PostRepositoryTest {
     @Autowired
     private PostRepository posts;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() {
+        var countDownLatch = new CountDownLatch(1);
         this.posts
                 .saveAll(
                         List.of(
@@ -68,7 +72,11 @@ class PostRepositoryTest {
                                 Post.builder().title("Post two").content("content of post two").build()
                         )
                 )
-                .subscribe(data -> log.debug("saved data: {}", data));
+                .subscribe(data -> {
+                    log.debug("saved data: {}", data);
+                    countDownLatch.countDown();;
+                });
+        countDownLatch.await(1000, java.util.concurrent.TimeUnit.MILLISECONDS);
     }
 
     @Test
