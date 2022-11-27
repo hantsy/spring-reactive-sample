@@ -1,6 +1,7 @@
 package com.example.demo;
 
 
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,7 @@ import reactor.test.StepVerifier;
 import java.time.Duration;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -31,18 +33,20 @@ public class PostRepositoryWithTestContainersTest {
 
     @DynamicPropertySource
     static void bindCassandraProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.cassandra.keyspace-name", () -> "demo");
-        registry.add("spring.data.cassandra.contact-points", () -> "localhost:" + cassandraContainer.getMappedPort(9042));
-        registry.add("spring.data.cassandra.local-datacenter", () -> "datacenter1");
-        registry.add("spring.data.cassandra.schema-action", () -> "RECREATE");
+        registry.add("spring.cassandra.keyspace-name", () -> "demo");
+        registry.add("spring.cassandra.contact-points", () -> "localhost:" + cassandraContainer.getMappedPort(9042));
+        registry.add("spring.cassandra.local-datacenter", () -> "datacenter1");
+        registry.add("spring.cassandra.schema-action", () -> "RECREATE");
     }
 
 
     @Autowired
     private PostRepository posts;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() {
+        var latch = new CountDownLatch(1);
         this.posts.deleteAll()
                 .then()
                 .thenMany(
@@ -53,7 +57,12 @@ public class PostRepositoryWithTestContainersTest {
                         )
                 )
                 .log()
-                .blockLast(Duration.ofSeconds(5));
+                .subscribe(data -> {
+                            log.debug("data: {}", data);
+                            latch.countDown();
+                        }
+                );
+        latch.await();
     }
 
     @Test
