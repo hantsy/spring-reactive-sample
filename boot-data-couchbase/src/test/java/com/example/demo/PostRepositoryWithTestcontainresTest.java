@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 @ActiveProfiles("test")
 @Slf4j
-class PostRepositoryWithDynamicPropertiesTest {
+class PostRepositoryWithTestcontainresTest {
 
 
     @TestConfiguration
