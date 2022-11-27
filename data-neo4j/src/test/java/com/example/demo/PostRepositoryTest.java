@@ -47,7 +47,7 @@ public class PostRepositoryTest {
 
         @Override
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            final Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0")
+            final Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:5")
                     .withAdminPassword("test");
             neo4jContainer.start();
             log.info(" neo4jContainer.getBoltUrl():: {}", neo4jContainer.getBoltUrl());
