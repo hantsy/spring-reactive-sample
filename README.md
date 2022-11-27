@@ -11,6 +11,7 @@ This is a sandbox project  for demonstrating  [Reactive Streams](https://www.rea
 * [Angular and Spring Reactive Example](https://github.com/hantsy/angular-spring-reactive-sample)
 * [Spring R2dbc Example](https://github.com/hantsy/spring-r2dbc-sample)(updates for *Spring 5.3, Spring Data R2dbc 1.2 and Spring Boot 2.4*)
 
+>The source codes are updated to **Spring 6/Spring Boot 3.0**, the Spring Boot 2.7.x based codes are available in [a compressed archive](https://github.com/hantsy/spring-reactive-sample/archive/refs/tags/v1.0.zip) and tagged with [v1.0](https://github.com/hantsy/spring-reactive-sample/releases/tag/v1.0).
 
 ## Docs
 
