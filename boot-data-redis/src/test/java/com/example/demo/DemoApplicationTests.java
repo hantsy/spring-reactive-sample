@@ -21,7 +21,6 @@ public class DemoApplicationTests {
     client = WebTestClient
         .bindToApplicationContext(context)
         .configureClient()
-        .baseUrl("http://localhost:8080/")
         .build();
   }
 
@@ -29,7 +28,7 @@ public class DemoApplicationTests {
   public void getAllPosts() {
     client
         .get()
-        .uri("/posts/")
+        .uri("/posts")
         .exchange()
         .expectStatus().isOk();
   }
