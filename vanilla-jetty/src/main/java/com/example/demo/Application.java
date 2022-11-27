@@ -1,6 +1,6 @@
 package com.example.demo;
 
-import javax.servlet.Servlet;
+import jakarta.servlet.Servlet;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
