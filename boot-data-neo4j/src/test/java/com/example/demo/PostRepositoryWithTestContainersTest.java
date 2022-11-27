@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:4.0")
+    static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:5")
             .withStartupTimeout(Duration.ofMinutes(5));
 
     @DynamicPropertySource
