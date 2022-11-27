@@ -71,8 +71,11 @@ class PostRepositoryWithDynamicPropertiesTest {
                                 Post.builder().title("Post two").content("content of post two").build()
                         )
                 )
-                .doOnTerminate(countDownLatch::countDown)
-                .subscribe(data -> log.debug("saved data: {}", data));
+                //.doOnTerminate(countDownLatch::countDown)
+                .subscribe(data -> {
+                    log.debug("saved data: {}", data);
+                    countDownLatch.countDown();
+                });
 
         countDownLatch.await(1000, java.util.concurrent.TimeUnit.MILLISECONDS);
     }
