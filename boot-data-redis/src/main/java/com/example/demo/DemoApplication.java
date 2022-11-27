@@ -51,7 +51,6 @@ public class DemoApplication {
             .hashValue(new Jackson2JsonRedisSerializer<>(Post.class))
             .build();
 
-
         return new ReactiveRedisTemplate<>(connectionFactory, serializationContext);
     }
 
