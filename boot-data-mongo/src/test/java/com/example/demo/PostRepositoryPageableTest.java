@@ -5,12 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import reactor.test.StepVerifier;
 
@@ -22,7 +19,7 @@ import java.util.stream.IntStream;
 
 import static java.util.Comparator.comparing;
 
-@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
+@DataMongoTest
 @TestPropertySource(properties = {
         "logging.level.org.springframework.data.mongodb.core.ReactiveMongoTemplate=DEBUG",
         "logging.level.com.example.demo=DEBUG"

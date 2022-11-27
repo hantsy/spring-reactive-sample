@@ -3,6 +3,7 @@ package com.example.demo;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
@@ -21,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @TestPropertySource(properties = "spring.mongodb.embedded.version=3.5.5")
 @Slf4j
 @ActiveProfiles("test")
+@Disabled("Embedded Mongo autoconfiguration is removed since Spring 3.0")
 public class PostRepositoryWithEmbeddedMongoTest {
 
     @Autowired

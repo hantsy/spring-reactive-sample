@@ -6,8 +6,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.mongo.embedded.EmbeddedMongoAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
@@ -27,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataMongoTest(excludeAutoConfiguration = EmbeddedMongoAutoConfiguration.class)
+@DataMongoTest
 @Testcontainers
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -47,7 +45,8 @@ public class PostRepositoryWithDynamicPropertiesTest {
 
     @TestConfiguration()
     @Import(DataConfig.class)//enable auditing.
-    static class TestConfig{}
+    static class TestConfig {
+    }
 
     @Autowired
     PostRepository posts;
@@ -79,7 +78,7 @@ public class PostRepositoryWithDynamicPropertiesTest {
                     assertThat(p.getCreatedBy()).isEqualTo("hantsy");
                     assertThat(p.getCreatedAt()).isNotNull();
                 })
-                .consumeNextWith(p ->  assertThat(p.getTitle()).isEqualTo("my test title"))
+                .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
                 .verifyComplete();
     }
 
