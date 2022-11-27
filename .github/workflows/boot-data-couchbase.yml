@@ -32,6 +32,6 @@ jobs:
       # see: https://github.com/testcontainers/testcontainers-java/discussions/4676
       run: |
         cd boot-data-couchbase
-        mvn -q clean test -Dtest=PostRepositoryWithDynamicPropertiesTest
+        mvn -q clean test -Dtest=PostRepositoryWithTestcontainresTest
         docker rm $(docker ps -aq) -f
         mvn -q clean test -Dtest=PostRepositoryTest
