@@ -8,6 +8,7 @@ package com.example.demo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.integration.annotation.IntegrationComponentScan;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.FluxMessageChannel;
 import org.springframework.integration.config.EnableIntegration;
@@ -22,6 +23,7 @@ import org.springframework.web.reactive.function.client.WebClient;
  */
 @Configuration
 @EnableIntegration
+@IntegrationComponentScan
 public class IntegrationConfig {
 
     @Bean
