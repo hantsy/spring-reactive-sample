@@ -30,7 +30,7 @@ public class IntegrationTests {
 
     @BeforeEach
     public void setup() {
-        this.disposableServer = this.httpServer.bindNow(Duration.ofMillis(1000));
+        this.disposableServer = this.httpServer.bindNow(Duration.ofMillis(5000));
         this.rest = WebTestClient
                 .bindToServer()
                 .responseTimeout(Duration.ofMillis(5000))
