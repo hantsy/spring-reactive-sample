@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -17,10 +18,8 @@ import reactor.netty.DisposableServer;
 import reactor.netty.http.server.HttpServer;
 
 import java.time.Duration;
-import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.Credentials.basicAuthenticationCredentials;
 import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.basicAuthentication;
 
 /**
@@ -82,8 +81,7 @@ public class IntegrationTests {
         this.rest
                 .get()
                 .uri("/posts")
-                .headers(httpHeaders -> httpHeaders.setBasicAuth("user", "password"))
-                //.attributes(userCredentials())
+                .headers(userCredentials())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody().jsonPath("$.length()").isEqualTo(2);
@@ -94,7 +92,7 @@ public class IntegrationTests {
         this.rest
                 .post()
                 .uri("/posts")
-                .attributes(invalidCredentials())
+                .headers(invalidCredentials())
                 .body(BodyInserters.fromValue(Post.builder().title("title test").content("content test").build()))
                 .exchange()
                 .expectStatus().is4xxClientError();
@@ -115,7 +113,7 @@ public class IntegrationTests {
         this.rest
                 .delete()
                 .uri("/posts/1")
-                .attributes(userCredentials())
+                .headers(userCredentials())
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
@@ -130,15 +128,15 @@ public class IntegrationTests {
                 .expectStatus().is4xxClientError();
     }
 
-    private Consumer<Map<String, Object>> userCredentials() {
-        return basicAuthenticationCredentials("user", "password");
+    private Consumer<HttpHeaders> userCredentials() {
+        return httpHeaders -> httpHeaders.setBasicAuth("user", "password");
     }
 
-    private Consumer<Map<String, Object>> adminCredentials() {
-        return basicAuthenticationCredentials("admin", "password");
+    private Consumer<HttpHeaders> adminCredentials() {
+        return httpHeaders -> httpHeaders.setBasicAuth("admin", "password");
     }
 
-    private Consumer<Map<String, Object>> invalidCredentials() {
-        return basicAuthenticationCredentials("user", "INVALID");
+    private Consumer<HttpHeaders> invalidCredentials() {
+        return httpHeaders -> httpHeaders.setBasicAuth("user", "INVALID");
     }
 }

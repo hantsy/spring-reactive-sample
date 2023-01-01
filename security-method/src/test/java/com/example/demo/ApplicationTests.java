@@ -9,17 +9,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 
-import java.util.Map;
 import java.util.function.Consumer;
 
-import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.*;
-import static org.springframework.web.reactive.function.client.ExchangeFilterFunctions.Credentials.basicAuthenticationCredentials;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
+import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 
 /**
  * @author hantsy
@@ -69,7 +69,7 @@ public class ApplicationTests {
         this.rest
                 .get()
                 .uri("/posts")
-                .attributes(userCredentials())
+                .headers(userCredentials())
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody().jsonPath("$.length()").isEqualTo(2);
@@ -81,7 +81,7 @@ public class ApplicationTests {
                 .post()
                 .uri("/posts")
                 .body(BodyInserters.fromValue(Post.builder().title("title test").content("content test").build()))
-                .attributes(invalidCredentials())
+                .headers(invalidCredentials())
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
@@ -101,7 +101,7 @@ public class ApplicationTests {
         this.rest
                 .delete()
                 .uri("/posts/1")
-                .attributes(userCredentials())
+                .headers(userCredentials())
                 .exchange()
                 .expectStatus().is4xxClientError();
     }
@@ -131,21 +131,21 @@ public class ApplicationTests {
 //        this.rest
 //            .delete()
 //            .uri("/posts/1")
-//            .attributes(adminCredentials())
+//            .headers(adminCredentials())
 //            .exchange()
 //            .expectStatus().isOk()
 //            .expectBody().isEmpty();
 //    }
 
-    private Consumer<Map<String, Object>> userCredentials() {
-        return basicAuthenticationCredentials("user", "password");
+    private Consumer<HttpHeaders> userCredentials() {
+        return httpHeaders -> httpHeaders.setBasicAuth("user", "password");
     }
 
-    private Consumer<Map<String, Object>> adminCredentials() {
-        return basicAuthenticationCredentials("admin", "password");
+    private Consumer<HttpHeaders> adminCredentials() {
+        return httpHeaders -> httpHeaders.setBasicAuth("admin", "password");
     }
 
-    private Consumer<Map<String, Object>> invalidCredentials() {
-        return basicAuthenticationCredentials("user", "INVALID");
+    private Consumer<HttpHeaders> invalidCredentials() {
+        return httpHeaders -> httpHeaders.setBasicAuth("user", "INVALID");
     }
 }
