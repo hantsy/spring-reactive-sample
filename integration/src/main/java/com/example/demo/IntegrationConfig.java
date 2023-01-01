@@ -11,15 +11,13 @@ import org.springframework.http.HttpMethod;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.integration.channel.FluxMessageChannel;
 import org.springframework.integration.config.EnableIntegration;
-import org.springframework.integration.webflux.inbound.WebFluxInboundEndpoint;
-import org.springframework.messaging.MessageChannel;
 import org.springframework.integration.http.inbound.RequestMapping;
+import org.springframework.integration.webflux.inbound.WebFluxInboundEndpoint;
 import org.springframework.integration.webflux.outbound.WebFluxRequestExecutingMessageHandler;
-import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.messaging.MessageChannel;
 import org.springframework.web.reactive.function.client.WebClient;
 
 /**
- *
  * @author hantsy
  */
 @Configuration
@@ -40,9 +38,9 @@ public class IntegrationConfig {
     public MessageChannel fluxResultChannel() {
         return new FluxMessageChannel();
     }
-    
+
     @Bean
-    public WebClient webClient(){
+    public WebClient webClient() {
         return WebClient.create();
     }
 
@@ -50,7 +48,7 @@ public class IntegrationConfig {
     @Bean
     public WebFluxRequestExecutingMessageHandler reactiveOutbound(WebClient client) {
         WebFluxRequestExecutingMessageHandler handler
-            = new WebFluxRequestExecutingMessageHandler("http://localhost:8080/posts", client);
+                = new WebFluxRequestExecutingMessageHandler("http://localhost:8080/posts", client);
         handler.setHttpMethod(HttpMethod.GET);
         handler.setExpectedResponseType(String.class);
         return handler;
