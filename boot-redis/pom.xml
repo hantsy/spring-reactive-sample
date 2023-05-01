@@ -20,7 +20,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <testcontainers.version>1.17.6</testcontainers.version>
+        <testcontainers.version>1.18.0</testcontainers.version>
     </properties>
     <dependencyManagement>
         <dependencies>
