@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.4")
+    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9")
             .withEnv("discovery.type", "single-node");
 
     @DynamicPropertySource
@@ -66,6 +66,11 @@ public class PostRepositoryWithTestContainersTest {
 
         countDownLatch.await(5000, MILLISECONDS);
         log.debug("the sample data is ready ...");
+    }
+
+    @Test
+    void testDatabaseIsRunning() {
+        assertThat(esContainer.isRunning()).isTrue();
     }
 
     @Test
