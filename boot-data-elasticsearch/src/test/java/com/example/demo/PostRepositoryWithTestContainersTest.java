@@ -58,12 +58,12 @@ public class PostRepositoryWithTestContainersTest {
                         )
                 )
                 .doOnTerminate(() -> {
-                        countDownLatch.countDown();
                         log.debug("terminating...");
-                })
-                .doOnComplete(() -> {
                         //countDownLatch.countDown();
+                })
+                .doOnComplete(() -> {      
                         log.debug("completing...");
+                        countDownLatch.countDown();
                 })
                 .subscribe(data -> {
                         log.debug("saved data: {}", data);
