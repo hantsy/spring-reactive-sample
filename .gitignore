@@ -50,3 +50,4 @@ target/
 build/
 bin/
 out/
+.vscode
