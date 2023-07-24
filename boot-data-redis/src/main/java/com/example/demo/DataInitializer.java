@@ -32,6 +32,7 @@ class DataInitializer implements CommandLineRunner {
                               .build());
                     }
                 )
+                .subscribeOn(Schedulers.boundedElastic())
         )
         .log()
         .subscribe(
