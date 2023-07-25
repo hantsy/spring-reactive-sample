@@ -1,10 +1,13 @@
 package com.example.demo;
 
 import java.util.UUID;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
+import reactor.core.scheduler.Schedulers;
 
 @Component
 @Slf4j
@@ -30,16 +33,13 @@ class DataInitializer implements CommandLineRunner {
                       return this.posts.save(
                           Post.builder().id(id).title(title).content("content of " + title)
                               .build());
-                    }
-                )
-                .subscribeOn(Schedulers.boundedElastic())
-        )
+                    })
+                .subscribeOn(Schedulers.boundedElastic()))
         .log()
         .subscribe(
             null,
             null,
-            () -> log.info("done initialization...")
-        );
+            () -> log.info("done initialization..."));
 
   }
 
