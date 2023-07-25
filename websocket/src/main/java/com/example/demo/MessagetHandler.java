@@ -38,7 +38,7 @@ public class MessagetHandler implements WebSocketHandler {
         var receiveMono = session.receive()
                 .map(WebSocketMessage::getPayloadAsText)
                 .map(this::readIncomingMessage)
-                .map(req -> Mono.fromCallable(() ->
+                .flatMap(req -> Mono.fromCallable(() ->
                                 Message.builder().id(UUID.randomUUID()).body(req.message()).sentAt(LocalDateTime.now()).build()))
                 .log("server receiving::")
 //                .subscribe(
@@ -47,7 +47,7 @@ public class MessagetHandler implements WebSocketHandler {
 //                );
                 .doOnNext(data -> {
                     executor.execute(() -> {
-                        sinks.emitNext(data.block(), Sinks.EmitFailureHandler.FAIL_FAST);
+                        sinks.emitNext(data, Sinks.EmitFailureHandler.FAIL_FAST);
                     });
                 })
                 .doOnError(error -> sinks.emitError(error, Sinks.EmitFailureHandler.FAIL_FAST))
