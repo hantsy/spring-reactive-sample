@@ -18,6 +18,8 @@ import reactor.core.publisher.Sinks;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @author hantsy
@@ -29,19 +31,25 @@ public class MessagetHandler implements WebSocketHandler {
 
     private Sinks.Many<Message> sinks = Sinks.many().replay().limit(2);
     private Flux<Message> outputMessages = sinks.asFlux();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
         var receiveMono = session.receive()
                 .map(WebSocketMessage::getPayloadAsText)
                 .map(this::readIncomingMessage)
-                .map(req -> Message.builder().id(UUID.randomUUID()).body(req.message()).sentAt(LocalDateTime.now()).build())
+                .map(req -> Mono.fromCallable(() ->
+                                Message.builder().id(UUID.randomUUID()).body(req.message()).sentAt(LocalDateTime.now()).build()))
                 .log("server receiving::")
 //                .subscribe(
 //                        data -> sinks.emitNext(data, Sinks.EmitFailureHandler.FAIL_FAST),
 //                        error -> sinks.emitError(error, Sinks.EmitFailureHandler.FAIL_FAST)
 //                );
-                .doOnNext(data -> sinks.emitNext(data, Sinks.EmitFailureHandler.FAIL_FAST))
+                .doOnNext(data -> {
+                    executor.execute(() -> {
+                        sinks.emitNext(data.block(), Sinks.EmitFailureHandler.FAIL_FAST);
+                    });
+                })
                 .doOnError(error -> sinks.emitError(error, Sinks.EmitFailureHandler.FAIL_FAST))
                 .then();
 
