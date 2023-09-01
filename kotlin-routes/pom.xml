@@ -23,7 +23,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.release>17</maven.compiler.release>
-        <kotlin.version>1.8.22</kotlin.version>
+        <kotlin.version>1.9.10</kotlin.version>
         <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
     </properties>
 
