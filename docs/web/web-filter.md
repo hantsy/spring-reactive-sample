@@ -35,7 +35,7 @@ public class SecurityWebFilter implements WebFilter{
 }
 ```
 
-> NOTE: In a Spring application, I would like use Spring Security to handle security considerations. Here I just use this as an example of `WebFitler`.
+> NOTE: In a Spring application, I would like use Spring Security to handle security considerations. Here I just use this as an example of `WebFilter`.
 > 
 
 
