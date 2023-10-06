@@ -148,6 +148,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/data-elasticsearch"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/data-mongo"
     schedule:
       interval: "monthly"
