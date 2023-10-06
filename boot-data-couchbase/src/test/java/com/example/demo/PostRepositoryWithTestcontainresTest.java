@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.wait.strategy.Wait;
 import org.testcontainers.couchbase.BucketDefinition;
 import org.testcontainers.couchbase.CouchbaseContainer;
 import org.testcontainers.junit.jupiter.Container;
@@ -38,7 +39,7 @@ class PostRepositoryWithTestcontainresTest {
     }
 
     private static final String COUCHBASE_IMAGE_NAME = "couchbase";
-    private static final String DEFAULT_IMAGE_NAME = "couchbase/server";
+    private static final String DEFAULT_IMAGE_NAME = "couchbase/server:6";
     private static final DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
             .asCompatibleSubstituteFor(DEFAULT_IMAGE_NAME);
 
@@ -46,8 +47,9 @@ class PostRepositoryWithTestcontainresTest {
     final static CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DEFAULT_IMAGE)
             .withCredentials("Administrator", "password")
             .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
-            //.withStartupAttempts(30)
-            .withStartupTimeout(Duration.ofSeconds(60));
+            .withStartupAttempts(5)
+            .withStartupTimeout(Duration.ofSeconds(60))
+            .waitingFor(Wait.forHealthcheck());
 
     @DynamicPropertySource
     static void bindCouchbaseProperties(DynamicPropertyRegistry registry) {

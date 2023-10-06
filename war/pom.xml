@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.2</version>
+        <version>3.1.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -22,6 +22,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.release>17</maven.compiler.release>
+        <jetty.version>11.0.16</jetty.version>
+        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <cargo-maven3-plugin.version>1.10.3</cargo-maven3-plugin.version>
     </properties>
 
     <dependencies>
@@ -118,7 +121,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.1.2</version>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <printSummary>true</printSummary>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
@@ -137,8 +140,8 @@
                 <plugins>
                     <plugin>
                         <groupId>org.codehaus.cargo</groupId>
-                        <artifactId>cargo-maven2-plugin</artifactId>
-                        <version>1.10.3</version>
+                        <artifactId>cargo-maven3-plugin</artifactId>
+                        <version>${cargo-maven3-plugin.version}</version>
                         <configuration>
                             <container>
                                 <containerId>tomcat10x</containerId>
@@ -189,7 +192,7 @@
                     <plugin>
                         <groupId>org.eclipse.jetty</groupId>
                         <artifactId>jetty-maven-plugin</artifactId>
-                        <version>11.0.16</version>
+                        <version>${jetty.version}</version>
                         <configuration>
                             <scanIntervalSeconds>10</scanIntervalSeconds>
                             <stopPort>8005</stopPort>
