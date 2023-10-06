@@ -3,7 +3,6 @@ package com.example.demo;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -37,10 +36,13 @@ public class PostRepositoryWithTestContainersTest {
     @Container
     static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9")
             .withEnv("discovery.type", "single-node");
+            //.withPassword("password");
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.elasticsearch.uris", esContainer::getHttpHostAddress);
+//        registry.add("spring.data.elasticsearch.client.reactive.username",  ()->"elastic");
+//        registry.add("spring.data.elasticsearch.client.reactive.password",  ()->"password");
     }
 
     @Autowired
@@ -58,15 +60,15 @@ public class PostRepositoryWithTestContainersTest {
                         )
                 )
                 .doOnTerminate(() -> {
-                        log.debug("terminating...");
-                        //countDownLatch.countDown();
+                    log.debug("terminating...");
+                    //countDownLatch.countDown();
                 })
-                .doOnComplete(() -> {      
-                        log.debug("completing...");
-                        countDownLatch.countDown();
+                .doOnComplete(() -> {
+                    log.debug("completing...");
+                    countDownLatch.countDown();
                 })
                 .subscribe(data -> {
-                        log.debug("saved data: {}", data);
+                    log.debug("saved data: {}", data);
                 });
 
         countDownLatch.await(5000, MILLISECONDS);
