@@ -14,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
@@ -84,12 +85,20 @@ public class PostRepositoryTest {
 
     @Test
     public void testGetAllPosts() {
+//        this.posts.findAll(Sort.by(Sort.Order.asc("title")))
+//                .as(StepVerifier::create)
+//                .consumeNextWith(p -> assertThat(p.getTitle()).contains("one"))
+//                .consumeNextWith(p -> assertThat(p.getTitle()).contains("two"))
+//                .expectComplete()
+//                .verify();
+
         this.posts.findAll()
+                .map(Post::getTitle)
+                .collectList()
                 .as(StepVerifier::create)
-                .consumeNextWith(p -> assertThat(p.getTitle()).contains("one"))
-                .consumeNextWith(p -> assertThat(p.getTitle()).contains("two"))
-                .expectComplete()
-                .verify();
+                .consumeNextWith(titleList -> assertThat(titleList)
+                        .containsExactlyInAnyOrder("Post one", "Post two"))
+                .verifyComplete();
     }
 
 }
