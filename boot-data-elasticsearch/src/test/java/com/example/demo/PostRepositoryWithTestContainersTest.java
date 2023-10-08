@@ -39,13 +39,10 @@ public class PostRepositoryWithTestContainersTest {
     @Container
     static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9")
             .withEnv("discovery.type", "single-node");
-    //.withPassword("password");
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
         registry.add("spring.elasticsearch.uris", esContainer::getHttpHostAddress);
-//        registry.add("spring.data.elasticsearch.client.reactive.username",  ()->"elastic");
-//        registry.add("spring.data.elasticsearch.client.reactive.password",  ()->"password");
     }
 
     @Autowired
