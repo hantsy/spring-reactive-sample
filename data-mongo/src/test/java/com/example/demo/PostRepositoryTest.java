@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -45,14 +44,19 @@ public class PostRepositoryTest {
             container.start();
             log.info(" container.getFirstMappedPort():: {}", container.getFirstMappedPort());
             configurableApplicationContext
-                    .addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> container.stop());
-            var env = configurableApplicationContext.getEnvironment();
-            var props = env.getPropertySources();
-            props.addFirst(
-                    new MapPropertySource("testproperties",
-                            Map.of("mongo.uri", "mongodb://localhost:" + container.getFirstMappedPort())
-                    )
-            );
+                    .addApplicationListener(event -> {
+                        if (event instanceof ContextClosedEvent) {
+                            container.stop();
+                        }
+                    });
+
+            configurableApplicationContext.getEnvironment()
+                    .getPropertySources()
+                    .addFirst(
+                            new MapPropertySource("testproperties",
+                                    Map.of("mongo.uri", "mongodb://localhost:" + container.getFirstMappedPort())
+                            )
+                    );
 
         }
     }
