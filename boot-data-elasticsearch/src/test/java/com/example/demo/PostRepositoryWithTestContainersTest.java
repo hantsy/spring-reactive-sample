@@ -8,7 +8,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.elasticsearch.DataElasticsearchTest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.ReactiveElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.query.Query;
+import org.springframework.data.elasticsearch.core.script.ReactiveScriptOperations;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
@@ -36,7 +39,7 @@ public class PostRepositoryWithTestContainersTest {
     @Container
     static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9")
             .withEnv("discovery.type", "single-node");
-            //.withPassword("password");
+    //.withPassword("password");
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
@@ -47,6 +50,9 @@ public class PostRepositoryWithTestContainersTest {
 
     @Autowired
     PostRepository posts;
+
+    @Autowired
+    ReactiveElasticsearchOperations template;
 
     @SneakyThrows
     @BeforeEach
@@ -81,13 +87,35 @@ public class PostRepositoryWithTestContainersTest {
     }
 
     @Test
-    void testLoadUsers() {
-        this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
+    void testLoadData() {
+//        this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
+//                .log()
+//                .as(StepVerifier::create)
+//                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
+//                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
+//                //.expectNextCount(2)
+//                .verifyComplete();
+
+        this.posts.findAll()
+                .map(Post::getTitle)
                 .log()
+                .collectList()
                 .as(StepVerifier::create)
-                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
-                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
-                //.expectNextCount(2)
+                .consumeNextWith(titleList -> assertThat(titleList)
+                        .containsExactlyInAnyOrder("Post one", "Post two"))
+                .verifyComplete();
+    }
+
+    @Test
+    void testLoadData_byTemplate() {
+        this.template.search(Query.findAll(), Post.class)
+                .map(SearchHit::getContent)
+                .map(Post::getTitle)
+                .log()
+                .collectList()
+                .as(StepVerifier::create)
+                .consumeNextWith(titleList -> assertThat(titleList)
+                        .containsExactlyInAnyOrder("Post one", "Post two"))
                 .verifyComplete();
     }
 
