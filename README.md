@@ -37,6 +37,7 @@ The following table list all sample codes related to the above posts.
 | [war](https://github.com/hantsy/spring-reactive-sample/tree/master/war) | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
 | [routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes) | Use `RouterFunction` instead of controller in **vanilla**    |
 | [register-bean](https://github.com/hantsy/spring-reactive-sample/tree/master/register-bean) | Programmatic approach to register all beans in `ApplicatonContext` at the application bootstrap |
+| [data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/data-elasticsearch) | Spring Data ElasticSearch Reactive example    
 | [data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/data-neo4j) | Spring Data Neo4j reactive example                           |
 | [data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo) | Spring Data Mongo Reactive example                           |
 | [data-mongo-pageable](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo-pageable) | Spring Data Mongo Reactive example with pagination support   |
