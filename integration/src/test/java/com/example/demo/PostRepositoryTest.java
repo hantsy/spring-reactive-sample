@@ -10,10 +10,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- *
  * @author hantsy
  */
 public class PostRepositoryTest {
@@ -29,10 +28,10 @@ public class PostRepositoryTest {
     public void testGetAllPosts() {
 
         StepVerifier.create(posts.findAll())
-            .consumeNextWith(p -> assertTrue(p.getTitle().equals("post one")))
-            .consumeNextWith(p -> assertTrue(p.getTitle().equals("post two")))
-            .expectComplete()
-            .verify();
+                .consumeNextWith(p -> assertEquals("post one", p.getTitle()))
+                .consumeNextWith(p -> assertEquals("post two", p.getTitle()))
+                .expectComplete()
+                .verify();
     }
 
 }

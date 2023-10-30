@@ -40,7 +40,7 @@ public class IntegrationTests {
     public void setup() {
         this.client = WebTestClient
             .bindToServer()
-            .responseTimeout(Duration.ofDays(1))
+            .responseTimeout(Duration.ofMillis(500))
             .baseUrl("http://localhost:8080")
             .build();
     }

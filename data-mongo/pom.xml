@@ -14,17 +14,17 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.0-RC1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.release>17</maven.compiler.release>
+        <maven.compiler.release>21</maven.compiler.release>
         <testcontainers.version>1.19.1</testcontainers.version>
-        <maven-failsafe-plugin.version>3.1.2</maven-failsafe-plugin.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.2.1</maven-failsafe-plugin.version>
+        <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
     </properties>
 
     <dependencies>    

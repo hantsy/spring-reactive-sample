@@ -14,19 +14,19 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.0-RC1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.release>17</maven.compiler.release>
-        <jetty.version>11.0.16</jetty.version>
-        <maven-surefire-plugin.version>3.1.2</maven-surefire-plugin.version>
+        <maven.compiler.release>21</maven.compiler.release>
+        <jetty.version>12.0.2</jetty.version>
         <cargo-maven3-plugin.version>1.10.9</cargo-maven3-plugin.version>
+        <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
+        <maven-failsafe-plugin.version>3.2.1</maven-failsafe-plugin.version>
     </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -167,6 +167,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-failsafe-plugin</artifactId>
+                        <version>${maven-failsafe-plugin.version}</version>
                         <configuration>
                             <includes>
                                 <include>**/IntegrationTests*</include>
@@ -190,8 +191,8 @@
                     </plugin>
 
                     <plugin>
-                        <groupId>org.eclipse.jetty</groupId>
-                        <artifactId>jetty-maven-plugin</artifactId>
+                        <groupId>org.eclipse.jetty.ee10</groupId>
+                        <artifactId>jetty-ee10-maven-plugin</artifactId>
                         <version>${jetty.version}</version>
                         <configuration>
                             <scanIntervalSeconds>10</scanIntervalSeconds>

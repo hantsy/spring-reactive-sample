@@ -43,14 +43,14 @@ public class IntegrationConfig {
 
     @Bean
     public WebClient webClient() {
-        return WebClient.create();
+        return WebClient.builder().baseUrl("http://localhost:8080").build();
     }
 
     @ServiceActivator(inputChannel = "fluxResultChannel")
     @Bean
     public WebFluxRequestExecutingMessageHandler reactiveOutbound(WebClient client) {
         WebFluxRequestExecutingMessageHandler handler
-                = new WebFluxRequestExecutingMessageHandler("http://localhost:8080/posts", client);
+                = new WebFluxRequestExecutingMessageHandler("/posts", client);
         handler.setHttpMethod(HttpMethod.GET);
         handler.setExpectedResponseType(String.class);
         return handler;

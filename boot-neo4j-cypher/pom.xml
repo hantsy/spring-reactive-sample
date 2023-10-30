@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.4</version>
+        <version>3.2.0-RC1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
@@ -15,7 +15,7 @@
     <description>Spring data neo4j using cypher query</description>
 
     <properties>
-        <java.version>17</java.version>
+        <java.version>21</java.version>
         <maven-failsafe-plugin.version>3.1.2-M6</maven-failsafe-plugin.version>
     </properties>
 
