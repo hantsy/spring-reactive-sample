@@ -23,7 +23,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.compiler.release>21</maven.compiler.release>
         <jetty.version>12.0.2</jetty.version>
-        <cargo-maven3-plugin.version>1.10.9</cargo-maven3-plugin.version>
+        <cargo-maven3-plugin.version>1.10.10</cargo-maven3-plugin.version>
         <maven-surefire-plugin.version>3.2.1</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.2.1</maven-failsafe-plugin.version>
     </properties>
