@@ -62,6 +62,9 @@ The following table list all sample codes related to the above posts.
 | [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in groovy                                            |
 | [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example                           |
 | [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) | Example of `WebClient` to shake hands with backend reactive  APIs |
+| [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) | Example of Cache Aync/Reactive support(with in-memory `ConcurrentHashMap`) |
+| [cache-caffeine](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-caffeine) | Example of Cache Aync/Reactive support with Caffeine |
+| [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) | Example of Cache Aync/Reactive support with Redis |
 | [kotlin](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin) | Written in kotlin                                            |
 | [kotlin-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-routes) | Use kotlin functional approach to declare beans and bootstrap the application programmatically |
 | [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-dsl) | Kotlin DSL bean definition example                           |
