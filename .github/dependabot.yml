@@ -134,7 +134,18 @@ updates:
     directory: "/boot-reactor-rabbitmq/receiver"
     schedule:
       interval: "monthly"  
-      
+  - package-ecosystem: "maven"
+    directory: "/cache"
+    schedule:
+      interval: "monthly"     
+  - package-ecosystem: "maven"
+    directory: "/cache-caffeine"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/cache-redis"
+    schedule:
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/client"
     schedule:
