@@ -67,7 +67,8 @@ The following table list all sample codes related to the above posts.
 | [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) | Example of Cache Aync/Reactive support with Redis |
 | [kotlin](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin) | Written in kotlin                                            |
 | [kotlin-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-routes) | Use kotlin functional approach to declare beans and bootstrap the application programmatically |
-| [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-dsl) | Kotlin DSL bean definition example                           |
+| [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-dsl) | Kotlin DSL bean definition example   |
+| [schedule](https://github.com/hantsy/spring-reactive-sample/tree/master/schedule) | Spring Schedule Reactive Example |
 | [session](https://github.com/hantsy/spring-reactive-sample/tree/master/session) | Spring Session Example                                       |
 | [session-header](https://github.com/hantsy/spring-reactive-sample/tree/master/session-header) | Spring Session `WebSessionIdResolver` Example                |
 | [session-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-redis) | Spring Data Redis based `ReactiveSessionRepository` Example  |
