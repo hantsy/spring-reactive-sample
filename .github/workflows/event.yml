@@ -1,0 +1,34 @@
+name: spring-reactive-event
+
+on:
+  push:
+    paths:
+      - "event/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "event/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        cd event
+        mvn -B package --file pom.xml
