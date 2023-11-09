@@ -151,6 +151,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/client-jetty"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/data-cassandra"
     schedule:
       interval: "monthly"

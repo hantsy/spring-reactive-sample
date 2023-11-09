@@ -1,24 +1,19 @@
 package com.example.demo;
 
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.logging.LogLevel;
+import lombok.SneakyThrows;
+import org.eclipse.jetty.client.HttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.http.client.reactive.JettyClientHttpConnector;
 import org.springframework.http.codec.json.Jackson2JsonDecoder;
 import org.springframework.http.codec.json.Jackson2JsonEncoder;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
-import reactor.netty.http.client.HttpClient;
-import reactor.netty.transport.logging.AdvancedByteBufFormat;
+
 
 @Configuration
 public class ClientConfig {
@@ -27,17 +22,18 @@ public class ClientConfig {
         return new PostClient(webClient);
     }
 
+    @SneakyThrows
     @Bean
     public WebClient webClient(ObjectMapper objectMapper) {
-        var reactorHttpClient = HttpClient.create()
-                .wiretap("reactor.netty.http.client.HttpClient", LogLevel.DEBUG, AdvancedByteBufFormat.TEXTUAL)
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 5000);
-        ReactorClientHttpConnector reactorClientHttpConnector = new ReactorClientHttpConnector(reactorHttpClient);
+        var jettyHttpClient = new HttpClient();
+        jettyHttpClient.setConnectTimeout(5000L);
+        jettyHttpClient.start();
+        JettyClientHttpConnector jettyClientHttpConnector = new JettyClientHttpConnector(jettyHttpClient);
 
         return WebClient.builder()
                 //see: https://github.com/jetty-project/jetty-reactive-httpclient
                 //.clientConnector(new JettyClientHttpConnector())
-                .clientConnector(reactorClientHttpConnector)
+                .clientConnector(jettyClientHttpConnector)
                 .codecs(
                         clientCodecConfigurer -> {
                             // use defaultCodecs() to apply DefaultCodecs

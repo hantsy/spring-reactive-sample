@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-client</artifactId>
+    <artifactId>spring-reactive-sample-client-jetty</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-reactive-sample-client</name>
-    <description>Spring Webflux demo(WebClient)</description>
+    <name>spring-reactive-sample-client-jetty</name>
+    <description>Spring Webflux demo(Jetty Reactive HttpClient)</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -30,8 +30,8 @@
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
         <dependency>
-            <groupId>io.projectreactor.netty</groupId>
-            <artifactId>reactor-netty</artifactId>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-reactive-httpclient</artifactId>
         </dependency>
 
         <!-- jackson support -->
