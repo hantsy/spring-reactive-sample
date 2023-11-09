@@ -158,7 +158,10 @@ updates:
     directory: "/client-reactor-netty2"
     schedule:
       interval: "monthly"
-
+  - package-ecosystem: "maven"
+    directory: "/client-jdk11-httpclient"
+    schedule:
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/data-cassandra"
     schedule:

@@ -1,0 +1,34 @@
+name: spring-reactive-client-jdk11-httpclient
+
+on:
+  push:
+    paths:
+      - "client-jdk11-httpclient/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "client-jdk11-httpclient/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        cd client-jdk11-httpclient
+        mvn -B package --file pom.xml
