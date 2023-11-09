@@ -111,6 +111,7 @@ The following table list all sample codes related to the above posts.
 | [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | Spring Data Mongo Example with Gridfs support             |
 | [boot-data-mongo-tailable](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-tailable) | Spring Data Mongo tailable document example             |
 | [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler  |
+| [boot-pulsar](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-pulsar) | Spring for Pulsar Reactive Example  |
 
 ### Legacy Codes
 Some example codes are becoming deprecated as time goes by, eg. the [SDN Rx project](https://github.com/neo4j/sdn-rx) which was maintained by the Neo4j team is discontinued now, it is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). 
