@@ -118,6 +118,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/boot-pulsar"
+    schedule:
+      interval: "monthly" 
+  - package-ecosystem: "maven"
     directory: "/boot-reactor-kafka/sender"
     schedule:
       interval: "monthly"   
