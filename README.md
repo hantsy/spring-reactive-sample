@@ -62,6 +62,9 @@ The following table list all sample codes related to the above posts.
 | [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in groovy                                            |
 | [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example                           |
 | [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) | Example of `WebClient` to shake hands with backend reactive  APIs |
+| [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty) | Example of `WebClient` with Jetty Reactive HttpClient |
+| [client-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/client-reactor-netty2) | Example of `WebClient` with Reactor Netty5 2.x HttpClient |
+| [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient) | Example of `WebClient` with JDK 11 HttpClient |
 | [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) | Example of Cache Aync/Reactive support(with in-memory `ConcurrentHashMap`) |
 | [cache-caffeine](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-caffeine) | Example of Cache Aync/Reactive support with Caffeine |
 | [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) | Example of Cache Aync/Reactive support with Redis |
