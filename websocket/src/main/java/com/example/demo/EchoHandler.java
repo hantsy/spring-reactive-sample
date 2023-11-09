@@ -23,6 +23,7 @@ public class EchoHandler implements WebSocketHandler {
 
         return session.send(session.receive()
                 .doOnNext(WebSocketMessage::retain)// Use retain() for Reactor Netty
-                .map(m -> session.textMessage("received:" + m.getPayloadAsText())));
+                .map(m -> session.textMessage("received:" + m.getPayloadAsText()))
+        );
     }
 }

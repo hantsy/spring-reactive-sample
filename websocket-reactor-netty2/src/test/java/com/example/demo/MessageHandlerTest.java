@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.web.reactive.socket.WebSocketHandler;
 import org.springframework.web.reactive.socket.WebSocketMessage;
-import org.springframework.web.reactive.socket.client.ReactorNettyWebSocketClient;
+import org.springframework.web.reactive.socket.client.ReactorNetty2WebSocketClient;
 import org.springframework.web.reactive.socket.client.WebSocketClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.netty.DisposableServer;
-import reactor.netty.http.server.HttpServer;
+import reactor.netty5.DisposableServer;
+import reactor.netty5.http.server.HttpServer;
 
 import java.net.URI;
 import java.time.Duration;
@@ -47,7 +47,7 @@ public class MessageHandlerTest {
     @BeforeEach
     void setUp() {
         this.server = this.httpServer.bindNow();
-        this.client = new ReactorNettyWebSocketClient();
+        this.client = new ReactorNetty2WebSocketClient();
     }
 
     @AfterEach

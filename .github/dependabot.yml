@@ -354,3 +354,7 @@ updates:
     directory: "/websocket"
     schedule:
       interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/websocket-reactor-netty2"
+    schedule:
+      interval: "monthly"
