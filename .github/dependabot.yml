@@ -331,6 +331,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/vanilla-reactor-netty2"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/vanilla-jetty"
     schedule:
       interval: "monthly"
