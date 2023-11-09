@@ -1,0 +1,34 @@
+name: spring-reactive-reactor-netty2
+
+on:
+  push:
+    paths:
+      - "reactor-netty2/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "reactor-netty2/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        cd reactor-netty2
+        mvn -B package --file pom.xml
