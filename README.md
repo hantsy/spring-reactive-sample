@@ -27,6 +27,7 @@ The following table list all sample codes related to the above posts.
 | name                                                         | description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
 | [vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla) | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
+| [vanilla-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-reactor-netty2) | Same as **vanilla**, but use Reactor Netty5 2.x as target runtime  |
 | [vanilla-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-jetty) | Same as **vanilla**, but use Jetty as target runtime         |
 | [vanilla-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-tomcat) | Same as **vanilla**, but use Reactor Netty as target runtime |
 | [vanilla-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-undertow) | Same as **vanilla**, but use Undertow as target runtime      |
@@ -58,6 +59,7 @@ The following table list all sample codes related to the above posts.
 | [mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/tree/master/mvc-freemarker) | Traditional web application, use freemarker as template engine |
 | [sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse) | Server Send Event  example                                   |
 | [websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket) | WebSocket example                                            |
+| [websocket-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket-reactor-netty2) | WebSocket example with Reactor Netty2 |
 | [web-filter](https://github.com/hantsy/spring-reactive-sample/tree/master/web-filter) | `WebFilter` example                                          |
 | [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in groovy                                            |
 | [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example                           |
@@ -65,6 +67,7 @@ The following table list all sample codes related to the above posts.
 | [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty) | Example of `WebClient` with Jetty Reactive HttpClient |
 | [client-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/client-reactor-netty2) | Example of `WebClient` with Reactor Netty5 2.x HttpClient |
 | [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient) | Example of `WebClient` with JDK 11 HttpClient |
+| [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5) | Example of `WebClient` with Apache HttpClient5 |
 | [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) | Example of Cache Aync/Reactive support(with in-memory `ConcurrentHashMap`) |
 | [cache-caffeine](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-caffeine) | Example of Cache Aync/Reactive support with Caffeine |
 | [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) | Example of Cache Aync/Reactive support with Redis |
