@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 // Testcontainers does not work well with per_class testinstance.
 // see: https://stackoverflow.com/questions/61357116/exception-mapped-port-can-only-be-obtained-after-the-container-is-started-when/61358336#61358336
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-class PostRepositoryWithTestContainersTest {
+public class PostRepositoryWithTestContainersTest {
 
     @Container
     static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9")
@@ -55,7 +55,7 @@ class PostRepositoryWithTestContainersTest {
 
     @SneakyThrows
     @BeforeEach
-    void setup() {
+    public void setup() {
         var countDownLatch = new CountDownLatch(1);
         this.posts.deleteAll().block(Duration.ofMillis(1000));
 
