@@ -24,23 +24,10 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Testcontainers
-@SpringBootTest
+@SpringBootTest(classes = TestDemoApplication.class)
 @Slf4j
 //@DataRedisTest works for blocking RedisRepository
 class PostRepositoryTest {
-    @Container
-    static GenericContainer redis = new GenericContainer(DockerImageName.parse("redis:5.0.3-alpine"))
-            .withExposedPorts(6379);
-
-    @DynamicPropertySource
-    static void setupRedisProperties(DynamicPropertyRegistry registry) {
-        var host = redis.getHost();
-        var port = redis.getFirstMappedPort();
-        log.debug("Connecting to Redis@Testcontainers, host:{}, port:{}", host, port);
-        registry.add("spring.redis.host", () -> host);
-        registry.add("spring.redis.port", () -> port);
-    }
 
     @Autowired
     PostRepository postRepository;

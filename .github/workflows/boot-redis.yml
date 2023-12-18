@@ -17,6 +17,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: "boot-redis"
 
     steps:
     - uses: actions/checkout@v4
@@ -27,13 +30,6 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-        cache: 'maven'
-    - name: Start up databases via Docker Compose 
-      run: |
-        docker-compose up -d redis
-        sleep 5
-        docker ps -a   
+        cache: 'maven' 
     - name: Build with Maven
-      run: |
-        cd boot-redis
-        mvn -B package --file pom.xml
+      run: ./mvnw clean verify
