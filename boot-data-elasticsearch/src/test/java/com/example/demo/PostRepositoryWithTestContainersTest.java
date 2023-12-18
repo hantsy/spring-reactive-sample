@@ -23,6 +23,7 @@ import reactor.test.StepVerifier;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -39,8 +40,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9")
-            .withEnv("discovery.type", "single-node");
+    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.11.3")
+            .withEnv(Map.of("xpack.security.enabled", "false"));
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
@@ -87,15 +88,15 @@ public class PostRepositoryWithTestContainersTest {
         assertThat(esContainer.isRunning()).isTrue();
     }
 
- //   @Test
-//    void testLoadData() {
-//        this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
-//                .log()
-//                .as(StepVerifier::create)
-//                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
-//                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
-//                .verifyComplete();
-//    }
+   @Test
+   void testLoadData() {
+       this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
+               .log()
+               .as(StepVerifier::create)
+               .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
+               .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
+               .verifyComplete();
+   }
 
     @Test
     void testSavedPostTitles() {
