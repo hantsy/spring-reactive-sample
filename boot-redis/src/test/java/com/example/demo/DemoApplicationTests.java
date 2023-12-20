@@ -14,7 +14,7 @@ import java.util.UUID;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.mockUser;
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 
-@SpringBootTest()
+@SpringBootTest(classes = TestDemoApplication.class)
 public class DemoApplicationTests {
 
     @Autowired
