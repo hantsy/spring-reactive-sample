@@ -23,6 +23,7 @@ import reactor.test.StepVerifier;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
@@ -36,11 +37,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 // Testcontainers does not work well with per_class testinstance.
 // see: https://stackoverflow.com/questions/61357116/exception-mapped-port-can-only-be-obtained-after-the-container-is-started-when/61358336#61358336
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
-public class PostRepositoryWithTestContainersTest {
+class PostRepositoryWithTestContainersTest {
 
     @Container
-    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9")
-            .withEnv("discovery.type", "single-node");
+    static ElasticsearchContainer esContainer = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:8.11.3")
+            .withEnv(Map.of("xpack.security.enabled", "false"));
 
     @DynamicPropertySource
     static void esProperties(DynamicPropertyRegistry registry) {
@@ -55,7 +56,7 @@ public class PostRepositoryWithTestContainersTest {
 
     @SneakyThrows
     @BeforeEach
-    public void setup() {
+    void setup() {
         var countDownLatch = new CountDownLatch(1);
         this.posts.deleteAll().block(Duration.ofMillis(1000));
 
@@ -87,15 +88,15 @@ public class PostRepositoryWithTestContainersTest {
         assertThat(esContainer.isRunning()).isTrue();
     }
 
- //   @Test
-//    void testLoadData() {
-//        this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
-//                .log()
-//                .as(StepVerifier::create)
-//                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
-//                .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
-//                .verifyComplete();
-//    }
+   @Test
+   void testLoadData() {
+       this.posts.findAll(Sort.by(Sort.Direction.ASC, "title"))
+               .log()
+               .as(StepVerifier::create)
+               .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post one"))
+               .consumeNextWith(user -> assertThat(user.getTitle()).isEqualTo("Post two"))
+               .verifyComplete();
+   }
 
     @Test
     void testSavedPostTitles() {
