@@ -7,6 +7,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
@@ -18,10 +24,23 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = TestDemoApplication.class)
+@Testcontainers
+@SpringBootTest
 @Slf4j
 //@DataRedisTest works for blocking RedisRepository
-class PostRepositoryTest {
+class PostRepositoryTestWithDynamicPropertySource {
+    @Container
+    static GenericContainer redis = new GenericContainer(DockerImageName.parse("redis:5.0.3-alpine"))
+            .withExposedPorts(6379);
+
+    @DynamicPropertySource
+    static void setupRedisProperties(DynamicPropertyRegistry registry) {
+        var host = redis.getHost();
+        var port = redis.getFirstMappedPort();
+        log.debug("Connecting to Redis@Testcontainers, host:{}, port:{}", host, port);
+        registry.add("spring.redis.host", () -> host);
+        registry.add("spring.redis.port", () -> port);
+    }
 
     @Autowired
     PostRepository postRepository;
