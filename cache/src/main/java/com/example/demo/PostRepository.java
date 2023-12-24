@@ -15,7 +15,7 @@ public interface PostRepository extends R2dbcRepository<Post, UUID> {
     Mono<Post> findById(UUID id);
 
     @Override
-    @CachePut(value = "posts", key = "#result.block().id")
+    @CachePut(value = "posts", key = "#result.id")
     Mono<Post> save(Post post);
 
     @Override
