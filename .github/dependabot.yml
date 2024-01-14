@@ -70,6 +70,14 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/boot-kotlin-co"
+    schedule:
+      interval: "monthly"    
+  - package-ecosystem: "maven"
+    directory: "/boot-kotlin-co-dsl"
+    schedule:
+      interval: "monthly"      
+  - package-ecosystem: "maven"
     directory: "/boot-mongo"
     schedule:
       interval: "monthly"
