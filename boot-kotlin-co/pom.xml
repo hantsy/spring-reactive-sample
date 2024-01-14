@@ -24,7 +24,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>21</java.version>
         <kotlin.version>1.9.22</kotlin.version>
-        <kotest.version>5.6.2</kotest.version>
+        <kotest.version>5.8.0</kotest.version>
         <mockk.version>1.13.9</mockk.version>
         <springmockk.version>4.0.2</springmockk.version>
     </properties>
