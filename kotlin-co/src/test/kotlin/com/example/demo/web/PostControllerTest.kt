@@ -42,7 +42,7 @@ class PostControllerTest {
     @BeforeEach
     fun setup() {
         log.debug("calling setup...")
-        client = WebTestClient.bindToController(PostController::class)
+        client = WebTestClient.bindToController(PostController(posts))
             .configureClient()
             .build()
     }
