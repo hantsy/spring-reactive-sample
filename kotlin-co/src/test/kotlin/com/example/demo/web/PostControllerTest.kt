@@ -31,10 +31,11 @@ class PostControllerTest {
 
         @Bean
         @Primary
-        fun postRepository(): PostRepository = mockk<PostRepository>()
+        fun mockPostRepository(): PostRepository = mockk<PostRepository>()
     }
 
     @Autowired
+    @Primary
     lateinit var posts: PostRepository
 
     lateinit var client: WebTestClient
