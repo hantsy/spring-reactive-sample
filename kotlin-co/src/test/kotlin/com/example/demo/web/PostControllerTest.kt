@@ -35,7 +35,6 @@ class PostControllerTest {
     }
 
     @Autowired
-    @Primary
     lateinit var posts: PostRepository
 
     lateinit var client: WebTestClient
