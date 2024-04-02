@@ -23,7 +23,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.release>21</maven.compiler.release>
-		<kotlin.version>1.9.22</kotlin.version>
+		<kotlin.version>1.9.23</kotlin.version>
 		<maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
 	</properties>
 
@@ -139,7 +139,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.12.1</version>
+				<version>3.13.0</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
