@@ -1,6 +1,8 @@
-package com.example.demo.repository
+package com.example.test.repository
 
 import com.example.demo.domain.Post
+import com.example.demo.repository.PostRepository
+import com.example.test.repository.PostRepositoryTest.TestConfig
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe
 import kotlinx.coroutines.reactor.awaitSingle
@@ -15,7 +17,7 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 
-@SpringJUnitConfig(classes = [PostRepositoryTest.TestConfig::class])
+@SpringJUnitConfig(classes = [TestConfig::class])
 @ContextConfiguration(initializers = [MongoContextInitializer::class])
 class PostRepositoryTest {
     companion object {

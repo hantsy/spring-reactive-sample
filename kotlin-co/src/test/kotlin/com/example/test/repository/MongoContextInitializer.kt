@@ -1,4 +1,4 @@
-package com.example.demo.repository
+package com.example.test.repository
 
 import org.slf4j.LoggerFactory
 import org.springframework.context.ApplicationContextInitializer

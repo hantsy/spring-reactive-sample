@@ -1,4 +1,4 @@
-package com.example.demo.it
+package com.example.test.it
 
 import com.example.demo.Application
 import com.example.demo.domain.Post

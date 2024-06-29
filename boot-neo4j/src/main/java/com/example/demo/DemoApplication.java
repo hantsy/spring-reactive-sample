@@ -2,19 +2,26 @@ package com.example.demo;
 
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
+import org.neo4j.driver.Driver;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.neo4j.config.EnableNeo4jAuditing;
+import org.springframework.data.neo4j.core.ReactiveDatabaseSelectionProvider;
 import org.springframework.data.neo4j.core.ReactiveNeo4jOperations;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Node;
+import org.springframework.data.neo4j.core.transaction.ReactiveNeo4jTransactionManager;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.ReactiveTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,13 +33,22 @@ import static org.springframework.http.ResponseEntity.notFound;
 
 @SpringBootApplication
 @EnableNeo4jAuditing
-@EnableTransactionManagement
 public class DemoApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(DemoApplication.class, args);
     }
 
+}
+
+@Configuration
+class Neo4jTxConfiguration {
+    @Bean
+    ReactiveTransactionManager reactiveTransactionManager(
+            Driver driver,
+            ReactiveDatabaseSelectionProvider databaseNameProvider) {
+        return new ReactiveNeo4jTransactionManager(driver, databaseNameProvider);
+    }
 }
 
 @Component
@@ -60,7 +76,7 @@ class DataInitializer implements CommandLineRunner {
                         this.posts.findAll()
                 )
                 //.blockLast();
-               .subscribe(post -> log.info("saved post: {}", post));//this will fail test.
+                .subscribe(post -> log.info("saved post: {}", post));//this will fail test.
 
     }
 

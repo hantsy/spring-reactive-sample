@@ -1,7 +1,9 @@
-package com.example.demo.web
+package com.example.test.web
 
 import com.example.demo.domain.Post
 import com.example.demo.repository.PostRepository
+import com.example.test.web.PostControllerTest.TestConfig
+import com.example.demo.web.PostController
 import io.mockk.clearAllMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
@@ -19,7 +21,7 @@ import org.springframework.context.annotation.Primary
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.test.web.reactive.server.WebTestClient
 import java.util.*
-@SpringJUnitConfig(classes = [PostControllerTest.TestConfig::class])
+@SpringJUnitConfig(classes = [TestConfig::class])
 class PostControllerTest {
     companion object {
         private val log = LoggerFactory.getLogger(PostControllerTest::class.java)

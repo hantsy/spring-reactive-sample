@@ -32,15 +32,16 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataNeo4jTest
-// @Transactional(propagation = Propagation.NOT_SUPPORTED) // reactive is not supported
+@Transactional(propagation = Propagation.NOT_SUPPORTED) // reactive is not supported
 @Testcontainers
 @Slf4j
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
 @ActiveProfiles("test")
+@Import(Neo4jTxConfiguration.class)
 public class PostRepositoryTest {
 
     @Container
-    static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:5")
+    static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:latest")
             .withStartupTimeout(Duration.ofMinutes(5));
 
     @DynamicPropertySource
