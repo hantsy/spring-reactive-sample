@@ -30,7 +30,7 @@ jobs:
         cache: 'maven'
     - name: Start up databases via Docker Compose 
       run: |
-        docker-compose up -d mongodb
+        docker compose up -d mongodb
         sleep 5
         docker ps -a      
     - name: Build with Maven
