@@ -16,7 +16,7 @@
 
     <properties>
         <java.version>21</java.version>
-        <neo4j.version>5.24.0</neo4j.version>
+        <neo4j.version>5.25.1</neo4j.version>
     </properties>
 
     <dependencies>
