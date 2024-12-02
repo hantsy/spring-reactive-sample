@@ -1,5 +1,8 @@
 ---
-sort: 3
+title: Functional Programming
+parent: Reactive Web
+nav_order: 3
+toc: true
 ---
 
 # RouterFunction

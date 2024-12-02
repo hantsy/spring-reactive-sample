@@ -1,5 +1,7 @@
 ---
-sort: 8
+title: Spring Data ElasticSearch
+parent: Rective Data Operations
+nav_order: 8
 ---
 
 

@@ -1,6 +1,7 @@
 ---
 title: An introduction to Spring WebFlux
-sort: 1
+parent: Getting Started
+nav_order: 1
 ---
 
 # An introduction to Spring WebFlux

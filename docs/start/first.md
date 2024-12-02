@@ -1,5 +1,7 @@
 ---
-sort: 2
+title: Create a WebFlux application from Scratch
+parent: Getting Started
+nav_order: 2
 ---
 
 # Create a WebFlux application from Scratch

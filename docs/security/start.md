@@ -1,5 +1,7 @@
 ---
-sort: 1
+title: An Introduction to Spring Security
+parent: Spring Security
+nav_order: 1
 ---
 
 # An Introduction to Spring Security

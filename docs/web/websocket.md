@@ -1,5 +1,8 @@
 ---
-sort: 8
+title: WebSocket
+parent: Reactive Web
+nav_order: 8
+toc: true
 ---
 
 # WebSocket

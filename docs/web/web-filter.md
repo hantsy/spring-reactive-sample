@@ -1,5 +1,8 @@
 ---
-sort: 2
+title: WebFilter
+parent: Reactive Web
+nav_order: 2
+toc: true
 ---
 
 # WebFilter

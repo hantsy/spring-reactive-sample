@@ -1,5 +1,8 @@
 ---
-sort: 4
+title: Handling Exceptions
+parent: Reactive Web
+nav_order: 4
+toc: true
 ---
 
 # Handing Web Exceptions

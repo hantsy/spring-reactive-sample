@@ -1,5 +1,7 @@
 ---
-sort: 7
+title: Spring Data Couchbase
+parent: Rective Data Operations
+nav_order: 7
 ---
 
 # Spring Data Couchbase

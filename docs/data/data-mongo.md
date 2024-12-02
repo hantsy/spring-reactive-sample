@@ -1,5 +1,7 @@
 ---
-sort: 4
+title: Spring Data MongoDb
+parent: Rective Data Operations
+nav_order: 4
 ---
 
 # Spring Data Mongo

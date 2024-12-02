@@ -1,5 +1,8 @@
 ---
-sort: 9
+title: View and View Resolvers
+parent: Reactive Web
+nav_order: 9
+toc: true
 ---
 
 # View and View Resolvers

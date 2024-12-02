@@ -1,5 +1,8 @@
 ---
-sort: 5
+title: Web Client
+parent: Reactive Web
+nav_order: 5
+toc: true
 ---
 
 # WebClient 

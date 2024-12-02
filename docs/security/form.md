@@ -1,5 +1,7 @@
 ---
-sort: 6
+title: Form based authentication 
+parent: Spring Security
+nav_order: 6
 ---
 
 # Form based authentication 

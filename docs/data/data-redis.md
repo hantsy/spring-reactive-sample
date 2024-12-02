@@ -1,5 +1,7 @@
 ---
-sort: 5
+title: Spring Data Redis
+parent: Rective Data Operations
+nav_order: 5
 ---
 
 

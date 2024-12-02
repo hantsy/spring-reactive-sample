@@ -1,20 +1,17 @@
-title: Spring WebFlux By Example
+title: Spring Reactive Programming
 lang: en
 description: A collection of code snippets and tips of using Spring WebFlux
 
 # theme
-remote_theme: rundocs/jekyll-rtd-theme
-
-# folders sort
-readme_index:
-  with_frontmatter: true
+remote_theme: just-the-docs/just-the-docs
   
 exclude:
   - Gemfile
   - Gemfile.lock
-
-plugins:
-  - jemoji
-  - jekyll-avatar
-  - jekyll-mentions  
-  
+ 
+color_scheme: dark
+nav_external_links:
+  - title: Example Codes on GitHub
+    url: https://github.com/hantsy/spring-reactive-sample
+    hide_icon: false # set to true to hide the external link icon - defaults to false
+    opens_in_new_tab: true # set to true to open this link in a new tab - defaults to false

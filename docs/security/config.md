@@ -1,5 +1,7 @@
 ---
-sort: 2
+title: Configure Spring Security
+parent: Spring Security
+nav_order: 2
 ---
 
 # Configure Spring Security

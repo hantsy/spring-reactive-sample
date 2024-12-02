@@ -1,5 +1,7 @@
 ---
-sort: 3
+title: Configure Spring Security in Spring Boot applications
+parent: Spring Security
+nav_order: 3
 ---
 
 # Configure Spring Security in Spring Boot applications

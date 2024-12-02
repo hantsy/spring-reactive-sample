@@ -1,5 +1,7 @@
 ---
-sort: 1
+title: An introduction to Spring Data(Reactive)
+parent: Rective Data Operations
+nav_order: 1
 ---
 
 # An introduction to Spring Data(Reactive)

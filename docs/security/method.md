@@ -1,5 +1,7 @@
 ---
-sort: 4
+title: Method level constraints
+parent: Spring Security
+nav_order: 4
 ---
 
 # Method level constraints

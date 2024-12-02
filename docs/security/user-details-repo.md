@@ -1,5 +1,7 @@
 ---
-sort: 5
+title: Customize UserDetailsRepository
+parent: Spring Security
+nav_order: 5
 ---
 
 # Customize UserDetailsRepository

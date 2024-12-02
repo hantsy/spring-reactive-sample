@@ -1,5 +1,8 @@
 ---
-sort: 1
+title: An introduction to Reactive Web
+parent: Reactive Web
+nav_order: 1
+toc: true
 ---
 
 # An introduction to Reactive Web

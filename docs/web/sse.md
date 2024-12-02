@@ -1,5 +1,8 @@
 ---
-sort: 7
+title: Server Sent Events
+parent: Reactive Web
+nav_order: 7
+toc: true
 ---
 
 # Server Sent Events

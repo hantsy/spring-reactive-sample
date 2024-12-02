@@ -1,5 +1,7 @@
 ---
-sort: 9
+title: Spring Data Neo4j Rx
+parent: Rective Data Operations
+nav_order: 3
 ---
 
 # Spring Data Neo4j Rx  

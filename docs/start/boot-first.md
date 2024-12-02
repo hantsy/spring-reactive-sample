@@ -1,5 +1,7 @@
 ---
-sort: 3
+title: Create a WebFlux application with Spring Boot
+parent: Getting Started
+nav_order: 3
 ---
 
 # Create a WebFlux application with Spring Boot

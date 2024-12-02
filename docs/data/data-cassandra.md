@@ -1,5 +1,7 @@
 ---
-sort: 6
+title: Spring Data Cassandra
+parent: Rective Data Operations
+nav_order: 6
 ---
 
 # Spring Data Cassandra
