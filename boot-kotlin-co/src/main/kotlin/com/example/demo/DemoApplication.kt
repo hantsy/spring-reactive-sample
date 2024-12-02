@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import org.slf4j.LoggerFactory
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.context.event.ContextRefreshedEvent
+import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.event.EventListener
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -13,7 +13,15 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.DeleteMapping
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.RestController
 import java.net.URI
 import java.time.LocalDateTime
 
@@ -81,12 +89,14 @@ class DataInitializer(val posts: PostRepository) {
         private val log = LoggerFactory.getLogger(DataInitializer::class.java)
     }
 
-    @EventListener(value = [ContextRefreshedEvent::class])
+    @EventListener(value = [ApplicationReadyEvent::class])
     suspend fun run() {
         log.info("start data initialization ...")
 
-        val samplePosts = listOf("Post one", "Post two").map { Post(title = it, content = "content of $it") }
-        posts.saveAll(samplePosts).collect { log.debug("saved post: $it") }
+        val samplePosts = listOf("Post one", "Post two")
+            .map { Post(title = it, content = "content of $it") }
+        posts.saveAll(samplePosts)
+            .collect { log.debug("saved post: $it") }
 
         log.info("data initialization is done ...")
     }

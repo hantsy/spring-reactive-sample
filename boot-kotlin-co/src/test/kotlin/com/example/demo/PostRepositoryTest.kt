@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest
+import org.springframework.context.annotation.Import
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.test.context.DynamicPropertyRegistry
 import org.springframework.test.context.DynamicPropertySource
@@ -19,19 +20,20 @@ import org.testcontainers.junit.jupiter.Testcontainers
 
 @Testcontainers
 @DataMongoTest
+@Import(TestcontainersConfiguration::class)
 class PostRepositoryTest {
     companion object {
         private val log = LoggerFactory.getLogger(PostRepositoryTest::class.java)
 
-        @Container
-        val mongoDBContainer: MongoDBContainer = MongoDBContainer("mongo")
-
-        @DynamicPropertySource
-        fun registerDynamicProperties(registry: DynamicPropertyRegistry) {
-            registry.add("spring.data.mongodb.uri") {
-                mongoDBContainer.replicaSetUrl
-            }
-        }
+//        @Container
+//        val mongoDBContainer: MongoDBContainer = MongoDBContainer("mongo")
+//
+//        @DynamicPropertySource
+//        fun registerDynamicProperties(registry: DynamicPropertyRegistry) {
+//            registry.add("spring.data.mongodb.uri") {
+//                mongoDBContainer.replicaSetUrl
+//            }
+//        }
 
     }
 
