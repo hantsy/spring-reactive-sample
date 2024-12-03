@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.couchbase.DataCouchbaseTest;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
@@ -30,7 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Testcontainers
 @ActiveProfiles("test")
 @Slf4j
-class PostRepositoryWithTestcontainresTest {
+class PostRepositoryWithTestcontainersTest {
 
 
     @TestConfiguration
@@ -39,11 +40,12 @@ class PostRepositoryWithTestcontainresTest {
     }
 
     private static final String COUCHBASE_IMAGE_NAME = "couchbase";
-    private static final String DEFAULT_IMAGE_NAME = "couchbase/server:6";
+    private static final String DEFAULT_IMAGE_NAME = "couchbase/server:7";
     private static final DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
             .asCompatibleSubstituteFor(DEFAULT_IMAGE_NAME);
 
     @Container
+    @ServiceConnection
     final static CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DEFAULT_IMAGE)
             .withCredentials("Administrator", "password")
             .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
@@ -51,13 +53,13 @@ class PostRepositoryWithTestcontainresTest {
             .withStartupTimeout(Duration.ofSeconds(60))
             .waitingFor(Wait.forHealthcheck());
 
-    @DynamicPropertySource
-    static void bindCouchbaseProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.couchbase.connection-string", couchbaseContainer::getConnectionString);
-        registry.add("spring.couchbase.username", couchbaseContainer::getUsername);
-        registry.add("spring.couchbase.password", couchbaseContainer::getPassword);
-        registry.add("spring.data.couchbase.bucket-name", () -> "demo");
-    }
+//    @DynamicPropertySource
+//    static void bindCouchbaseProperties(DynamicPropertyRegistry registry) {
+//        registry.add("spring.couchbase.connection-string", couchbaseContainer::getConnectionString);
+//        registry.add("spring.couchbase.username", couchbaseContainer::getUsername);
+//        registry.add("spring.couchbase.password", couchbaseContainer::getPassword);
+//        registry.add("spring.data.couchbase.bucket-name", () -> "demo");
+//    }
 
     @Autowired
     private PostRepository posts;
