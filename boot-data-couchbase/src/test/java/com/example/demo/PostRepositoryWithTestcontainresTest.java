@@ -39,7 +39,7 @@ class PostRepositoryWithTestcontainresTest {
     }
 
     private static final String COUCHBASE_IMAGE_NAME = "couchbase";
-    private static final String DEFAULT_IMAGE_NAME = "couchbase/server:6";
+    private static final String DEFAULT_IMAGE_NAME = "couchbase/server:7";
     private static final DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
             .asCompatibleSubstituteFor(DEFAULT_IMAGE_NAME);
 

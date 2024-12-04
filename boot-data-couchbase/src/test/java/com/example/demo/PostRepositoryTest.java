@@ -33,7 +33,7 @@ class PostRepositoryTest {
 
     static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
         private static final String COUCHBASE_IMAGE_NAME = "couchbase";
-        private static final String DEFAULT_IMAGE_NAME = "couchbase/server:6";
+        private static final String DEFAULT_IMAGE_NAME = "couchbase/server:7";
         private static final DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
                 .asCompatibleSubstituteFor(DEFAULT_IMAGE_NAME);
 
@@ -41,7 +41,9 @@ class PostRepositoryTest {
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
             final CouchbaseContainer couchbaseContainer = new CouchbaseContainer(DEFAULT_IMAGE)
                     .withCredentials("Administrator", "password")
-                    .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
+                    .withBucket(new BucketDefinition("demo")
+                            .withPrimaryIndex(true)
+                    )
                     .withStartupTimeout(Duration.ofSeconds(60));
 
             couchbaseContainer.start();
@@ -74,7 +76,8 @@ class PostRepositoryTest {
                 )
                 .subscribe(data -> {
                     log.debug("saved data: {}", data);
-                    countDownLatch.countDown();;
+                    countDownLatch.countDown();
+                    ;
                 });
         countDownLatch.await(1000, java.util.concurrent.TimeUnit.MILLISECONDS);
     }
