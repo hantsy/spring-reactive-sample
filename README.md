@@ -1,8 +1,11 @@
 # Spring Reactive Sample
 
-This is a sandbox project  for demonstrating  [Reactive Streams](https://www.reactive-streams.org/) support in Spring framework and Spring ecosystem. 
+> [!NOTE]
+> The new Spring Boot 4 changed the modular structure. This repository will be kept in sync with Spring 6 and Spring Boot 3.x. The new features related to the Reactive stack will be demonstrated in the [Spring 7 Sandbox](https://github.com/hantsy/spring7-sandbox).
 
-*I've also maintained a series of repos related to ReativeStreams and the latest Spring 5*.
+This is a sandbox project for demonstrating [Reactive Streams](https://www.reactive-streams.org/) support in the Spring framework and the Spring ecosystem. 
+
+*I've also maintained a series of repos related to ReactiveStreams and the latest Spring 5*.
 
 * [Spring RSocket Sample](https://github.com/hantsy/rsocket-sample)
 * [Spring Kotlin Coroutines Example](https://github.com/hantsy/spring-kotlin-coroutines-sample)
@@ -26,7 +29,7 @@ The following table list all sample codes related to the above posts.
 
 | name                                                         | description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
-| [vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla) | The initial application, includes basic `spring-webflux` feature, use a main class to start up the application |
+| [vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla) | The initial application includes basic `spring-webflux` features, uses a main class to start up the application |
 | [vanilla-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-reactor-netty2) | Same as **vanilla**, but use Reactor Netty5 2.x as target runtime  |
 | [vanilla-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-jetty) | Same as **vanilla**, but use Jetty as target runtime         |
 | [vanilla-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-tomcat) | Same as **vanilla**, but use Reactor Netty as target runtime |
@@ -99,7 +102,7 @@ The following table list all sample codes related to the above posts.
 | [boot-groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-groovy) | Written in Groovy                                            |
 | [boot-kotlin](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin) | Written in Kotlin                                            |
 | [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) | Written in Kotlin Coroutines                                           |
-| [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) | Kotlin specific `BeanDefinitionDSL` and `RouterFunctionDsl` Example                  |
+| [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) | Kotlin-specific `BeanDefinitionDSL` and `RouterFunctionDsl` Example                  |
 | [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) | Kotlin specific `BeanDefinitionDSL`, `CoRouterFunctionDsl` Example                  |
 | [boot-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-redis) | Example of using `ReactiveRedisConnection` and `RouterFunction` |
 | [boot-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis) | Spring Data Redis Example                                    |
@@ -119,9 +122,9 @@ The following table list all sample codes related to the above posts.
 ### Legacy Codes
 Some example codes are becoming deprecated as time goes by, eg. the [SDN Rx project](https://github.com/neo4j/sdn-rx) which was maintained by the Neo4j team is discontinued now, it is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). 
 
-And Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.      
+Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.      
 
-Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/spring-framework/issues/27443), and other projects, such as Spring Data will remove RxJava/RxJava2 support soon.
+Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/spring-framework/issues/27443), and other projects, such as Spring Data, will remove RxJava/RxJava2 support soon.
 
 | name                                                         | description                                                  |
 | :----------------------------------------------------------- | ------------------------------------------------------------ |
@@ -175,3 +178,4 @@ Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/sp
 Specials thanks for Jetbrains's support by contributing an open-source license.
 
 [<img src="./jetbrains.png" height="250px" width="250px"/>](https://www.jetbrains.com/?from=spring-reactive-sample)
+
