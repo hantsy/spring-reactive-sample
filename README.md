@@ -1,7 +1,10 @@
 # Spring Reactive Sample
 
-> [!NOTE]
-> The new Spring Boot 4 changed the modular structure. This repository will be kept in sync with Spring 6 and Spring Boot 3.x. The new features related to the Reactive stack will be demonstrated in the [Spring 7 Sandbox](https://github.com/hantsy/spring7-sandbox).
+> [!WARNING]
+> Spring Boot 4 introduced a new modular structure. This repository will be kept in sync with Spring 6 and Spring Boot 3.x. The new features related to the Reactive stack will be demonstrated in the [Spring 7 Sandbox](https://github.com/hantsy/spring7-sandbox).
+>
+
+**If there is an AI agent spec/skills, etc., that can convert the entire project to Spring 7/Spring Boot 4, please let me know or create a PR for it. Thanks.**
 
 This is a sandbox project for demonstrating [Reactive Streams](https://www.reactive-streams.org/) support in the Spring framework and the Spring ecosystem. 
 
@@ -23,7 +26,7 @@ Read online: [https://hantsy.github.io/spring-reactive-sample/](https://hantsy.g
 
 ## Sample Codes
 
-The following table list all sample codes related to the above posts. 
+The following table lists all sample codes related to the above posts. 
 
 ### Spring Samples
 
@@ -40,7 +43,7 @@ The following table list all sample codes related to the above posts.
 | [smallrye-mutiny](https://github.com/hantsy/spring-reactive-sample/tree/master/smallrye-mutiny) | Same as **vanilla**, but use [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) instead of Reactor, since Spring 5.3.10 |
 | [war](https://github.com/hantsy/spring-reactive-sample/tree/master/war) | Replace the manual bootstrap class in **vanilla** with Spring `ApplicationInitializer`, it can be packaged as a **war** file to be deployed into an external servlet container. |
 | [routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes) | Use `RouterFunction` instead of controller in **vanilla**    |
-| [register-bean](https://github.com/hantsy/spring-reactive-sample/tree/master/register-bean) | Programmatic approach to register all beans in `ApplicatonContext` at the application bootstrap |
+| [register-bean](https://github.com/hantsy/spring-reactive-sample/tree/master/register-bean) | Programmatic approach to register all beans in `ApplicationContext` at the application bootstrap |
 | [data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/data-elasticsearch) | Spring Data ElasticSearch Reactive example    
 | [data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/data-neo4j) | Spring Data Neo4j reactive example                           |
 | [data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo) | Spring Data Mongo Reactive example                           |
@@ -120,9 +123,9 @@ The following table list all sample codes related to the above posts.
 | [boot-pulsar](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-pulsar) | Spring for Pulsar Reactive Example  |
 
 ### Legacy Codes
-Some example codes are becoming deprecated as time goes by, eg. the [SDN Rx project](https://github.com/neo4j/sdn-rx) which was maintained by the Neo4j team is discontinued now, it is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). 
+Some example codes are becoming deprecated over time, e.g., the [SDN Rx project](https://github.com/neo4j/sdn-rx), which was maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). 
 
-Spring Data R2dbc 1.2 added a lot of breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.      
+Spring Data R2dbc 1.2 introduced many breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.      
 
 Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/spring-framework/issues/27443), and other projects, such as Spring Data, will remove RxJava/RxJava2 support soon.
 
@@ -175,7 +178,8 @@ Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/sp
 
 ## Special Thanks
 
-Specials thanks for Jetbrains's support by contributing an open-source license.
+Special thanks to JetBrains for supporting an open-source license.
 
 [<img src="./jetbrains.png" height="250px" width="250px"/>](https://www.jetbrains.com/?from=spring-reactive-sample)
+
 
