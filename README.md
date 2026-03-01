@@ -1,10 +1,10 @@
 # Spring Reactive Sample
 
 > [!WARNING]
-> Spring Boot 4 introduced a new modular structure. This repository will be kept in sync with Spring 6 and Spring Boot 3.x. The new features related to the Reactive stack will be demonstrated in the [Spring 7 Sandbox](https://github.com/hantsy/spring7-sandbox).
+> Spring Boot 4 introduced a new modular structure that reorganizes the source code, which will break almost all projects in this repository if upgrading to Spring Boot 4. So this repository will be kept in sync with Spring 6 and Spring Boot 3.x. The new features related to the Reactive stack will be demonstrated in the [Spring 7 Sandbox](https://github.com/hantsy/spring7-sandbox).
 >
 
-**If there is an AI agent spec/skills, etc., that can convert the entire project to Spring 7/Spring Boot 4, please let me know or create a PR for it. Thanks.**
+**If there is an AI agent spec/skills, etc., that can convert the entire repository to Spring 7/Spring Boot 4, please let me know or create a PR for it. Thanks.**
 
 This is a sandbox project for demonstrating [Reactive Streams](https://www.reactive-streams.org/) support in the Spring framework and the Spring ecosystem. 
 
@@ -181,5 +181,6 @@ Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/sp
 Special thanks to JetBrains for supporting an open-source license.
 
 [<img src="./jetbrains.png" height="250px" width="250px"/>](https://www.jetbrains.com/?from=spring-reactive-sample)
+
 
 
