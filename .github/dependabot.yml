@@ -378,3 +378,7 @@ updates:
     directory: "/websocket-reactor-netty2"
     schedule:
       interval: "monthly"
+  - package-ecosystem: "devcontainers"
+    directory: "/"
+    schedule:
+      interval: weekly
