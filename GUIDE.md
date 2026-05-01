@@ -353,7 +353,7 @@ Now we almost have done the programming work, let's try to bootstrap the applica
 
 ### Bootstrap
 
-According to the official documention, in [WebFlux framework](http://docs.spring.io/spring-framework/docs/5.0.x/spring-framework-reference/web.html#web-reactive) section, there are some options to bootsrap a reactive web application.
+According to the official documentation, in [WebFlux framework](http://docs.spring.io/spring-framework/docs/5.0.x/spring-framework-reference/web.html#web-reactive) section, there are some options to bootstrap a reactive web application.
 
 >WebFlux can run on Servlet containers with support for the Servlet 3.1 Non-Blocking IO API as well as on other async runtimes such as Netty and Undertow. 
 
