@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
+import org.springframework.boot.data.neo4j.test.autoconfigure.DataNeo4jTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
@@ -15,9 +15,9 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.Neo4jContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.neo4j.Neo4jContainer;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -41,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PostRepositoryTest {
 
     @Container
-    static Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:latest")
+    static Neo4jContainer neo4jContainer = new Neo4jContainer("neo4j:latest")
             .withStartupTimeout(Duration.ofMinutes(5));
 
     @DynamicPropertySource

@@ -8,8 +8,10 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
+import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,7 +25,7 @@ import reactor.rabbitmq.RabbitFlux;
 import reactor.rabbitmq.Sender;
 import reactor.rabbitmq.SenderOptions;
 
-import javax.annotation.PostConstruct;
+
 import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -42,8 +44,8 @@ public class SenderApplication {
     @Autowired
     AmqpAdmin amqpAdmin;
 
-    @PostConstruct
-    public void init() {
+    @EventListener
+    public void init(ApplicationStartedEvent event) {
         amqpAdmin.declareQueue(new Queue(HELLO_QUEUE, false, false, true));
     }
 

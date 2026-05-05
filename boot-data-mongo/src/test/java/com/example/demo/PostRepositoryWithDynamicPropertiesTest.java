@@ -6,16 +6,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.mongodb.MongoDBContainer;
 import reactor.test.StepVerifier;
 
 import java.time.Duration;
@@ -40,7 +40,7 @@ public class PostRepositoryWithDynamicPropertiesTest {
     static void initMongoProperties(DynamicPropertyRegistry registry) {
         log.debug("container url: {}", container.getReplicaSetUrl("/blog"));
         log.debug("container host/port: {}/{}", container.getHost(), container.getFirstMappedPort());
-        registry.add("spring.data.mongodb.uri", () -> container.getReplicaSetUrl("blog"));
+        registry.add("spring.mongodb.uri", () -> container.getReplicaSetUrl("blog"));
     }
 
     @TestConfiguration()

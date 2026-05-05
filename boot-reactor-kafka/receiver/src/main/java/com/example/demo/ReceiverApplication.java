@@ -8,7 +8,9 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -20,7 +22,6 @@ import reactor.kafka.receiver.KafkaReceiver;
 import reactor.kafka.receiver.ReceiverOffset;
 import reactor.kafka.receiver.ReceiverOptions;
 
-import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
@@ -39,8 +40,8 @@ public class ReceiverApplication {
     @Autowired
     KafkaAdmin kafkaAdmin;
 
-    @PostConstruct
-    public void init() {
+    @EventListener
+    public void init(ApplicationStartedEvent event) {
         kafkaAdmin.createOrModifyTopics(
                 TopicBuilder.name(HELLO_TOPIC)
                         .partitions(1)

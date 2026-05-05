@@ -15,7 +15,7 @@ import org.springframework.context.event.ContextClosedEvent;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.postgresql.PostgreSQLContainer;
 import org.testcontainers.utility.MountableFile;
 
 import java.util.Map;
@@ -72,7 +72,7 @@ public class PostRepositoryTest {
     //see: https://github.com/testcontainers/testcontainers-java/discussions/4841
     static class PostgreSQLContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-        final PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer<>("postgres:12")
+        final PostgreSQLContainer postgreSQLContainer = new PostgreSQLContainer("postgres:18")
                 .withCopyFileToContainer(
                         MountableFile.forClasspathResource("init.sql"),
                         "/docker-entrypoint-initdb.d/init.sql"

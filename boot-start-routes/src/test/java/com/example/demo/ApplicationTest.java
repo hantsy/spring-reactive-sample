@@ -4,19 +4,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.server.RouterFunction;
-import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
-import org.springframework.web.server.WebHandler;
-import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
 import reactor.core.publisher.Flux;
 
 import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
+@AutoConfigureWebTestClient
 @SpringBootTest
 // create a `WebTestClient` with essential options from application context automaticially, it works on both mock env or a real server.
 // @AutoConfigureWebTestClient
@@ -25,7 +24,7 @@ public class ApplicationTest {
     @Autowired
     RouterFunction<ServerResponse> routerFunction;
 
-    @MockBean
+    @MockitoBean
     PostRepository posts;
 
     WebTestClient client;

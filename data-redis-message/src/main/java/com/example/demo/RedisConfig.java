@@ -5,7 +5,8 @@
  */
 package com.example.demo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,11 +15,11 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.ReactiveRedisMessageListenerContainer;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import reactor.core.publisher.Mono;
+import tools.jackson.core.JacksonException;
 
-import java.io.IOException;
 import java.util.UUID;
 
 /**
@@ -50,14 +51,14 @@ public class RedisConfig {
     public ReactiveRedisTemplate<String, Post> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
         return new ReactiveRedisTemplate<String, Post>(
                 factory,
-                RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer(Post.class))
+                RedisSerializationContext.fromSerializer(new JacksonJsonRedisSerializer(Post.class))
         );
     }
 
     @Bean
     public ReactiveRedisMessageListenerContainer redisMessageListenerContainer(PostRepository posts, ReactiveRedisConnectionFactory connectionFactory) {
         ReactiveRedisMessageListenerContainer container = new ReactiveRedisMessageListenerContainer(connectionFactory);
-        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectMapper objectMapper = new JsonMapper();
         container.receive(ChannelTopic.of("posts"))
                 .map(p -> p.getMessage())
                 .map(m -> {
@@ -65,7 +66,7 @@ public class RedisConfig {
                         Post post = objectMapper.readValue(m, Post.class);
                         post.setId(UUID.randomUUID().toString());
                         return post;
-                    } catch (IOException e) {
+                    } catch (JacksonException e) {
                         return null;
                     }
                 })

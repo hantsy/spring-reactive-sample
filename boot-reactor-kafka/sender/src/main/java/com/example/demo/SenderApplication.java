@@ -11,7 +11,9 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -26,7 +28,6 @@ import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
 import reactor.kafka.sender.SenderRecord;
 
-import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -44,8 +45,8 @@ public class SenderApplication {
     @Autowired
     KafkaAdmin kafkaAdmin;
 
-    @PostConstruct
-    public void init() {
+    @EventListener
+    public void init(ApplicationStartedEvent event) {
         kafkaAdmin.createOrModifyTopics(
                 TopicBuilder.name(HELLO_TOPIC)
                         .partitions(1)

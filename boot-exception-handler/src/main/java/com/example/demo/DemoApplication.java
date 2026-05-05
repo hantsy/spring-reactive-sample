@@ -104,7 +104,9 @@ class PostController {
 
     @DeleteMapping("/{id}")
     public Mono<Void> delete(@PathVariable("id") String id) {
-        return this.posts.deleteById(id).switchIfEmpty(Mono.error(new PostNotFoundException(id)));
+        return this.posts.findById(id)
+                .switchIfEmpty(Mono.error(new PostNotFoundException(id)))
+                .flatMap(p -> this.posts.delete(p));
     }
 
 }

@@ -11,12 +11,17 @@
 			"installMaven": "true",
 			"installGradle": "false"
 		},
-		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {
+			"version": "latest",
+			"moby": false
+		}
 	},
 	"customizations": {
 		"vscode": {
 			"extensions": [
-				"vscjava.vscode-lombok"
+				"vscjava.vscode-lombok",
+				"vscjava.vscode-java-pack",
+				"vmware.vscode-boot-dev-pack"
 			]
 		}
 	}

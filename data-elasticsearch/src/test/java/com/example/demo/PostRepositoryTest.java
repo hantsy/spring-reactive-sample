@@ -41,7 +41,8 @@ public class PostRepositoryTest {
 
         @Override
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            final ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:7.17.9");
+            final ElasticsearchContainer container = new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:9.3.3")
+                .withEnv(Map.of("xpack.security.enabled", "false"));
 
             container.start();
             log.info(" container.getFirstMappedPort():: {}", container.getFirstMappedPort());

@@ -40,7 +40,7 @@ public class IntegrationTests {
 
     @AfterAll
     public void teardown() {
-        this.disposableServer.dispose();
+        this.disposableServer.disposeNow();
     }
 
     @Test

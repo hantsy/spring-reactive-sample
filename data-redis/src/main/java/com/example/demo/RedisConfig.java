@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 
 /**
@@ -41,7 +41,7 @@ public class RedisConfig {
     public ReactiveRedisTemplate<String, Post> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
         return new ReactiveRedisTemplate<String, Post>(
                 factory,
-                RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer(Post.class))
+                RedisSerializationContext.fromSerializer(new JacksonJsonRedisSerializer(Post.class))
         );
     }
 

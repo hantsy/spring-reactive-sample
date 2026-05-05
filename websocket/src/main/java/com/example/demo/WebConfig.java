@@ -5,10 +5,11 @@
  */
 package com.example.demo;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.SerializationFeature;
 import org.springframework.web.reactive.HandlerMapping;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.handler.SimpleUrlHandlerMapping;
@@ -44,9 +45,8 @@ class WebConfig {
 
     @Bean
     ObjectMapper jackson2ObjectMapper() {
-        Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
-        builder.indentOutput(true);
-
-        return builder.build();
+        return JsonMapper.builder()
+                .enable(SerializationFeature.INDENT_OUTPUT)
+                .build();
     }
 }

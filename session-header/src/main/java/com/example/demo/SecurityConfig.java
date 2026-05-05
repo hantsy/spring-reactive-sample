@@ -15,6 +15,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.context.WebSessionServerSecurityContextRepository;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 /**
  *
  * @author hantsy
@@ -26,16 +28,13 @@ public class SecurityConfig {
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
        return http
-            .csrf().disable()
-                //.and()
-			.authorizeExchange()
-				.anyExchange().authenticated()
-				.and()
-			.httpBasic().securityContextRepository(new WebSessionServerSecurityContextRepository())
-				.and()
-			.formLogin()
-				.and()
-            .build();
+               .csrf(csrf -> csrf.disable())
+               //.and()
+               .authorizeExchange(exchange -> exchange
+                       .anyExchange().authenticated())
+               .httpBasic(basic -> basic.securityContextRepository(new WebSessionServerSecurityContextRepository()))
+               .formLogin(withDefaults())
+               .build();
     }
 
     @Bean

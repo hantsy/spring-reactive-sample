@@ -18,6 +18,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import reactor.core.publisher.Mono;
 
+import static org.springframework.security.config.Customizer.withDefaults;
+
 /**
  * @author hantsy
  */
@@ -27,11 +29,9 @@ class SecurityConfig {
 
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
-        return http.authorizeExchange()
-                    .anyExchange().authenticated()
-                .and()
-                    .formLogin()
-                .and()
+        return http.authorizeExchange(exchange -> exchange
+                .anyExchange().authenticated())
+                .formLogin(withDefaults())
                 .build();
     }
 
