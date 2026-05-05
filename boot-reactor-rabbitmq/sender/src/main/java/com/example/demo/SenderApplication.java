@@ -7,8 +7,8 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.amqp.autoconfigure.RabbitConnectionDetails;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 import org.springframework.boot.context.event.ApplicationStartedEvent;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.event.EventListener;
@@ -50,13 +50,12 @@ public class SenderApplication {
     }
 
     @Bean
-    ConnectionFactory connectionFactory(RabbitProperties rabbitProperties) {
+    ConnectionFactory connectionFactory(RabbitConnectionDetails rabbitConnectionDetails) {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(rabbitProperties.getHost());
-        connectionFactory.setPort(rabbitProperties.getPort());
-        connectionFactory.setUsername(rabbitProperties.getUsername());
-        connectionFactory.setPassword(rabbitProperties.getPassword());
-        connectionFactory.useNio();
+        connectionFactory.setHost(rabbitConnectionDetails.getFirstAddress().host());
+        connectionFactory.setPort(rabbitConnectionDetails.getFirstAddress().port());
+        connectionFactory.setUsername(rabbitConnectionDetails.getUsername());
+        connectionFactory.setPassword(rabbitConnectionDetails.getPassword());
         return connectionFactory;
     }
 
@@ -82,15 +81,12 @@ class MessageController {
         log.debug("sending message: {}", message);
 
         return messageRepository.save(message)
-                .doOnSuccess(it -> {
-                            var notification = "Message #" + it.id() + " was sent at " + it.sentAt();
-                            var messageFlux = Flux
-                                    .just(
-                                            new OutboundMessage("", SenderApplication.HELLO_QUEUE, notification.getBytes())
-                                    );
-                            this.sender.send(messageFlux).subscribe();
-                        }
-                )
+                .flatMap(it -> {
+                    var notification = "Message #" + it.id() + " with text '" + it.text() + "' was sent at " + it.sentAt();
+                    var messageFlux = Flux.just(new OutboundMessage("", SenderApplication.HELLO_QUEUE, notification.getBytes()));
+                    return this.sender.send(messageFlux)
+                            .then(Mono.just(it));
+                })
                 .map(it -> ResponseEntity.created(URI.create("/messages/" + it.id())).build());
     }
 }

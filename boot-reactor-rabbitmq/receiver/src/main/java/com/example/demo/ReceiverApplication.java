@@ -7,8 +7,8 @@ import org.springframework.amqp.core.AmqpAdmin;
 import org.springframework.amqp.core.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.amqp.autoconfigure.RabbitConnectionDetails;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.amqp.autoconfigure.RabbitProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +39,12 @@ public class ReceiverApplication {
     }
 
     @Bean
-    ConnectionFactory connectionFactory(RabbitProperties rabbitProperties) {
+    ConnectionFactory connectionFactory(RabbitConnectionDetails rabbitConnectionDetails) {
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(rabbitProperties.getHost());
-        connectionFactory.setPort(rabbitProperties.getPort());
-        connectionFactory.setUsername(rabbitProperties.getUsername());
-        connectionFactory.setPassword(rabbitProperties.getPassword());
-        connectionFactory.useNio();
+        connectionFactory.setHost(rabbitConnectionDetails.getFirstAddress().host());
+        connectionFactory.setPort(rabbitConnectionDetails.getFirstAddress().port());
+        connectionFactory.setUsername(rabbitConnectionDetails.getUsername());
+        connectionFactory.setPassword(rabbitConnectionDetails.getPassword());
         return connectionFactory;
     }
 

@@ -1,0 +1,18 @@
+package com.example.demo;
+
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
+import org.testcontainers.rabbitmq.RabbitMQContainer;
+import org.testcontainers.utility.DockerImageName;
+
+@TestConfiguration(proxyBeanMethods = false)
+public class TestReceiverApplicationConfig {
+
+    @Bean
+    @ServiceConnection
+    RabbitMQContainer rabbitmqContainer() {
+        return new RabbitMQContainer(DockerImageName.parse("rabbitmq").withTag("4.2.5-management"));
+    }
+
+}
