@@ -3,7 +3,6 @@ package com.example.demo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 import org.testcontainers.mongodb.MongoDBContainer;
@@ -13,15 +12,20 @@ import java.time.Duration;
 @Slf4j
 class MongodbContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        var mongoDBContainer = new MongoDBContainer("mongo")
+        var container = new MongoDBContainer("mongo")
                 .withStartupTimeout(Duration.ofSeconds(60));
-        mongoDBContainer.start();
+        container.start();
 
         configurableApplicationContext
-                .addApplicationListener((ApplicationListener<ContextClosedEvent>) event -> mongoDBContainer.stop());
-        log.debug("mongoDBContainer.getReplicaSetUrl(): {}", mongoDBContainer.getReplicaSetUrl("blog"));
+                .addApplicationListener(e -> {
+                            if (e instanceof ContextClosedEvent event) {
+                                container.stop();
+                            }
+                        }
+                );
+        log.debug("container.getReplicaSetUrl(): {}", container.getReplicaSetUrl("blog"));
         TestPropertyValues
-                .of("spring.mongodb.uri=" + mongoDBContainer.getReplicaSetUrl("blog"))
+                .of("spring.mongodb.uri=" + container.getReplicaSetUrl("blog"))
                 .applyTo(configurableApplicationContext.getEnvironment());
     }
 }

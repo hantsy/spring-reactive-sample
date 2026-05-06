@@ -15,6 +15,7 @@ import reactor.test.StepVerifier;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -58,12 +59,34 @@ public class PostRepositoryTest {
                 .verify();
     }
 
+    @SneakyThrows
     @Test
     public void testSaveAndVerifyPost() {
-        Post saved = this.postRepository.save(Post.builder().content("my test content").title("my test title").build()).block();
-        assertThat(saved.getId()).isNotNull();
-        assertThat(this.reactiveMongoTemplate.collectionExists(Post.class).block()).isTrue();
-        assertThat(this.reactiveMongoTemplate.findById(saved.getId(), Post.class).block().getTitle()).isEqualTo("my test title");
+        Post data = Post.builder().content("my test content").title("my test title").build();
+        var latch = new CountDownLatch(1);
+        var idRef = new AtomicReference<String>();
+        this.postRepository.save(data)
+                .subscribe(r -> {
+                    log.debug("saved post: {}", r);
+                    idRef.set(r.getId());
+                    latch.countDown();
+                });
+        latch.await(500, TimeUnit.MILLISECONDS);
+
+        var id = idRef.get();
+        assertThat(id).isNotNull();
+
+        this.reactiveMongoTemplate.collectionExists(Post.class)
+                .as(StepVerifier::create)
+                .consumeNextWith(r -> assertThat(r).isTrue())
+                .verifyComplete();
+
+        this.reactiveMongoTemplate.findById(id, Post.class)
+                .as(StepVerifier::create)
+                .consumeNextWith(r -> {
+                    assertThat(r.getTitle()).isEqualTo("my test title");
+                })
+                .verifyComplete();
     }
 
 
