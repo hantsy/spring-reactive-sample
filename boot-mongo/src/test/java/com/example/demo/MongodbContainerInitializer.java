@@ -10,19 +10,23 @@ import org.testcontainers.mongodb.MongoDBContainer;
 
 @Slf4j
 class MongodbContainerInitializer implements
-    ApplicationContextInitializer<ConfigurableApplicationContext> {
+        ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-  public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-    var container = new MongoDBContainer("mongo:4");
-    container.start();
+    public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
+        var container = new MongoDBContainer("mongo:4");
+        container.start();
 
-    configurableApplicationContext
-        .addApplicationListener(
-            (ApplicationListener<ContextClosedEvent>) event -> container.stop());
-    log.debug("container.getFirstMappedPort(): {}", container.getFirstMappedPort());
-    TestPropertyValues
-        .of("spring.mongodb.uri=mongodb://localhost:" + container.getFirstMappedPort()
-            + "/blog")
-        .applyTo(configurableApplicationContext.getEnvironment());
-  }
+        configurableApplicationContext
+                .addApplicationListener(e -> {
+                            if (e instanceof ContextClosedEvent event) {
+                                container.stop();
+                            }
+                        }
+                );
+        log.debug("container.getFirstMappedPort(): {}", container.getFirstMappedPort());
+        TestPropertyValues
+                .of("spring.mongodb.uri=mongodb://localhost:" + container.getFirstMappedPort()
+                        + "/blog")
+                .applyTo(configurableApplicationContext.getEnvironment());
+    }
 }
