@@ -6,7 +6,7 @@ import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
-import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.mongodb.MongoDBContainer;
 
 @Slf4j
 class MongodbContainerInitializer implements
@@ -19,9 +19,9 @@ class MongodbContainerInitializer implements
     configurableApplicationContext
         .addApplicationListener(
             (ApplicationListener<ContextClosedEvent>) event -> container.stop());
-    log.debug("container.getFirstMappedPort():" + container.getFirstMappedPort());
+    log.debug("container.getFirstMappedPort(): {}", container.getFirstMappedPort());
     TestPropertyValues
-        .of("spring.data.mongodb.uri=mongodb://localhost:" + container.getFirstMappedPort()
+        .of("spring.mongodb.uri=mongodb://localhost:" + container.getFirstMappedPort()
             + "/blog")
         .applyTo(configurableApplicationContext.getEnvironment());
   }

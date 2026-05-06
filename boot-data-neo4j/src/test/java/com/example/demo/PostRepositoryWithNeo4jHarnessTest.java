@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.neo4j.harness.Neo4j;
 import org.neo4j.harness.Neo4jBuilders;
+import org.neo4j.configuration.connectors.BoltConnector;
+import org.neo4j.configuration.helpers.SocketAddress;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.neo4j.DataNeo4jTest;
+import org.springframework.boot.data.neo4j.test.autoconfigure.DataNeo4jTest;
 import org.springframework.data.domain.Example;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -41,6 +43,7 @@ public class PostRepositoryWithNeo4jHarnessTest {
     static void initializeNeo4j() {
 
         embeddedDatabaseServer = Neo4jBuilders.newInProcessBuilder()
+                .withConfig(BoltConnector.listen_address, new SocketAddress("localhost", 0))
                 .withDisabledServer()//disable http server
                 .build();
     }

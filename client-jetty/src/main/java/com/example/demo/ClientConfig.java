@@ -1,16 +1,14 @@
 package com.example.demo;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.channel.ChannelOption;
-import io.netty.handler.logging.LogLevel;
+import tools.jackson.databind.json.JsonMapper;
 import lombok.SneakyThrows;
 import org.eclipse.jetty.client.HttpClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.reactive.JettyClientHttpConnector;
-import org.springframework.http.codec.json.Jackson2JsonDecoder;
-import org.springframework.http.codec.json.Jackson2JsonEncoder;
+import org.springframework.http.codec.json.JacksonJsonDecoder;
+import org.springframework.http.codec.json.JacksonJsonEncoder;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -24,7 +22,7 @@ public class ClientConfig {
 
     @SneakyThrows
     @Bean
-    public WebClient webClient(ObjectMapper objectMapper) {
+    public WebClient webClient(JsonMapper objectMapper) {
         var jettyHttpClient = new HttpClient();
         jettyHttpClient.setConnectTimeout(5000L);
         jettyHttpClient.start();
@@ -45,9 +43,9 @@ public class ClientConfig {
                             // Or
                             // use customCodecs to register Codecs from scratch.
                             clientCodecConfigurer.customCodecs()
-                                    .register(new Jackson2JsonDecoder(objectMapper));
+                                    .register(new JacksonJsonDecoder(objectMapper));
                             clientCodecConfigurer.customCodecs()
-                                    .register(new Jackson2JsonEncoder(objectMapper));
+                                    .register(new JacksonJsonEncoder(objectMapper));
                         }
 
                 )

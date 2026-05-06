@@ -3,11 +3,11 @@ server:
 spring:
   data:
     mongodb:
-#      host: localhost
-#      port: 27017
-#      uri: mongodb://user:secret@mongo1.example.com:12345,mongo2.example.com:23456/test
-      uri: mongodb://localhost:27017/blog
-      grid-fs-database: images
+      #      host: localhost
+      #      port: 27017
+      #      uri: mongodb://user:secret@mongo1.example.com:12345,mongo2.example.com:23456/test
+      gridfs.database: images
+  mongodb.uri: mongodb://localhost:27017/blog
 logging:
   level:
     org.springframework.web: DEBUG

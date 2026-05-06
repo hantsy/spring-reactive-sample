@@ -11,7 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.web.reactive.function.server.RouterFunction;
@@ -31,7 +31,7 @@ public class DemoApplication {
         RedisSerializationContext<String, Post> serializationContext = RedisSerializationContext
             .<String, Post>newSerializationContext(new StringRedisSerializer())
             .hashKey(new StringRedisSerializer())
-            .hashValue(new Jackson2JsonRedisSerializer<>(Post.class))
+            .hashValue(new JacksonJsonRedisSerializer<>(Post.class))
             .build();
 
         return new ReactiveRedisTemplate<>(connectionFactory, serializationContext);

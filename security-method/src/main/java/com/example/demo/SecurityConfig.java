@@ -32,12 +32,11 @@ class SecurityConfig {
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange()
-                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                //.pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")//replace this with method level constraints
-                //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-                .anyExchange().authenticated()
-                .and()
+                .authorizeExchange(exchange -> exchange
+                        .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                        //.pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")//replace this with method level constraints
+                        //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+                        .anyExchange().authenticated())
                 .build();
     }
 

@@ -20,7 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.testcontainers.containers.Neo4jContainer;
+import org.testcontainers.neo4j.Neo4jContainer;
 import reactor.test.StepVerifier;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public class PostRepositoryTest {
 
         @Override
         public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            final Neo4jContainer<?> neo4jContainer = new Neo4jContainer<>("neo4j:5")
+            final Neo4jContainer neo4jContainer = new Neo4jContainer("neo4j:5")
                     .withAdminPassword("passw0rd");
             neo4jContainer.start();
             log.info(" neo4jContainer.getBoltUrl():: {}", neo4jContainer.getBoltUrl());

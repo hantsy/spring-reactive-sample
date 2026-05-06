@@ -47,7 +47,7 @@ class DataInitializer {
                 .flatMapMany(Flux::fromIterable) //
                 .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
                 .count() //
-                .doOnSuccess(count -> System.out.println(String.format("Total No. found: %s", count))) //
+                .doOnSuccess(count -> System.out.println("Total No. found: %s".formatted(count))) //
                 .block();
 
         conn.setCommands()
@@ -66,7 +66,7 @@ class DataInitializer {
         keyCommands.randomKey()
                 .doOnNext(byteBuffer -> System.out.println(toString(byteBuffer))) //
                 .flatMap(keyCommands::type)
-                .doOnSuccess(type -> System.out.println(String.format("ByteBuffer type: %s", type))) //
+                .doOnSuccess(type -> System.out.println("ByteBuffer type: %s".formatted(type))) //
                 .block();
 
         log.info("done data initialization  ...");

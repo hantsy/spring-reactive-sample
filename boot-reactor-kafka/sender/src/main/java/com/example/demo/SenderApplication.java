@@ -11,7 +11,10 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.boot.kafka.autoconfigure.KafkaConnectionDetails;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.config.TopicBuilder;
 import org.springframework.kafka.core.KafkaAdmin;
@@ -26,7 +29,6 @@ import reactor.kafka.sender.KafkaSender;
 import reactor.kafka.sender.SenderOptions;
 import reactor.kafka.sender.SenderRecord;
 
-import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
@@ -44,8 +46,8 @@ public class SenderApplication {
     @Autowired
     KafkaAdmin kafkaAdmin;
 
-    @PostConstruct
-    public void init() {
+    @EventListener
+    public void init(ApplicationStartedEvent event) {
         kafkaAdmin.createOrModifyTopics(
                 TopicBuilder.name(HELLO_TOPIC)
                         .partitions(1)
@@ -54,9 +56,9 @@ public class SenderApplication {
         );
     }
 
-    private Map<String, Object> producerProps() {
+    private Map<String, Object> producerProps(KafkaConnectionDetails kafkaConnectionDetails) {
         Map<String, Object> props = new HashMap<>();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaConnectionDetails.getBootstrapServers());
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "sample-producer");
         props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class);
@@ -65,8 +67,8 @@ public class SenderApplication {
     }
 
     @Bean
-    KafkaSender<Integer, String> sender() {
-        var senderOptions = SenderOptions.<Integer, String>create(producerProps());
+    KafkaSender<Integer, String> sender(KafkaConnectionDetails kafkaConnectionDetails) {
+        var senderOptions = SenderOptions.<Integer, String>create(producerProps(kafkaConnectionDetails));
         return KafkaSender.create(senderOptions);
     }
 }
@@ -85,7 +87,7 @@ class MessageController {
         Integer key = new SecureRandom().nextInt(Integer.MAX_VALUE);
         return messageRepository.save(message)
                 .doOnSuccess(it -> {
-                            var notification = "Message #" + it.id() + " was sent at " + it.sentAt();
+                            var notification = "Message #" + it.id() + " with text '" + it.text() + "' was sent at " + it.sentAt();
                             this.sender.send(Flux.just(SenderRecord.create(new ProducerRecord<>(SenderApplication.HELLO_TOPIC, key, notification), key)))
                                     .doOnError(e -> log.error("Send failed", e))
                                     .subscribe(r -> {

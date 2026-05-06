@@ -42,12 +42,6 @@ class DataInitializer {
                                 )
                 )
                 .log()
-                .subscribe(
-                        data -> log.info("data: {}", data),
-                        error -> log.info("error: {}", error),
-                        () -> log.info("done initialization...")
-                );
-
+                .blockLast();
     }
-
 }

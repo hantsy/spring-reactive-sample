@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.cassandra.DataCassandraTest;
+import org.springframework.boot.data.cassandra.test.autoconfigure.DataCassandraTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.containers.CassandraContainer;
+import org.testcontainers.cassandra.CassandraContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.test.StepVerifier;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class PostRepositoryWithTestContainersTest {
 
     @Container
-    static CassandraContainer<?> cassandraContainer = new CassandraContainer<>("cassandra")
+    static CassandraContainer cassandraContainer = new CassandraContainer("cassandra")
             .withInitScript("init.cql")
             .withStartupTimeout(Duration.ofMinutes(5));
 

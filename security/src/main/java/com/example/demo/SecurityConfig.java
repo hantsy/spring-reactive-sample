@@ -31,12 +31,11 @@ class SecurityConfig {
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
         return http
-            .authorizeExchange()
-            .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
-            .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
-            //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
-            .anyExchange().authenticated()
-            .and()
+            .authorizeExchange(exchange -> exchange
+                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
+                //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+                .anyExchange().authenticated())
             .build();
     }
 

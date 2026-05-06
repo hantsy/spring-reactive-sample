@@ -17,6 +17,9 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: boot-data-cassandra
 
     steps:
     - uses: actions/checkout@v6
@@ -29,6 +32,4 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     - name: Build with Maven
-      run: |
-        cd boot-data-cassandra
-        mvn -B package --file pom.xml
+      run: ./mvnw -B package --file pom.xml
