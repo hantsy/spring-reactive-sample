@@ -1,10 +1,7 @@
 # Spring Reactive Sample
 
-> [!WARNING]
-> Spring Boot 4 introduced a new modular structure that reorganizes the source code, which will break almost all projects in this repository if upgrading to Spring Boot 4. So this repository will be kept in sync with Spring 6 and Spring Boot 3.x. The new features related to the Reactive stack will be demonstrated in the [Spring 7 Sandbox](https://github.com/hantsy/spring7-sandbox).
->
-
-**If there is an AI agent spec/skills, etc., that can convert the entire repository to Spring 7/Spring Boot 4, please let me know or create a PR for it. Thanks.**
+>[!NOTE]
+>A huge thanks to [@rajadilipkolli](https://github.com/rajadilipkolli) for his efforts in updating this repository to the newest Spring Boot v4.
 
 This is a sandbox project for demonstrating [Reactive Streams](https://www.reactive-streams.org/) support in the Spring framework and the Spring ecosystem. 
 
