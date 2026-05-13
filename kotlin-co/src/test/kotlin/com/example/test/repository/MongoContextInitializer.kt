@@ -13,7 +13,7 @@ import java.util.Map
 class MongoContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
     companion object {
         private val log = LoggerFactory.getLogger(MongoContextInitializer::class.java)
-        private val container = MongoDBContainer("mongo")
+        private val container = MongoDBContainer("mongo:8.0")
     }
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {

@@ -33,7 +33,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class PostRepositoryWithDynamicPropertiesTest {
 
     @Container
-    static MongoDBContainer container = new MongoDBContainer("mongo")
+    static MongoDBContainer container = new MongoDBContainer("mongo:8.0")
             .withStartupTimeout(Duration.ofSeconds(60));
 
     @DynamicPropertySource
