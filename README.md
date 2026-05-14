@@ -32,7 +32,6 @@ The following table lists all sample codes available in this repository.
 | Name | Description |
 | :--- | :--- |
 | [vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla) | Basic `spring-webflux` features with a main class to start the application |
-| [vanilla-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-reactor-netty2) | Same as **vanilla**, but uses Reactor Netty 2.x as the runtime |
 | [vanilla-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-jetty) | Same as **vanilla**, but uses Jetty as the runtime |
 | [vanilla-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-tomcat) | Same as **vanilla**, but uses Tomcat as the runtime |
 | [vanilla-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-undertow) | Same as **vanilla**, but uses Undertow as the runtime |
@@ -66,13 +65,11 @@ The following table lists all sample codes available in this repository.
 | [mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/tree/master/mvc-freemarker) | Traditional web application using Freemarker as template engine |
 | [sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse) | Server Send Event example |
 | [websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket) | WebSocket example |
-| [websocket-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket-reactor-netty2) | WebSocket example with Reactor Netty 2 |
 | [web-filter](https://github.com/hantsy/spring-reactive-sample/tree/master/web-filter) | `WebFilter` example |
 | [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in Groovy |
 | [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example |
 | [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) | `WebClient` example for calling backend reactive APIs |
 | [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty) | `WebClient` with Jetty Reactive HttpClient |
-| [client-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/client-reactor-netty2) | `WebClient` with Reactor Netty 2.x HttpClient |
 | [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient) | `WebClient` with JDK 11 HttpClient |
 | [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5) | `WebClient` with Apache HttpClient 5 |
 | [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) | Cache Async/Reactive support with in-memory `ConcurrentHashMap` |
@@ -120,11 +117,11 @@ The following table lists all sample codes available in this repository.
 | [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | Spring Data Mongo example with GridFS support |
 | [boot-data-mongo-tailable](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-tailable) | Spring Data Mongo tailable document example |
 | [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler example |
-| [boot-pulsar](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-pulsar) | Spring for Pulsar Reactive example |
+
 
 ### Legacy Codes
 
-Some example codes are becoming deprecated over time; for example, the [SDN Rx project](https://github.com/neo4j/sdn-rx), maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). [Reactor Kafka](https://github.com/reactor/reactor-kafka) and [Reactor Rabbit](https://github.com/reactor/reactor-rabbitmq) are discontinued, N[etty 5 support(the development is inactive) was finally removed](https://github.com/spring-projects/spring-framework/issues/28847) in Spring framework. 
+Some example codes are becoming deprecated over time; for example, the [SDN Rx project](https://github.com/neo4j/sdn-rx), maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). [Reactor Kafka](https://github.com/reactor/reactor-kafka) and [Reactor Rabbit](https://github.com/reactor/reactor-rabbitmq) are discontinued, [Netty 5 support(the development is inactive) was finally removed](https://github.com/spring-projects/spring-framework/issues/28847) in the Spring framework. 
 
 Spring Data R2dbc 1.2 introduced many breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.
 
@@ -143,10 +140,14 @@ Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/sp
 | [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example but use `ReactiveNeo4jClient`(*Deprecated*) |
 | [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx-cypher) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example using Cypher queries(*Deprecated*) |
 | [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example(*Deprecated*) |
-| [rxjava](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava) | Same as **vanilla**, but use Rxjava instead of Reactor       |
-| [rxjava-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava-jdbc) | Accessing database with rxjava-jdbc.  **NOTE: rxjava-jdbc is a wrapper of blocking Jdbc APIs** |
-| [rxjava2](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2) | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
-| [rxjava2-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava2-jdbc) | Accessing database with rxjava2-jdbc. **NOTE: rxjava2-jdbc is a wrapper of blocking Jdbc APIs** |
+| [rxjava](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava) | Same as **vanilla**, but use Rxjava instead of Reactor       |
+| [rxjava-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava-jdbc) | Accessing database with rxjava-jdbc.  **NOTE: rxjava-jdbc is a wrapper of blocking Jdbc APIs** |
+| [rxjava2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava2) | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
+| [rxjava2-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava2-jdbc) | Accessing database with rxjava2-jdbc. **NOTE: rxjava2-jdbc is a wrapper of blocking Jdbc APIs** |
+| [websocket-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/websocket-reactor-netty2) | WebSocket example with Reactor Netty 2 |
+| [vanilla-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/vanilla-reactor-netty2) | Same as **vanilla**, but uses Reactor Netty 2.x as the runtime |
+| [client-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/client-reactor-netty2) | `WebClient` with Reactor Netty 2.x HttpClient |
+| [boot-pulsar](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-pulsar) | Spring for Pulsar Reactive example |
 
 ## References
 
