@@ -124,7 +124,7 @@ The following table lists all sample codes available in this repository.
 
 ### Legacy Codes
 
-Some example codes are becoming deprecated over time, e.g., the [SDN Rx project](https://github.com/neo4j/sdn-rx), which was maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j).
+Some example codes are becoming deprecated over time; for example, the [SDN Rx project](https://github.com/neo4j/sdn-rx), maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). [Reactor Kafka](https://github.com/reactor/reactor-kafka) and [Reactor Rabbit](https://github.com/reactor/reactor-rabbitmq) are discontinued, N[etty 5 support(the development is inactive) was finally removed](https://github.com/spring-projects/spring-framework/issues/28847) in Spring framework. 
 
 Spring Data R2dbc 1.2 introduced many breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.
 
