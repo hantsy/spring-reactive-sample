@@ -12,7 +12,7 @@ import java.time.Duration;
 @Slf4j
 class MongodbContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
     public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-        var container = new MongoDBContainer("mongo")
+        var container = new MongoDBContainer("mongo:8.0")
                 .withStartupTimeout(Duration.ofSeconds(60));
         container.start();
 
