@@ -18,7 +18,7 @@ class Application {
 
     constructor(port: Int = 8080) {
         val context = GenericApplicationContext()
-        beans().initialize(context)
+        context.register(beans())
         context.refresh()
         context.getBean(DataInitializr::class.java).initData()
         server = HttpServer.create().host("localhost").port(port)
