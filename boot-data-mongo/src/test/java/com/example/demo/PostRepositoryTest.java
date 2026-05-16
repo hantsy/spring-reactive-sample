@@ -6,10 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -20,11 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
-// or exclude via @ImportAutoConfiguration
-//@ImportAutoConfiguration(exclude = EmbeddedMongoAutoConfiguration.class)
-// but @EnableAutoConfiguration(exclude=...) does not work,
-// see: https://stackoverflow.com/questions/70047380/excluding-embededmongoautoconfiguration-failed-in-spring-boot-2-6-0
-@ContextConfiguration(initializers = {MongodbContainerInitializer.class})
+@Import(ContainersConfig.class)
 @Slf4j
 @ActiveProfiles("test")
 public class PostRepositoryTest {

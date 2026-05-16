@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.server.ServerResponse
 
 @AutoConfigureWebTestClient
 @SpringBootTest(
-    classes = [DemoApplication::class],
+    classes = [DemoApplication::class, TestcontainersConfiguration::class],
     // removed since Spring Boot 3.4.0
     //properties = ["context.initializer.classes=com.example.demo.TestConfigInitializer"]
 )

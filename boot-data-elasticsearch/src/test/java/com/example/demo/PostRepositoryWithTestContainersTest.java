@@ -27,8 +27,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 @Import(ContainersConfig.class)
 @Slf4j
-// Testcontainers does not work well with per_class testinstance.
-// see: https://stackoverflow.com/questions/61357116/exception-mapped-port-can-only-be-obtained-after-the-container-is-started-when/61358336#61358336
 class PostRepositoryWithTestContainersTest {
 
 

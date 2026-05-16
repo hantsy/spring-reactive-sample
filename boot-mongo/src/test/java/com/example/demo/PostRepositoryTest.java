@@ -24,9 +24,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Testcontainers
 @DataMongoTest
-//@ContextConfiguration(initializers = {MongodbContainerInitializer.class})
+@Import({PostRepository.class, ContainersConfig.class})
 @Slf4j
 public class PostRepositoryTest {
 
@@ -35,19 +34,6 @@ public class PostRepositoryTest {
 
     @Autowired
     PostRepository postRepository;
-
-    @Container
-    static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo:4");
-
-    @DynamicPropertySource
-    static void setProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    }
-
-    @TestConfiguration
-    @Import(PostRepository.class)
-    static class TestConfig {
-    }
 
     @BeforeEach
     public void setup() {

@@ -1,6 +1,5 @@
 package com.example.demo;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,7 +19,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = {TestDemoApplication.class})
+@SpringBootTest(classes = {DemoApplication.class, ContainersConfig.class})
 @Slf4j
 @ActiveProfiles("test")
 public class PostRepositoryWithTestDemoApplicationTest {

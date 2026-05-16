@@ -3,10 +3,9 @@ package com.example.demo;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
@@ -21,21 +20,13 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
 @AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ContainersConfig.class)
 @Slf4j
 public class DemoApplicationTests {
 
-    @LocalServerPort
-    private int port;
 
+    @Autowired
     WebTestClient client;
-
-    @BeforeEach
-    public void setup() {
-        this.client = WebTestClient.bindToServer()
-                .baseUrl("http://localhost:" + this.port)
-                .build();
-    }
 
     private MultiValueMap<String, HttpEntity<?>> generateBody() {
         MultipartBodyBuilder builder = new MultipartBodyBuilder();

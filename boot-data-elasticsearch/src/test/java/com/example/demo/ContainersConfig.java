@@ -13,7 +13,7 @@ public class ContainersConfig {
     @ServiceConnection
     @Bean
     ElasticsearchContainer elasticsearchContainer() {
-        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:9.3.3")
+        return new ElasticsearchContainer("docker.elastic.co/elasticsearch/elasticsearch:9.4.1")
                 .withEnv(Map.of("xpack.security.enabled", "false"));
     }
 }

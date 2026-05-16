@@ -7,6 +7,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.neo4j.core.ReactiveNeo4jClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -28,6 +29,7 @@ public class DemoApplication {
 }
 
 @Component
+@Profile("default")
 @Slf4j
 @RequiredArgsConstructor
 class DataInitializer implements CommandLineRunner {
