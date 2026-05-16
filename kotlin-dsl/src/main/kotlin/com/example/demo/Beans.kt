@@ -1,9 +1,9 @@
 package com.example.demo
 
 import com.mongodb.ConnectionString
+import org.springframework.beans.factory.BeanRegistrarDsl
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer
 import org.springframework.context.support.ReloadableResourceBundleMessageSource
-import org.springframework.context.support.beans
 import org.springframework.core.io.ClassPathResource
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory
@@ -12,26 +12,26 @@ import org.springframework.web.reactive.function.server.HandlerStrategies
 import org.springframework.web.reactive.function.server.RouterFunctions
 import org.springframework.web.server.WebHandler
 
-fun beans() = beans {
+fun beans() = BeanRegistrarDsl {
 
-    bean {
+    registerBean {
         PropertySourcesPlaceholderConfigurer().apply {
             val resources = arrayOf(ClassPathResource("application.properties"))
-            setLocations(* resources)
+            setLocations(*resources)
             setIgnoreUnresolvablePlaceholders(true)
         }
     }
 
-    bean {
-        PostHandler(ref())
+    registerBean {
+        PostHandler(bean())
     }
 
-    bean {
-        Routes(ref())
+    registerBean {
+        Routes(bean())
     }
 
-    bean<WebHandler>("webHandler") {
-        val router = ref<Routes>().router()
+    registerBean<WebHandler>("webHandler") {
+        val router = bean<Routes>().router()
         val strategies = HandlerStrategies.builder()
             //.webFilter(ref("springSecurityFilterChain"))
             .build()
@@ -40,24 +40,24 @@ fun beans() = beans {
         RouterFunctions.toWebHandler(router, strategies)
     }
 
-    bean("messageSource") {
+    registerBean("messageSource") {
         ReloadableResourceBundleMessageSource().apply {
             setBasename("messages")
             setDefaultEncoding("UTF-8")
         }
     }
 
-    bean {
-        DataInitializr(ref())
+    registerBean {
+        DataInitializr(bean())
     }
 
-    bean {
-        PostRepository(ref())
+    registerBean {
+        PostRepository(bean())
     }
 
-    bean { ReactiveMongoRepositoryFactory(ref()) }
+    registerBean { ReactiveMongoRepositoryFactory(bean()) }
 
-    bean {
+    registerBean {
         ReactiveMongoTemplate(
             SimpleReactiveMongoDatabaseFactory(
                 //ConnectionString(env["mongo.uri"])
@@ -67,7 +67,7 @@ fun beans() = beans {
     }
 
     profile("foo") {
-        bean<Foo>()
+        registerBean<Foo>()
     }
 }
 

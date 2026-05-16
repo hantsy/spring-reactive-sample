@@ -6,13 +6,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.mongodb.MongoDBContainer;
 import reactor.test.StepVerifier;
 
 import java.util.List;
@@ -22,18 +18,10 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
-@Testcontainers
+@Import(ContainersConfig.class)
 @Slf4j
 @ActiveProfiles("test")
 class RepositoryTests {
-
-    @Container
-    static MongoDBContainer container = new MongoDBContainer("mongo:4");
-
-    @DynamicPropertySource
-    static void initMongoProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.mongodb.uri", () -> container.getReplicaSetUrl("chatroom"));
-    }
 
     @Autowired
     MessageRepository messages;

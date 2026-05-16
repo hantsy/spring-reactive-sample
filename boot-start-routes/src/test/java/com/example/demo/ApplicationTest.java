@@ -18,7 +18,6 @@ import static org.mockito.Mockito.*;
 @AutoConfigureWebTestClient
 @SpringBootTest
 // create a `WebTestClient` with essential options from application context automaticially, it works on both mock env or a real server.
-// @AutoConfigureWebTestClient
 public class ApplicationTest {
 
     @Autowired

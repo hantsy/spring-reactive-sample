@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.test.context.TestPropertySource;
@@ -25,6 +26,7 @@ import static java.util.Comparator.comparing;
         "logging.level.com.example.demo=DEBUG"
 })
 @Slf4j
+@Import(ContainersConfig.class)
 public class PostRepositoryPageableTest {
 
     @Autowired

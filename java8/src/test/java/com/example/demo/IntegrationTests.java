@@ -50,7 +50,7 @@ public class IntegrationTests {
     }
 
     @Test
-    public void getAllPostsWillBeOk() throws Exception {
+    public void getAllPostsWillBeOk() {
         this.rest
             .get()
             .uri("/posts")

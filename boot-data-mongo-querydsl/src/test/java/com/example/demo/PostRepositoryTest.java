@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.test.context.ActiveProfiles;
@@ -20,6 +21,7 @@ import static java.util.Arrays.asList;
 @DataMongoTest
 @Slf4j
 @ActiveProfiles("test")
+@Import(ContainersConfig.class)
 public class PostRepositoryTest {
 
     @Autowired
