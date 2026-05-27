@@ -16,7 +16,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 import static org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers.springSecurity;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(classes = TestDemoApplication.class)
+@SpringBootTest(classes = ContainersConfig.class)
 public class DemoApplicationTests {
 
     @Autowired

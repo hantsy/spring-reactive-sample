@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest(classes = TestDemoApplication.class)
+@SpringBootTest(classes = ContainersConfig.class)
 @Slf4j
 //@DataRedisTest works for blocking RedisRepository
 class PostRepositoryTest {

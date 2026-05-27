@@ -24,7 +24,7 @@ import java.util.stream.IntStream;
 import static java.util.Comparator.comparing;
 
 @DataMongoTest
-@ContextConfiguration(initializers = {MongodbContainerInitializer.class})
+@Import({PostRepository.class, ContainersConfig.class})
 @TestPropertySource(properties = {
         "logging.level.org.springframework.data.mongodb.core.ReactiveMongoTemplate=DEBUG",
         "logging.level.com.example.demo=DEBUG"
@@ -34,11 +34,6 @@ public class PostRepositoryPageableTest {
 
     @Autowired
     PostRepository postRepository;
-
-    @TestConfiguration
-    @Import(PostRepository.class)
-    static class TestConfig {
-    }
 
     @SneakyThrows
     @BeforeEach

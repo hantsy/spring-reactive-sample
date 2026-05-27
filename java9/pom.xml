@@ -14,7 +14,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.4.0</version>
+        <version>4.0.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -35,7 +35,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
@@ -48,11 +48,6 @@
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-netty</artifactId>
         </dependency>
-        <!--
-                <dependency>
-                    <groupId>org.projectlombok</groupId>
-                    <artifactId>lombok</artifactId>
-                </dependency>-->
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -97,8 +92,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -108,52 +103,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.14.0</version>
             </plugin>
-            <!--docs: https://maven.apache.org/plugins/maven-compiler-plugin/examples/module-info.html-->
-            <!--            <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-compiler-plugin</artifactId>
-                            <version>3.8.0</version>
-                            <executions>
-                                <execution>
-                                    <id>default-compile</id>
-                                    <configuration>
-                                        &lt;!&ndash; compile everything to ensure module-info contains right entries &ndash;&gt;
-                                        &lt;!&ndash; required when JAVA_HOME is JDK 8 or below &ndash;&gt;
-                                        <jdkToolchain>
-                                            <version>9</version>
-                                        </jdkToolchain>
-                                        <release>9</release>
-                                    </configuration>
-                                </execution>
-                                <execution>
-                                    <id>base-compile</id>
-                                    <goals>
-                                        <goal>compile</goal>
-                                    </goals>
-                                    &lt;!&ndash; recompile everything for target VM except the module-info.java &ndash;&gt;
-                                    <configuration>
-                                        <excludes>
-                                            <exclude>module-info.java</exclude>
-                                        </excludes>
-                                    </configuration>
-                                </execution>
-                            </executions>
-                            &lt;!&ndash; defaults for compile and testCompile &ndash;&gt;
-                            <configuration>
-                                &lt;!&ndash; Only required when JAVA_HOME isn't at least Java 9 and when haven't configured the maven-toolchains-plugin &ndash;&gt;
-            &lt;!&ndash;                    <jdkToolchain>
-                                    <version>9</version>
-                                </jdkToolchain>
-                                <release>8</release>
-                                <compilerArgs>
-
-                                </compilerArgs>&ndash;&gt;
-
-                            </configuration>
-                        </plugin>-->
-
             <!--          <plugin>
                           <groupId>org.apache.maven.plugins</groupId>
                           <artifactId>maven-toolchains-plugin</artifactId>

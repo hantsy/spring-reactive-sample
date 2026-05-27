@@ -2,40 +2,32 @@ package com.example.demo
 
 
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.web.server.LocalServerPort
+import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
-import org.springframework.web.reactive.function.client.WebClient
+import org.springframework.test.web.reactive.server.WebTestClient
+import org.springframework.beans.factory.annotation.Autowired
 import reactor.test.StepVerifier
 
-@SpringBootTest(classes = [DemoApplication::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@AutoConfigureWebTestClient
+@SpringBootTest(classes = [DemoApplication::class, TestcontainersConfiguration::class], webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class IntegrationTests {
 
-    private lateinit var client: WebClient
-
-    @LocalServerPort
-    private var port: Int = 8080
-
-    @BeforeAll
-    fun setup() {
-        client = WebClient.create("http://localhost:$port")
-    }
+    @Autowired
+    private lateinit var client: WebTestClient
 
     @Test
     fun `get all posts`() {
         client.get()
             .uri("/posts")
             .accept(MediaType.APPLICATION_JSON)
-            .exchangeToFlux {
-                assertThat(it.statusCode()).isEqualTo(HttpStatus.OK)
-                it.bodyToFlux(Post::class.java)
-            }
-            .`as` { StepVerifier.create(it) }
-            .expectNextCount(2)
-            .verifyComplete()
+            .exchange()
+            .expectStatus().isOk
+            .expectHeader().contentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+            .expectBodyList(Post::class.java)
+            .hasSize(2)
     }
 
 }

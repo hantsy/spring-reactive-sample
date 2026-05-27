@@ -1,33 +1,28 @@
 package com.example.demo.domain;
 
 import com.example.demo.CacheConfig;
+import com.example.demo.ContainersConfiguration;
 import com.example.demo.DataR2dbcConfig;
 import com.example.demo.Post;
 import com.example.demo.PostRepository;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.event.ContextClosedEvent;
-import org.springframework.core.env.MapPropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.testcontainers.postgresql.PostgreSQLContainer;
-import org.testcontainers.utility.MountableFile;
-
-import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-@Slf4j
-@SpringJUnitConfig(classes = {PostRepositoryTest.TestConfig.class})
-@ContextConfiguration(initializers = {PostRepositoryTest.TestContainerInitializer.class})
+@ContextConfiguration(initializers = {ContainersConfiguration.class})
+@SpringJUnitConfig(classes = { PostRepositoryTest.TestConfig.class })
 public class PostRepositoryTest {
+
+    private static final Logger log = LoggerFactory.getLogger(PostRepositoryTest.class);
 
     @Autowired
     PostRepository posts;
@@ -63,41 +58,7 @@ public class PostRepositoryTest {
         posts.findAll().subscribe(p -> log.debug("get saved post: {}", p));
     }
 
-    //see: https://github.com/testcontainers/testcontainers-java/discussions/4841
-    static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
-        final PostgreSQLContainer container = new PostgreSQLContainer("postgres:18")
-                .withCopyFileToContainer(
-                        MountableFile.forClasspathResource("init.sql"),
-                        "/docker-entrypoint-initdb.d/init.sql"
-                );
-
-        @Override
-        public void initialize(ConfigurableApplicationContext context) {
-            container.start();
-
-            log.info(" container.getFirstMappedPort():: {}", container.getFirstMappedPort());
-            context.addApplicationListener(event -> {
-                if (event instanceof ContextClosedEvent) {
-                    container.stop();
-                }
-            });
-
-            context.getEnvironment().getPropertySources()
-                    .addFirst(
-                            new MapPropertySource("testdatasource",
-                                    Map.of("r2dbc.host", container.getHost(),
-                                            "r2dbc.port", container.getFirstMappedPort(),
-                                            "r2dbc.database", container.getDatabaseName(),
-                                            "r2dbc.username", container.getUsername(),
-                                            "r2dbc.password", container.getPassword()
-                                    )
-                            )
-                    );
-        }
-    }
-
-    @Configuration
+    @TestConfiguration(proxyBeanMethods = false)
     @Import(value = {
             DataR2dbcConfig.class,
             CacheConfig.class

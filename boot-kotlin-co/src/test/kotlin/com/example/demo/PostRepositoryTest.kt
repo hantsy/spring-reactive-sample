@@ -11,29 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest
 import org.springframework.context.annotation.Import
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
-import org.springframework.test.context.DynamicPropertyRegistry
-import org.springframework.test.context.DynamicPropertySource
-import org.testcontainers.junit.jupiter.Container
-import org.testcontainers.junit.jupiter.Testcontainers
 
-
-@Testcontainers
 @DataMongoTest
 @Import(TestcontainersConfiguration::class)
 class PostRepositoryTest {
     companion object {
         private val log = LoggerFactory.getLogger(PostRepositoryTest::class.java)
-
-//        @Container
-//        val mongoDBContainer: MongoDBContainer = MongoDBContainer("mongo")
-//
-//        @DynamicPropertySource
-//        fun registerDynamicProperties(registry: DynamicPropertyRegistry) {
-//            registry.add("spring.data.mongodb.uri") {
-//                mongoDBContainer.replicaSetUrl
-//            }
-//        }
-
     }
 
     @Autowired
