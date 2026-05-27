@@ -1,13 +1,13 @@
-name: spring-reactive-boot-mongo
+name: spring-reactive-boot-data-mongo-template
 
 on:
   push:
     paths:
-      - "boot-mongo/**"
+      - "boot-data-mongo-template/**"
     branches: [ master ]
   pull_request:
     paths:
-      - "boot-mongo/**"
+      - "boot-data-mongo-template/**"
     types:
       - opened
       - synchronize
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: boot-mongo
+        working-directory: boot-data-mongo-template
 
     steps:
     - uses: actions/checkout@v6

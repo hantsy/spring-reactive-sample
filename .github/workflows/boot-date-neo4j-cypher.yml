@@ -1,13 +1,13 @@
-name: spring-reactive-boot-neo4j
+name: spring-reactive-boot-date-neo4j-cypher
 
 on:
   push:
     paths:
-      - "boot-neo4j/**"
+      - "boot-date-neo4j-cypher/**"
     branches: [ master ]
   pull_request:
     paths:
-      - "boot-neo4j/**"
+      - "boot-date-neo4j-cypher/**"
     types:
       - opened
       - synchronize
@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: boot-neo4j
+        working-directory: boot-date-neo4j-cypher
 
     steps:
     - uses: actions/checkout@v6
@@ -30,6 +30,6 @@ jobs:
       with:
         java-version: '21'
         distribution: 'temurin'
-        cache: 'maven'  
+        cache: 'maven'
     - name: Build with Maven
       run: ./mvnw -B package --file pom.xml
