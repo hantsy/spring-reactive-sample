@@ -78,7 +78,7 @@ updates:
     schedule:
       interval: "monthly"      
   - package-ecosystem: "maven"
-    directory: "/boot-mongo"
+    directory: "/boot-data-mongo-template"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -94,15 +94,15 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-neo4j"
+    directory: "/boot-date-neo4j-template"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-neo4j-cypher"
+    directory: "/boot-data-neo4j-cypher"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-redis"
+    directory: "/boot-data-redis-template"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"

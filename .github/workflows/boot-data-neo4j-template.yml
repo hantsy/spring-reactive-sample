@@ -1,13 +1,13 @@
-name: spring-reactive-boot-redis
+name: spring-reactive-boot-data-neo4j-template
 
 on:
   push:
     paths:
-      - "boot-redis/**"
+      - "boot-data-neo4j-template/**"
     branches: [ master ]
   pull_request:
     paths:
-      - "boot-redis/**"
+      - "boot-data-neo4j-template/**"
     types:
       - opened
       - synchronize
@@ -19,17 +19,17 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: "boot-redis"
+        working-directory: boot-data-neo4j-template
 
     steps:
     - uses: actions/checkout@v6
       with:
           fetch-depth: 0
     - name: Set up JDK
-      uses: actions/setup-java@v4
+      uses: actions/setup-java@v5
       with:
         java-version: '21'
         distribution: 'temurin'
-        cache: 'maven' 
+        cache: 'maven'  
     - name: Build with Maven
-      run: ./mvnw clean verify
+      run: ./mvnw -B package --file pom.xml
