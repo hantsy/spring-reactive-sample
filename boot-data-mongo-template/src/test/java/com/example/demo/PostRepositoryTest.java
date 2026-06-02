@@ -6,14 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.mongodb.MongoDBContainer;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -25,7 +19,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
-@Import({PostRepository.class, ContainersConfig.class})
+@Import({PostRepository.class, TestcontainersConfiguration.class})
 @Slf4j
 public class PostRepositoryTest {
 
@@ -35,17 +29,25 @@ public class PostRepositoryTest {
     @Autowired
     PostRepository postRepository;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() {
+        var latch = new CountDownLatch(1);
         this.reactiveMongoTemplate.remove(Post.class).all()
-                .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e),
-                        () -> log.debug("done"));
+                .subscribe(
+                        r -> {
+                            log.debug("delete all posts: " + r);
+                            latch.countDown();
+                        },
+                        e -> log.debug("error: " + e),
+                        () -> log.debug("done")
+                );
+        latch.await(500, TimeUnit.MILLISECONDS);
     }
 
     @Test
     public void testSavePostAndFindByTitleContains() {
-        this.postRepository.save(
-                        Post.builder().content("my test content").title("my test title").build())
+        this.postRepository.save(Post.builder().content("my test content").title("my test title").build())
                 .flatMapMany(p -> this.postRepository.findByTitleContains("test"))
                 .as(StepVerifier::create)
                 .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
@@ -55,8 +57,7 @@ public class PostRepositoryTest {
 
     @Test
     public void testSavePost() {
-        StepVerifier.create(this.postRepository.save(
-                        Post.builder().content("my test content").title("my test title").build()))
+        StepVerifier.create(this.postRepository.save(Post.builder().content("my test content").title("my test title").build()))
                 .consumeNextWith(p -> assertThat(p.getTitle()).isEqualTo("my test title"))
                 .expectComplete()
                 .verify();

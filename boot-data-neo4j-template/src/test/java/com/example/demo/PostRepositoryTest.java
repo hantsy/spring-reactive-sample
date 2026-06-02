@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @Transactional(propagation = Propagation.NOT_SUPPORTED) // reactive is not supported
 @Slf4j
 @ActiveProfiles("test")
-@Import(value = {Neo4jTxConfiguration.class, ContainersConfig.class})
+@Import(value = {Neo4jTxConfiguration.class, TestcontainersConfiguration.class})
 public class PostRepositoryTest {
 
     @Autowired

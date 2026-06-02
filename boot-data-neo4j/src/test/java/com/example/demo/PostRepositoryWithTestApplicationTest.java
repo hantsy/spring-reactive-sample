@@ -19,10 +19,10 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = {DemoApplication.class, ContainersConfig.class})
+@SpringBootTest(classes = {DemoApplication.class, TestcontainersConfiguration.class})
 @Slf4j
 @ActiveProfiles("test")
-public class PostRepositoryWithTestDemoApplicationTest {
+public class PostRepositoryWithTestApplicationTest {
 
     @Autowired
     private PostRepository posts;

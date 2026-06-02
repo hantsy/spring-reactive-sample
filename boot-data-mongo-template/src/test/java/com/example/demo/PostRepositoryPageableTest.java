@@ -7,11 +7,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
-import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import reactor.test.StepVerifier;
 
@@ -24,7 +22,7 @@ import java.util.stream.IntStream;
 import static java.util.Comparator.comparing;
 
 @DataMongoTest
-@Import({PostRepository.class, ContainersConfig.class})
+@Import({PostRepository.class, TestcontainersConfiguration.class})
 @TestPropertySource(properties = {
         "logging.level.org.springframework.data.mongodb.core.ReactiveMongoTemplate=DEBUG",
         "logging.level.com.example.demo=DEBUG"

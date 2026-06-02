@@ -11,7 +11,7 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import java.time.Duration
 
 @AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [ContainersConfig.class])
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = [TestcontainersConfiguration.class])
 class IntegrationTests {
 
     @Autowired

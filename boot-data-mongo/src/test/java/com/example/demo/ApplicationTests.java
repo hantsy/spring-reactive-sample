@@ -5,16 +5,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTestClient;
-import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@AutoConfigureWebTestClient
-@SpringBootTest(classes = {DemoApplication.class, ContainersConfig.class})
+@SpringBootTest(classes = {DemoApplication.class, TestcontainersConfiguration.class})
 public class ApplicationTests {
 
-    @Autowired
-    ApplicationContext ctx;
+//    @Autowired
+//    ApplicationContext ctx;
 
     WebTestClient client;
 

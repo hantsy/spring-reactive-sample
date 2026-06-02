@@ -26,7 +26,7 @@ import static java.util.Comparator.comparing;
         "logging.level.com.example.demo=DEBUG"
 })
 @Slf4j
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 public class PostRepositoryPageableTest {
 
     @Autowired

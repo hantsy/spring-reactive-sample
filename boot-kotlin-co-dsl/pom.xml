@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>spring-reactive-sample-boot-kotlin-co-dsl</artifactId>
+    <artifactId>boot-kotlin-co-dsl-example</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>spring-reactive-sample-boot-kotlin-co-dsl</name>

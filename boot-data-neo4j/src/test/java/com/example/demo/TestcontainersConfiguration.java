@@ -8,12 +8,12 @@ import org.testcontainers.neo4j.Neo4jContainer;
 import java.time.Duration;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class ContainersConfig {
+public class TestcontainersConfiguration {
 
     @Bean
     @ServiceConnection
     Neo4jContainer neo4jContainer() {
-        return new Neo4jContainer("neo4j:5")
+        return new Neo4jContainer("neo4j:latest")
                 .withStartupTimeout(Duration.ofMinutes(5));
     }
 }

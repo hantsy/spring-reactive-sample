@@ -13,7 +13,7 @@ import java.time.Duration;
 @TestConfiguration(proxyBeanMethods = false)
 public class TestcontainersConfiguration {
     private static final String COUCHBASE_IMAGE_NAME = "couchbase";
-    private static final String DEFAULT_IMAGE_NAME = "couchbase/server:7";
+    private static final String DEFAULT_IMAGE_NAME = "couchbase/server:latest";
     private static final DockerImageName DEFAULT_IMAGE = DockerImageName.parse(COUCHBASE_IMAGE_NAME)
             .asCompatibleSubstituteFor(DEFAULT_IMAGE_NAME);
 

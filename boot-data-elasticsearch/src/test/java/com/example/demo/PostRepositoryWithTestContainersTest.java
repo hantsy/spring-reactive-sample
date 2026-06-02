@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataElasticsearchTest
 @ActiveProfiles("test")
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 @Slf4j
 class PostRepositoryWithTestContainersTest {
 

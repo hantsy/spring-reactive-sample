@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataNeo4jTest
 @Transactional(propagation = Propagation.NOT_SUPPORTED) // reactive is not supported
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 @Slf4j
 public class PostRepositoryWithTestcontainersTest {
 

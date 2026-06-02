@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest(classes = {DemoApplication.class, ContainersConfig.class})
+@SpringBootTest(classes = {DemoApplication.class, TestcontainersConfiguration.class})
 @ActiveProfiles("test")
 @Slf4j
 public class PostRepositoryCypherTest {

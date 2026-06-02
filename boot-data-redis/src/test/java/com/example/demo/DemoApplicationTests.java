@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(classes = {DemoApplication.class, ContainersConfig.class})
+@SpringBootTest(classes = {DemoApplication.class, TestcontainersConfiguration.class})
 public class DemoApplicationTests {
 
   @Autowired

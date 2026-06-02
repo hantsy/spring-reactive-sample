@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 @Slf4j
 @ActiveProfiles("test")
 public class PostRepositoryTest {
@@ -31,10 +31,18 @@ public class PostRepositoryTest {
     @Autowired
     PostRepository postRepository;
 
+    @SneakyThrows
     @BeforeEach
     public void setup() {
+        CountDownLatch latch = new CountDownLatch(1);
         this.reactiveMongoTemplate.remove(Post.class).all()
-                .subscribe(r -> log.debug("delete all posts: " + r), e -> log.debug("error: " + e), () -> log.debug("done"));
+                .subscribe(r -> {
+                            log.debug("delete all posts: " + r);
+                            latch.countDown();
+                        },
+                        e -> log.debug("error: " + e),
+                        () -> log.debug("done"));
+        latch.await(500, TimeUnit.MILLISECONDS);
     }
 
     @Test

@@ -21,7 +21,7 @@ import static java.util.Arrays.asList;
 @DataMongoTest
 @Slf4j
 @ActiveProfiles("test")
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 public class PostRepositoryTest {
 
     @Autowired

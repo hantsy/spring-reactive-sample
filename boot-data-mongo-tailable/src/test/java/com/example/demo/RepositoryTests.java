@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 @Slf4j
 @ActiveProfiles("test")
 class RepositoryTests {

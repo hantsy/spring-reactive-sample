@@ -18,7 +18,7 @@ import java.util.concurrent.CountDownLatch;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataCassandraTest
-@Import(ContainersConfig.class)
+@Import(TestcontainersConfiguration.class)
 @Slf4j
 class PostRepositoryWithTestContainersTest {
 

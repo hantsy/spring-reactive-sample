@@ -9,16 +9,16 @@ import org.springframework.boot.webtestclient.autoconfigure.AutoConfigureWebTest
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 @AutoConfigureWebTestClient
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = {DemoApplication.class, ContainersConfig.class})
+@SpringBootTest(
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+        classes = {DemoApplication.class, TestcontainersConfiguration.class}
+)
 public class IntegrationTests {
 
     @LocalServerPort
     int port;
 
     WebTestClient client;
-
-//    @Autowired
-//    WebTestClient client;
 
     @BeforeEach
     public void setup() {

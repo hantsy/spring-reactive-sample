@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Bean;
 import java.time.Duration;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class ContainersConfig {
+public class TestcontainersConfiguration {
 
     @Bean
-    @ServiceConnection(name = "cassandra")
+    @ServiceConnection(name = "cassandra:latest")
     CassandraContainer cassandraContainer() {
-        return new CassandraContainer("cassandra")
+        return new CassandraContainer("cassandra:latest")
             .withInitScript("init.cql")
             .withStartupTimeout(Duration.ofMinutes(5));
     }

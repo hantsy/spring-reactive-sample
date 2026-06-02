@@ -12,7 +12,7 @@ class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     fun mongoDbContainer(): MongoDBContainer {
-        return MongoDBContainer(DockerImageName.parse("mongo").withTag("8.3.2")).withSharding()
+        return MongoDBContainer(DockerImageName.parse("mongo").withTag("latest")).withSharding()
     }
 
 }

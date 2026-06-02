@@ -2,19 +2,16 @@ package com.example.demo;
 
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
-import org.testcontainers.neo4j.Neo4jContainer;
 import org.springframework.context.annotation.Bean;
-
-import java.time.Duration;
+import org.testcontainers.mongodb.MongoDBContainer;
+import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class ContainersConfig {
+public class TestcontainersConfiguration {
 
     @Bean
     @ServiceConnection
-    Neo4jContainer neo4jContainer() {
-        return new Neo4jContainer("neo4j:5")
-                .withStartupTimeout(Duration.ofMinutes(5));
+    MongoDBContainer mongoDBContainer() {
+        return new MongoDBContainer(DockerImageName.parse("mongo").withTag("latest")).withSharding()
     }
-
 }

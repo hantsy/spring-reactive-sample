@@ -7,12 +7,11 @@ import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.utility.DockerImageName;
 
 @TestConfiguration(proxyBeanMethods = false)
-public class ContainersConfig {
+public class TestcontainersConfiguration {
 
     @Bean
-    @ServiceConnection(name = "redis")
-    GenericContainer<?> redisContainer() {
-        return new GenericContainer<>(DockerImageName.parse("redis").withTag("7.0.11-alpine"))
-                .withExposedPorts(6379);
-    }
+	@ServiceConnection(name = "redis")
+	GenericContainer<?> redisContainer() {
+		return new GenericContainer<>(DockerImageName.parse("redis:latest")).withExposedPorts(6379);
+	}
 }
