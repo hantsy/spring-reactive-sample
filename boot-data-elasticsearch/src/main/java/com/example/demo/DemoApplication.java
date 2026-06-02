@@ -29,7 +29,7 @@ public class DemoApplication {
 
 @Component
 @Slf4j
-@Profile("default")
+@Profile("dev")
 class DataInitializer implements CommandLineRunner {
 
     private final PostRepository posts;
