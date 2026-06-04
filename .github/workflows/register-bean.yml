@@ -1,4 +1,4 @@
-name: spring-reactive-register-bean
+name: register-bean
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd register-bean
         mvn -B package --file pom.xml
+

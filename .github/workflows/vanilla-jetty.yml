@@ -1,4 +1,4 @@
-name: spring-reactive-vanilla-jetty
+name: vanilla-jetty
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd vanilla-jetty
         mvn -B package --file pom.xml
+

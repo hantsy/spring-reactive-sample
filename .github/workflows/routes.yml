@@ -1,4 +1,4 @@
-name: spring-reactive-routes
+name: routes
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd routes
         mvn -B package --file pom.xml
+

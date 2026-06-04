@@ -1,4 +1,4 @@
-name: spring-reactive-vanilla
+name: vanilla
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd vanilla
         mvn -B package --file pom.xml
+

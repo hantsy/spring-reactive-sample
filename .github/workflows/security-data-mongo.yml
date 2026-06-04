@@ -1,4 +1,4 @@
-name: spring-reactive-security-data-mongo
+name: security-data-mongo
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd security-data-mongo
         mvn -B package --file pom.xml
+

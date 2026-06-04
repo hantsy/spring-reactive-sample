@@ -1,4 +1,4 @@
-name: spring-reactive-data-elasticsearch
+name: data-elasticsearch
 
 on:
   push:
@@ -37,3 +37,4 @@ jobs:
       run: |
         cd data-elasticsearch
         mvn -B package --file pom.xml
+
