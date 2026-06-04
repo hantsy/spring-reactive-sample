@@ -1,4 +1,4 @@
-name: spring-reactive-kotlin-routes
+name: kotlin-routes
 
 on:
   push:
@@ -37,3 +37,4 @@ jobs:
       run: |
         cd kotlin-routes
         mvn -B package --file pom.xml
+

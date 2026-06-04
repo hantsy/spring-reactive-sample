@@ -1,4 +1,4 @@
-name: spring-reactive-groovy-dsl
+name: groovy-dsl
 
 on:
   push:
@@ -37,3 +37,4 @@ jobs:
       run: |
         cd groovy-dsl
         mvn -B package --file pom.xml
+

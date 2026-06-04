@@ -3,7 +3,7 @@ name: Greetings
 on: [pull_request, issues]
 
 jobs:
-  greeting:
+  build:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/first-interaction@v1
@@ -11,3 +11,4 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: 'Thanks for reporting issues'
         pr-message: 'Thanks for sending your prs'
+

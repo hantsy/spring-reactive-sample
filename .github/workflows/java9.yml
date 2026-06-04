@@ -1,4 +1,4 @@
-name: spring-reactive-java9
+name: java9
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd java9
         mvn -B package --file pom.xml
+

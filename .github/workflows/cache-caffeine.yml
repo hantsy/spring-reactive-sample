@@ -1,4 +1,4 @@
-name: spring-reactive-cache-caffeine
+name: cache-caffeine
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd cache-caffeine
         mvn -B package --file pom.xml
+

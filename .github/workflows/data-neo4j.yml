@@ -1,4 +1,4 @@
-name: spring-reactive-data-neo4j
+name: data-neo4j
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd data-neo4j
         mvn -B package --file pom.xml
+

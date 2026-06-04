@@ -1,4 +1,4 @@
-name: spring-reactive-java8
+name: java8
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd java8
         mvn -B package --file pom.xml
+

@@ -1,4 +1,4 @@
-name: spring-reactive-web-filter
+name: web-filter
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd web-filter
         mvn -B package --file pom.xml
+

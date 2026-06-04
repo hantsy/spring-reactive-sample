@@ -1,4 +1,4 @@
-name: spring-reactive-schedule
+name: schedule
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd schedule
         mvn -B package --file pom.xml
+

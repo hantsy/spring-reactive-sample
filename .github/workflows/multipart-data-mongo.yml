@@ -1,4 +1,4 @@
-name: spring-reactive-multipart-data-mongo
+name: multipart-data-mongo
 
 on:
   push:
@@ -37,3 +37,4 @@ jobs:
       run: |
         cd multipart-data-mongo
         mvn -B package --file pom.xml
+

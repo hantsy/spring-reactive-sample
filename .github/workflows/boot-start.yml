@@ -1,4 +1,4 @@
-name: spring-reactive-boot-start
+name: boot-start
 
 on:
   push:
@@ -33,3 +33,4 @@ jobs:
         cache: 'maven'
     - name: Build with Maven
       run: ./mvnw -B package --file pom.xml
+

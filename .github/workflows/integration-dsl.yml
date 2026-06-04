@@ -1,4 +1,4 @@
-name: spring-reactive-integration-dsl
+name: integration-dsl
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd integration-dsl
         mvn -B package --file pom.xml
+

@@ -1,4 +1,4 @@
-name: spring-reactive-smallrye-mutiny
+name: smallrye-mutiny
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd smallrye-mutiny
         mvn -B package --file pom.xml
+

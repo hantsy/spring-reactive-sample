@@ -117,6 +117,14 @@ The following table lists all sample codes available in this repository.
 | [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | Spring Data Mongo example with GridFS support |
 | [boot-data-mongo-tailable](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-tailable) | Spring Data Mongo tailable document example |
 | [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler example |
+| [boot-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-cassandra) | Spring Boot Cassandra example |
+| [boot-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-couchbase) | Spring Boot Couchbase example |
+| [boot-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-elasticsearch) | Spring Boot ElasticSearch example |
+| [boot-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mongo) | Spring Boot Mongo example |
+| [boot-data-mongo-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-template) | Spring Data Mongo template example |
+| [boot-data-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-cypher) | Spring Data Neo4j using Cypher example |
+| [boot-data-neo4j-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-template) | Spring Data Neo4j template example |
+| [boot-data-redis-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis-template) | Spring Data Redis template example |
 
 
 ### Legacy Codes

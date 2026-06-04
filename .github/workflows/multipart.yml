@@ -1,4 +1,4 @@
-name: spring-reactive-multipart
+name: multipart
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd multipart
         mvn -B package --file pom.xml
+

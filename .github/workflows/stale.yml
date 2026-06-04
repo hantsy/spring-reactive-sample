@@ -1,11 +1,11 @@
-name: Mark stale issues and pull requests
+name: stale
 
 on:
   schedule:
   - cron: "0 0 * * *"
 
 jobs:
-  stale:
+  build:
 
     runs-on: ubuntu-latest
 
@@ -19,3 +19,4 @@ jobs:
         stale-pr-label: 'no-pr-activity'
         days-before-stale: 30
         days-before-close: 5
+

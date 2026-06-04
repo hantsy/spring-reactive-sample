@@ -1,4 +1,4 @@
-name: spring-reactive-mvc-thymeleaf
+name: mvc-thymeleaf
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd mvc-thymeleaf
         mvn -B package --file pom.xml
+
