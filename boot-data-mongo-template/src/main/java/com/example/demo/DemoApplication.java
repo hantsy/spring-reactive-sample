@@ -46,6 +46,7 @@ public class DemoApplication {
 
 @Component
 @Slf4j
+@Profile("dev")
 class DataInitializer implements CommandLineRunner {
 
   private final PostRepository posts;

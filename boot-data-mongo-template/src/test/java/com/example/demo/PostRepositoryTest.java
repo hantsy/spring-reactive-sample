@@ -6,8 +6,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.mongodb.test.autoconfigure.DataMongoTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.mongodb.MongoDBContainer;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
@@ -32,17 +38,17 @@ public class PostRepositoryTest {
     @SneakyThrows
     @BeforeEach
     public void setup() {
-        var latch = new CountDownLatch(1);
+		var latch = new CountDownLatch(1);
         this.reactiveMongoTemplate.remove(Post.class).all()
                 .subscribe(
-                        r -> {
-                            log.debug("delete all posts: " + r);
-                            latch.countDown();
-                        },
-                        e -> log.debug("error: " + e),
-                        () -> log.debug("done")
-                );
-        latch.await(500, TimeUnit.MILLISECONDS);
+					r -> {
+						log.debug("delete all posts: " + r);
+						latch.countDown();
+					}, 
+					e -> log.debug("error: " + e),
+					() -> log.debug("done")
+				);
+		latch.await(500, TimeUnit.MILLISECONDS);
     }
 
     @Test

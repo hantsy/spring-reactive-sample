@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataCassandraTest
 @Import(TestcontainersConfiguration.class)
 @Slf4j
-class PostRepositoryWithTestContainersTest {
+class PostRepositoryTest {
 
     @Autowired
     private PostRepository posts;
