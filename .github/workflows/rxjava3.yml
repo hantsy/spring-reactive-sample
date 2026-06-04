@@ -1,4 +1,4 @@
-name: spring-reactive-rxjava3
+name: rxjava3
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd rxjava3
         mvn -B package --file pom.xml
+

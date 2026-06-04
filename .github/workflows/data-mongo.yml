@@ -1,4 +1,4 @@
-name: spring-reactive-data-mongo
+name: data-mongo
 
 on:
   push:
@@ -37,3 +37,4 @@ jobs:
       run: |
         cd data-mongo
         mvn -B package --file pom.xml
+

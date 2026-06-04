@@ -46,6 +46,10 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/boot-neo4j"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/boot-data-redis"
     schedule:
       interval: "monthly"
@@ -72,11 +76,11 @@ updates:
   - package-ecosystem: "maven"
     directory: "/boot-kotlin-co"
     schedule:
-      interval: "monthly"    
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/boot-kotlin-co-dsl"
     schedule:
-      interval: "monthly"      
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/boot-data-mongo-template"
     schedule:
@@ -126,30 +130,9 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-pulsar"
-    schedule:
-      interval: "monthly" 
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-kafka/sender"
-    schedule:
-      interval: "monthly"   
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-kafka/receiver"
-    schedule:
-      interval: "monthly"  
-
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-rabbitmq/sender"
-    schedule:
-      interval: "monthly"  
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-rabbitmq/receiver"
-    schedule:
-      interval: "monthly"  
-  - package-ecosystem: "maven"
     directory: "/cache"
     schedule:
-      interval: "monthly"     
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/cache-caffeine"
     schedule:
@@ -167,17 +150,13 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/client-reactor-netty2"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
     directory: "/client-jdk11-httpclient"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/client-apache-httpclient5"
     schedule:
-      interval: "monthly"      
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/data-cassandra"
     schedule:
@@ -293,11 +272,11 @@ updates:
   - package-ecosystem: "maven"
     directory: "/event"
     schedule:
-      interval: "monthly" 
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/schedule"
     schedule:
-      interval: "monthly"        
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/security"
     schedule:
@@ -347,10 +326,6 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/vanilla-reactor-netty2"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
     directory: "/vanilla-jetty"
     schedule:
       interval: "monthly"
@@ -371,7 +346,35 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/websocket-reactor-netty2"
+    directory: "/boot-cassandra"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-couchbase"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-elasticsearch"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-mongo"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-mongo-template"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-neo4j-cypher"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-neo4j-template"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-redis-template"
     schedule:
       interval: "monthly"
   - package-ecosystem: "devcontainers"

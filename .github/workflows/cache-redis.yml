@@ -1,4 +1,4 @@
-name: spring-reactive-cache-redis
+name: cache-redis
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd cache-redis
         mvn -B package --file pom.xml
+

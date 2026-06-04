@@ -1,4 +1,4 @@
-name: spring-reactive-client-jdk11-httpclient
+name: client-jdk11-httpclient
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd client-jdk11-httpclient
         mvn -B package --file pom.xml
+

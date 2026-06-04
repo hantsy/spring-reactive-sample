@@ -1,4 +1,4 @@
-name: spring-reactive-apache-httpclient5
+name: apache-httpclient5
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd apache-httpclient5
         mvn -B package --file pom.xml
+

@@ -1,4 +1,4 @@
-name: spring-reactive-security-form
+name: security-form
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd security-form
         mvn -B package --file pom.xml
+

@@ -1,4 +1,4 @@
-name: spring-reactive-exception-handler
+name: exception-handler
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd exception-handler
         mvn -B package --file pom.xml
+

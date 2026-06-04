@@ -1,4 +1,4 @@
-name: spring-reactive-security-user-properties
+name: security-user-properties
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd security-user-properties
         mvn -B package --file pom.xml
+

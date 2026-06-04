@@ -1,4 +1,4 @@
-name: spring-reactive-kotlin-co
+name: kotlin-co
 
 on:
   push:
@@ -37,3 +37,4 @@ jobs:
       run: |
         cd kotlin-co
         mvn -B package --file pom.xml
+

@@ -1,4 +1,4 @@
-name: spring-reactive-war
+name: war
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd war
         mvn -B clean verify --file pom.xml -Pintegration
+

@@ -1,4 +1,4 @@
-name: spring-reactive-event
+name: event
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd event
         mvn -B package --file pom.xml
+

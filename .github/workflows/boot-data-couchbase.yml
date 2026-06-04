@@ -1,4 +1,4 @@
-name: spring-reactive-boot-data-couchbase
+name: boot-data-couchbase
 
 on:
   push:
@@ -35,3 +35,4 @@ jobs:
         mvn -q clean test -Dtest=PostRepositoryWithTestcontainersTest
         docker rm $(docker ps -aq) -f
         mvn -q clean test -Dtest=PostRepositoryTest
+

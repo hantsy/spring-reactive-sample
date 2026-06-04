@@ -1,4 +1,4 @@
-name: spring-reactive-session-header
+name: session-header
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd session-header
         mvn -B package --file pom.xml
+

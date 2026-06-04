@@ -1,4 +1,4 @@
-name: spring-reactive-client-jetty
+name: client-jetty
 
 on:
   push:
@@ -32,3 +32,4 @@ jobs:
       run: |
         cd client-jetty
         mvn -B package --file pom.xml
+
