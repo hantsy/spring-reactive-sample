@@ -399,14 +399,6 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-data-neo4j-cypher"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-neo4j-template"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
     directory: "/boot-data-redis-template"
     schedule:
       interval: "monthly"
