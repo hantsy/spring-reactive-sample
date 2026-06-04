@@ -15,7 +15,7 @@
     <name>spring-reactive-sample-boot-reactor-rabbitmq-receiver</name>
     <description>Demo project for Spring Boot</description>
     <properties>
-        <java.version>21</java.version>
+        <java.version>25</java.version>
     </properties>
     <dependencies>
         <dependency>
