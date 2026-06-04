@@ -22,8 +22,8 @@
 		<kotlin.compiler.incremental>true</kotlin.compiler.incremental>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.release>21</maven.compiler.release>
-		<kotlin.version>2.2.21</kotlin.version>
+		<maven.compiler.release>25</maven.compiler.release>
+		<kotlin.version>2.4.0</kotlin.version>
 		<maven-surefire-plugin.version>3.5.3</maven-surefire-plugin.version>
 	</properties>
 
