@@ -1,6 +1,6 @@
 ---
 title: Spring Data ElasticSearch
-parent: Rective Data Operations
+parent: Reactive Data Operations
 nav_order: 8
 ---
 

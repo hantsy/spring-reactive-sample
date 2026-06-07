@@ -9,21 +9,22 @@ toc: true
 
 Like the traditional Spring MVC, Spring WebFlux also includes the capability to rendering views by the integrated template engine.
 
-## ThymeLeaf
+## Thymeleaf
 
-Thymeleaf  is the most popular template engine in Spring ecosystem.  
+Thymeleaf is the most popular template engine in the Spring ecosystem.
 
-Add thymeleaf related dependencies.
+Add Thymeleaf-related dependencies. Use the Thymeleaf Spring integration artifact that matches your Spring Framework version (e.g. thymeleaf-spring6/thymeleaf-spring7 when available).
 
 ```xml
 <dependency>
     <groupId>org.thymeleaf.extras</groupId>
     <artifactId>thymeleaf-extras-java8time</artifactId>
 </dependency>
+<!-- Use the Thymeleaf Spring integration artifact that matches your Spring version -->
 <dependency>
     <groupId>org.thymeleaf</groupId>
-    <artifactId>thymeleaf-spring5</artifactId>
-</dependency>     
+    <artifactId>thymeleaf-springX</artifactId>
+</dependency>
 ```
 
 Configure Thymeleaf in a Spring web application. 
@@ -127,7 +128,7 @@ Source codes:   [spring-reactive-sample/mvc-thymeleaf](https://github.com/hantsy
 
 ## Freemarker
 
-Spring 5 provides built-in support to Freemarker template engine.
+Spring Framework 7 provides built-in support for the Freemarker template engine in WebFlux.
 
 Add Freemarker dependencies.
 

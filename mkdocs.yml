@@ -46,7 +46,6 @@ markdown_extensions:
       permalink: true
 
 nav:
-  - Home: index.md
   - Preface: preface.md
   - Getting Started:
       - start/index.md
@@ -54,7 +53,6 @@ nav:
       - start/first.md
       - start/boot-first.md
   - Reactive Web:
-      - web/index.md
       - web/intro.md
       - web/web-filter.md
       - web/func.md
@@ -81,10 +79,8 @@ nav:
       - security/user-details-repo.md
       - security/form.md
   - Session:
-      - session/index.md
       - session/intro.md
   - Integration:
-      - int/index.md
       - int/intro.md
   - Other Topics:
       - other/kotlin.md
@@ -94,6 +90,5 @@ nav:
       - other/schedule.md
       - other/restdocs.md
       - other/testing.md
-      - other/rxjava.md
       - other/mutiny.md
       - other/java9.md

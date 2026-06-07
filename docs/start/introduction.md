@@ -1,80 +1,86 @@
 ---
-title: An introduction to Spring WebFlux
+title: Introduction to Spring WebFlux
 parent: Getting Started
 nav_order: 1
+toc: true
 ---
 
-# An introduction to Spring WebFlux
+# Introduction to Spring WebFlux
 
+Spring WebFlux is the reactive web framework in Spring Framework. It embraces asynchronous, non-blocking I/O and the Reactive Streams specification to build scalable, resource-efficient applications for modern cloud and microservice environments.
 
-**Reactive** or **Reactive Streams** is a hot topic in these years, you can see it in blog entries, presentations, or some online course.
+This introduction covers the Reactive Streams specification, common implementations (Project Reactor, RxJava 3, SmallRye Mutiny, and the Java Flow API), and how Spring WebFlux uses these technologies. Many readers find the linked API pages and implementation guides helpful; those links are preserved and expanded below.
 
-## What is Reactive Streams? 
+## Reactive Streams (the specification)
 
-The following is extracted from the official Reactive Streams website:
+Reactive Streams is a small set of interfaces that enable interoperable asynchronous stream processing with back pressure. Key interfaces:
 
->Reactive Streams is an initiative to provide a standard for asynchronous stream processing with non-blocking back pressure. This encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
+- `Publisher<T>` — produces potentially many values asynchronously.
+- `Subscriber<T>` — consumes values produced by a `Publisher`.
+- `Subscription` — manages demand and cancellation between `Publisher` and `Subscriber`.
+- `Processor` — a component that is both a `Subscriber` and a `Publisher`.
 
-Currently, the JVM specification is completed, it includes a Java API(four simple interfaces), a textual Specification, a TCK and implementation examples. 
+Spec and source: https://github.com/reactive-streams/reactive-streams-jvm
 
-There are 4 core components provided in ReactiveStreams JVM specification.
+Conformance tests (TCK): the Reactive Streams TCK validates implementations. Knowing about the TCK helps when comparing implementations.
 
-* [`Publisher<T>`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html) - A `Publisher` is a provider of a potentially unbounded number of sequenced elements, publishing them according to the demand received from its `Subscriber`(s). 
-* [`Subscriber<T>`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html) - Will receive call to `Subscriber.onSubscribe(Subscription)` once after passing an instance of `Subscriber` to `Publisher.subscribe(Subscriber)`.
-* [`Subscription`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html) -  A `Subscription` represents a one-to-one lifecycle of a `Subscriber` subscribing to a `Publisher`. 
-* [`Processor<T,R>`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Processor.html) -  A Processor represents a processing stage—which is both a `Subscriber` and a `Publisher` and obeys the contracts of both.
+## Implementations and libraries
 
-More info, please check  [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams)  project  and [API docs](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/package-summary.html).
+Spring WebFlux interoperates with multiple reactive libraries. The most common are:
 
-Reactor and RxJava 2/3 have implemented this specification, and Java 9 has already adopted it in the new Flow API. 
+- Project Reactor (recommended default)
+  - Official site and docs: https://projectreactor.io/
+  - API reference: https://projectreactor.io/docs/core/release/api/
+  - Types: `Mono<T>` (0..1) and `Flux<T>` (0..N). These implement `org.reactivestreams.Publisher` and offer rich operators for composition and transformation.
 
-## Reactor
+- RxJava 3 (adapter-supported)
+  - Official site and docs: https://github.com/ReactiveX/RxJava
+  - RxJava 3 maps well to Reactive Streams via adapters; **RxJava 2** is deprecated and removed from most modern samples.
 
-The [Reactor project](https://projectreactor.io/) team works close to the Spring Team, and Reactor is the default ReactiveStreams implementation supported in Spring WebFlux.
+- SmallRye Mutiny
+  - Project page and docs: https://smallrye.io/smallrye-mutiny/
+  - Mutiny offers a simple, fluent API for reactive programming and can be adapted to Reactive Streams types when integrating with WebFlux.
 
-In Reactor, there are two reactive types implements `Publisher` interface.
+- Java Flow API (`java.util.concurrent.Flow`)
+  - JDK (Java 9+) Flow API docs: https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.html
+  - `Flow.Publisher`/`Flow.Subscriber` interoperate with other Reactive Streams types via adapters and can be used as controller return types in Spring.
 
-* [`Flux`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html) -  A  [`Publisher`](https://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html?is-external=true) with rx operators that emits 0 to N elements, and then completes (successfully or with an error). 
-* [`Mono`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Mono.html) - A  [`Publisher`](https://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html?is-external=true) with basic rx operators that emits at most one item *via* the `onNext` signal then terminates with an `onComplete` signal (successful Mono, with or without value), or only emits a single `onError` signal (failed Mono).  
+Note: **RxJava 2** is considered legacy; this site removes RxJava 2-focused material and suggests **Project Reactor** or **RxJava 3/Mutiny** as modern alternatives. If retaining historical **RxJava 2** content is desired, those samples can be moved to a clearly marked legacy area.
 
-## RxJava 2 and RxJava 3
+## How Spring WebFlux uses the Reactive stack
 
-RxJava 2 and 3 APIs are similar, the difference is RxJava 2 targets Java 6 and RxJava 3 is rewritten in Java 8.  RxJava 2 is end of life, and for new projects RxJava 3 is preferred.
+Spring WebFlux builds on Reactive Streams and Project Reactor by default, but remains unopinionated about the underlying reactive runtime. Key points:
 
-In [RxJava](https://github.com/ReactiveX/RxJava), there are some terminologies.
+- Reactive return types: Controller methods and handler functions may return `Mono<T>`, `Flux<T>`, or any `org.reactivestreams.Publisher<T>`. Spring adapts between supported reactive types automatically.
 
-- [`Observable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Observable.html) - The `Observable` class is the non-backpressured, optionally multi-valued base reactive class that offers factory methods, intermediate operators and the ability to consume synchronous and/or asynchronous reactive dataflows. 
-- [`Flowable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Flowable.html) - The `Flowable` class that implements the [Reactive Streams](https://github.com/reactive-streams/reactive-streams-jvm) [`Publisher`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html?is-external=true) Pattern and offers factory methods, intermediate operators and the ability to consume reactive dataflows. `Flowable`s support backpressure and require `Subscriber`s to signal demand via [`Subscription.request(long)`](http://www.reactive-streams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html?is-external=true#request-long-).
-- [`Single`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Single.html) - The `Single` class implements the Reactive Pattern for a single value response.  `Single` behaves similarly to [`Observable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Observable.html) except that it can only emit either a single successful value or an error (there is no `onComplete` notification as there is for an `Observable`). 
-- [`Maybe`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Maybe.html) - The `Maybe` class represents a deferred computation and emission of a single value, no value at all or an exception. 
-- [`Completable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Completable.html) - The `Completable` class represents a deferred computation without any value but only indication for completion or exception.  `Completable` behaves similarly to [`Observable`](http://reactivex.io/RxJava/3.x/javadoc/io/reactivex/rxjava3/core/Observable.html) except that it can only emit either a completion or error signal (there is no `onNext` or `onSuccess` as with the other reactive types). 
+- Programming models:
+  - Annotated controllers (`@Controller` / `@RestController`) using `@GetMapping`, `@PostMapping`, etc.
+  - Functional handlers (`RouterFunction` + `HandlerFunction`) for a lightweight, functional style.
 
-## Flow API in Java 9+
+- Web clients and servers:
+  - `WebClient` — a non-blocking, reactive HTTP client that integrates with Reactor and other reactive types. Docs: https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#webflux-client
+  - Server runtimes — **Reactor Netty** is the default server for Spring Boot's WebFlux starter. **Eclipse Jetty** is supported as an alternative. **Undertow** is retained only in historical samples and is marked *deprecated)* here. Prefer **Reactor Netty** for new projects.
 
-Since Java 9,  Java platform adds an [java.util.concurrent.Flow](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/Flow.html)  interface which repackage all interfaces in [Reactive Streams for JVM](https://github.com/reactive-streams/reactive-streams-jvm#reactive-streams)  and a `Flow.Publisher` implementation class  - [SubmissionPublisher](https://docs.oracle.com/javase/9/docs/api/java/util/concurrent/SubmissionPublisher.html) .
+- Integration with other Spring projects:
+  - Spring Data (`R2DBC`, reactive repositories) for non-blocking database access.
+  - Spring Security reactive support for securing applications with `ServerHttpSecurity` and reactive user services.
+  - Spring Session and other modules provide reactive-friendly APIs when available.
 
-Java 11 adds a new reactive [Http Client API](https://docs.oracle.com/en/java/javase/11/docs/api/java.net.http/java/net/http/HttpClient.html) which is based on the Flow APIs. It frees you from using other 3rd party HttpClient libraries, such as Apache HttpClients, OkHttp, etc. when interacts with remote HTTP APIs.
+## Useful links and references
 
-## SmallRye Mutiny 
+- Reactive Streams spec: https://github.com/reactive-streams/reactive-streams-jvm
+- Project Reactor: https://projectreactor.io/ (Core API: `Mono`, `Flux`)
+- RxJava (ReactiveX): https://github.com/ReactiveX/RxJava
+- SmallRye Mutiny: https://smallrye.io/smallrye-mutiny/
+- Java Flow API (JDK): https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/concurrent/Flow.html
+- Spring WebFlux reference (Spring Framework): https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html
+- Spring Boot WebFlux starter: https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#web.reactive
 
-Since Spring Boot 2.5.5/Spring Framework 5.3.10, [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) is suppported.
+## Where to start in this guide
 
-SmallyRye Mutiny is an Reactive Streams implementation from RedHat. 
+- [Create a WebFlux application with Spring Boot][./boot-first.md] — fastest path using Spring Boot 4 starters and auto-configuration.
+- [Create a WebFlux application from Scratch](./first.md) — learn the low-level building blocks (`RouterFunctions`, `HandlerFunctions`, and Reactor primitives).
 
-There are two core types in the SmallRye Mutiny.
+Both tutorials in this book assume **Project Reactor** as the default reactive library but show how to adapt other libraries when needed. For historical or migration context, legacy samples are available but clearly marked as deprecated.
 
-* `Multi` - Similar to the Reactor `Flux`, it means there are 0 to many items in the stream. The `Multi` implements `Publisher` interface.
-* `Uni` - Similar to the Reactor `Mono`, but Uni accepts `null`. *NOTE: Uni does not implements Publisher.* 
-
-## Spring WebFlux
-
-The Spring embraces [Reactive Streams](http://www.reactive-streams.org/) in the new 5.x era
-
-For Spring developers, it brings a complete new programming model. 
-
-* Spring added a new `spring-webflux` module in it is core framework, and provided built-in reactive programming support via Reactor and RxJava 2/3(RxJava 1 support is removed in the latest Spring 5.3). 
-* Spring Security 5 also added reactive feature. 
-* Spring supports RSocket which a new bi-direction messaging protocol.
-* In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. For RDBMS, Spring created R2dbc sepc and R2dbc is part of Spring since 5.3. 
-* Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included since 2.0.
-* Spring Integration added flux message channel and reactive programming APIs.
+If any of the original API links or examples you recall are missing, say which ones and they will be re-added or expanded with direct anchors to the API docs.

@@ -16,8 +16,8 @@ WebClient client = WebClient.create("http://localhost:8080");
 client
 	.get()
 	.uri("/posts")
-	.exchange()
-	.flatMapMany(res -> res.bodyToFlux(Post.class))
+	.retrieve()
+	.bodyToFlux(Post.class)
 	.log()
 	.subscribe(post -> System.out.println("post: " + post));
 ```
@@ -82,5 +82,6 @@ public class DemoApplicationTests {
 
 The usage of the `WebTestClient` API is very similar to `WebClient`, but provides  methods to assert the response result.
 
-> NOTE: Although `WebClient` and `WebTestClient` looks similar, but `WebTestClient` is not derived from `WebClient`.
+> NOTE: Although `WebClient` and `WebTestClient` look similar, `WebTestClient` is a distinct test utility and is not derived from `WebClient`.    
+
 
