@@ -1,31 +1,26 @@
----
-title: An introduction to Reactive Web
-parent: Reactive Web
-nav_order: 1
-toc: true
----
 
 # An introduction to Reactive Web
 
-Unlike the Servlet stack, the Reactive Web Stack is rewritten from scratch using ReactiveStreams and Reactor API.
+Unlike the traditional Servlet stack, the new Reactive Web stack that introduced in Spring v5 was rewritten from scratch using ReactiveStreams specification and Reactor API.
 
-There are two important concepts in the *Reactive Web*  stack to handle web request.
+There are two important concepts in the _Reactive Web_ stack to handle a web request.
 
-* `WebHandler` - which is the high-level APIs to assemble the  resources eg. `WebFilter`, `ExceptionHandler`, etc. to handle web requests from client.
-* `HttpHandler` - which is a low-level API to adapt web handlers to the underlying runtime environment, such as Netty, as well as Servlet 3.1+ container which did provide async capability.
+- `WebHandler` - which is the _high-level_ APIs to assemble the resources eg. `WebFilter`, `ExceptionHandler`, etc. to handle web requests from client.
+- `HttpHandler` - which is a _low-level_ API to adapt web handlers to the underlying runtime environment, such as Netty, as well as Servlet 3.1+ container which did provide async capability.
 
-You can review the `Application` classes in the [Getting Started](../start) part.
+You can review the `Application` class in the former [Getting Started](../start) part.
 
-## Enable WebFlux
+## Enabling WebFlux
 
-To activate *Reactive Web*, create a `@Configuration`class, add an additional `@EnableWebFlux` to activate WebFlux support.
+To activate _Reactive Web_, create a `@Configuration`class, add an additional `@EnableWebFlux` annotation to enable WebFlux support.
 
 ```java
 @Configuration
 @EnableWebFlux
 class WebConfig {}
 ```
-Similar to the existing `WebMvcConfigurer` in the Servlet stack.  There is a `WebFluxConfigurer` interface for you  to customize the details of web resources, validation,  CORS,  etc.
+
+Similar to the existing `WebMvcConfigurer` in the Servlet stack. There is a `WebFluxConfigurer` interface for you to customize the details of web resources, validation, CORS, etc.
 
 You can create a configuration class to derive this interface and override the methods to customize the built-in configuration.
 
@@ -33,13 +28,13 @@ You can create a configuration class to derive this interface and override the m
 @Configuration
 @EnableWebFlux
 class WebConfig implements WebFluxConfigurer {}
-````
+```
 
-> NOTE: For Spring Boot applications, no extra steps are required  to activate  **WebFlux** if *spring-boot-starter-webflux* is included in the classpath.
+> NOTE: For Spring Boot applications, no extra steps are required to activate **WebFlux** if _spring-boot-starter-webflux_ is included in the classpath.
 
-## RxJava 2 and RxJava 3 
+## RxJava 3
 
-By default, Spring WebFlux  heavily depends on Reactor, but it also supports RxJava 2 and RxJava 3 APIs via adapters.
+By default, Spring WebFlux heavily depends on Reactor, but it also supports RxJava 3 APIs via adapters.
 
 To use RxJava APIs instead of Reactor's API, firstly add RxJava in project dependencies.
 
@@ -81,13 +76,13 @@ class PostController {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/rxjava2](https://github.com/hantsy/spring-reactive-sample/blob/master/rxjava2) and [spring-reactive-sample/rxjava3](https://github.com/hantsy/spring-reactive-sample/blob/master/rxjava3).
+For the complete codes, check [spring-reactive-sample/rxjava3](https://github.com/hantsy/spring-reactive-sample/blob/master/rxjava3).
 
 ## Java 9 Flow API
 
-As a member of the ReactiveStreams family, Spring WebFlux  also supports it.  You can use `Flow.Publisher` as the controller method return type or parameters.
+Java 9 introduced the `java.util.concurrent.Flow` API and tried to standardize it as part of the `java.util.concurrent` package. Spring WebFlux also provide adapter support for it. You can use `Flow.Publisher` as the controller method return type or parameters.
 
-> NOTE: Make sure you are using  Java 9 or the later versions.
+> NOTE: Make sure you are using Java 9 or the later versions.
 
 ```java
 @RestController
@@ -110,9 +105,11 @@ public class PostController {
 
 For the complete codes, check [spring-reactive-sample/java9](https://github.com/hantsy/spring-reactive-sample/blob/master/java9).
 
-## SmallRye Mutiny 
+## SmallRye Mutiny
 
 [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) support is added in Spring Framework 5.3.10. For developers, you can use Mutiny APIs instead of Reactor to build Spring WebFlux applications.
+
+> NOTE: The earlier versions of Smallry Mutiny supported ReactiveStreams APIs, but in the latest version, it swtiched to Java 9 Flow API. So you need to use Java 9 or the later versions to use SmallRye Mutiny.
 
 Add the following project dependencies.
 
@@ -122,7 +119,7 @@ Add the following project dependencies.
         <dependency>
             <groupId>io.smallrye.reactive</groupId>
             <artifactId>mutiny-bom</artifactId>
-            <version>1.0.0</version>
+            <version>3.1.0</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>

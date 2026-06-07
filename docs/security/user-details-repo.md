@@ -1,12 +1,5 @@
----
-title: Customize UserDetailsRepository
-parent: Spring Security
-nav_order: 5
----
 
 # Customize UserDetailsRepository
-
-
 
 ## Load users from a properties file
 
@@ -20,7 +13,7 @@ public UserDetailsRepositoryResourceFactoryBean userDetailsService() {
 }
 ```
 
-The content of the *users.properties* is similar to the following.
+The content of the _users.properties_ is similar to the following.
 
 ```
 user=password,ROLE_USER
@@ -29,7 +22,7 @@ admin=password,ROLE_USER,ROLE_ADMIN
 
 The key is username, the value is password, and it's roles.
 
-Source codes: [spring-reactive-sample/security-user-properties]( https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties)
+Source codes: [spring-reactive-sample/security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties)
 
 ## Customize UserDetailsRepository
 

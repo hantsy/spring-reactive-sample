@@ -1,14 +1,7 @@
----
-title: Spring Data Couchbase
-parent: Reactive Data Operations
-nav_order: 7
----
 
 # Spring Data Couchbase
 
-
 Spring Data Couchbase adds basic Reactive support.
-
 
 Follow the the [Getting Started](./start) part to create a freestyle(none Spring Boot) or Spring Boot based project skeleton.
 
@@ -173,6 +166,3 @@ docker-compose up couchbase
 ```
 
 And go to http://localhost:8091 to set the user account and bucket info.
-
-
-

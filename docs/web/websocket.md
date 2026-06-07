@@ -1,11 +1,6 @@
----
-title: WebSocket
-parent: Reactive Web
-nav_order: 8
-toc: true
----
 
 # WebSocket
+
 WebSocket is a bi-directional, multiplexed protocol built on HTTP. It is widely used for real-time client-server communication (chat, live updates, gaming) and supports custom subprotocols.
 
 Spring WebFlux adds simple basic WebSocket support.
@@ -43,7 +38,7 @@ public class PostsWebSocketHandler implements WebSocketHandler {
 }
 ```
 
-And register this  handler in a `HandlerMapping` bean. 
+And register this handler in a `HandlerMapping` bean.
 
 ```java
 @Bean
@@ -58,7 +53,7 @@ public HandlerMapping handlerMapping() {
 }
 ```
 
-In a none Spring Boot application,  you have to declare a `WebSocketHandlerAdapter` bean.
+In a none Spring Boot application, you have to declare a `WebSocketHandlerAdapter` bean.
 
 ```java
 @Bean
@@ -67,7 +62,7 @@ WebSocketHandlerAdapter webSocketHandlerAdapter(){
 }
 ```
 
-Source codes:  [spring-reactive-sample/websocket](https://github.com/hantsy/spring-reactive-sample/blob/master/websocket).
+Source codes: [spring-reactive-sample/websocket](https://github.com/hantsy/spring-reactive-sample/blob/master/websocket).
 
 ## Client Side
 

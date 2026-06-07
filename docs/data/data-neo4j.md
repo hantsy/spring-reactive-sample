@@ -1,12 +1,7 @@
----
-title: Spring Data Neo4j
-parent: Rective Data Operations
-nav_order: 2
----
 
 # Spring Data Neo4j
 
-> The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0. If you are using SDN Rx  it is better to upgrade to the official Spring Data Neo4j.
+> The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0. If you are using SDN Rx it is better to upgrade to the official Spring Data Neo4j.
 
 > This post explains using Spring Data Neo4j with Spring Framework 7 and Spring Boot 4.
 
@@ -14,16 +9,16 @@ nav_order: 2
 
 Generate a Spring WebFlux project using https://start.spring.io and choose:
 
-* Project type: Maven (or Gradle)
-* Spring Boot: 4.x
-* Java version: 21 (or Java 17 LTS)
-* Add dependencies: Spring Data Neo4j, Spring WebFlux, Lombok (optional)
+- Project type: Maven (or Gradle)
+- Spring Boot: 4.x
+- Java version: 21 (or Java 17 LTS)
+- Add dependencies: Spring Data Neo4j, Spring WebFlux, Lombok (optional)
 
 Open the generated `pom.xml` and verify the `spring-boot-starter-data-neo4j` and `spring-boot-starter-webflux` starters are present.
 
 Extract the downloaded archive into your disc, and import into your IDEs
 
-Open the `pom.xml` file in the project root, you will see the following dependencies added in the *dependencies* section.
+Open the `pom.xml` file in the project root, you will see the following dependencies added in the _dependencies_ section.
 
 ```xml
 <dependencies>
@@ -74,18 +69,18 @@ class Post {
 }
 ```
 
-A Neo4j entity is annotated with a `@Node`  annotation. 
+A Neo4j entity is annotated with a `@Node` annotation.
 
 > We used the `@Data`, `@ToString`, `@Builder` annotations provided in Lombok to erases the tedious methods, such as setters, getters, hashCode, equals, and toString in a POJO class.
 
-Create a `Repository` for the  `Post` entity.
+Create a `Repository` for the `Post` entity.
 
 ```java
 interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 }
 ```
 
-Create a `RestController` to expose the simple CRUD RESTful APIs for  the `Post` entity.
+Create a `RestController` to expose the simple CRUD RESTful APIs for the `Post` entity.
 
 ```java
 @RestController()
@@ -132,7 +127,7 @@ class PostController {
 }
 ```
 
-In the above  `get` method, when the post is not found  it will throw a `PostNotFoundException`. Create a  `@RestControllerAdvice` annotated class to handle this exception.
+In the above `get` method, when the post is not found it will throw a `PostNotFoundException`. Create a `@RestControllerAdvice` annotated class to handle this exception.
 
 ```java
 @RestControllerAdvice
@@ -148,7 +143,7 @@ class RestExceptionHandler {
 }
 ```
 
-Add a `ReactiveTransactionManager` bean. In the Spring Data Neo4j 6.0, it seems activating a reactive transaction manager becomes a must, if it is not set, you will see  an exception thrown at the startup stage when running the application.
+Add a `ReactiveTransactionManager` bean. In the Spring Data Neo4j 6.0, it seems activating a reactive transaction manager becomes a must, if it is not set, you will see an exception thrown at the startup stage when running the application.
 
 ```java
 // see: https://github.com/spring-projects/spring-boot/wiki/Spring-Boot-2.4.0-M2-Release-Notes#neo4j-1
@@ -160,7 +155,7 @@ public ReactiveTransactionManager reactiveTransactionManager(
 }
 ```
 
-> NOTE: If you are from SDN Rx,  adding a transaction manager is a must now.
+> NOTE: If you are from SDN Rx, adding a transaction manager is a must now.
 
 Add a `CommandLineRunner` bean to initialize some sample data. Here we use `PostRepository` to insert two `Post` sample data.
 
@@ -201,15 +196,15 @@ class DataInitializer implements CommandLineRunner {
 
 Before starting this application, make sure there is a running Neo4j server.
 
-There is a *docker-compose.yaml* file in the root folder of the [spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample) repository which is prepared for bootstrapping dependent servers. 
+There is a _docker-compose.yaml_ file in the root folder of the [spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample) repository which is prepared for bootstrapping dependent servers.
 
-Simply, run the following command to serve a Neo4j instance  in the Docker container. 
+Simply, run the following command to serve a Neo4j instance in the Docker container.
 
 ```bash
 docker-compose up neo4j
 ```
 
-And do not forget to configure the connection settings in the *application.properties*.
+And do not forget to configure the connection settings in the _application.properties_.
 
 ```properties
 spring.neo4j.uri=bolt://localhost:7687
@@ -217,7 +212,7 @@ spring.neo4j.authentication.username=neo4j
 spring.neo4j.authentication.password=test
 ```
 
->Note: if you are migrating from [SDN RX](https://github.com/neo4j/sdn-rx/), you need to replace all namespaces with the new `spring.neo4j`  prefix.
+> Note: if you are migrating from [SDN RX](https://github.com/neo4j/sdn-rx/), you need to replace all namespaces with the new `spring.neo4j` prefix.
 
 Now, you can run the application directly in IDEs, or using the following Maven command.
 
@@ -249,7 +244,7 @@ interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 
 Add a new test method in `PostRespositoryTest` to verify it.
 
-```java 
+```java
 @Test
 void testFindByTitle() {
     posts.findByTitleLike("one")
@@ -266,11 +261,11 @@ Alternatively, you can use a `@Query` annotation to execute Cypher Query Languag
 ```java
 import org.springframework.data.neo4j.repository.query.Query;
 //...
-    
+
 interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
     @Query("MATCH(post:Post) WHERE post.title =~ $title RETURN post")
     Flux<Post> findByTitleContains(String title);
-    
+
     //
 	...
 }
@@ -278,7 +273,7 @@ interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 
 Here we use a `regex` pattern in the where clause.
 
-> More details about the syntax of  Cypher Query Language, please check the [official Neo4j documentation](https://neo4j.com/developer/cypher/).
+> More details about the syntax of Cypher Query Language, please check the [official Neo4j documentation](https://neo4j.com/developer/cypher/).
 
 Add a test method to verify it.
 
@@ -296,9 +291,9 @@ Here the `findByTitleContains` method has to accept a Regex pattern.
 
 ## ReactiveNeo4jClient
 
-Once Spring Data Neo4j is configured in a reactive application, a `ReactvieNeo4jClient` bean is available in the Spring application context. 
+Once Spring Data Neo4j is configured in a reactive application, a `ReactvieNeo4jClient` bean is available in the Spring application context.
 
-Like the R2dbc's `DatabaseClient` , with `ReactiveNeo4jClient`, you can execute custom Cypher Queries and handle returning result freely. 
+Like the R2dbc's `DatabaseClient` , with `ReactiveNeo4jClient`, you can execute custom Cypher Queries and handle returning result freely.
 
 For example, to find all posts, it can be done by the following method.
 
@@ -323,14 +318,14 @@ public Flux<Post> findAll() {
 }
 ```
 
-In the above codes. 
+In the above codes.
 
-* The `query` use a multi-lined text block(available in the latest Java 15) to define a Cypher query.
-* The  `client.query` to execute the defined query.
-* The `fetchAs` to handle the returning result, similar to RowMapper in Jdbc/R2dbc to extract the result and wrap it into a POJO class.
-* The `all` will return a `Flux` , if you want to return a single result, use `one` instead.
+- The `query` use a multi-lined text block(available in the latest Java 15) to define a Cypher query.
+- The `client.query` to execute the defined query.
+- The `fetchAs` to handle the returning result, similar to RowMapper in Jdbc/R2dbc to extract the result and wrap it into a POJO class.
+- The `all` will return a `Flux` , if you want to return a single result, use `one` instead.
 
-The following is an example of  basic CRUD operations.
+The following is an example of basic CRUD operations.
 
 ```java
 @Component
@@ -465,12 +460,11 @@ public class PostRepository {
 
 For the complete codes, check [spring-reactive-sample/boot-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j-cypher).
 
-
 ## ReactiveNeo4jOperations
 
-Like other Spring Data modules, Spring Data Neo4j provides a `ReactiveNeo4jOperations`(and  the implementation `ReactiveNeo4jTemplate`), it allows your to perform operations on Neo4j databases but by programmatic approaches.
+Like other Spring Data modules, Spring Data Neo4j provides a `ReactiveNeo4jOperations`(and the implementation `ReactiveNeo4jTemplate`), it allows your to perform operations on Neo4j databases but by programmatic approaches.
 
-Here is an example of `PostRepository`  which is reimplemented by `ReactiveNeo4jOperations`.
+Here is an example of `PostRepository` which is reimplemented by `ReactiveNeo4jOperations`.
 
 ```java
 @Component
@@ -529,7 +523,7 @@ public class PostRepository  {
 
 ```
 
-It it similar to the ReactiveNeo4jClient, but more simple.  Have a look at the `findAll`, the literal queries are replaced by Java Query Criteria APIs.
+It it similar to the ReactiveNeo4jClient, but more simple. Have a look at the `findAll`, the literal queries are replaced by Java Query Criteria APIs.
 
 For the complete codes, check [spring-reactive-sample/boot-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j).
 
@@ -562,16 +556,16 @@ class Post {
 }
 ```
 
-In the above codes, there are some annotations applied on the fields. 
+In the above codes, there are some annotations applied on the fields.
 
-*  `CreatedDate` will fill the current date when saving the entity.
-* `LastModifiedDate` will fill the current date when updating the entity.
-* `CreatedBy` will retrieve the current auditor from  `ReactiveAuditorAware`  and fill it when saving the entity.
-* `LastModifiedBy` will retrieve the current auditor from  `ReactiveAuditorAware`  and fill it when updating the entity.
+- `CreatedDate` will fill the current date when saving the entity.
+- `LastModifiedDate` will fill the current date when updating the entity.
+- `CreatedBy` will retrieve the current auditor from `ReactiveAuditorAware` and fill it when saving the entity.
+- `LastModifiedBy` will retrieve the current auditor from `ReactiveAuditorAware` and fill it when updating the entity.
 
 The `CreatedDate` and `LastModifiedDate` can be applied on the traditional `java.util.Date`, the new Java 8 DateTime API and [Joda](https://www.joda.org) time types.
 
-The class type of `CreatedBy` and `ModifiedBy` are dependent  on the parameterized type of the declaration of `ReactiveAuditorAware` bean.
+The class type of `CreatedBy` and `ModifiedBy` are dependent on the parameterized type of the declaration of `ReactiveAuditorAware` bean.
 
 Add a `ReactiveAuditorAware` bean to serve the auditor in the entity when saving and updating it.
 
@@ -584,7 +578,7 @@ public ReactiveAuditorAware<String> reactiveAuditorAware() {
 
 > Note : in the real world applications, you can retrieve the current user from current SecurityContextHolder.
 
-By default Spring Boot do not autoconfigure the auditing feature. Do not forget to add a `@EnableReactiveNeo4jAuditing`  annotation on the `@Configuration` class to activate the data auditing feature.
+By default Spring Boot do not autoconfigure the auditing feature. Do not forget to add a `@EnableReactiveNeo4jAuditing` annotation on the `@Configuration` class to activate the data auditing feature.
 
 ```java
 @Configuration(proxyBeanMethods = false)
@@ -598,12 +592,12 @@ class DataConfig {
 
 Run the application, you will see the following logging info printed by the `DataInitializer` bean.
 
- ```bash
+```bash
 2020-11-08 10:22:26.661  INFO 16856 --- [o4jDriverIO-2-2] [Initializing data]                      : onNext(Post(id=2, title=Post one, content=The content of Post one, createdDate=2020-11-08T10:22:24.554356100, updatedDate=2020-11-08T10:22:24.554356100, createdBy=hantsy, updatedBy=hantsy))
 2020-11-08 10:22:26.661  INFO 16856 --- [o4jDriverIO-2-2] com.example.demo.DataInitializer         : found post: Post(id=2, title=Post one, content=The content of Post one, createdDate=2020-11-08T10:22:24.554356100, updatedDate=2020-11-08T10:22:24.554356100, createdBy=hantsy, updatedBy=hantsy)
 2020-11-08 10:22:26.661  INFO 16856 --- [o4jDriverIO-2-2] [Initializing data]                      : onNext(Post(id=3, title=Post two, content=The content of Post two, createdDate=2020-11-08T10:22:24.562356700, updatedDate=2020-11-08T10:22:24.562356700, createdBy=hantsy, updatedBy=hantsy))
 2020-11-08 10:22:26.661  INFO 16856 --- [o4jDriverIO-2-2] com.example.demo.DataInitializer         : found post: Post(id=3, title=Post two, content=The content of Post two, createdDate=2020-11-08T10:22:24.562356700, updatedDate=2020-11-08T10:22:24.562356700, createdBy=hantsy, updatedBy=hantsy)
- ```
+```
 
 You can also verify it via `curl` .
 
@@ -614,21 +608,20 @@ You can also verify it via `curl` .
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
-
 ## Testing
 
-Since version 1.4,  Spring Boot provided a new test harness so-called **test slice** to test features easier than previous version,  which included a series of  `AutoConfigureXXX` to allow developers to test desired features in an isolated environment. 
+Since version 1.4, Spring Boot provided a new test harness so-called **test slice** to test features easier than previous version, which included a series of `AutoConfigureXXX` to allow developers to test desired features in an isolated environment.
 
-For example,  adding a test scoped H2 dependency into your project and annotating your test class with `@DataJpaTest`, you can test your `Repository` class against an embedded H2 instead of the real runtime database. With the `@DataJpaTest`, Spring test context only loads the essential configuration for testing JPA facilities, no need to load the all configuration for the whole application .  
+For example, adding a test scoped H2 dependency into your project and annotating your test class with `@DataJpaTest`, you can test your `Repository` class against an embedded H2 instead of the real runtime database. With the `@DataJpaTest`, Spring test context only loads the essential configuration for testing JPA facilities, no need to load the all configuration for the whole application .
 
 For Spring Data Neo4j, Spring Boot also provides a `@DataNeo4jTest` for testing Neo4j facilities, but unfortunately it does not include an utility to start up an embedded Neoj4 database for your tests. There are some solutions to overcome this barrier.
 
-* Neo4j provides a test harness which provides APIs to start and stop an embedded Neo4j server by programmatic approach.
-*  [Testcontainers](https://www.testcontainers.org)  is a generic solution to run Docker containers for the testing framework, it is easy to start a Neo4j database in a Docker container when testing Spring Data Neo4j repositories.
+- Neo4j provides a test harness which provides APIs to start and stop an embedded Neo4j server by programmatic approach.
+- [Testcontainers](https://www.testcontainers.org) is a generic solution to run Docker containers for the testing framework, it is easy to start a Neo4j database in a Docker container when testing Spring Data Neo4j repositories.
 
 ### Test with Neo4j test harness
 
-Add the following dependency into your *pom.xml*.
+Add the following dependency into your _pom.xml_.
 
 ```xml
 <dependency>
@@ -681,8 +674,8 @@ public class PostRepositoryWithNeo4jHarnessTest {
 
 In the above codes,
 
-* We use the JUnit 5 lifecycle hooks, such as  `beforeAll` and `afterAll` to start and stop an embedded Neo4j server.
-* Use a static method annotated with `@DynamicPropertySource` to bind the Neo4j properties to the Spring test context.
+- We use the JUnit 5 lifecycle hooks, such as `beforeAll` and `afterAll` to start and stop an embedded Neo4j server.
+- Use a static method annotated with `@DynamicPropertySource` to bind the Neo4j properties to the Spring test context.
 
 Now you can add tests as general.
 
@@ -690,9 +683,9 @@ Now you can add tests as general.
 
 Testcontainers provides a simple programmatic API abstraction for you to bootstrap a Docker container in your testing codes.
 
-Testcontainers is available in the official [Spring initializr](https://start.spring.io). You can add *TestContainers* as dependencies when generating new project using [Spring initializr](https://start.spring.io).
+Testcontainers is available in the official [Spring initializr](https://start.spring.io). You can add _TestContainers_ as dependencies when generating new project using [Spring initializr](https://start.spring.io).
 
-Or add the following dependencies into your *pom.xml* manually.
+Or add the following dependencies into your _pom.xml_ manually.
 
 ```xml
 <dependency>
@@ -723,10 +716,10 @@ And import the testcontainers BOM in the `depedencyManagement`section.
 </dependencyManagement>
 ```
 
-In the above code, 
+In the above code,
 
-* The `junit-jupiter` artifact is used to integrate *TestContainers* with JUnit 5 platform.
-* The `neo4j` artifact provides APIs to compose a Neo4j Docker container.
+- The `junit-jupiter` artifact is used to integrate _TestContainers_ with JUnit 5 platform.
+- The `neo4j` artifact provides APIs to compose a Neo4j Docker container.
 
 Create a test for `PostRepository`.
 
@@ -793,18 +786,18 @@ public class PostRepositoryWithTestContainersTest {
 }
 ```
 
-In the above codes, 
+In the above codes,
 
-*  A test class is annotated with a general `@SpringBootTest` annotation(will load all configurations) or a `@DataNeo4jTest` annotation. When using `@DataNeo4jTest`, you have to add an extra `@Transactional(propagation = Propagation.NEVER)`, check  [spring-boot issue#23630](https://github.com/spring-projects/spring-boot/issues/23630) for more details.
-* A `@Testcontainers` is added on the class level, thus the Testcontainers facilities will contribute the test lifecycle.
-* A static `@Container` resource is defined, it will be initialized before the test execution.
-*  By default, JUnit 5 uses a `PER_METHOD` strategy to bootstrap a test, if you set a global `PER_CLASS` strategy in the *junit-platform.properties*, add a `@TestInstance(TestInstance.Lifecycle.PER_METHOD)` to override it.
-* A static method annotated with `@DynamicPropertySource` is used to bind properties from the running Docker container to the Spring environmental variables before the test is running. 
-* You can inject your `Repository` beans, and the Neo4j specific `ReactiveNeo4jOperations`, `ReactiveNeo4jClient`, `Driver`  beans etc. in a  `@DataNeo4jTest` annotated test directly.
-* Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the JUnit test lifecycle.
-* In the `@Test` method, we usually utilizes reactor's `StepVerifier` to assert the result.
+- A test class is annotated with a general `@SpringBootTest` annotation(will load all configurations) or a `@DataNeo4jTest` annotation. When using `@DataNeo4jTest`, you have to add an extra `@Transactional(propagation = Propagation.NEVER)`, check [spring-boot issue#23630](https://github.com/spring-projects/spring-boot/issues/23630) for more details.
+- A `@Testcontainers` is added on the class level, thus the Testcontainers facilities will contribute the test lifecycle.
+- A static `@Container` resource is defined, it will be initialized before the test execution.
+- By default, JUnit 5 uses a `PER_METHOD` strategy to bootstrap a test, if you set a global `PER_CLASS` strategy in the _junit-platform.properties_, add a `@TestInstance(TestInstance.Lifecycle.PER_METHOD)` to override it.
+- A static method annotated with `@DynamicPropertySource` is used to bind properties from the running Docker container to the Spring environmental variables before the test is running.
+- You can inject your `Repository` beans, and the Neo4j specific `ReactiveNeo4jOperations`, `ReactiveNeo4jClient`, `Driver` beans etc. in a `@DataNeo4jTest` annotated test directly.
+- Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the JUnit test lifecycle.
+- In the `@Test` method, we usually utilizes reactor's `StepVerifier` to assert the result.
 
-> In the original [SDN Rx]((https://github.com/neo4j/sdn-rx/)  ), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
+> In the original [SDN Rx](<(https://github.com/neo4j/sdn-rx/)>), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
 
 Alternatively, you can create a `ApplicationContextInitializer` to start a Neo4j Docker container manually.
 
@@ -841,6 +834,3 @@ public class PostRepositoryTest {
 In the above, we use a `ContextConfiguration` to apply the context initializers. In the real world application, you can extract `TestContainerInitializer` to a standalone class, and thus it is easy to reuse in any tests that requires a running Neo4j server instance.
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
-
-
-

@@ -1,9 +1,3 @@
----
-title: Spring Data ElasticSearch
-parent: Reactive Data Operations
-nav_order: 8
----
-
 
 # Spring Data ElasticSearch
 
@@ -79,7 +73,3 @@ To run the application, you have to serve a running ElasticSearch server firstly
 ```bash
 docker-compose up elasticsearch
 ```
-
-
-
-
