@@ -30,28 +30,28 @@ Create a configuration class, add `@EnableWebFluxSecurity` annotation to enable 
 class SecurityConfig {
 
 	@Bean
-	SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
 		return http
 			.authorizeExchange()
 				.pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
                 .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
-				//.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
 				.anyExchange().authenticated()
-				.and()
+			.and().csrf().disable()
+			.and()
 			.build();
 	}
 
 	private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
 		return authentication
-			.map( a -> context.getVariables().get("user").equals(a.getName()))
-			.map( granted -> new AuthorizationDecision(granted));
+			.map(a -> context.getVariables().get("user").equals(a.getName()))
+			.map(granted -> new AuthorizationDecision(granted));
 	}
 
 	@Bean
-	public MapUserDetailsRepository userDetailsRepository() {
-		UserDetails rob = User.withUsername("test").password("test123").roles("USER").build();
-		UserDetails admin = User.withUsername("admin").password("admin123").roles("USER","ADMIN").build();
-		return new MapUserDetailsRepository(rob, admin);
+	public MapReactiveUserDetailsService userDetailsRepository() {
+		UserDetails rob = User.withDefaultPasswordEncoder().username("test").password("test123").roles("USER").build();
+		UserDetails admin = User.withDefaultPasswordEncoder().username("admin").password("admin123").roles("USER","ADMIN").build();
+		return new MapReactiveUserDetailsService(rob, admin);
 	}
 
 }

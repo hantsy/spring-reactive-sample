@@ -35,7 +35,7 @@ client.get()
     .uri("messages")
     .accept(MediaType.TEXT_EVENT_STREAM)
     .retrieve()
-    .bodyToFlux(Message::class.java)
+    .bodyToFlux(Message.class)
 ```
 
 A more close to the real world example, go to [hantsy/angular-spring-sse-sample/](https://github.com/hantsy/angular-spring-sse-sample/) in which the client is built with Angular and  the server side is a simple Spring Boot application that uses SSE to update the chat messages to client.

@@ -1,6 +1,6 @@
 ---
 title: Spring Data Redis
-parent: Rective Data Operations
+parent: Reactive Data Operations
 nav_order: 5
 ---
 
@@ -11,7 +11,7 @@ Spring Data Redis provides a reactive variant of `RedisConnectionFactory` aka `R
 
 ## Getting Started
 
-Follow the the [Getting Started](./start) part to create a freestyle or Spring Boot based project skeleton.
+Follow the [Getting Started](./start) section to create a base project skeleton, either freestyle (manual wiring) or a Spring Boot 4 starter.
 
 For none Spring Boot project, add the following dependencies to the *pom.xml*.
 

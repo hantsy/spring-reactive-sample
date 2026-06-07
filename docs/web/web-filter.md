@@ -7,7 +7,7 @@ toc: true
 
 # WebFilter
 
-One of the most important components in Reactive Stack is the `WebFilter` which is used to handle web requests from HTTP client.
+WebFilter is a core component in the reactive stack that intercepts and processes HTTP requests and responses.
 
 The `WebFilter` interface looks like the following.
 
@@ -19,7 +19,7 @@ public interface WebFilter {
 }
 ```
 
-The `filter` method accepts a `ServerWebExchange` where you can interact with web request and do crossing-cut operations as you expected in the response.
+The `filter` method receives a `ServerWebExchange` that lets you inspect the request and perform cross-cutting operations before or after the request is handled.
 
 The `WebFilterChain` is similar to the  role of  `FilterChain` in the Servlet Filter.  At runtime, a series of  `WebFilter` can be chained to execute in one web request.
 
@@ -38,7 +38,7 @@ public class SecurityWebFilter implements WebFilter{
 }
 ```
 
-> NOTE: In a Spring application, I would like use Spring Security to handle security considerations. Here I just use this as an example of `WebFilter`.
+> NOTE: In production applications prefer Spring Security for authentication and authorization. This example demonstrates how a simple WebFilter can be used for small checks or prototyping.
 > 
 
 

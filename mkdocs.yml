@@ -94,6 +94,5 @@ nav:
       - other/schedule.md
       - other/restdocs.md
       - other/testing.md
-      - other/rxjava.md
       - other/mutiny.md
       - other/java9.md

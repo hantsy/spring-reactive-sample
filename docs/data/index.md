@@ -1,8 +1,8 @@
 ---
-title: Rective Data Operations
+title: Reactive Data Operations
 nav_order: 3
 ---
 
 
-# Rective Data Operations
+# Reactive Data Operations
 

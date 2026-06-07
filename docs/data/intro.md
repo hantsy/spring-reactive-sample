@@ -4,47 +4,30 @@ parent: Rective Data Operations
 nav_order: 1
 ---
 
-# An introduction to Spring Data(Reactive)
+# An introduction to Spring Data (Reactive)
 
-Spring Data also added Reactive Streams support into the existing projects.
+Spring Data projects provide first-class reactive support for many data stores, especially NoSQL databases such as Redis, MongoDB, Couchbase and Cassandra.
 
-NoSQL support, such as Redis, MongoDB, Couchbase and Cassandra are the first-class citizen in the WebFlux world.
-
-RDBMS support, such as JDBC and JPA are designated for blocking access will not work under the new WebFlux applications. 
-
-To resolve the problem, Spring team leads a new reactive specification [R2dbc](https://R2dbc.io) to access RDBMS. Similar to the JDBC specification, R2dbc provides a collection of standardized APIs and allow you to implement your own database drivers through `r2dbc-spi`. Currently, MySQL(and MariaDB), MSSQL, Oracle, H2, PostgresSQL have got support.  Check the [R2dbc website](https://r2dbc.io/) for more info. 
+Blocking APIs such as JDBC and JPA are not suitable for a reactive WebFlux application. To support relational databases reactively, the R2DBC specification and drivers provide non-blocking access via `r2dbc-spi`. See https://r2dbc.io/ for drivers and documentation.
 
 ## Reactive Repository
 
-Similar to the existing `Repository` and it derived interfaces for blocking cases such as `PagingAndSortingRepository` and `CrudRepository`. Spring Data Commons add variants for reactive cases, such as `ReactiveSortingRepository` and `ReactiveCrudRepository`.
-
-> Note: There is no `Paging` variant for reactive interfaces.
-
-The Spring Data subprojects could have its specific top-level `Repository`, such as Spring Data Mongo provides `ReactiveMongoRepository`.
+Spring Data offers reactive repository variants such as `ReactiveCrudRepository` and `ReactiveSortingRepository`. Subprojects expose store-specific interfaces, for example `ReactiveMongoRepository` for MongoDB.
 
 ```java
 @NoRepositoryBean
 public interface ReactiveMongoRepository<T,ID>
-extends ReactiveSortingRepository<T,ID>, ReactiveQueryByExampleExecutor<T>{...}
+  extends ReactiveSortingRepository<T,ID>, ReactiveQueryByExampleExecutor<T> { ... }
 ```
 
-To create  your `Repository` ,  create an interface to extend `ReactiveCrudRepository` or `ReactiveSortingRepository`  or a subproject specific `Repository`.  For example:
+Create repositories by extending the appropriate reactive interface:
 
 ```java
-interface PostRepository extends ReactiveCrudRepository{}
-interface PostRepository extends ReactiveSortingRepository{}
-interface PostRepository extends ReactiveMongoRepository{}
+interface PostRepository extends ReactiveCrudRepository<Post, Long> {}
+interface PostRepository extends ReactiveSortingRepository<Post, Long> {}
+interface PostRepository extends ReactiveMongoRepository<Post, Long> {}
 ```
 
-## RxJava 2 and RxJava 3 Support 
+## Alternative reactive APIs
 
-The reactive  `Repository` supports RxJava 2 and 3 variants.
-
-* For RxJava 2, there is a `RxJava2CrudRepository` and `RxJava2SortingRepository`.
-* For RxJava 3, there is a `RxJava3CrudRepository` and `RxJava3SortingRepository`. 
-
-To use RxJava 2/3 instead of Reactor, just need to declare your `Repository`to extends  `RxJava3CrudRepository` or `RxJava3SortingRepository`. For example:
-
-```java
-interface PostRepository extends RxJava3SortingRepository{}
-```
+Spring Data provides adapters to interoperate with other reactive libraries. RxJava 3 and SmallRye Mutiny can be used via adapters, while older RxJava 2 support is deprecated; prefer Reactor or RxJava 3 for new projects.

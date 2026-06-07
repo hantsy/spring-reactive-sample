@@ -5,9 +5,9 @@ nav_order: 4
 toc: true
 ---
 
-# Handing Web Exceptions
+# Handling Web Exceptions
 
-We have know when exposing RESTful APIs, we can choose between `@RestController` and `RouterFunction`.
+When exposing RESTful APIs you can choose between `@RestController` and functional `RouterFunction` routes.
 
 The former is simple. If you have some experience with Spring WebMvc, it is easy to update your knowledge.  Just need to use newer Reactor specific `Mono` and `Flux`  instead in your codes.
 
@@ -44,9 +44,9 @@ The exception handling in *reactive* `@RestController` is similar to the one in 
    class RestExceptionHandler {
 
        @ExceptionHandler(PostNotFoundException.class)
-       ResponseEntity postNotFound(PostNotFoundException ex) {
-           log.debug("handling exception::" + ex);
-           return notFound().build();
+       public ResponseEntity<?> postNotFound(PostNotFoundException ex) {
+           log.debug("handling exception: {}", ex.toString());
+           return ResponseEntity.notFound().build();
        }
 
    }
@@ -67,7 +67,8 @@ public WebExceptionHandler exceptionHandler() {
         return Mono.error(ex);
     };
 }
-}
+
+// Note: WebExceptionHandler is a low-level extension point. For most cases prefer @RestControllerAdvice or functional exception handlers.
 ```
 
 > NOTE:  `WebExceptionHandler` is a low-level API, also works well for the exception handling  in the former controller case.

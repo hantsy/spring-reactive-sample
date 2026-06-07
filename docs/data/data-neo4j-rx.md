@@ -1,6 +1,6 @@
 ---
 title: Spring Data Neo4j Rx
-parent: Rective Data Operations
+parent: Reactive Data Operations
 nav_order: 3
 ---
 

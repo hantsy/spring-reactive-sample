@@ -1,6 +1,6 @@
 ---
 title: Spring Data MongoDb
-parent: Rective Data Operations
+parent: Reactive Data Operations
 nav_order: 4
 ---
 

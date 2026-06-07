@@ -6,7 +6,7 @@ nav_order: 2
 
 # Create a WebFlux application from Scratch
 
-An example exceeds thousands of words. Let's begin to write some codes and enjoy the reactive programming brought by Spring 5.
+A working example is worth a thousand words. Let's write code and explore the reactive programming features introduced in Spring Framework 7.
 
 As an example, I will reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application. 
 
@@ -19,7 +19,7 @@ In the following steps we will start with creating RESTful APIs for `Post`.
 
 Before writing some real codes, make sure you have installed the essential software:
 
-* [Oracle Java 8](https://java.oracle.com) (Java 11+ is nightly recommended)
+* Java 21 (or Java 17 LTS). Install a JDK from Temurin/Adoptium, Oracle, or your preferred vendor: https://adoptium.net/.
 * [Apache Maven](https://maven.apache.org) or [Gradle](http://www.gradle.org)
 * Your favorite IDE, including :
   * NetBeans IDE
@@ -77,14 +77,14 @@ The final pom.xml looks like:
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.3</version>
+        <version>4.0.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>11</java.version>
+        <java.version>21</java.version>
     </properties>
 
     <dependencies>     
@@ -212,7 +212,10 @@ If you have used Spring Data before, you will find these APIs are every similiar
 
 The main difference is in the current Repository class all methods return a `Flux` or `Mono`.
 
-`Flux` and `Mono` are from Reactor, which powers the reactive support in Spring 5 by default. 
+`Flux` and `Mono` are from Reactor, which powers the reactive support in Spring Framework 7 by default.
+
+* `Flux` represents a stream of 0..N elements.
+* `Mono` represents an asynchronous 0..1 result.
 
 * `Flux` means it could return lots of results in a stream. 
 * `Mono` means it could return 0 to 1 result. 
@@ -264,7 +267,7 @@ Now we almost have done the programming work, let's try to bootstrap the applica
 
 ## Bootstrap
 
-According to the official documentation, in [Web on Reactive Stack](https://docs.spring.io/spring-framework/docs/5.3.x/reference/html/web-reactive.html#spring-webflux) section, there are some options to bootstrap a reactive web application.
+According to the official documentation (see the Web on Reactive Stack section), Spring Framework 7 provides several options to bootstrap a reactive web application: https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#spring-webflux
 
 >Spring WebFlux is supported on Tomcat, Jetty, Servlet 3.1+ containers, as well as on non-Servlet runtimes such as Netty and Undertow. 
 
@@ -504,7 +507,7 @@ And add `reactor-netty` in your project dependencies.
 
 For the complete codes, check [spring-reactive-sample/vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla).
 
-### Undertow
+### Undertow (deprecated)
 
 For Undertow, replace the `Application` class with:
 
@@ -555,7 +558,7 @@ Check the sample codes: [spring-reactive-sample/vanilla-undertow](https://github
 
 ### Standalone Servlet Container
 
-If you are stick on traditional web applications, and want to package it into a **war** file and deploy it into an existing servlet container, Spring 5 provides a `AbstractReactiveWebInitializer`to archive this purpose. It is a standard Spring `ApplicationInitializer` implementation which can be scanned by Spring container when servlet container starts up.
+If you prefer traditional web applications and want to package a WAR to deploy into a servlet container, Spring Framework 7 provides AbstractReactiveWebInitializer to help initialize a reactive web application in a Servlet environment. This class implements ApplicationInitializer and is discovered by the servlet container at startup.
 
 Create a `AppInitializer` instead of the `Application` class.
 
@@ -580,7 +583,7 @@ Next change the project packaging from **jar** to **war** in pom.xml.
 <packaging>war</packaging>
 ```
 
-And add `serlvet-api` to your project dependencies.
+And add `servlet-api` to your project dependencies.
 
 ```xml
 <dependency>
@@ -633,7 +636,7 @@ Check the sample codes: [spring-reactive-sample/war](https://github.com/hantsy/s
 
 ### Alternative Bean Registration
 
-In the above the codes, we use `ApplicationContext` to scan components automatically. For those classes are not part of Spring context, and you want to register them as Spring beans in the  `ApplicationContext`, Spring 5 introduces a simple approach to archive this purpose.
+In the example above we use ApplicationContext component scanning. For classes that are not part of the component scan, Spring Framework 7 provides a concise registerBean API to programmatically register instances as Spring beans in the ApplicationContext.
 
 ```java
 public class Application {

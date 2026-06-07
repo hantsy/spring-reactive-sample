@@ -20,11 +20,11 @@ For Spring Boot applications, add it in the project dependencies aside with `spr
 Then add a `@Configuration` class to customize your security rules.
 
 ```java
-@Configration
+@Configuration
 class SecurityConfig {
 
 	@Bean
-	SecurityWebFilterChain springWebFilterChain(HttpSecurity http) throws Exception {
+	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
 		return http
 			.authorizeExchange()
 				.pathMatchers(HttpMethod.GET, "/posts/**").permitAll()

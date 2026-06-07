@@ -6,7 +6,7 @@ nav_order: 3
 
 # Create a WebFlux application with Spring Boot
 
-The Spring Boot 2.x targets the latest Spring technology stack, including Spring 5, Spring Security 5, Spring Session 2, etc. 
+Spring Boot 4.x targets the latest Spring technology stack, including Spring Framework 7, Spring Security 6+, Spring Session 3+, and more.
 
 Spring Boot added a new starter `spring-boot-starter-webflux` for starting a WebFlux application.
 
@@ -21,9 +21,9 @@ Open your browser and navigate to [http://start.spring.io](http://start.spring.i
 
 In the Spring Boot Initializr page, fill the following fields. 
 
-1. Select the latest stable Spring Boot version, eg. 2.4.3 at the moment. 
-2. In the dependencies box, type **reactive**, it will display all reactive options in a dropdown menu. Select **Ractive Web** to add `spring-boot-starter-webflux` into project dependencies. You can also add other items as you like, such as **Lombok**, **Reactive MongoDb**, **Reactive Redis** etc.
-3. Click **Generate project** button or use **ALT+NETER** shortcut to generate a project skeleton as a zip file for downloading.
+1. Select the latest Spring Boot 4.x release (for example, 4.0.0). 
+2. In the dependencies box, type **reactive** and choose **Reactive Web** to add `spring-boot-starter-webflux`. Optionally add Lombok, Reactive MongoDB, Reactive Redis, or other starters you need.
+3. Click **Generate project** (or press **ALT+ENTER**) to download a ZIP archive containing the project skeleton.
 
 Download the archive and extract files into your disc, import the source codes into your IDEs.
 
@@ -119,27 +119,27 @@ To use Jetty to replace the default Reactor Netty.
 
 ```xml
 <dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-webflux</artifactId>
-	 <exclusions>
-		<exclusion>
-			<artifactId>spring-boot-starter-reactor-netty</artifactId>
-			<groupId>org.springframework.boot</groupId>
-		</exclusion>
-	</exclusions>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-webflux</artifactId>
+  <exclusions>
+    <exclusion>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-reactor-netty</artifactId>
+    </exclusion>
+  </exclusions>
 </dependency>
 
 <dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-jetty</artifactId>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-jetty</artifactId>
 </dependency>
 ```
 
 Check the sample codes, [spring-reactive-sample/boot-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-jetty).
 
-### Undertow
+### Undertow (deprecated)
 
-Similiarly, you can use Undertow as target runtime.
+You can use Undertow as the runtime, but note that Undertow examples in this repository are retained for historical reference and are marked deprecated. For new projects prefer Reactor Netty or Jetty.
 
 ```xml
 <dependency>

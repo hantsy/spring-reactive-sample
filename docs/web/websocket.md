@@ -6,7 +6,7 @@ toc: true
 ---
 
 # WebSocket
-WebSocket is a bi-directional multiplexed protocol,  it is based on HTTP protocol.  WebSocket is wildly used in client and server real-time communications, such as online gaming,  and multiple clients chat applications.   It is very flexible to create your own sub protocol. 
+WebSocket is a bi-directional, multiplexed protocol built on HTTP. It is widely used for real-time client-server communication (chat, live updates, gaming) and supports custom subprotocols.
 
 Spring WebFlux adds simple basic WebSocket support.
 
@@ -35,11 +35,10 @@ public class PostsWebSocketHandler implements WebSocketHandler {
         return doSend(session, Mono.just(message));
     }
 
-    // TODO: workaround for suspected RxNetty WebSocket client issue
-    // https://github.com/ReactiveX/RxNetty/issues/560
-    private Mono<Void> doSend(WebSocketSession session, Publisher<WebSocketMessage> output) {
-        return session.send(Mono.delay(Duration.ofMillis(100)).thenMany(output));
-    }
+    // Small delay to avoid client-side timing issues when sending initial frames.
+        private Mono<Void> doSend(WebSocketSession session, Publisher<WebSocketMessage> output) {
+            return session.send(Mono.delay(Duration.ofMillis(100)).thenMany(output));
+        }
 
 }
 ```

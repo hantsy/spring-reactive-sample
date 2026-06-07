@@ -7,7 +7,7 @@ toc: true
 
 # RouterFunction
 
-You have to know the *functional programming* is so hot in these days. Spring introduced functional style in the 5.x era.  Utilize with the new `RouterFunction`, you can handle your web requests in a series of fluent APIs instead of writing a  `@RestController`.
+Functional routing provides a concise, fluent alternative to @RestController. Introduced in the Spring 5 era, RouterFunction remains fully supported in Spring Framework 7. RouterFunction lets you compose routes and handlers using a functional API instead of controller classes.
 
 For example,  there is a simple controller class.
 
@@ -19,8 +19,8 @@ class MessageController {
     @GetMapping
     Flux<Message> allMessages(){
         return Flux.just(
-            Message.builder().body("hello Spring 5").build(),
-            Message.builder().body("hello Spring Boot 2").build()
+            Message.builder().body("hello Spring Framework 7").build(),
+            Message.builder().body("hello Spring Boot 4").build()
         );
     }
    
@@ -34,10 +34,10 @@ You can write the same functionality with a  `RouterFunction` bean instead.
 public RouterFunction<ServerResponse> routes() {
     return route(GET("/"),(ServerRequest req)-> ok()
                  .body(
-                     BodyInserters.fromObject(
+                     BodyInserters.fromValue(
                          Arrays.asList(
-                             Message.builder().body("hello Spring 5").build(),
-                             Message.builder().body("hello Spring Boot 2").build()
+                             Message.builder().body("hello Spring Framework 7").build(),
+                             Message.builder().body("hello Spring Boot 4").build()
                          )
                      )
                  )
@@ -45,7 +45,7 @@ public RouterFunction<ServerResponse> routes() {
 }
 ```
 
-The  `reoute`(from `RouterFunctions`) accepts a `RequestPredicate` and `HandlerFunction`.  `HandlerFunction` is a  `@FunctionalInteface`.
+The `route` (from `RouterFunctions`) accepts a `RequestPredicate` and a `HandlerFunction`. `HandlerFunction` is a `@FunctionalInterface`.
 
 `RouterFunctions` and `RequestPredicates` are helpers to make it easy to assemble the request routes and predicates.
 

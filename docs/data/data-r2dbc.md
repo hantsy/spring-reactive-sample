@@ -6,21 +6,18 @@ nav_order: 3
 
 # Spring Data R2dbc 
 
-> This post focused on Spring Boot 2.3  or previous version which shipped with Spring Data R2dbc 1.1.  
-
-**Spring Data R2dbc 1.2 brought plenty of changes and broken APIs. For the newest Spring Boot 2.4 and Spring Data R2dbc 1.2, please go to [Spring R2dbc Sample](https://github.com/hantsy/spring-r2dbc-sample) and update yourself to the latest R2dbc**.
-
-
+> Note: This article has been updated for Spring Framework 7 and Spring Boot 4. Use the Spring Boot starter `spring-boot-starter-data-r2dbc` for managed R2DBC dependencies.
 
 ## Getting Started
 
+Generate a Spring Boot project using https://start.spring.io and choose:
 
-Generate a Spring Boot project using [Spring Initializr](https://start.spring.io), and select the following options.
+* Project type: Maven (or Gradle)
+* Java version: 21 (or Java 17 LTS)
+* Spring Boot: 4.x
+* Dependencies: Spring WebFlux, Spring Data R2DBC (`spring-boot-starter-data-r2dbc`), and optional Lombok
 
-* Project type: Maven
-* Java version : 11
-* Spring Boot : 2.2.4.RELEASE
-* Dependencies: Reactive Web, Lombok, R2dbc 
+Open the generated `pom.xml` and verify `spring-boot-starter-data-r2dbc` is present.
 
 Open the *pom.xml* file in the project root folder.
 

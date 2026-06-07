@@ -8,19 +8,18 @@ nav_order: 2
 
 > The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0. If you are using SDN Rx  it is better to upgrade to the official Spring Data Neo4j.
 
-> This post targets Spring Data Neo4j 6.0 GA and Spring Boot 2.4.x release.
+> This post explains using Spring Data Neo4j with Spring Framework 7 and Spring Boot 4.
 
 ## Getting Started
 
-Firstly, generate a Spring  WebFlux project skeleton using [Spring initializr](https://start.spring.io). 
+Generate a Spring WebFlux project using https://start.spring.io and choose:
 
-* Choose Maven as project type(If you prefer Gradle, choose Gradle please)
-* And select Spring Boot 2.4.3
-* And select Java 11 or Java 15, personally I would like use the latest Java to experience the upcoming preview features
-* Add the following dependencies.
-  * Data Neo4j
-  * Web Reactive
-  * Lombok
+* Project type: Maven (or Gradle)
+* Spring Boot: 4.x
+* Java version: 21 (or Java 17 LTS)
+* Add dependencies: Spring Data Neo4j, Spring WebFlux, Lombok (optional)
+
+Open the generated `pom.xml` and verify the `spring-boot-starter-data-neo4j` and `spring-boot-starter-webflux` starters are present.
 
 Extract the downloaded archive into your disc, and import into your IDEs
 
