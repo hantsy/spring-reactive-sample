@@ -1,0 +1,99 @@
+site_name: Spring Reactive Programming
+site_description: A collection of tutorials and code snippets for Spring WebFlux and the reactive Spring ecosystem.
+site_author: Hantsy Bai
+site_url: https://hantsy.github.io/spring-reactive-sample/
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - toc.integrate
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/hantsy/spring-reactive-sample
+
+plugins:
+  - search
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - toc:
+      permalink: true
+
+nav:
+  - Home: index.md
+  - Preface: preface.md
+  - Getting Started:
+      - start/index.md
+      - start/introduction.md
+      - start/first.md
+      - start/boot-first.md
+  - Reactive Web:
+      - web/index.md
+      - web/intro.md
+      - web/web-filter.md
+      - web/func.md
+      - web/exception.md
+      - web/multipart.md
+      - web/sse.md
+      - web/websocket.md
+      - web/view.md
+      - web/client.md
+  - Reactive Data:
+      - data/index.md
+      - data/data-mongo.md
+      - data/data-redis.md
+      - data/data-cassandra.md
+      - data/data-couchbase.md
+      - data/data-elasticsearch.md
+      - data/data-neo4j.md
+  - Security:
+      - security/index.md
+      - security/start.md
+      - security/config.md
+      - security/config-boot.md
+      - security/method.md
+      - security/user-details-repo.md
+      - security/form.md
+  - Session:
+      - session/index.md
+      - session/intro.md
+  - Integration:
+      - int/index.md
+      - int/intro.md
+  - Other Topics:
+      - other/kotlin.md
+      - other/groovy.md
+      - other/cache.md
+      - other/event.md
+      - other/schedule.md
+      - other/restdocs.md
+      - other/testing.md
+      - other/rxjava.md
+      - other/mutiny.md
+      - other/java9.md
