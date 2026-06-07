@@ -10,24 +10,23 @@ Spring Boot 4.x targets the latest Spring technology stack, including Spring Fra
 
 Spring Boot added a new starter `spring-boot-starter-webflux` for starting a WebFlux application.
 
-
 ## Generate project skeleton
 
 Follow the following steps to prepare the project skeleton using [Spring initializr](http://start.spring.io).
 
-Open your browser and navigate to [http://start.spring.io](http://start.spring.io). 
+Open your browser and navigate to [http://start.spring.io](http://start.spring.io).
 
 ![Spring Boot initializer](./init.png)
 
-In the Spring Boot Initializr page, fill the following fields. 
+In the Spring Boot Initializr page, fill the following fields.
 
-1. Select the latest Spring Boot 4.x release (for example, 4.0.0). 
+1. Select the latest Spring Boot 4.x release (for example, 4.0.0).
 2. In the dependencies box, type **reactive** and choose **Reactive Web** to add `spring-boot-starter-webflux`. Optionally add Lombok, Reactive MongoDB, Reactive Redis, or other starters you need.
 3. Click **Generate project** (or press **ALT+ENTER**) to download a ZIP archive containing the project skeleton.
 
 Download the archive and extract files into your disc, import the source codes into your IDEs.
 
-Open the pom.xml, you will see the `spring-boot-starter-webflux` is added into *dependencies*.
+Open the pom.xml, you will see the `spring-boot-starter-webflux` is added into _dependencies_.
 
 ```xml
 <dependency>
@@ -65,7 +64,6 @@ mvn spring-boot:run
 
 Alternatively, to start Spring Boot applications in your IDEs, run it just like running a general-purpose Java application.
 
-
 ## Getting Started
 
 As an exercise, try to add the similar codes with [the former post](./first.md) to expose RESTful APIs for `Post`.
@@ -91,7 +89,7 @@ It is easy to switch to other embedded servers.
 
 ### Apache Tomcat
 
-If you want to use Apache Tomcat as target runtime environment, just exclude `spring-boot-starter-reactor-netty` from `spring-boot-starter-webflux`, and add an extra dependency `spring-boot-starter-tomcat` into *pom.xml*.
+If you want to use Apache Tomcat as target runtime environment, just exclude `spring-boot-starter-reactor-netty` from `spring-boot-starter-webflux`, and add an extra dependency `spring-boot-starter-tomcat` into _pom.xml_.
 
 ```xml
 <dependency>
@@ -113,7 +111,7 @@ If you want to use Apache Tomcat as target runtime environment, just exclude `sp
 
 Check the sample codes, [spring-reactive-sample/boot-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-tomcat).
 
-### Eclipse Jetty 
+### Eclipse Jetty
 
 To use Jetty to replace the default Reactor Netty.
 

@@ -46,6 +46,7 @@ markdown_extensions:
       permalink: true
 
 nav:
+  - Home: index.md
   - Preface: preface.md
   - Getting Started:
       - start/intro.md

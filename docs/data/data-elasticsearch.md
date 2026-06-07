@@ -4,7 +4,6 @@ parent: Reactive Data Operations
 nav_order: 8
 ---
 
-
 # Spring Data ElasticSearch
 
 ElasticSearch is well known as a search engine, also working well as document based NoSQL.
@@ -79,7 +78,3 @@ To run the application, you have to serve a running ElasticSearch server firstly
 ```bash
 docker-compose up elasticsearch
 ```
-
-
-
-

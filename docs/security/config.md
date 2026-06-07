@@ -23,7 +23,7 @@ When you are developing a Spring Web application, try to add the following into 
 </dependency>
 ```
 
-Create a configuration class, add `@EnableWebFluxSecurity` annotation to enable  WebFlux support for Spring security.
+Create a configuration class, add `@EnableWebFluxSecurity` annotation to enable WebFlux support for Spring security.
 
 ```java
 @EnableWebFluxSecurity
@@ -133,4 +133,3 @@ Note: Unnecessary use of -X or --request, POST is already inferred.
 ```
 
 It is done successfully, and returns the new created post.
-

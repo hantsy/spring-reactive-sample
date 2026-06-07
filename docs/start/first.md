@@ -8,37 +8,32 @@ nav_order: 2
 
 A working example is worth a thousand words. Let's write code and explore the reactive programming features introduced in Spring Framework 7.
 
-As an example, I will reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application. 
+As an example, I will reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application.
 
 > In this post, we prepare the codes manually and do not use Spring Boot autoconfiguration. I think it will help you to understand the essential configuration in a Spring WebFlux application.
 
-In the following steps we will start with creating RESTful APIs for `Post`. 
-
+In the following steps we will start with creating RESTful APIs for `Post`.
 
 ## Prerequisites
 
 Before writing some real codes, make sure you have installed the essential software:
 
-* Java 21 (or Java 17 LTS). Install a JDK from Temurin/Adoptium, Oracle, or your preferred vendor: https://adoptium.net/.
-* [Apache Maven](https://maven.apache.org) or [Gradle](http://www.gradle.org)
-* Your favorite IDE, including :
-  * NetBeans IDE
-  
-  * Eclipse IDE (or base on  Eclipse, eg. Spring Tool Suite is highly recommended) 
-  
-  * IntelliJ IDEA Community Edition or Ultimate Edition
-  
-  * VSCode with Java feature pack and Spring feature pack
-  
-  * etc
-    
+- Java 21 (or Java 17 LTS). Install a JDK from Temurin/Adoptium, Oracle, or your preferred vendor: https://adoptium.net/.
+- [Apache Maven](https://maven.apache.org) or [Gradle](http://www.gradle.org)
+- Your favorite IDE, including :
+    - NetBeans IDE
+    - Eclipse IDE (or base on Eclipse, eg. Spring Tool Suite is highly recommended)
+    - IntelliJ IDEA Community Edition or Ultimate Edition
+    - VSCode with Java feature pack and Spring feature pack
+    - etc
+
 > **NOTE**: Do not forget to add path which includes `java` and `mvn` command into your system environment variable **PATH** .
 
 ## Generate project skeleton
 
 Personally I prefer to use Apache Maven to build Java applications.
 
-Run the following command to create a general web application from the existing Maven archetype. 
+Run the following command to create a general web application from the existing Maven archetype.
 
 ```
 $ mvn archetype:generate -DgroupId=com.example \
@@ -46,17 +41,17 @@ $ mvn archetype:generate -DgroupId=com.example \
 	-DarchetypeArtifactId=maven-archetype-webapp \
 	-DinteractiveMode=false \
 ```
-> **NOTE**:  I would like Unix like bash to run commands in my terminal. Under Windows system, you can choose CygWin or convert it to Windows form.
+
+> **NOTE**: I would like Unix like bash to run commands in my terminal. Under Windows system, you can choose CygWin or convert it to Windows form.
 
 Import the generated codes into your IDE..
 
-Open *pom.xml* in your IDE editor, add some modifications:
+Open _pom.xml_ in your IDE editor, add some modifications:
 
 1. Add `spring-boot-starter-parent` as parent POM to manage the versions of all required dependencies for this project.
 2. Add `spring-webflux`, `jackson-databind`, `reactor-core` as dependencies to get Spring Web Reactive support
 3. Add `logback` as logging framework, `jcl-over-slf4j` is a bridge for Spring jcl and slf4j.
-4. Add Lombok to erase the tedious getters, setters, etc for  POJO classes. More details go to [Lombok project](http://projectlombok.org).
-
+4. Add Lombok to erase the tedious getters, setters, etc for POJO classes. More details go to [Lombok project](http://projectlombok.org).
 
 The final pom.xml looks like:
 
@@ -87,7 +82,7 @@ The final pom.xml looks like:
         <java.version>21</java.version>
     </properties>
 
-    <dependencies>     
+    <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
@@ -96,27 +91,27 @@ The final pom.xml looks like:
             <groupId>org.springframework</groupId>
             <artifactId>spring-webflux</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>io.netty</groupId>
             <artifactId>netty-buffer</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>io.projectreactor.netty</groupId>
             <artifactId>reactor-core</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
@@ -133,7 +128,7 @@ The final pom.xml looks like:
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
         </dependency>
-        
+
     </dependencies>
 </project>
 ```
@@ -151,17 +146,17 @@ Create a new class named `Post`, it includes three fields: `id`, `title`, `conte
 @NoArgsConstructor
 @AllArgsConstructor
 class Post {
-    
+
     private Long id;
     private String title;
     private String content;
-    
+
 }
 ```
 
 In the above codes, `@Data`, `@ToString`, `@Builder`, `@NoArgsConstructor`, `@AllArgsConstructor` are from the Lombok project.
 
-When you compile `Post`, it will utilize Java compiler built-in  *Annotation Processing Tooling* feature to add extra facilities into the final compiled classes, including:
+When you compile `Post`, it will utilize Java compiler built-in _Annotation Processing Tooling_ feature to add extra facilities into the final compiled classes, including:
 
 1. Getters and setters of the three fields, and overrides `equals` and `hashCode` methods.
 2. Overrides `toString` method.
@@ -208,17 +203,17 @@ class PostRepository {
 
 Currently we have not connect to any database, here we use a `Map` backed data store instead. When we come to discuss the reactive features provided by Spring Data projects, we will replace it with a real Spring Data reactive implementation.
 
-If you have used Spring Data before, you will find these APIs are every similiar with `Repository` interface provided in Spring Data. 
+If you have used Spring Data before, you will find these APIs are every similiar with `Repository` interface provided in Spring Data.
 
 The main difference is in the current Repository class all methods return a `Flux` or `Mono`.
 
 `Flux` and `Mono` are from Reactor, which powers the reactive support in Spring Framework 7 by default.
 
-* `Flux` represents a stream of 0..N elements.
-* `Mono` represents an asynchronous 0..1 result.
+- `Flux` represents a stream of 0..N elements.
+- `Mono` represents an asynchronous 0..1 result.
 
-* `Flux` means it could return lots of results in a stream. 
-* `Mono` means it could return 0 to 1 result. 
+- `Flux` means it could return lots of results in a stream.
+- `Mono` means it could return 0 to 1 result.
 
 Create a controller class named `PostController` to expose RESTful PAIs for `Post` entity.
 
@@ -226,7 +221,7 @@ Create a controller class named `PostController` to expose RESTful PAIs for `Pos
 @RestController
 @RequestMapping(value = "/posts")
 class PostController {
-    
+
     private final PostRepository posts;
 
     public PostController(PostRepository posts) {
@@ -242,24 +237,25 @@ class PostController {
     public Mono<Post> get(@PathVariable(value = "id") Long id) {
         return this.posts.findById(id);
     }
-    
+
     @PostMapping(value = "")
     public Mono<Post> create(Post post) {
         return this.posts.createPost(post);
     }
-   
+
 }
 ```
+
 If you have some experience in Spring WebMvc, you will see the above codes are almost same as the existing one, except we return a `Flux` or `Mono` as the response body.
 
-Next, let's create  a `@Configuration` class, add an `@EnableWebFlux` annotation to activiate webflux support in this application.
+Next, let's create a `@Configuration` class, add an `@EnableWebFlux` annotation to activiate webflux support in this application.
 
 ```java
 @Configuration
 @ComponentScan
 @EnableWebFlux
 class WebConfig {
-    
+
 }
 ```
 
@@ -269,14 +265,13 @@ Now we almost have done the programming work, let's try to bootstrap the applica
 
 According to the official documentation (see the Web on Reactive Stack section), Spring Framework 7 provides several options to bootstrap a reactive web application: https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#spring-webflux
 
->Spring WebFlux is supported on Tomcat, Jetty, Servlet 3.1+ containers, as well as on non-Servlet runtimes such as Netty and Undertow. 
+> Spring WebFlux is supported on Tomcat, Jetty, Servlet 3.1+ containers, as well as on non-Servlet runtimes such as Netty and Undertow.
 
 ![Spring Webflux](./webflux.png)
 
-
 ### Apache Tomcat
 
-Create a general-purpose `Application` class to start the application manually. 
+Create a general-purpose `Application` class to start the application manually.
 
 ```java
 @Configuration
@@ -325,7 +320,7 @@ The above codes perform some tasks.
 
 1. Create a `HttpHandler` from `ApplicationContext`.
 2. Use `TomcatHttpHandlerAdapter` to bridge the Servlet APIs to the reactive based `HttpHandler`.
-3. Start tomcat server. 
+3. Start tomcat server.
 
 Do not forget add the `tomcat-embed-core` to project dependencies.
 
@@ -336,7 +331,7 @@ Do not forget add the `tomcat-embed-core` to project dependencies.
 </dependency>
 ```
 
-You can simply run this class in IDEs as java applications. 
+You can simply run this class in IDEs as java applications.
 
 If you want to package all dependencies into one jar and run the application in command line, eg. `java -jar filename`, `maven-assembly-plugin` can help this purpose.
 
@@ -377,14 +372,14 @@ Open your terminal, run the following command in your project root folder:
 mvn package
 ```
 
-When it is done, switch to the *target* folder, besides the general jar, you will find an extra fat jar was generated, which filename is ended with **jar-with-dependencies.jar**.
+When it is done, switch to the _target_ folder, besides the general jar, you will find an extra fat jar was generated, which filename is ended with **jar-with-dependencies.jar**.
 
 ```
 spring-reactive-sample-vanilla-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 spring-reactive-sample-vanilla-0.0.1-SNAPSHOT.jar
 ```
 
-Run the following command to run this application. 
+Run the following command to run this application.
 
 ```
 java -jar target/spring-reactive-sample-vanilla-0.0.1-SNAPSHOT-jar-with-dependencies.jar
@@ -456,6 +451,7 @@ Replace `tomcat-embed-core` with the following jetty related dependencies.
 	<artifactId>jetty-servlet</artifactId>
 </dependency>
 ```
+
 Similarly, you can run the application directly in your IDEs.
 
 For the complete codes, check [spring-reactive-sample/vanilla-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-jetty).
@@ -575,7 +571,7 @@ public class AppInitializer extends AbstractReactiveWebInitializer {
 }
 ```
 
->  The former  `AbstractAnnotationConfigDispatcherHandlerInitializer` is problematic, check notes I added in the sample codes [spring-reactive-sample/war](https://github.com/hantsy/spring-reactive-sample/blob/master/war/src/main/java/com/example/demo/AppInitializer.java)
+> The former `AbstractAnnotationConfigDispatcherHandlerInitializer` is problematic, check notes I added in the sample codes [spring-reactive-sample/war](https://github.com/hantsy/spring-reactive-sample/blob/master/war/src/main/java/com/example/demo/AppInitializer.java)
 
 Next change the project packaging from **jar** to **war** in pom.xml.
 
@@ -593,14 +589,14 @@ And add `servlet-api` to your project dependencies.
 </dependency>
 ```
 
-Now you can run this application on a IDE managed Servlet 3.1 Container directly. 
+Now you can run this application on a IDE managed Servlet 3.1 Container directly.
 
 Or package the project into a **war** format and deploy it into a servlet 3.1 based container(tomcat, jetty) manually.
 
 Alternatively, if you want to run this application via `mvn` command in the development stage. `cargo-maven2-plugin` can archive this purpose.
 
 ```xml
-<plugin> 
+<plugin>
 	<groupId>org.apache.maven.plugins</groupId>
 	<artifactId>maven-war-plugin</artifactId>
 	<configuration>
@@ -666,4 +662,4 @@ public class Application {
 }
 ```
 
-For the complete codes, check  [spring-reactive-sample/register-bean](https://github.com/hantsy/spring-reactive-sample/blob/master/register-bean).
+For the complete codes, check [spring-reactive-sample/register-bean](https://github.com/hantsy/spring-reactive-sample/blob/master/register-bean).

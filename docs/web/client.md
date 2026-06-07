@@ -5,11 +5,11 @@ nav_order: 5
 toc: true
 ---
 
-# WebClient 
+# WebClient
 
-Similar to `RestTemplate` and `AsyncRestTemplate`, in the  WebFlux stack, Spring adds a `WebClient` to perform HTTP requests and interact with HTTP APIs. 
+Similar to `RestTemplate` and `AsyncRestTemplate`, in the WebFlux stack, Spring adds a `WebClient` to perform HTTP requests and interact with HTTP APIs.
 
-The following is a simple example of using `WebClient` to send a `GET` request to the  `/posts` URI and retrieve posts.
+The following is a simple example of using `WebClient` to send a `GET` request to the `/posts` URI and retrieve posts.
 
 ```java
 WebClient client = WebClient.create("http://localhost:8080");
@@ -22,7 +22,7 @@ client
 	.subscribe(post -> System.out.println("post: " + post));
 ```
 
-The `WebClient` provides a builder to configure `ClientConnector`, `Codecs`, `ExchangeStrategies`  and change `HttpHeaders`.  For example.
+The `WebClient` provides a builder to configure `ClientConnector`, `Codecs`, `ExchangeStrategies` and change `HttpHeaders`. For example.
 
 ```java
 WebClient client = WebClient.builder()
@@ -56,12 +56,12 @@ WebClient client = WebClient.builder()
 
 By default, the `ClientConnector` is `ReactorClientHttpConnector`, there are some other built-in implementations:
 
-* [Jetty Reactive HttpClient](https://github.com/jetty-project/jetty-reactive-httpclient)
-* [Apache HttpComponents](https://hc.apache.org/index.html)
+- [Jetty Reactive HttpClient](https://github.com/jetty-project/jetty-reactive-httpclient)
+- [Apache HttpComponents](https://hc.apache.org/index.html)
 
 For the complete codes, check [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/blob/master/client).
 
-Another client utility class is `WebTestClient`  , which is used for testing purpose.
+Another client utility class is `WebTestClient` , which is used for testing purpose.
 
 The following is a simple example.
 
@@ -80,8 +80,6 @@ public class DemoApplicationTests {
 }
 ```
 
-The usage of the `WebTestClient` API is very similar to `WebClient`, but provides  methods to assert the response result.
+The usage of the `WebTestClient` API is very similar to `WebClient`, but provides methods to assert the response result.
 
-> NOTE: Although `WebClient` and `WebTestClient` look similar, `WebTestClient` is a distinct test utility and is not derived from `WebClient`.    
-
-
+> NOTE: Although `WebClient` and `WebTestClient` look similar, `WebTestClient` is a distinct test utility and is not derived from `WebClient`.
