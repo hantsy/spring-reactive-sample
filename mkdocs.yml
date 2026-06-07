@@ -48,11 +48,11 @@ markdown_extensions:
 nav:
   - Preface: preface.md
   - Getting Started:
-      - start/index.md
-      - start/introduction.md
+      - start/intro.md
+      - start/reactive-streams.md
       - start/first.md
       - start/boot-first.md
-  - Reactive Web:
+  - Web Programming:
       - web/intro.md
       - web/web-filter.md
       - web/func.md
@@ -62,16 +62,17 @@ nav:
       - web/websocket.md
       - web/view.md
       - web/client.md
-  - Reactive Data:
-      - data/index.md
+  - Data Operations:
+      - data/intro.md
       - data/data-mongo.md
       - data/data-redis.md
       - data/data-cassandra.md
       - data/data-couchbase.md
       - data/data-elasticsearch.md
       - data/data-neo4j.md
+      - data/data-r2dbc.md
   - Security:
-      - security/index.md
+      - security/intro.md
       - security/start.md
       - security/config.md
       - security/config-boot.md
