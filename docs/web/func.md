@@ -1,15 +1,9 @@
----
-title: Functional Programming
-parent: Reactive Web
-nav_order: 3
-toc: true
----
 
 # RouterFunction
 
 Functional routing provides a concise, fluent alternative to @RestController. Introduced in the Spring 5 era, RouterFunction remains fully supported in Spring Framework 7. RouterFunction lets you compose routes and handlers using a functional API instead of controller classes.
 
-For example,  there is a simple controller class.
+For example, there is a simple controller class.
 
 ```java
 @RestController
@@ -23,13 +17,13 @@ class MessageController {
             Message.builder().body("hello Spring Boot 4").build()
         );
     }
-   
+
 }
 ```
 
-You can write the same functionality with a  `RouterFunction` bean instead.
+You can write the same functionality with a `RouterFunction` bean instead.
 
-```java    
+```java
 @Bean
 public RouterFunction<ServerResponse> routes() {
     return route(GET("/"),(ServerRequest req)-> ok()
@@ -56,11 +50,11 @@ public interface HandlerFunction<T extends ServerResponse> {
 }
 ```
 
-For the complete codes,  check [spring-reactive-sample/boot-start](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-start) and  [spring-reactive-sample/boot-start-routes](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-start-routes).
+For the complete codes, check [spring-reactive-sample/boot-start](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-start) and [spring-reactive-sample/boot-start-routes](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-start-routes).
 
 You can extract the handler codes into a new class.
 
-The following code fragments demonstrates the same features of `PostController`  but written in `RouterFunction`.
+The following code fragments demonstrates the same features of `PostController` but written in `RouterFunction`.
 
 ```java
 @Bean
@@ -73,7 +67,7 @@ public RouterFunction<ServerResponse> routes(PostHandler postController) {
 }
 ```
 
-The implementation of `HandlerFunction` are centralized in a  `PostHandler` class.
+The implementation of `HandlerFunction` are centralized in a `PostHandler` class.
 
 ```java
 @Component
@@ -128,6 +122,6 @@ class PostHandler {
 }
 ```
 
-For the complete codes,  check  [spring-reactive-sample/boot-routes](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-routes).
+For the complete codes, check [spring-reactive-sample/boot-routes](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-routes).
 
 > NOTE: The `RouterFunction` is ported back to Servlet stack since 5.2, check my example [hantsy/spring-webmvc-functional-sample](https://github.com/hantsy/spring-webmvc-functional-sample).

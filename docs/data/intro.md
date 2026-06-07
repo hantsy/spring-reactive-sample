@@ -1,33 +1,31 @@
----
-title: An introduction to Spring Data(Reactive)
-parent: Rective Data Operations
-nav_order: 1
----
 
 # An introduction to Spring Data (Reactive)
 
-Spring Data projects provide first-class reactive support for many data stores, especially NoSQL databases such as Redis, MongoDB, Couchbase and Cassandra.
+This chapter covers reactive data access in the Spring ecosystem. It explains available store integrations, repository patterns, and pragmatic guidance for choosing the right persistence strategy for reactive applications.
 
-Blocking APIs such as JDBC and JPA are not suitable for a reactive WebFlux application. To support relational databases reactively, the R2DBC specification and drivers provide non-blocking access via `r2dbc-spi`. See https://r2dbc.io/ for drivers and documentation.
+What this chapter covers
 
-## Reactive Repository
+- Reactive repositories and common store integrations (MongoDB, Redis, Couchbase, Cassandra)
+- R2DBC for reactive relational access and recommended drivers
+- Mapping, pagination and query-by-example in reactive repositories
+- Interop with Reactor, RxJava, and Mutiny where applicable
 
-Spring Data offers reactive repository variants such as `ReactiveCrudRepository` and `ReactiveSortingRepository`. Subprojects expose store-specific interfaces, for example `ReactiveMongoRepository` for MongoDB.
+What you'll learn
 
-```java
-@NoRepositoryBean
-public interface ReactiveMongoRepository<T,ID>
-  extends ReactiveSortingRepository<T,ID>, ReactiveQueryByExampleExecutor<T> { ... }
-```
+- When to use reactive repositories vs external streaming approaches
+- How to model data and perform common operations without blocking
+- Practical configuration examples for key stores and drivers
 
-Create repositories by extending the appropriate reactive interface:
+Quick notes
 
-```java
-interface PostRepository extends ReactiveCrudRepository<Post, Long> {}
-interface PostRepository extends ReactiveSortingRepository<Post, Long> {}
-interface PostRepository extends ReactiveMongoRepository<Post, Long> {}
-```
+- Traditional JDBC/JPA are blocking and should be avoided in critical reactive paths
+- R2DBC provides a reactive relational API; check driver support and maturity for your DB
 
-## Alternative reactive APIs
+Chapter roadmap
 
-Spring Data provides adapters to interoperate with other reactive libraries. RxJava 3 and SmallRye Mutiny can be used via adapters, while older RxJava 2 support is deprecated; prefer Reactor or RxJava 3 for new projects.
+1. Reactive repository patterns and interfaces
+2. Store-specific guides (MongoDB, Redis, Cassandra, Couchbase)
+3. Pagination, sorting and query-by-example in a reactive context
+4. Migration and testing strategies for reactive data access
+
+See the data/\* files for concrete examples and configuration snippets.

@@ -1,9 +1,3 @@
----
-title: Spring Data Redis
-parent: Reactive Data Operations
-nav_order: 5
----
-
 
 # Spring Data Redis
 
@@ -13,7 +7,7 @@ Spring Data Redis provides a reactive variant of `RedisConnectionFactory` aka `R
 
 Follow the [Getting Started](./start) section to create a base project skeleton, either freestyle (manual wiring) or a Spring Boot 4 starter.
 
-For none Spring Boot project, add the following dependencies to the *pom.xml*.
+For none Spring Boot project, add the following dependencies to the _pom.xml_.
 
 ```xml
 <dependency>
@@ -27,10 +21,10 @@ For none Spring Boot project, add the following dependencies to the *pom.xml*.
 <dependency>
 	<groupId>org.apache.commons</groupId>
 	<artifactId>commons-pool2</artifactId>
-</dependency>    
+</dependency>
 ```
 
->**NOTE**: You have to use `lettuce` as Redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
+> **NOTE**: You have to use `lettuce` as Redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
 
 Create a `@Configuration` class to configure Mongo and enable Reactive support for Redis.
 
@@ -64,10 +58,10 @@ public class RedisConfig {
             RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer(Post.class))
         );
     }
-}	
+}
 ```
 
-`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans. 
+`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans.
 
 In your components, you can inject a `ReactiveRedisConnectionFactory` bean to get a `ReactiveConnection1`.
 
@@ -128,7 +122,7 @@ class FavoriteController {
 ```
 
 For the complete codes, check [spring-reactive-sample/data-redis](https://github.com/hantsy/spring-reactive-sample/blob/master/data-redis).
- 
+
 For Spring Boot applications, the configuration can be simplified. Just add `spring-boot-starter-data-redis-reactive` into the project dependencies.
 
 ```xml
@@ -141,7 +135,6 @@ For Spring Boot applications, the configuration can be simplified. Just add `spr
 Spring boot provides auto-configuration for Redis, and registers `ReactiveRedisConnectionFactory` for you automatically.
 
 For the complete codes, check [spring-reactive-sample/boot-data-redis](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-redis).
-
 
 ## ReactiveRedisTemplate
 
@@ -157,12 +150,12 @@ Let's try to add some sample via a generic Repository interface. Create a `Post`
 @AllArgsConstructor
 @RedisHash("posts")
 class Post {
-    
+
     @Id
     private String id;
     private String title;
     private String content;
-    
+
 }
 ```
 
@@ -192,9 +185,10 @@ class PostRepository {
     }
 }
 ```
+
 ## Redis Messaging
 
-Redis is well known as a key value database, it is also famous for a light-weight messaging broker. 
+Redis is well known as a key value database, it is also famous for a light-weight messaging broker.
 
 Declare a `ReactiveRedisMessageListenerContainer` bean to receive messaging from Redis.
 
@@ -219,7 +213,7 @@ public ReactiveRedisMessageListenerContainer redisMessageListenerContainer(PostR
 		.subscribe(c-> log.info(" count:" + c), null , () -> log.info("saving post."));
 	return container;
 }
-```	
+```
 
 Send a message using `ReactiveRedisOperations` bean.
 
@@ -234,8 +228,8 @@ class PostController {
     public Mono<Long> save(@RequestBody Post post) {
         return this.reactiveRedisOperations.convertAndSend("posts", post );
     }
-	
-}	
+
+}
 ```
 
 For the complete codes, check [spring-reactive-sample/data-redis-message](https://github.com/hantsy/spring-reactive-sample/blob/master/data-redis-message).

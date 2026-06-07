@@ -1,9 +1,3 @@
----
-title: View and View Resolvers
-parent: Reactive Web
-nav_order: 9
-toc: true
----
 
 # View and View Resolvers
 
@@ -27,7 +21,7 @@ Add Thymeleaf-related dependencies. Use the Thymeleaf Spring integration artifac
 </dependency>
 ```
 
-Configure Thymeleaf in a Spring web application. 
+Configure Thymeleaf in a Spring web application.
 
 ```java
 @Configuration
@@ -92,39 +86,36 @@ An example of Thymeleaf template.
 ```html
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>Simple Blog Posts</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <h1>All posts</h1>
-        <div>
-            <table>
-                <thead>
-                    <tr>
-                        <th> ID</th>
-                        <th>Title </th>
-                        <th>Content</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="e : ${posts}">
-                        <td th:text="${e.id}"></td>
-                        <td th:text="${e.title}"></td>
-                        <td th:text="${e.content}"></td>
-                    </tr>
-                </tbody>
-            </table>  
-
-        </div>
-    </body>
+  <head>
+    <title>Simple Blog Posts</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  </head>
+  <body>
+    <h1>All posts</h1>
+    <div>
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Content</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr th:each="e : ${posts}">
+            <td th:text="${e.id}"></td>
+            <td th:text="${e.title}"></td>
+            <td th:text="${e.content}"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
 </html>
 ```
 
-
-
-Source codes:   [spring-reactive-sample/mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-thymeleaf) and  [spring-reactive-sample/boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-thymeleaf) .
+Source codes: [spring-reactive-sample/mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-thymeleaf) and [spring-reactive-sample/boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-thymeleaf) .
 
 ## Freemarker
 
@@ -136,7 +127,7 @@ Add Freemarker dependencies.
 <dependency>
     <groupId>org.freemarker</groupId>
     <artifactId>freemarker</artifactId>
-</dependency>       
+</dependency>
 ```
 
 Add Freemarker configuration.
@@ -198,7 +189,7 @@ An example of Freemarker template.
                 </thead>
                 <tbody>
 
-                        <#list posts as post>        
+                        <#list posts as post>
                         <tr>
                             <td>${post.id}</td>
                             <td>${post.title}</td>
@@ -209,17 +200,17 @@ An example of Freemarker template.
                         </#list>
 
                 </tbody>
-            </table>  
+            </table>
         </div>
     </body>
 </html>
 ```
 
-Source codes:   [spring-reactive-sample/mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-freemarker) and  [spring-reactive-sample/boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-freemarker) .
+Source codes: [spring-reactive-sample/mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-freemarker) and [spring-reactive-sample/boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-freemarker) .
 
 ## Mustache
 
-[Mustache](https://mustache.github.io/) is  a popular template engine in the Ruby and  NodeJS world, it also provides Java implementation.
+[Mustache](https://mustache.github.io/) is a popular template engine in the Ruby and NodeJS world, it also provides Java implementation.
 
 Spring framework does not integrate Mustache as Freemarker. But you can create your own `Veiw` and `ViewResolver` to adapt the Mustache compiler to the Spring world.
 
@@ -445,27 +436,25 @@ public class MustacheResourceTemplateLoader implements TemplateLoader, ResourceL
 
 An example of Mustache template file.
 
-
 {% highlight html %}{% raw %}
 {{>header}}
-	<section class="container">
-        <div class="row">
-			{{#posts}}
-            <div class="col-md-12">
-			    <div class="card">
-				  <div class="card-body">
-					<h4 class="card-title">{{title}}</h4>
-					<h6 class="card-subtitle mb-2 text-muted">{{createdDate}}</h6>
-					<p class="card-text">{{content}}</p>
-					<a href="/posts/{{id}}" class="card-link">View Details</a>
-				  </div>
-				</div>
-			</div>
-			{{/posts}}
-        </div>
-    </section>
+<section class="container">
+<div class="row">
+{{#posts}}
+<div class="col-md-12">
+<div class="card">
+<div class="card-body">
+<h4 class="card-title">{{title}}</h4>
+<h6 class="card-subtitle mb-2 text-muted">{{createdDate}}</h6>
+<p class="card-text">{{content}}</p>
+<a href="/posts/{{id}}" class="card-link">View Details</a>
+</div>
+</div>
+</div>
+{{/posts}}
+</div>
+</section>
 {{>footer}}
 {% endraw %}{% endhighlight %}
 
-
-Source codes:   [spring-reactive-sample/mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-mustache) and  [spring-reactive-sample/boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-mustache) .
+Source codes: [spring-reactive-sample/mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-mustache) and [spring-reactive-sample/boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-mustache) .

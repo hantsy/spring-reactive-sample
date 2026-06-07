@@ -1,24 +1,20 @@
----
-nav_order: 0
----
-
 # Preface
 
-When Spring introduced its reactive stack in the Spring 5 era, I followed the project closely and wrote a long article — "Reactive Programming with Spring 5" — to introduce the new reactive features. This site collects example projects and step-by-step guides that have since been updated for Spring Framework 7 and Spring Boot 4. Example code is available at https://github.com/hantsy/spring-reactive-sample.
+When Spring introduced its reactive stack in the Spring 5 era, I followed it closely and published a long article — [Reactive Programming with Spring 5](https://hantsy.medium.com/reactive-programming-with-spring-5-3bfc5d324ba0) — to introduce the new reactive features (see the original article). This site gathers example projects and step-by-step guides that have since been updated for Spring Framework 7 and Spring Boot 4. Example code is available at <https://github.com/hantsy/spring-reactive-sample>.
 
-As time goes by, some content in the original article are out of date, and the example codes also should be refreshed according to the changes in the latest Spring and Spring Boot. So I decided to restructure the article into a mini book form and update the example codes simultaneously.
+Over time, parts of the original article became outdated and the example code needed refreshing to match the latest Spring and Boot releases. To address this, the material has been restructured into a short, hands-on book while the examples were updated in parallel.
 
 ## Audience
 
-It is a book to introduce the newest Spring WebFlux stack.
+This is a hands-on guide to the Spring Reactive Web stack (Spring WebFlux).
 
-It is not a comprehensive reference book to explore Spring framework. If you are new to Spring, I suggest you read [Spring in Action](https://www.manning.com/books/spring-in-action-sixth-edition) from Manning or [Pro Spring](https://www.apress.com/gp/book/9781430261520) from Apress firstly.
+It is not a comprehensive reference for the entire Spring framework. If you are new to Spring, consider reading [Spring in Action](https://www.manning.com/books/spring-in-action-sixth-edition) or [Pro Spring](https://www.apress.com/gp/book/9781430261520) first.
 
-I assume that you have some experience in Spring application development and are familiar with modern Java syntax (Java 17 or 21 preferred).
+I assume you have some experience developing Spring applications and are comfortable with modern Java (Java 17 or 21 preferred).
 
 ## Example Codes
 
-When introducing new things to the newbie, I believe that *one example exceeds one thousand words*.  For all *Reactive* features in Spring and its ecosystem, including Spring Data, Spring Security, Spring Session, etc.,  I would like to explore them with simple working examples.
+When introducing new concepts, I believe that _one example exceeds one thousand words_. For reactive features across Spring and its ecosystem — including Spring Data, Spring Security, Spring Session, and more — the book uses simple, runnable examples to demonstrate each idea.
 
 All example codes used in this book are available in the Github repository: [hantsy/spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample). In the README file, I listed all examples clearly with a simple description, you can select any of them and practice yourself.
 
@@ -32,6 +28,6 @@ If my work is helpful, please help me to spread it out to your circles or [buy m
 
 ## About Me
 
-I am an impendent freelancer from China with about 20 years of software engineering experience. If you need some development and technical consulting service, please drop me an email, my email address is hantsy@gmail.com.
+I am a self-employed freelancer from China with about 20 years of software engineering experience. If you need some development and technical consulting service, please drop me an email, my email address is <hantsy@gmail.com>.
 
 Enjoy reading!

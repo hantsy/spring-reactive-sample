@@ -1,12 +1,7 @@
----
-title: Form based authentication 
-parent: Spring Security
-nav_order: 6
----
 
-# Form based authentication 
+# Form based authentication
 
-Form based authentication is the simple approach to protect web pages.  
+Form based authentication is the simple approach to protect web pages.
 
 By default Spring security detects the request content type and decide if it should be authenticated by a login form.
 
@@ -32,7 +27,7 @@ public class HomeController {
 }
 ```
 
-And the content of the  *home*  template file.
+And the content of the _home_ template file.
 
 ```html
 <!-- /WEB-INF/templates/home.ftl -->
@@ -56,7 +51,7 @@ And the content of the  *home*  template file.
                 </thead>
                 <tbody>
 
-                        <#list posts as post>        
+                        <#list posts as post>
                         <tr>
                             <td>${post.id}</td>
                             <td>${post.title}</td>
@@ -67,7 +62,7 @@ And the content of the  *home*  template file.
                         </#list>
 
                 </tbody>
-            </table>  
+            </table>
 
         </div>
     </body>
@@ -94,7 +89,7 @@ class SecurityConfig {
 }
 ```
 
-By default, when accessing the default home URL *http://localhost:8080/*,  the `HomeController` will try to handle the request and render the *home.flt* template into a HTML page,  Spring Security will invoke *form* based authentication to protect *web pages*.
+By default, when accessing the default home URL _http://localhost:8080/_, the `HomeController` will try to handle the request and render the _home.flt_ template into a HTML page, Spring Security will invoke _form_ based authentication to protect _web pages_.
 
 By default, Spring Security provides a simple login form page. Alternatively you can customize the login form attribute or specify a new login page in the Spring security configuration.
 
@@ -103,4 +98,3 @@ By default, Spring Security provides a simple login form page. Alternatively you
 ```
 
 Source codes: [spring-reactive-sample/security-form](https://github.com/hantsy/spring-reactive-sample/tree/master/security-form).
-

@@ -1,12 +1,5 @@
----
-title: Configure Spring Security in Spring Boot applications
-parent: Spring Security
-nav_order: 3
----
 
 # Configure Spring Security in Spring Boot applications
-
-
 
 For Spring Boot applications, add it in the project dependencies aside with `spring-boot-starter-security`.
 
@@ -37,4 +30,3 @@ class SecurityConfig {
 // ...
 }
 ```
-

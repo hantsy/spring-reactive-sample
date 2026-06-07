@@ -1,8 +1,3 @@
----
-title: Method level constraints
-parent: Spring Security
-nav_order: 4
----
 
 # Method level constraints
 
@@ -28,11 +23,8 @@ Mono<Post> delete(Long id) {
 }
 ```
 
-If you want to Java EE/Jakarta EE compatible annotations, such `RolesAllowed` , etc.   Add an attribute to the `@EnableGlobalMethodSecurity` annotation.
+If you want to Java EE/Jakarta EE compatible annotations, such `RolesAllowed` , etc. Add an attribute to the `@EnableGlobalMethodSecurity` annotation.
 
 ```java
 @EnableGlobalMethodSecurity(jsr250Enabled = true)
 ```
-
- 
-
