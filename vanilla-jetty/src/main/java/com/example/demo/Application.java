@@ -1,16 +1,21 @@
 package com.example.demo;
 
 import jakarta.servlet.Servlet;
-import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
-import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.ee11.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee11.servlet.ServletHolder;
+import org.eclipse.jetty.http.pathmap.PathSpec;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.handler.PathMappingsHandler;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.*;
+import org.springframework.http.server.reactive.ContextPathCompositeHandler;
 import org.springframework.http.server.reactive.HttpHandler;
-import org.springframework.http.server.reactive.JettyHttpHandlerAdapter;
+import org.springframework.http.server.reactive.JettyCoreHttpHandlerAdapter;
 import org.springframework.web.server.adapter.WebHttpHandlerBuilder;
+
+import java.util.Map;
 
 @Configuration
 @ComponentScan
@@ -23,6 +28,8 @@ public class Application {
     public static void main(String[] args) throws Exception {
         ApplicationContext context = new AnnotationConfigApplicationContext(Application.class);  // (1)
         Server server = context.getBean(Server.class);
+
+        // 4. Starts up application
         server.start();
         //server.join();
 
@@ -32,14 +39,26 @@ public class Application {
 
     @Bean
     public Server jettyServer(ApplicationContext context) throws Exception {
-        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
-        Servlet servlet = new JettyHttpHandlerAdapter(handler);
+        // 1. Initialize the adapter with Spring's HttpHandler
+        HttpHandler httpHandler = WebHttpHandlerBuilder.applicationContext(context).build();
+        // 2. Create the Jetty Core adapter
+        JettyCoreHttpHandlerAdapter adapter = new JettyCoreHttpHandlerAdapter(httpHandler);
 
-        Server server = new Server(8080);
+        // 3. Set up the Jetty 12 Core Path Mappings
+        PathMappingsHandler pathMappingsHandler = new PathMappingsHandler();
 
-        ServletContextHandler contextHandler = new ServletContextHandler("");
-        contextHandler.addServlet(new ServletHolder(servlet), "/*");
-        server.setHandler(contextHandler);
+        // CRITICAL JETTY 12 CHANGE: Bind your adapter explicitly via PathSpec
+        // Use "/*" to ensure all sub-paths underneath the root context are matched correctly
+        pathMappingsHandler.addMapping(PathSpec.from("/*"), adapter);
+
+        // 4. Initialize server and attach the mapping handler
+        Server server = new Server();
+        server.setHandler(pathMappingsHandler);
+
+        // 5. Setup Network Connector
+        ServerConnector connector = new ServerConnector(server);
+        connector.setPort(port);
+        server.addConnector(connector);
 
         return server;
     }
