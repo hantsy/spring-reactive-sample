@@ -39,9 +39,9 @@ public class ProductRepository {
         // Open, execute, and automatically close a session for this specific call
         return Mono.usingWhen(
                 Mono.fromSupplier(() -> driver.session(ReactiveSession.class, sessionConfig)),
-                session -> Mono.from(session.executeWrite(tc -> Mono.from(tc.run(query, parameters))
+                session -> Mono.fromDirect(session.executeWrite(tc -> Mono.from(tc.run(query, parameters))
                         .flatMapMany(ReactiveResult::records)
-                        .single()
+                        .single() // ensure it contains one item
                         .map(result -> {
                             log.debug("saving product {}", result);
                             return new Product(
@@ -73,7 +73,7 @@ public class ProductRepository {
                 Mono.fromSupplier(() -> driver.session(ReactiveSession.class, sessionConfig)),
                 session -> Mono.from(session.executeRead(tc -> Mono.from(tc.run(query, parameters))
                         .flatMapMany(ReactiveResult::records)
-                        .next()
+                        .next() // single or empty
                         .map(result -> {
                             // Extracting using standard .get("productData").get("id") syntax
                             var data = result.get("productData");
