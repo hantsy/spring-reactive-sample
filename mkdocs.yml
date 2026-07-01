@@ -65,6 +65,7 @@ nav:
       - web/client.md
   - Data Operations:
       - data/intro.md
+      - data/client.md
       - data/data-mongo.md
       - data/data-redis.md
       - data/data-cassandra.md
