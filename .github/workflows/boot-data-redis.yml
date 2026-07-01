@@ -21,7 +21,7 @@ jobs:
       run:
         working-directory: "boot-data-redis"
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v7
       with:
           fetch-depth: 0
     - name: Set up JDK
