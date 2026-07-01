@@ -24,7 +24,7 @@
       <dependency>
         <groupId>org.springframework.session</groupId>
         <artifactId>spring-session-data-mongodb</artifactId>
-        <version>3.5.6</version>
+        <version>3.5.7</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
