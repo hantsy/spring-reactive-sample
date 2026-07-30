@@ -16,7 +16,7 @@ I assume you have some experience developing Spring applications and are comfort
 
 When introducing new concepts, I believe that _one example exceeds one thousand words_. For reactive features across Spring and its ecosystem — including Spring Data, Spring Security, Spring Session, and more — the book uses simple, runnable examples to demonstrate each idea.
 
-All example codes used in this book are available in the Github repository: [hantsy/spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample). In the README file, I listed all examples clearly with a simple description, you can select any of them and practice yourself.
+All example codes used in this book are available in the GitHub repository: [hantsy/spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample). In the README file, I listed all examples clearly with a simple description, you can select any of them and practice yourself.
 
 ## Contribution
 

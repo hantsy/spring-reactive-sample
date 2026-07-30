@@ -137,7 +137,7 @@ Add the following project dependencies.
 </dependencies>
 ```
 
-There is a `Controller` exmaple which is written in SmallRye Mutiny.
+There is a `Controller` example which is written in SmallRye Mutiny.
 
 ```java
 @RestController

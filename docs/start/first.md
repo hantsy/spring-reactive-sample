@@ -198,7 +198,7 @@ class PostRepository {
 
 Currently we have not connect to any database, here we use a `Map` backed data store instead. When we come to discuss the reactive features provided by Spring Data projects, we will replace it with a real Spring Data reactive implementation.
 
-If you have used Spring Data before, you will find these APIs are every similiar with `Repository` interface provided in Spring Data.
+If you have used Spring Data before, you will find these APIs are every similar with `Repository` interface provided in Spring Data.
 
 The main difference is in the current Repository class all methods return a `Flux` or `Mono`.
 
