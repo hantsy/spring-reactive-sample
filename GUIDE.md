@@ -19,7 +19,7 @@ The Spring 5 embraces [Reactive Streams](http://www.reactive-streams.org/). For 
 * In Spring Data umbrella projects, a new `ReactiveSortingRepository` interface is added in Spring Data Commons. Redis, Mongo, Cassandra subprojects firstly got reactive supports. Unluckily due to the original JDBC is designated for blocking access, Spring Data JPA can not benefit from this feature. 
 * Spring Session also began to add reactive features, an reactive variant for its `SessionRepository` is included in the latest 2.0.0.M3. 
 
-**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [Github sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
+**NOTE: At the moment I was writing this post, some Spring projects are still under active development, I will update the content and the sample codes against the final release version when they are ready. Please start the [GitHub sample repository](https://github.com/hantsy/spring-reactive-sample) to get update in future.**
 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
@@ -298,7 +298,7 @@ class PostRepository {
 
 Currently we have not connect to any database, here we use a `Map` backed data store instead. When we come to discuss the reactive features provided by Spring Data projects, we will replace it with a real Spring Data reactive implementation.
 
-If you have used Spring Data before, you will find these APIs are every similiar with `Repository` interface provided in Spring Data. 
+If you have used Spring Data before, you will find these APIs are every similar with `Repository` interface provided in Spring Data. 
 
 The main difference is in the current Repository class all methods return a `Flux` or `Mono`.
 
@@ -1664,7 +1664,7 @@ Spring 5 also brings Kotlin on board, and add a few improvements to integrate wi
 
 `BeanDefinitionDSL` allow you declare beans in a fluent DSL file instead of XML configuration or Java annotation configuration.
 
-The following is an exmaple of beans declaration which utilizes the Kotlin specific `BeanDefinitionDSL`.
+The following is an example of beans declaration which utilizes the Kotlin specific `BeanDefinitionDSL`.
 
 ```kotlin
 fun beans() = beans {
@@ -1797,7 +1797,7 @@ Please check out the [Source codes](https://github.com/hantsy/spring-reactive-sa
 
 ## Sample codes
 
-The following table lits all sample codes related to this post. The  [sample  codes ](https://github.com/hantsy/spring-reactive-sample) of this post is hosted on my Github account, welcome to star and fork it.
+The following table lits all sample codes related to this post. The  [sample  codes ](https://github.com/hantsy/spring-reactive-sample) of this post is hosted on my GitHub account, welcome to star and fork it.
 
 | name                     | description                              |
 | ------------------------ | ---------------------------------------- |
