@@ -1,34 +1,34 @@
 
 # Customize UserDetailsRepository
 
+The authentication manager resolves users through a `ReactiveUserDetailsService`, whose single method returns a `Mono<UserDetails>`. The in-memory `MapReactiveUserDetailsService` covers demos; this page shows two ways to replace it.
+
 ## Load users from a properties file
 
-Spring Security provides a `UserDetailsRepositoryResourceFactoryBean` which allow you load users from a properties file to create the `UserDetailsRepository` for your applications.
+Spring Security provides a `ReactiveUserDetailsServiceResourceFactoryBean` which loads users from a properties file and creates the `ReactiveUserDetailsService` for your applications:
 
 ```java
 @Bean
-public UserDetailsRepositoryResourceFactoryBean userDetailsService() {
-	return UserDetailsRepositoryResourceFactoryBean
-		.fromResourceLocation("classpath:users.properties");
+public ReactiveUserDetailsServiceResourceFactoryBean userDetailsService() {
+    return ReactiveUserDetailsServiceResourceFactoryBean
+        .fromResourceLocation("classpath:users.properties");
 }
 ```
 
-The content of the _users.properties_ is similar to the following.
+The content of the _users.properties_ file is similar to the following:
 
 ```
 user=password,ROLE_USER
 admin=password,ROLE_USER,ROLE_ADMIN
 ```
 
-The key is username, the value is password, and it's roles.
+The key is the username; the value is the password and its roles.
 
 Source codes: [spring-reactive-sample/security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties)
 
-## Customize UserDetailsRepository
+## Load users from a database
 
-As said before, you can easily implement your own `UserDetailsRepository`.
-
-Here let's use Mongo as backend store, create a `User` document class which implements spring security specific `UserDetails` interface.
+For real applications, implement the `ReactiveUserDetailsService` against your user store. Using Mongo as the backend store, create a `User` document class that implements the Spring Security `UserDetails` interface:
 
 ```java
 @Data
@@ -74,11 +74,10 @@ class User implements UserDetails {
     public boolean isEnabled() {
         return active;
     }
-
 }
 ```
 
-Create a generic purpose `Repository` for `User`, named `UserRepository`.
+Create a `UserRepository` for `User`:
 
 ```java
 public interface UserRepository extends ReactiveMongoRepository<User, String> {
@@ -87,14 +86,21 @@ public interface UserRepository extends ReactiveMongoRepository<User, String> {
 }
 ```
 
-Replace the `UserDetailsRepository` bean declaration with the following, which connect to the real database.
+Replace the in-memory user details service bean with the following, which connects to the real database:
 
 ```java
 @Bean
-public UserDetailsRepository userDetailsRepository(UserRepository users) {
-	return (username) -> {
-		return users.findByUsername(username).cast(UserDetails.class);
-	};
+public ReactiveUserDetailsService userDetailsService(UserRepository users) {
+    return (username) -> users.findByUsername(username).cast(UserDetails.class);
+}
+```
+
+The [security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo) sample goes one step further and registers a `PasswordEncoder`:
+
+```java
+@Bean
+PasswordEncoder passwordEncoder() {
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 }
 ```
 

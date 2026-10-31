@@ -13,14 +13,13 @@ In the following steps we will start with creating RESTful APIs for `Post`.
 
 Before writing some real codes, make sure you have installed the essential software:
 
-- Java 21 (or Java 17 LTS). Install a JDK from Temurin/Adoptium, Oracle, or your preferred vendor: https://adoptium.net/.
-- [Apache Maven](https://maven.apache.org) or [Gradle](http://www.gradle.org)
-- Your favorite IDE, including :
-    - NetBeans IDE
-    - Eclipse IDE (or base on Eclipse, eg. Spring Tool Suite is highly recommended)
-    - IntelliJ IDEA Community Edition or Ultimate Edition
-    - VSCode with Java feature pack and Spring feature pack
-    - etc
+- Java 21. Install a JDK from [Adoptium](https://adoptium.net/), Oracle, or your preferred vendor.
+- [Apache Maven](https://maven.apache.org) or [Gradle](https://gradle.org)
+- Your favorite IDE:
+    - [IntelliJ IDEA](https://www.jetbrains.com/idea/) (Community or Ultimate Edition)
+    - [Eclipse IDE](https://eclipseide.org/) — with [Spring Tools](https://spring.io/tools) for Spring support
+    - [Apache NetBeans IDE](https://netbeans.apache.org/)
+    - [VS Code](https://code.visualstudio.com/) with the Java and Spring Boot extensions
 
 > **NOTE**: Do not forget to add path which includes `java` and `mvn` command into your system environment variable **PATH** .
 
@@ -46,7 +45,7 @@ Open _pom.xml_ in your IDE editor, add some modifications:
 1. Add `spring-boot-starter-parent` as parent POM to manage the versions of all required dependencies for this project.
 2. Add `spring-webflux`, `jackson-databind`, `reactor-core` as dependencies to get Spring Web Reactive support
 3. Add `logback` as logging framework, `jcl-over-slf4j` is a bridge for Spring jcl and slf4j.
-4. Add Lombok to erase the tedious getters, setters, etc for POJO classes. More details go to [Lombok project](http://projectlombok.org).
+4. Add Lombok to erase the tedious getters, setters, etc for POJO classes. More details go to [Lombok project](https://projectlombok.org).
 
 The final pom.xml looks like:
 
@@ -196,7 +195,7 @@ class PostRepository {
 }
 ```
 
-Currently we have not connect to any database, here we use a `Map` backed data store instead. When we come to discuss the reactive features provided by Spring Data projects, we will replace it with a real Spring Data reactive implementation.
+Currently we have not connected to any database, so this repository uses a `Map` backed data store instead. When we discuss the reactive features provided by the Spring Data projects, we will replace it with a real Spring Data reactive implementation.
 
 If you have used Spring Data before, you will find these APIs are every similar with `Repository` interface provided in Spring Data.
 
@@ -207,10 +206,7 @@ The main difference is in the current Repository class all methods return a `Flu
 - `Flux` represents a stream of 0..N elements.
 - `Mono` represents an asynchronous 0..1 result.
 
-- `Flux` means it could return lots of results in a stream.
-- `Mono` means it could return 0 to 1 result.
-
-Create a controller class named `PostController` to expose RESTful PAIs for `Post` entity.
+Create a controller class named `PostController` to expose RESTful APIs for the `Post` entity.
 
 ```java
 @RestController
@@ -243,7 +239,7 @@ class PostController {
 
 If you have some experience in Spring WebMvc, you will see the above codes are almost same as the existing one, except we return a `Flux` or `Mono` as the response body.
 
-Next, let's create a `@Configuration` class, add an `@EnableWebFlux` annotation to activiate webflux support in this application.
+Next, create a `@Configuration` class and add an `@EnableWebFlux` annotation to activate WebFlux support in this application.
 
 ```java
 @Configuration
@@ -254,7 +250,7 @@ class WebConfig {
 }
 ```
 
-Now we almost have done the programming work, let's try to bootstrap the application.
+The application code is ready. Let's bootstrap the application.
 
 ## Bootstrap
 
@@ -263,6 +259,12 @@ According to the official documentation (see the Web on Reactive Stack section),
 > Spring WebFlux is supported on Tomcat, Jetty, Servlet 3.1+ containers, as well as on non-Servlet runtimes such as Netty and Undertow.
 
 ![Spring Webflux](./webflux.png)
+
+Every bootstrap variant follows the same three steps, built on a handful of core Spring types (Javadoc links):
+
+1. Build an [`HttpHandler`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/server/reactive/HttpHandler.html) from the `ApplicationContext` with [`WebHttpHandlerBuilder`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/server/adapter/WebHttpHandlerBuilder.html) — the low-level contract for reactive request handling.
+2. Wrap it in a server-specific adapter: [`TomcatHttpHandlerAdapter`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/server/reactive/TomcatHttpHandlerAdapter.html), [`JettyCoreHttpHandlerAdapter`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/server/reactive/JettyCoreHttpHandlerAdapter.html), [`ReactorHttpHandlerAdapter`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/server/reactive/ReactorHttpHandlerAdapter.html), or [`UndertowHttpHandlerAdapter`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/server/reactive/UndertowHttpHandlerAdapter.html). Above the adapter, the [`WebHandler`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/server/WebHandler.html) chain assembles the filters and exception handlers — see [An introduction to Reactive Web](../web/intro.md).
+3. Start the embedded server.
 
 ### Apache Tomcat
 
@@ -403,10 +405,11 @@ public class Application {
     private int port = 8080;
 
     public static void main(String[] args) throws Exception {
-        ApplicationContext context = new AnnotationConfigApplicationContext(Application.class);  // (1)
+        ApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
         Server server = context.getBean(Server.class);
+
+        // 4. Starts up application
         server.start();
-        server.join();
 
         System.out.println("Press ENTER to exit.");
         System.in.read();
@@ -414,16 +417,24 @@ public class Application {
 
     @Bean
     public Server jettyServer(ApplicationContext context) throws Exception {
-        HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
-        Servlet servlet = new JettyHttpHandlerAdapter(handler);
+        // 1. Initialize the adapter with Spring's HttpHandler
+        HttpHandler httpHandler = WebHttpHandlerBuilder.applicationContext(context).build();
+        // 2. Create the Jetty Core adapter
+        JettyCoreHttpHandlerAdapter adapter = new JettyCoreHttpHandlerAdapter(httpHandler);
 
+        // 3. Set up the Jetty 12 Core Path Mappings
+        PathMappingsHandler pathMappingsHandler = new PathMappingsHandler();
+
+        // CRITICAL JETTY 12 CHANGE: Bind your adapter explicitly via PathSpec
+        // Use "/*" to ensure all sub-paths underneath the root context are matched correctly
+        pathMappingsHandler.addMapping(PathSpec.from("/*"), adapter);
+
+        // 4. Initialize server and attach the mapping handler
         Server server = new Server();
-        ServletContextHandler contextHandler = new ServletContextHandler(server, "");
-        contextHandler.addServlet(new ServletHolder(servlet), "/");
-        contextHandler.start();
+        server.setHandler(pathMappingsHandler);
 
+        // 5. Setup Network Connector
         ServerConnector connector = new ServerConnector(server);
-        connector.setHost("localhost");
         connector.setPort(port);
         server.addConnector(connector);
 
@@ -433,18 +444,31 @@ public class Application {
 }
 ```
 
-Replace `tomcat-embed-core` with the following jetty related dependencies.
+Since Jetty 11, the Jetty artifact IDs changed: the servlet support moved into environment-specific modules such as `jetty-ee11-servlet` (Jetty 12, EE 11 environment), and the servlet-era `ServletContextHandler` bootstrap is replaced by Jetty Core's `PathMappingsHandler`. Declare a BOM for the EE 11 environment and use the new coordinates:
 
 ```xml
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-server</artifactId>
-</dependency>
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>org.eclipse.jetty.ee11</groupId>
+            <artifactId>jetty-ee11-bom</artifactId>
+            <version>${jetty.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
 
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-servlet</artifactId>
-</dependency>
+<dependencies>
+    <dependency>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-server</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.eclipse.jetty.ee11</groupId>
+        <artifactId>jetty-ee11-servlet</artifactId>
+    </dependency>
+</dependencies>
 ```
 
 Similarly, you can run the application directly in your IDEs.
@@ -545,11 +569,9 @@ And add `undertow-core` in your project dependencies.
 </dependency>
 ```
 
-Check the sample codes: [spring-reactive-sample/vanilla-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-undertow).
-
 ### Standalone Servlet Container
 
-If you prefer traditional web applications and want to package a WAR to deploy into a servlet container, Spring Framework 7 provides AbstractReactiveWebInitializer to help initialize a reactive web application in a Servlet environment. This class implements ApplicationInitializer and is discovered by the servlet container at startup.
+If you prefer traditional web applications and want to package a WAR to deploy into a servlet container, Spring Framework 7 provides `AbstractReactiveWebInitializer` to help initialize a reactive web application in a Servlet environment. This class implements `WebApplicationInitializer` and is discovered by the servlet container at startup.
 
 Create a `AppInitializer` instead of the `Application` class.
 
@@ -559,8 +581,8 @@ public class AppInitializer extends AbstractReactiveWebInitializer {
     @Override
     protected Class<?>[] getConfigClasses() {
         return new Class[]{
-            WebConfig.class,
-            SecurityConfig.class
+                AppConfig.class,
+                WebConfig.class
         };
     }
 }
@@ -574,21 +596,42 @@ Next change the project packaging from **jar** to **war** in pom.xml.
 <packaging>war</packaging>
 ```
 
-And add `servlet-api` to your project dependencies.
+And add the Jakarta Servlet API to your project dependencies.
 
 ```xml
 <dependency>
-	<groupId>javax.servlet</groupId>
-	<artifactId>javax.servlet-api</artifactId>
+	<groupId>jakarta.servlet</groupId>
+	<artifactId>jakarta.servlet-api</artifactId>
 	<scope>provided</scope>
 </dependency>
 ```
 
-Now you can run this application on a IDE managed Servlet 3.1 Container directly.
+Now you can run this application on an IDE managed Servlet container directly.
 
-Or package the project into a **war** format and deploy it into a servlet 3.1 based container(tomcat, jetty) manually.
+Or package the project into a **war** format and deploy it into a Servlet based container (Tomcat, Jetty) manually.
 
-Alternatively, if you want to run this application via `mvn` command in the development stage. `cargo-maven2-plugin` can archive this purpose.
+Alternatively, if you want to run this application via `mvn` commands in the development stage, the [Jetty EE 11 Maven plugin](https://eclipse.dev/jetty/documentation/jetty-12/programming-guide/index.html#jetty-maven-plugin) serves the WAR in place:
+
+```xml
+<plugin>
+	<groupId>org.eclipse.jetty.ee11</groupId>
+	<artifactId>jetty-ee11-maven-plugin</artifactId>
+	<configuration>
+		<scanIntervalSeconds>10</scanIntervalSeconds>
+		<webApp>
+			<contextPath>/</contextPath>
+		</webApp>
+	</configuration>
+</plugin>
+```
+
+Run the following command to start it.
+
+```
+mvn jetty:run
+```
+
+Or use the Cargo plugin to package and deploy into an embedded Tomcat controlled by **cargo**:
 
 ```xml
 <plugin>
@@ -600,16 +643,16 @@ Alternatively, if you want to run this application via `mvn` command in the deve
 </plugin>
 <plugin>
 	<groupId>org.codehaus.cargo</groupId>
-	<artifactId>cargo-maven2-plugin</artifactId>
+	<artifactId>cargo-maven3-plugin</artifactId>
 	<configuration>
 		<container>
-			<containerId>tomcat9x</containerId>
+			<containerId>tomcat10x</containerId>
 			<type>embedded</type>
 		</container>
 
 		<configuration>
 			<properties>
-				<cargo.servlet.port>9000</cargo.servlet.port>
+				<cargo.servlet.port>8080</cargo.servlet.port>
 				<cargo.logging>high</cargo.logging>
 			</properties>
 		</configuration>
@@ -617,13 +660,11 @@ Alternatively, if you want to run this application via `mvn` command in the deve
 </plugin>
 ```
 
-Run the following command to package and deploy it into an embedded tomcat controlled by **cargo**.
-
 ```
 mvn verify cargo:run
 ```
 
-Check the sample codes: [spring-reactive-sample/war](https://github.com/hantsy/spring-reactive-sample/blob/master/war).
+Check the sample codes: [spring-reactive-sample/war](https://github.com/hantsy/spring-reactive-sample/tree/master/war).
 
 ### Alternative Bean Registration
 

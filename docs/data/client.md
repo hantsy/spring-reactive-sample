@@ -17,7 +17,7 @@ Generate a new project at [Spring Initializr](https://start.spring.io/) with the
 - **Project**: Maven
 - **Language**: Java
 - **Spring Boot**: 4.x
-- **Java**: 25
+- **Java**: 21
 - **Dependencies**: `Cassandra`, `Webflux`, `Lombok`, `Testcontainers`
 
 The `spring-boot-starter-cassandra` starter auto-configures the connection pool and exposes the `CqlSession` bean. Since Cassandra's DSE driver includes native reactive support, no additional reactive driver is needed. 
@@ -176,7 +176,7 @@ Visit [Spring Initializr](https://start.spring.io/) and generate a project with:
 - **Project**: Maven
 - **Language**: Java
 - **Spring Boot**: 4.x
-- **Java**: 25
+- **Java**: 21
 - **Dependencies**: `Couchbase`, `Webflux`, `Lombok`, `Testcontainers`
 
 The `spring-boot-starter-couchbase` starter configures the SDK and bootstraps the `Cluster` connection. The Couchbase Java SDK exposes a `ReactiveCollection` API natively, so no additional reactive driver is needed — just call `.reactive()` on any `Collection` reference.
@@ -332,7 +332,7 @@ Create a new project at [Spring Initializr](https://start.spring.io/) with:
 - **Project**: Maven
 - **Language**: Java
 - **Spring Boot**: 4.x
-- **Java**: 25
+- **Java**: 21
 - **Dependencies**: `Spring Data Elasticsearch`, `Webflux`, `Lombok`, `Testcontainers`
 
 > [!IMPORTANT]
@@ -473,7 +473,7 @@ Head to [Spring Initializr](https://start.spring.io/) and generate a project wit
 - **Project**: Maven
 - **Language**: Java
 - **Spring Boot**: 4.x
-- **Java**: 25
+- **Java**: 21
 - **Dependencies**: `MongoDB`, `Webflux`, `Lombok`, `Testcontainers`
 
 The `spring-boot-starter-mongodb` starter exposes both the synchronous and reactive `MongoClient` beans. When used in a reactive application, the starter registers a `com.mongodb.reactivestreams.client.MongoClient` bean automatically.
@@ -635,7 +635,7 @@ Open [Spring Initializr](https://start.spring.io/) and create a project with:
 - **Project**: Maven
 - **Language**: Java
 - **Spring Boot**: 4.x
-- **Java**: 25
+- **Java**: 21
 - **Dependencies**: `Neo4j`, `Webflux`, `Lombok`, `Testcontainers`
 
 The `spring-boot-starter-neo4j` starter bootstraps the Neo4j `Driver` which supports synchronous, async, and reactive sessions out of the box. No additional reactive driver artifact is required — simply request a `ReactiveSession` from the already-configured `Driver` bean at runtime.

@@ -1,98 +1,73 @@
 
 # Spring Data Couchbase
 
-Spring Data Couchbase adds basic Reactive support.
+Spring Data Couchbase adds reactive support on top of the Couchbase Java SDK 3.x. It provides a `ReactiveCouchbaseTemplate` and `ReactiveCouchbaseRepository` alongside the blocking variants, and the SDK itself exposes a `ReactiveCollection` for raw document operations — see [Database Client Modules](client.md#couchbase-cluster) for the raw client approach.
 
-Follow the the [Getting Started](./start) part to create a freestyle(none Spring Boot) or Spring Boot based project skeleton.
+## Getting started
 
-If you are not using Spring Boot, firstly add the following dependencies into your project.
+Follow the [Getting Started](../start/intro.md) chapter to create a project skeleton — freestyle (no Spring Boot) or Spring Boot based.
+
+### Step 1: add the dependencies
+
+For a freestyle Spring project, add the following to the `pom.xml`:
 
 ```xml
 <dependency>
-	<groupId>org.springframework.data</groupId>
-	<artifactId>spring-data-couchbase</artifactId>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-couchbase</artifactId>
 </dependency>
 <dependency>
-	<groupId>com.couchbase.client</groupId>
-	<artifactId>java-client</artifactId>
-</dependency>
-<dependency>
-	<groupId>io.reactivex</groupId>
-	<artifactId>rxjava</artifactId>
-</dependency>
-<dependency>
-	<groupId>io.reactivex</groupId>
-	<artifactId>rxjava-reactive-streams</artifactId>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>java-client</artifactId>
 </dependency>
 ```
 
-Create a `@Configuration` class to configure Cassandra and add `@EnableReactiveCouchbaseRepositories` to enable reactive `Repository` support.
+### Step 2: configure the connection
+
+Create a `@Configuration` class extending `AbstractCouchbaseConfiguration`, and add `@EnableReactiveCouchbaseRepositories` to enable reactive `Repository` support:
 
 ```java
 @Configuration
 @EnableReactiveCouchbaseRepositories(basePackageClasses = {CouchbaseConfig.class})
-public class CouchbaseConfig extends AbstractReactiveCouchbaseConfiguration {
+public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 
-    @Autowired
-    private Environment env;
+    @Value("${couchbase.user}")
+    private String user;
 
-    @Bean
-    public String couchbaseAdminUser() {
-        return env.getProperty("couchbase.adminUser", "Administrator");
-    }
+    @Value("${couchbase.password}")
+    private String password;
 
-    @Bean
-    public String couchbaseAdminPassword() {
-        return env.getProperty("couchbase.adminPassword", "password");
+    @Value("${couchbase.connection-string}")
+    private String connectionString;
+
+    @Value("${couchbase.bucket-name}")
+    private String bucket;
+
+    @Override
+    public String getConnectionString() {
+        return this.connectionString;
     }
 
     @Override
-    protected List<String> getBootstrapHosts() {
-        return Collections.singletonList(env.getProperty("couchbase.host", "127.0.0.1"));
+    public String getUserName() {
+        return this.user;
     }
 
     @Override
-    protected String getBucketName() {
-        return env.getProperty("couchbase.bucket", "default");
+    public String getPassword() {
+        return this.password;
     }
 
     @Override
-    protected String getBucketPassword() {
-        return env.getProperty("couchbase.password", "");
+    public String getBucketName() {
+        return this.bucket;
     }
-
-    @Override
-    protected CouchbaseEnvironment getEnvironment() {
-        return DefaultCouchbaseEnvironment.builder()
-            .connectTimeout(10000)
-            .kvTimeout(10000)
-            .queryTimeout(10000)
-            .viewTimeout(10000)
-            .build();
-    }
-
-    @Override
-    public RxJavaCouchbaseTemplate reactiveCouchbaseTemplate() throws Exception {
-        RxJavaCouchbaseTemplate template = super.reactiveCouchbaseTemplate();
-        template.setWriteResultChecking(WriteResultChecking.LOG);
-        return template;
-    }
-
-    //this is for dev so it is ok to auto-create indexes
-    @Override
-    public IndexManager indexManager() {
-        return new IndexManager();
-    }
-
-    @Override
-    protected Consistency getDefaultConsistency() {
-        return Consistency.READ_YOUR_OWN_WRITES;
-    }
-
 }
 ```
 
-Create a `Post` class to present a document in Couchbase, and add a `@Document` annotation on the class level.
+### Step 3: define the entity and repository
+
+Create a `Post` class to represent a document in Couchbase, and add a `@Document` annotation at the class level:
 
 ```java
 @Data
@@ -104,65 +79,86 @@ Create a `Post` class to present a document in Couchbase, and add a `@Document` 
 class Post {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UNIQUE)
     private String id;
     private String title;
 
     @Field("content")
     private String content;
-
 }
 ```
 
-Create `PostRepository` interface.
+- `@Document` marks the class as a Couchbase document.
+- `@Id` designates the document key; `@GeneratedValue(strategy = GenerationType.UNIQUE)` lets Spring Data generate a unique key for you.
+- `@Field` maps a differently named field in the document.
+
+Create the `PostRepository` interface:
 
 ```java
 @ViewIndexed(designDoc = "post", viewName = "all")
-interface PostRepository extends ReactiveCouchbaseRepository<Post, String>{}
+interface PostRepository extends ReactiveCouchbaseRepository<Post, String> {}
 ```
 
-For the complete codes, check [spring-reactive-sample/data-couchbase](https://github.com/hantsy/spring-reactive-sample/blob/master/data-couchbase).
+### Step 4: run against a Couchbase server
 
-Alternatively, for Spring Boot applications, just need to add `spring-boot-starter-data-couchbase-reactive` into your project dependencies.
-
-```xml
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-data-couchbase-reactive</artifactId>
-</dependency>
-```
-
-No need extra configuration, Spring Boot will auto-configure couchbase and registers all essential beans for you.
-
-For the complete codes, check [spring-reactive-sample/boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-couchbase).
-
-Add some sample data via a `CommandLineRunner` bean or a `ApplicationRunner` bean.
-
-```java
-public void init() {
-	log.info("start data initialization  ...");
-	this.posts
-		.deleteAll()
-		.thenMany(
-			Flux
-				.just("Post one", "Post two")
-				.flatMap(
-					title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-				)
-		)
-		.log()
-		.subscribe(
-			null,
-			null,
-			() -> log.info("done initialization...")
-		);
-
-}
-```
-
-To run the application, you have to serve a running Couchbase server firstly.
+Start a Couchbase server first:
 
 ```bash
 docker-compose up couchbase
 ```
 
-And go to http://localhost:8091 to set the user account and bucket info.
+Open http://localhost:8091 to create the administrator user account and bucket. Set the connection properties in `application.properties`:
+
+```properties
+couchbase.user=Administrator
+couchbase.password=password
+couchbase.connection-string=couchbase://localhost
+couchbase.bucket-name=default
+```
+
+For the complete codes, check [spring-reactive-sample/data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase).
+
+## Spring Boot
+
+For Spring Boot applications, add `spring-boot-starter-data-couchbase-reactive` to the project dependencies and configure the connection in `application.properties`:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-couchbase-reactive</artifactId>
+</dependency>
+```
+
+```properties
+spring.couchbase.connection-string=couchbase://localhost
+spring.couchbase.username=Administrator
+spring.couchbase.password=password
+spring.data.couchbase.bucket-name=default
+```
+
+No extra configuration class is needed — Spring Boot auto-configures Couchbase and registers all essential beans. The [boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-couchbase) sample uses a `WebFlux.fn` handler layer on top of the repository.
+
+## Seeding sample data
+
+Add sample data via a `CommandLineRunner` bean or an `ApplicationRunner` bean:
+
+```java
+public void init() {
+    log.info("start data initialization  ...");
+    this.posts
+        .deleteAll()
+        .thenMany(
+            Flux
+                .just("Post one", "Post two")
+                .flatMap(
+                    title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+                )
+        )
+        .log()
+        .subscribe(
+            null,
+            null,
+            () -> log.info("done initialization...")
+        );
+}
+```

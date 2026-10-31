@@ -1,130 +1,77 @@
 
 # Configure Spring Security
 
-When you are developing a Spring Web application, try to add the following into your project dependencies.
+When you are developing a Spring WebFlux application without Spring Boot, add the security dependencies from the [previous page](start.md) to your project.
 
-```xml
-<dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-core</artifactId>
-</dependency>
-<dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-config</artifactId>
-</dependency>
-<dependency>
-	<groupId>org.springframework.security</groupId>
-	<artifactId>spring-security-webflux</artifactId>
-</dependency>
-```
-
-Create a configuration class, add `@EnableWebFluxSecurity` annotation to enable WebFlux support for Spring security.
+Create a configuration class and add the `@EnableWebFluxSecurity` annotation to enable WebFlux support for Spring Security:
 
 ```java
+@Configuration
 @EnableWebFluxSecurity
 class SecurityConfig {
 
-	@Bean
-	SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
-		return http
-			.authorizeExchange()
-				.pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+    @Bean
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) throws Exception {
+        return http
+            .authorizeExchange(exchange -> exchange
+                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
                 .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
-				.anyExchange().authenticated()
-			.and().csrf().disable()
-			.and()
-			.build();
-	}
+                //.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
+                .anyExchange().authenticated())
+            .build();
+    }
 
-	private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
-		return authentication
-			.map(a -> context.getVariables().get("user").equals(a.getName()))
-			.map(granted -> new AuthorizationDecision(granted));
-	}
+    private Mono<AuthorizationDecision> currentUserMatchesPath(Mono<Authentication> authentication, AuthorizationContext context) {
+        return authentication
+            .map(a -> context.getVariables().get("user").equals(a.getName()))
+            .map(AuthorizationDecision::new);
+    }
 
-	@Bean
-	public MapReactiveUserDetailsService userDetailsRepository() {
-		UserDetails rob = User.withDefaultPasswordEncoder().username("test").password("test123").roles("USER").build();
-		UserDetails admin = User.withDefaultPasswordEncoder().username("admin").password("admin123").roles("USER","ADMIN").build();
-		return new MapReactiveUserDetailsService(rob, admin);
-	}
-
+    @Bean
+    public MapReactiveUserDetailsService userDetailsRepository() {
+        UserBuilder users = User.withDefaultPasswordEncoder();
+        UserDetails user = users.username("user").password("password").roles("USER").build();
+        UserDetails admin = users.username("admin").password("password").roles("USER", "ADMIN").build();
+        return new MapReactiveUserDetailsService(user, admin);
+    }
 }
 ```
 
-1. Use `@EnableWebFluxSecurity` annotation to enable Security for `spring-webflux` based application.
-2. `SecurityWebFilterChain` bean is a must to configure the details of Spring Security. `HttpSecurity` is from `spring-secuirty-webflux`, similar with the general version, but handle `WebExhange` instead of Servlet based `WebRequest`.
-3. A new `UserDetailsRepository` interface is introduced which is aligned with Reactor APIs. By default, an in-memory `Map` based implementation `MapUserDetailsRepository` is provided, you can customsize yourself by implementing the `UserDetailsRepository` interface.
+In the above codes:
 
-Starts up the application and verify the Spring Security configuratoin work as expected.
+1. The `@EnableWebFluxSecurity` annotation enables Security for a `spring-webflux` based application.
+2. A `SecurityWebFilterChain` bean is required to configure the details of Spring Security. `ServerHttpSecurity` comes from the reactive config support — similar to the servlet-stack `HttpSecurity`, but it handles `ServerWebExchange` instead of the Servlet based `WebRequest`.
+3. A `ReactiveUserDetailsService` resolves users reactively. The in-memory `MapReactiveUserDetailsService` is the default choice for demos; you can customize it by implementing the interface yourself — see [Customize UserDetailsRepository](user-details-repo.md).
+4. The `pathMatchers` rules protect the API: `GET /posts/**` is public, `DELETE /posts/**` requires the `ADMIN` role, and every other exchange must be authenticated.
 
-```
-mvn spring-boot:run
-```
+## Verify with curl
+
+Start up the application and verify that the Spring Security configuration works as expected.
 
 After it is started, try to add a new post without authentication:
 
 ```
-#curl -v  -X POST http://localhost:8080/posts -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
-Note: Unnecessary use of -X or --request, POST is already inferred.
-* timeout on name lookup is not supported
-*   Trying ::1...
-* TCP_NODELAY set
-* Connected to localhost (::1) port 8080 (#0)
-> POST /posts HTTP/1.1
-> Host: localhost:8080
-> User-Agent: curl/7.54.1
-> Accept: */*
-> Content-Type:application/json
-> Content-Length: 42
->
-* upload completely sent off: 42 out of 42 bytes
+#curl -v -X POST http://localhost:8080/posts -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
 < HTTP/1.1 401 Unauthorized
 < WWW-Authenticate: Basic realm="Realm"
-< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-< Pragma: no-cache
-< Expires: 0
-< X-Content-Type-Options: nosniff
-< X-Frame-Options: DENY
-< X-XSS-Protection: 1 ; mode=block
-< content-length: 0
-<
-* Connection #0 to host localhost left intact
 ```
 
-The server side rejects the client request, and sends back a 401 error(401 Unauthorized).
+The server side rejects the client request and sends back a 401 error (401 Unauthorized).
 
-Use the predefined **user:password** credentials to get authenticated and send the post request again.
+Use the predefined `user`/`password` credentials to get authenticated and send the request again:
 
 ```
-curl -v  -X POST http://localhost:8080/posts -u "user:password" -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
-Note: Unnecessary use of -X or --request, POST is already inferred.
-* timeout on name lookup is not supported
-*   Trying ::1...
-* TCP_NODELAY set
-* Connected to localhost (::1) port 8080 (#0)
-* Server auth using Basic with user 'test'
-> POST /posts HTTP/1.1
-> Host: localhost:8080
-> Authorization: Basic dGVzdDp0ZXN0MTIz
-> User-Agent: curl/7.54.1
-> Accept: */*
-> Content-Type:application/json
-> Content-Length: 50
->
-* upload completely sent off: 50 out of 50 bytes
+curl -v -X POST http://localhost:8080/posts -u "user:password" -H "Content-Type:application/json" -d "{\"title\":\"My Post\",\"content\":\"content of My Post\"}"
 < HTTP/1.1 200 OK
-< transfer-encoding: chunked
-< Content-Type: application/json;charset=UTF-8
-< Cache-Control: no-cache, no-store, max-age=0, must-revalidate
-< Pragma: no-cache
-< Expires: 0
-< X-Content-Type-Options: nosniff
-< X-Frame-Options: DENY
-< X-XSS-Protection: 1 ; mode=block
 < set-cookie: SESSION=b99124f7-c0a0-4507-b9be-34718af3d137; HTTPOnly
 <
-{"id":"59906f9d3c44060e044fb378","title":"My Post","content":"content of My Post","createdDate":[2017,8,13,23,26,21,392000000]}* Connection #0 to host localhost left intact
+{"id":"59906f9d3c44060e044fb378","title":"My Post","content":"content of My Post"}
 ```
 
-It is done successfully, and returns the new created post.
+The request succeeds and returns the newly created post.
+
+## Restricting access by path variable
+
+The commented `currentUserMatchesPath` fragment above demonstrates a dynamic rule: it grants access only when the authenticated username matches the `{user}` path variable of the exchange. Wire it with `.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)` to activate it.
+
+For the complete codes, check [spring-reactive-sample/security](https://github.com/hantsy/spring-reactive-sample/tree/master/security) and [spring-reactive-sample/security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo), which applies the same rule against a Mongo-backed user store.

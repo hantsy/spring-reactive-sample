@@ -1,30 +1,54 @@
 
-# Spring Session Reactive
+# Spring Session (Reactive)
 
-This chapter describes session management for reactive applications. Unlike traditional servlet sessions, reactive session support requires non-blocking stores and integration points that work with the WebFlux runtime.
+This chapter describes session management for reactive applications. Unlike traditional servlet sessions, reactive session support uses non-blocking stores and integration points that work with the WebFlux runtime.
 
-What this chapter covers
+## WebSession: the reactive session
 
-- Reactive session concepts and how they differ from servlet sessions
-- Supported stores (Redis, MongoDB, other distributed stores) and their trade-offs
-- Spring Session configuration for reactive applications
-- Patterns for stateless authentication, token strategies and when to use server-side sessions
+WebFlux does not use the Servlet `HttpSession`. Instead, every request can access a `WebSession` — a reactive abstraction whose attributes live on the server and whose id is exchanged with the client:
 
-What you'll learn
+```java
+@Controller
+public class SessionController {
 
-- How to choose a session strategy for a reactive service
-- How to configure Spring Session with reactive data stores
-- How to migrate existing session-based apps to a reactive model
+    @PostMapping("/session")
+    public String setAttribute(@ModelAttribute SessionAttributeForm sessionAttributeForm, WebSession session) {
+        session.getAttributes().put(sessionAttributeForm.getAttributeName(), sessionAttributeForm.getAttributeValue());
+        return "redirect:/";
+    }
 
-Prerequisites and notes
+    @GetMapping("/")
+    public String index(Model model, WebSession webSession) {
+        model.addAttribute("webSession", webSession);
+        return "index";
+    }
+}
+```
 
-- Familiarity with Spring Security and basic session concepts is helpful
-- Prefer external, non-blocking stores (e.g., Redis with Lettuce) for production
+Inject a `WebSession` as a controller method parameter and read or write attributes like a plain map. The session id is returned to the client in a `SESSION` cookie by default — there is no `JSESSIONID` cookie in the reactive stack.
 
-Examples and roadmap
+## Spring Session for WebFlux
 
-1. Configuring reactive session storage
-2. Using Spring Session with Spring Security in a WebFlux app
-3. Migration notes and testing strategies
+[Spring Session](https://spring.io/projects/spring-session) replaces the default in-memory session store with a pluggable `ReactiveSessionRepository`. For WebFlux applications, activate it with `@EnableSpringWebSession` (and store-specific variants such as `@EnableRedisWebSession` or `@EnableMongoWebSession`) and provide a `ReactiveSessionRepository` bean.
 
-This chapter focuses on practical configuration and patterns for production-ready session handling in reactive systems.
+| Store | Annotation | Repository | Extra dependency |
+| :--- | :--- | :--- | :--- |
+| In-memory map | `@EnableSpringWebSession` | `ReactiveMapSessionRepository` | `spring-session-core` |
+| Redis | `@EnableRedisWebSession` | `ReactiveRedisSessionRepository` (auto) | `spring-session-data-redis` |
+| MongoDB | `@EnableMongoWebSession` | `ReactiveMongoOperationsSessionRepository` (auto) | `spring-session-data-mongodb` |
+
+An external store is recommended for production: sessions survive restarts and are shared across instances.
+
+## Choosing a session strategy
+
+- **Server-side sessions** (this chapter) — simplest to reason about; pairs naturally with form login and HTTP Basic; use Redis or Mongo for clustered deployments.
+- **Token strategies** (JWT, OAuth2) — stateless; consider when the API is consumed by mobile apps or other services.
+
+## Chapter roadmap
+
+1. [In-memory sessions](in-memory.md) — `@EnableSpringWebSession` with a `ReactiveMapSessionRepository`
+2. [Redis-backed sessions](redis.md) — `@EnableRedisWebSession` with Lettuce
+3. [Mongo-backed sessions](mongo.md) — `@EnableMongoWebSession` with the reactive Mongo driver
+4. [Header-based session id](header.md) — a custom `WebSessionIdResolver` for API clients
+
+Familiarity with [Spring Security](../security/intro.md) is helpful — the samples combine Spring Session with security configurations.

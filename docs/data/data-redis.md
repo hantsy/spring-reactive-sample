@@ -5,7 +5,7 @@ Spring Data Redis provides a reactive variant of `RedisConnectionFactory` aka `R
 
 ## Getting Started
 
-Follow the [Getting Started](./start) section to create a base project skeleton, either freestyle (manual wiring) or a Spring Boot 4 starter.
+Follow the [Getting Started](../start/intro.md) chapter to create a base project skeleton, either freestyle (manual wiring) or a Spring Boot 4 starter.
 
 For none Spring Boot project, add the following dependencies to the _pom.xml_.
 
@@ -26,36 +26,22 @@ For none Spring Boot project, add the following dependencies to the _pom.xml_.
 
 > **NOTE**: You have to use `lettuce` as Redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
 
-Create a `@Configuration` class to configure Mongo and enable Reactive support for Redis.
+Create a `@Configuration` class to configure Redis and enable Reactive support.
 
 ```java
 @Configuration
-@Slf4j
 public class RedisConfig {
-
 
     @Bean
     public ReactiveRedisConnectionFactory connectionFactory() {
         return new LettuceConnectionFactory("localhost", 6379);
     }
 
-//    @Bean
-//    public ReactiveRedisConnectionFactory lettuceConnectionFactory() {
-//
-//        LettuceClientConfiguration clientConfig = LettuceClientConfiguration.builder()
-//            .useSsl().and()
-//            .commandTimeout(Duration.ofSeconds(2))
-//            .shutdownTimeout(Duration.ZERO)
-//            .build();
-//
-//        return new LettuceConnectionFactory(new RedisStandaloneConfiguration("localhost", 6379), clientConfig);
-//    }
-
     @Bean
     public ReactiveRedisTemplate<String, Post> reactiveRedisTemplate(ReactiveRedisConnectionFactory factory) {
         return new ReactiveRedisTemplate<String, Post>(
             factory,
-            RedisSerializationContext.fromSerializer(new Jackson2JsonRedisSerializer(Post.class))
+            RedisSerializationContext.fromSerializer(new JacksonJsonRedisSerializer(Post.class))
         );
     }
 }
@@ -63,7 +49,7 @@ public class RedisConfig {
 
 `LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans.
 
-In your components, you can inject a `ReactiveRedisConnectionFactory` bean to get a `ReactiveConnection1`.
+In your components, you can inject a `ReactiveRedisConnectionFactory` bean to get a `ReactiveConnection`.
 
 ```java
 @Inject ReactiveRedisConnectionFactory factory;
@@ -86,7 +72,7 @@ conn.setCommands()
 			.collect(Collectors.toList())
 	)
 	.log()
-	.subscribe(null, null, ()-> log.info("added favirates..."));
+	.subscribe(null, null, ()-> log.info("added favorites..."));
 ```
 
 And show my favorites in the controller.
@@ -188,34 +174,36 @@ class PostRepository {
 
 ## Redis Messaging
 
-Redis is well known as a key value database, it is also famous for a light-weight messaging broker.
+Redis is well known as a key value database, and it is also a light-weight messaging broker.
 
-Declare a `ReactiveRedisMessageListenerContainer` bean to receive messaging from Redis.
+Declare a `ReactiveRedisMessageListenerContainer` bean to receive messages from Redis pub/sub channels reactively:
 
 ```java
 @Bean
 public ReactiveRedisMessageListenerContainer redisMessageListenerContainer(PostRepository posts, ReactiveRedisConnectionFactory connectionFactory) {
-	ReactiveRedisMessageListenerContainer container = new ReactiveRedisMessageListenerContainer(connectionFactory);
-	ObjectMapper objectMapper = new ObjectMapper();
-	container.receive(ChannelTopic.of("posts"))
-		.map(p->p.getMessage())
-		.map(m -> {
-			try {
-				Post post= objectMapper.readValue(m, Post.class);
-				post.setId(UUID.randomUUID().toString());
-				return post;
-			} catch (IOException e) {
-				return null;
-			}
-		})
-		.switchIfEmpty(Mono.error(new IllegalArgumentException()))
-		.flatMap(p-> posts.save(p))
-		.subscribe(c-> log.info(" count:" + c), null , () -> log.info("saving post."));
-	return container;
+    ReactiveRedisMessageListenerContainer container = new ReactiveRedisMessageListenerContainer(connectionFactory);
+    ObjectMapper objectMapper = new JsonMapper();
+    container.receive(ChannelTopic.of("posts"))
+        .map(p -> p.getMessage())
+        .map(m -> {
+            try {
+                Post post = objectMapper.readValue(m, Post.class);
+                post.setId(UUID.randomUUID().toString());
+                return post;
+            } catch (JacksonException e) {
+                return null;
+            }
+        })
+        .switchIfEmpty(Mono.error(new IllegalArgumentException()))
+        .flatMap(p -> posts.save(p))
+        .subscribe(c -> log.info(" count:" + c), null, () -> log.info("saving post."));
+    return container;
 }
 ```
 
-Send a message using `ReactiveRedisOperations` bean.
+The `container.receive(ChannelTopic.of("posts"))` call subscribes to the `posts` channel and returns a `Flux` of messages, so the processing pipeline is plain Reactor composition.
+
+Send a message using the `ReactiveRedisOperations` bean:
 
 ```java
 @RestController()
@@ -226,10 +214,9 @@ class PostController {
     //...
     @PostMapping("")
     public Mono<Long> save(@RequestBody Post post) {
-        return this.reactiveRedisOperations.convertAndSend("posts", post );
+        return this.reactiveRedisOperations.convertAndSend("posts", post);
     }
-
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/data-redis-message](https://github.com/hantsy/spring-reactive-sample/blob/master/data-redis-message).
+For the complete codes, check [spring-reactive-sample/data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message). For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../int/message-channel.md).

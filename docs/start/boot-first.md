@@ -19,7 +19,7 @@ In the Spring Boot Initializr page, fill the following fields.
 2. In the dependencies box, type **reactive** and choose **Reactive Web** to add `spring-boot-starter-webflux`. Optionally add Lombok, Reactive MongoDB, Reactive Redis, or other starters you need.
 3. Click **Generate project** (or press **ALT+ENTER**) to download a ZIP archive containing the project skeleton.
 
-Download the archive and extract files into your disc, import the source codes into your IDEs.
+Download the archive and extract it to your disk, then import the source codes into your IDE.
 
 Open the pom.xml, you will see the `spring-boot-starter-webflux` is added into _dependencies_.
 
@@ -104,7 +104,7 @@ If you want to use Apache Tomcat as target runtime environment, just exclude `sp
 </dependency>
 ```
 
-Check the sample codes, [spring-reactive-sample/boot-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-tomcat).
+The [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) sample provides Maven profiles to switch between Reactor Netty (default), Tomcat, Jetty, and Undertow — activate one with `mvn spring-boot:run -Ptomcat`.
 
 ### Eclipse Jetty
 
@@ -128,8 +128,6 @@ To use Jetty to replace the default Reactor Netty.
 </dependency>
 ```
 
-Check the sample codes, [spring-reactive-sample/boot-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-jetty).
-
 ### Undertow (deprecated)
 
 You can use Undertow as the runtime, but note that Undertow examples in this repository are retained for historical reference and are marked deprecated. For new projects prefer Reactor Netty or Jetty.
@@ -151,5 +149,3 @@ You can use Undertow as the runtime, but note that Undertow examples in this rep
 	<artifactId>spring-boot-starter-undertow</artifactId>
 </dependency>
 ```
-
-Check the sample codes, [spring-reactive-sample/boot-undertow](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-undertow).

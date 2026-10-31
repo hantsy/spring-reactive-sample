@@ -1,11 +1,15 @@
 
 # Server Sent Events
 
-SSE (Server Sent Events) provides one-way server-to-client communications, it is based on the existing HTTP protocol. In the real world applications, it is useful for sending notifications to clients or some like real time events update in a stream approach, such as news update or stock update, etc.
+SSE (Server Sent Events) provides one-way server-to-client communication over the existing HTTP protocol. In real world applications, it is useful for sending notifications to clients or pushing near real-time updates in a stream — news feeds, stock prices, or chat updates.
 
-## Server Side
+In WebFlux, an SSE endpoint is a controller method (or a functional route) that produces a `Flux` with the `text/event-stream` content type. The stream can come from anywhere — a timer, a database tailable cursor, or a `Sinks` hub that broadcasts messages as they arrive.
 
-In the server side, expose a SSE endpoint is easy. Set the content type to `text/event-stream`, and produces a `Flux` stream in the response body.
+## Server side
+
+### Emitting a stream from a timer
+
+Set the content type to `text/event-stream` and return a `Flux`. The following example emits a time-paced event:
 
 ```java
 @GetMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE)
@@ -16,13 +20,64 @@ public Flux<Post> sse() {
 }
 ```
 
-The above example is emitting a time based event.
+### Broadcasting with Sinks
 
-Source codes: [spring-reactive-sample/sse](https://github.com/hantsy/spring-reactive-sample/blob/master/sse).
+For an application where clients push messages and all connected clients receive them, a Reactor `Sinks.Many` acts as a hub: the service exposes the sink as a `Flux` for subscribers, and pushes new messages into it as they arrive.
 
-## Client Side
+```java
+@Service
+public class MessageService {
 
-There is no special client to consume SSE APIs, like interacting with RESTful APIs, use the existing `WebClient` to consume a SSE endpoint, do not forget to set `Accept` header to `text/event-stream` to consume SSE events.
+    private final Sinks.Many<Message> sinks = Sinks.many().replay().latest();
+
+    public Flux<Message> latestMessages() {
+        return sinks.asFlux();
+    }
+
+    public void send(Message m) {
+        sinks.emitNext(m, EmitFailureHandler.FAIL_FAST);
+    }
+
+}
+```
+
+The `replay().latest()` configuration replays the most recent message to a new subscriber, so a client reconnecting to the stream sees the latest state.
+
+Expose the stream with a controller:
+
+```java
+@RestController
+@RequestMapping("/messages")
+@RequiredArgsConstructor
+public class MessageController {
+
+    private final MessageService messageService;
+
+    @GetMapping(value = "", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Message> messageStream() {
+        return this.messageService.latestMessages();
+    }
+
+    @PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public Mono<ResponseEntity<?>> send(@RequestBody MessageRequest request) {
+        var message = Message.builder()
+            .id(UUID.randomUUID())
+            .body(request.message())
+            .sentAt(LocalDateTime.now())
+            .build();
+        this.messageService.send(message);
+        return Mono.just(created(URI.create("/messages/" + message.getId())).build());
+    }
+}
+```
+
+Every `POST /messages` fans out to all SSE subscribers of `GET /messages`.
+
+Source codes: [spring-reactive-sample/sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse).
+
+## Client side
+
+There is no special client for SSE. Like interacting with RESTful APIs, use the existing `WebClient` to consume an SSE endpoint, and set the `Accept` header to `text/event-stream`:
 
 ```java
 client.get()
@@ -30,6 +85,9 @@ client.get()
     .accept(MediaType.TEXT_EVENT_STREAM)
     .retrieve()
     .bodyToFlux(Message.class)
+    .subscribe(System.out::println);
 ```
 
-A more close to the real world example, go to [hantsy/angular-spring-sse-sample/](https://github.com/hantsy/angular-spring-sse-sample/) in which the client is built with Angular and the server side is a simple Spring Boot application that uses SSE to update the chat messages to client.
+In a browser, the built-in `EventSource` API consumes the same endpoint.
+
+For a complete real world application, see [hantsy/angular-spring-sse-sample](https://github.com/hantsy/angular-spring-sse-sample/), in which the client is built with Angular and the server side is a simple Spring Boot application that uses SSE to broadcast chat messages — backed by a MongoDB tailable cursor, see [Tailable Query](../data/data-mongo.md#tailable-query).

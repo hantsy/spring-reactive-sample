@@ -42,7 +42,7 @@ The exception handling in _reactive_ `@RestController` is similar to the one in 
    }
    ```
 
-`@RestControllerAdvice` only works for `@RestController` .
+`@RestControllerAdvice` only works for `@RestController`.
 
 If you are using `RouterFunction`, create a `WebExceptionHandler` bean to handle it manually.
 
@@ -57,10 +57,30 @@ public WebExceptionHandler exceptionHandler() {
         return Mono.error(ex);
     };
 }
-
-// Note: WebExceptionHandler is a low-level extension point. For most cases prefer @RestControllerAdvice or functional exception handlers.
 ```
 
-> NOTE: `WebExceptionHandler` is a low-level API, also works well for the exception handling in the former controller case.
+> NOTE: `WebExceptionHandler` is a low-level API. It also works for the exception handling in the annotated controller case — the `@ExceptionHandler` mechanism itself is implemented as a chain of `WebExceptionHandler`s.
 
-For the complete codes, check [spring-reactive-sample/exception-handler](https://github.com/hantsy/spring-reactive-sample/blob/master/exception-handler) and [spring-reactive-sample/boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-exception-handler) .
+### Registering a WebExceptionHandler in Spring Boot
+
+In a Spring Boot application, register the handler as a `@Component` with an explicit `@Order(-2)` so it runs before the default `ErrorWebExceptionHandler` (which has order `-1`):
+
+```java
+@Component
+@Order(-2)
+class RestWebExceptionHandler implements WebExceptionHandler {
+
+    @Override
+    public Mono<Void> handle(ServerWebExchange exchange, Throwable ex) {
+        if (ex instanceof PostNotFoundException) {
+            exchange.getResponse().setStatusCode(HttpStatus.NOT_FOUND);
+
+            // marks the response as complete and forbids writing to it
+            return exchange.getResponse().setComplete();
+        }
+        return Mono.error(ex);
+    }
+}
+```
+
+For the complete codes, check [spring-reactive-sample/exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/exception-handler) and [spring-reactive-sample/boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler).

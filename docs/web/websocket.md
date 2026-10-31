@@ -1,80 +1,108 @@
 
 # WebSocket
 
-WebSocket is a bi-directional, multiplexed protocol built on HTTP. It is widely used for real-time client-server communication (chat, live updates, gaming) and supports custom subprotocols.
+WebSocket is a bi-directional, multiplexed protocol built on HTTP. It is widely used for real-time client-server communication — chat, live updates, gaming — and supports custom subprotocols.
 
-Spring WebFlux adds simple basic WebSocket support.
+Spring WebFlux adds simple WebSocket support built on reactive types: a `WebSocketHandler` processes inbound and outbound streams of messages, and a `HandlerMapping` registers handlers at URLs.
 
-## Server Side
+## Server side
 
-Firstly create a WebSocket Handler to process the incoming messages and send back to the client.
+### Step 1: implement a WebSocketHandler
+
+Create a handler to process the incoming messages and send a response back to the client. The simplest form is an echo handler that loops the inbound stream back to the outbound stream:
 
 ```java
-public class PostsWebSocketHandler implements WebSocketHandler {
-
-    private final PostRepository posts;
-
-    public PostsWebSocketHandler(PostRepository posts) {
-        this.posts = posts;
-    }
-
-    @Override
-    public List<String> getSubProtocols() {
-        return Arrays.asList("test");
-    }
+public class EchoHandler implements WebSocketHandler {
 
     @Override
     public Mono<Void> handle(WebSocketSession session) {
-        String protocol = session.getHandshakeInfo().getSubProtocol();
-        WebSocketMessage message = session.textMessage(this.posts.findAll().takeLast(0).toString());
-        return doSend(session, Mono.just(message));
+        return session.send(session.receive()
+                .doOnNext(WebSocketMessage::retain) // Use retain() for Reactor Netty
+                .map(m -> session.textMessage("received:" + m.getPayloadAsText()))
+        );
+    }
+}
+```
+
+`WebSocketSession` exposes `receive()` and `send(Publisher<WebSocketMessage>)` as reactive streams, so a handler is just a composition of the two flows.
+
+A more realistic handler maintains a shared `Sinks.Many` and broadcasts every received message to all connected sessions — the same hub pattern as the [SSE example](sse.md#broadcasting-with-sinks):
+
+```java
+@RequiredArgsConstructor
+public class MessagetHandler implements WebSocketHandler {
+
+    private final ObjectMapper objectMapper;
+
+    private Sinks.Many<Message> sinks = Sinks.many().replay().limit(2);
+    private Flux<Message> outputMessages = sinks.asFlux();
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    @Override
+    public Mono<Void> handle(WebSocketSession session) {
+        var receiveMono = session.receive()
+                .map(WebSocketMessage::getPayloadAsText)
+                .map(this::readIncomingMessage)
+                .flatMap(req -> Mono.fromCallable(
+                        () -> new Message(UUID.randomUUID(), req.message(), LocalDateTime.now())))
+                .log("server receiving::")
+                .doOnNext(data -> executor.execute(
+                        () -> sinks.emitNext(data, Sinks.EmitFailureHandler.FAIL_FAST)))
+                .doOnError(error -> sinks.emitError(error, Sinks.EmitFailureHandler.FAIL_FAST))
+                .then();
+
+        var sendMono = session
+                .send(
+                        Mono.delay(Duration.ofMillis(500))
+                                .thenMany(outputMessages.map(msg -> session.textMessage(toJsonString(msg)))))
+                .log("server sending::")
+                .onErrorResume(throwable -> session.close())
+                .then();
+
+        return Mono.zip(receiveMono, sendMono).then();
     }
 
-    // Small delay to avoid client-side timing issues when sending initial frames.
-        private Mono<Void> doSend(WebSocketSession session, Publisher<WebSocketMessage> output) {
-            return session.send(Mono.delay(Duration.ofMillis(100)).thenMany(output));
-        }
-
+    // toJsonString(...) and readIncomingMessage(...) convert to/from JSON
 }
 ```
 
-And register this handler in a `HandlerMapping` bean.
+### Step 2: register the handler in a HandlerMapping
 
 ```java
-@Bean
-public HandlerMapping handlerMapping() {
-    Map<String, WebSocketHandler> map = new HashMap<>();
-    map.put("/echo", new EchoWebSocketHandler());
-    map.put("/posts", new PostsWebSocketHandler(this.posts));
+@Configuration
+@EnableWebFlux
+class WebConfig {
 
-    SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
-    mapping.setUrlMap(map);
-    return mapping;
+    @Bean
+    public HandlerMapping handlerMapping(ObjectMapper objectMapper) {
+        Map<String, WebSocketHandler> map = new HashMap<>();
+        map.put("/echo", new EchoHandler());
+        map.put("/ws/messages", new MessagetHandler(objectMapper));
+
+        SimpleUrlHandlerMapping mapping = new SimpleUrlHandlerMapping();
+        mapping.setUrlMap(map);
+        return mapping;
+    }
+
+    @Bean
+    WebSocketHandlerAdapter webSocketHandlerAdapter() {
+        return new WebSocketHandlerAdapter();
+    }
 }
 ```
 
-In a none Spring Boot application, you have to declare a `WebSocketHandlerAdapter` bean.
+In a non-Spring Boot application, you have to declare the `WebSocketHandlerAdapter` bean explicitly. Spring Boot auto-configures it when `spring-boot-starter-webflux` is on the classpath.
 
-```java
-@Bean
-WebSocketHandlerAdapter webSocketHandlerAdapter(){
-    return new WebSocketHandlerAdapter();
-}
-```
+Source codes: [spring-reactive-sample/websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket).
 
-Source codes: [spring-reactive-sample/websocket](https://github.com/hantsy/spring-reactive-sample/blob/master/websocket).
+## Client side
 
-## Client Side
+Spring provides a built-in Reactor Netty based WebSocket client to communicate with the server side.
 
-Let's move to the client side to interact with this WebSocket.
-
-Spring provides a built-in Netty based WebSocket client to communicate with the server side.
+The following test fragment connects to `/echo`, sends 100 messages, and collects the echoed responses:
 
 ```java
 WebSocketClient client = new ReactorNettyWebSocketClient();
-//        client.execute(new URI("ws://localhost:8080/echo"), (WebSocketSession session) -> {
-//            session.send().log().;
-//        });
 
 int count = 100;
 Flux<String> input = Flux.range(1, count).map(index -> "msg-" + index);
@@ -90,13 +118,19 @@ client.execute(new URI("ws://localhost:8080/echo"),
                        .doOnNext(s -> log.debug("inbound " + s))
                        .then()
                        .doOnTerminate((aVoid, ex) ->
-                                      log.debug("Done with " + (ex != null ? ex.getMessage() : "success")));
+                               log.debug("Done with " + (ex != null ? ex.getMessage() : "success")));
                })
     .block(Duration.ofMillis(5000));
-
-}
 ```
 
-Source codes: [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/blob/master/client).
+Source codes: [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
 
-A more close to the real world example application, go to [hantsy/angular-spring-websocket-sample/](https://github.com/hantsy/angular-spring-websocket-sample/).
+For a complete real world example application, see [hantsy/angular-spring-websocket-sample](https://github.com/hantsy/angular-spring-websocket-sample/), which combines a Mongo tailable cursor, WebFlux, and an Angular client.
+
+## WebSocket vs SSE
+
+| Requirement | Use |
+| :--- | :--- |
+| Server → client only (notifications, feeds) | [Server Sent Events](sse.md) — simpler, plain HTTP, auto-reconnect |
+| Bi-directional (chat, collaborative editing) | WebSocket |
+| Request/response with backpressure over the network | RSocket — see [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample) |

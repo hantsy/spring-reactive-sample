@@ -11,7 +11,7 @@ Generate a Spring WebFlux project using https://start.spring.io and choose:
 
 - Project type: Maven (or Gradle)
 - Spring Boot: 4.x
-- Java version: 21 (or Java 17 LTS)
+- Java version: 21
 - Add dependencies: Spring Data Neo4j, Spring WebFlux, Lombok (optional)
 
 Open the generated `pom.xml` and verify the `spring-boot-starter-data-neo4j` and `spring-boot-starter-webflux` starters are present.
@@ -50,7 +50,7 @@ Open the `pom.xml` file in the project root, you will see the following dependen
 </dependencies>
 ```
 
-Now , create a Noe4j entity class as the following.
+Now , create a Neo4j entity class as the following.
 
 ```java
 @Node
@@ -291,7 +291,7 @@ Here the `findByTitleContains` method has to accept a Regex pattern.
 
 ## ReactiveNeo4jClient
 
-Once Spring Data Neo4j is configured in a reactive application, a `ReactvieNeo4jClient` bean is available in the Spring application context.
+Once Spring Data Neo4j is configured in a reactive application, a `ReactiveNeo4jClient` bean is available in the Spring application context.
 
 Like the R2dbc's `DatabaseClient` , with `ReactiveNeo4jClient`, you can execute custom Cypher Queries and handle returning result freely.
 
@@ -458,7 +458,7 @@ public class PostRepository {
 
 ```
 
-For the complete codes, check [spring-reactive-sample/boot-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j-cypher).
+For the complete codes, check [spring-reactive-sample/boot-data-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-cypher).
 
 ## ReactiveNeo4jOperations
 
@@ -523,9 +523,9 @@ public class PostRepository  {
 
 ```
 
-It it similar to the ReactiveNeo4jClient, but more simple. Have a look at the `findAll`, the literal queries are replaced by Java Query Criteria APIs.
+It is similar to the ReactiveNeo4jClient, but more simple. Have a look at the `findAll`, the literal queries are replaced by Java Query Criteria APIs.
 
-For the complete codes, check [spring-reactive-sample/boot-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-neo4j).
+For the complete codes, check [spring-reactive-sample/boot-data-neo4j-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-template).
 
 ## Data Auditing Support
 
@@ -797,7 +797,7 @@ In the above codes,
 - Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the JUnit test lifecycle.
 - In the `@Test` method, we usually utilizes reactor's `StepVerifier` to assert the result.
 
-> In the original [SDN Rx](<(https://github.com/neo4j/sdn-rx/)>), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
+> In the original [SDN Rx](https://github.com/neo4j/sdn-rx/), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
 
 Alternatively, you can create a `ApplicationContextInitializer` to start a Neo4j Docker container manually.
 

@@ -5,7 +5,7 @@ Spring Data Mongo provides reactive variants of `MongoTemplate` and `MongoReposi
 
 ## Getting Started
 
-Follow the the [Getting Started](./start) part to create a freestyle or Spring Boot based project skeleton.
+Follow the [Getting Started](../start/intro.md) chapter to create a freestyle or Spring Boot based project skeleton.
 
 For a freestyle Spring project, add the following into project dependencies.
 
@@ -72,7 +72,7 @@ interface PostRepository extends ReactiveMongoRepository<Post, String> {
 }
 ```
 
-Configure MongoDB connection in the _appliation.yml_ file.
+Configure the MongoDB connection in the _application.yml_ file.
 
 ```yml
 spring:
@@ -83,7 +83,7 @@ spring:
 
 Before starting up your application, make sure there is a running MongoDB instance in your local system.
 
-> **NOTE**: If you have not installed it, go to [Mongo download page](ttps://www.mongodb.com/download-center?jmp=nav#community) and get a copy of MongoDB, and install it into your system.
+> **NOTE**: If you have not installed it, go to the [MongoDB download page](https://www.mongodb.com/download-center) to get a copy of MongoDB and install it.
 
 Alternatively, if you are familiar with Docker, it is simple to start a MongoDB instance via Docker Compose file.
 
@@ -206,7 +206,7 @@ curl -v http://localhost:8080/posts
 
 ## Customizing Queries
 
-As other Spring Data projects, Spring Data Mongo Reactive also query derivation in the `Repository`.
+As other Spring Data projects, Spring Data Mongo Reactive also supports query derivation in the `Repository`.
 
 For example:
 
@@ -242,7 +242,7 @@ Flux<Post> findByKeyword(String q);
 
 The `ReactiveMongoTemplate` provides a programmatic approach to execute queries in a fluent API.
 
-The following is an example of the `Repository` rewritten with ``ReactiveMongoTemplate` .
+The following is an example of the `Repository` rewritten with `ReactiveMongoTemplate`:
 
 ```java
 @Component

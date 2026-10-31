@@ -1,7 +1,7 @@
 
 # RouterFunction
 
-Functional routing provides a concise, fluent alternative to @RestController. Introduced in the Spring 5 era, RouterFunction remains fully supported in Spring Framework 7. RouterFunction lets you compose routes and handlers using a functional API instead of controller classes.
+Functional routing provides a concise, fluent alternative to `@RestController`. Introduced in the Spring 5 era, `RouterFunction` remains fully supported in Spring Framework 7. It lets you compose routes and handlers using a functional API instead of controller classes.
 
 For example, there is a simple controller class.
 
@@ -67,7 +67,7 @@ public RouterFunction<ServerResponse> routes(PostHandler postController) {
 }
 ```
 
-The implementation of `HandlerFunction` are centralized in a `PostHandler` class.
+The implementations of `HandlerFunction` are centralized in a `PostHandler` class.
 
 ```java
 @Component
@@ -122,6 +122,6 @@ class PostHandler {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/boot-routes](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-routes).
+For the complete codes, check [spring-reactive-sample/boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) and [spring-reactive-sample/routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes).
 
-> NOTE: The `RouterFunction` is ported back to Servlet stack since 5.2, check my example [hantsy/spring-webmvc-functional-sample](https://github.com/hantsy/spring-webmvc-functional-sample).
+> NOTE: The `RouterFunction` is ported back to the Servlet stack since Spring Framework 5.2 — check my example [hantsy/spring-webmvc-functional-sample](https://github.com/hantsy/spring-webmvc-functional-sample).

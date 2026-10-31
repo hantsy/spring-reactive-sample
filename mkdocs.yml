@@ -83,8 +83,15 @@ nav:
       - security/form.md
   - Session:
       - session/intro.md
+      - session/in-memory.md
+      - session/redis.md
+      - session/mongo.md
+      - session/header.md
   - Integration:
       - int/intro.md
+      - int/webflux.md
+      - int/dsl.md
+      - int/message-channel.md
   - Other Topics:
       - other/kotlin.md
       - other/groovy.md

@@ -51,3 +51,4 @@ build/
 bin/
 out/
 .vscode
+site/

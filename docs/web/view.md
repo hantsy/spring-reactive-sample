@@ -7,17 +7,12 @@ Like the traditional Spring MVC, Spring WebFlux also includes the capability to 
 
 Thymeleaf is the most popular template engine in the Spring ecosystem.
 
-Add Thymeleaf-related dependencies. Use the Thymeleaf Spring integration artifact that matches your Spring Framework version (e.g. thymeleaf-spring6/thymeleaf-spring7 when available).
+Add the Thymeleaf Spring integration artifact that matches your Spring Framework version:
 
 ```xml
 <dependency>
-    <groupId>org.thymeleaf.extras</groupId>
-    <artifactId>thymeleaf-extras-java8time</artifactId>
-</dependency>
-<!-- Use the Thymeleaf Spring integration artifact that matches your Spring version -->
-<dependency>
     <groupId>org.thymeleaf</groupId>
-    <artifactId>thymeleaf-springX</artifactId>
+    <artifactId>thymeleaf-spring6</artifactId>
 </dependency>
 ```
 
@@ -436,25 +431,25 @@ public class MustacheResourceTemplateLoader implements TemplateLoader, ResourceL
 
 An example of Mustache template file.
 
-{% highlight html %}{% raw %}
+```html
 {{>header}}
 <section class="container">
-<div class="row">
-{{#posts}}
-<div class="col-md-12">
-<div class="card">
-<div class="card-body">
-<h4 class="card-title">{{title}}</h4>
-<h6 class="card-subtitle mb-2 text-muted">{{createdDate}}</h6>
-<p class="card-text">{{content}}</p>
-<a href="/posts/{{id}}" class="card-link">View Details</a>
-</div>
-</div>
-</div>
-{{/posts}}
-</div>
+  <div class="row">
+    {{#posts}}
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{title}}</h4>
+          <h6 class="card-subtitle mb-2 text-muted">{{createdDate}}</h6>
+          <p class="card-text">{{content}}</p>
+          <a href="/posts/{{id}}" class="card-link">View Details</a>
+        </div>
+      </div>
+    </div>
+    {{/posts}}
+  </div>
 </section>
 {{>footer}}
-{% endraw %}{% endhighlight %}
+```
 
 Source codes: [spring-reactive-sample/mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-mustache) and [spring-reactive-sample/boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-mustache) .

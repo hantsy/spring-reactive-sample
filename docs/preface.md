@@ -10,7 +10,7 @@ This is a hands-on guide to the Spring Reactive Web stack (Spring WebFlux).
 
 It is not a comprehensive reference for the entire Spring framework. If you are new to Spring, consider reading [Spring in Action](https://www.manning.com/books/spring-in-action-sixth-edition) or [Pro Spring](https://www.apress.com/gp/book/9781430261520) first.
 
-I assume you have some experience developing Spring applications and are comfortable with modern Java (Java 17 or 21 preferred).
+I assume you have some experience developing Spring applications and are comfortable with modern Java (Java 21).
 
 ## Example Codes
 
