@@ -17,7 +17,7 @@ This chapter covers reactive data access in the Spring ecosystem. Every major Sp
 
 ## Choosing thin client vs rich Spring Data
 
-Each store guide in this chapter follows the same path: generate a project as in [Getting Started](../start/intro.md), add the dependency, try the store's **native client** first (autoconfigured by the lightweight starter), test it with Testcontainers, and then move to the **rich Spring Data** abstractions (`XXXRepository`, `XXXTemplate`) — with the store-specific configuration of the non-Boot `data-xxx` samples introduced along the way.
+The thin client approach involves using the store's native SDK directly, which is autoconfigured by a lightweight starter. This gives you maximum control and minimal overhead, but you have to handle query composition, pagination, and object mapping manually. The rich Spring Data approach, on the other hand, provides higher-level abstractions that handle these concerns for you, at the cost of some additional overhead and less direct control over the underlying driver. You can focus on your model and business logic, while Spring Data takes care of the plumbing.
 
 | Style | API | Best for |
 | :--- | :--- | :--- |

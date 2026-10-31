@@ -90,6 +90,8 @@ public class ProductRepository {
 
 ### Testing with Testcontainers
 
+Add the following dependencies to your `pom.xml` for testing with Testcontainers:
+
 ```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -108,7 +110,7 @@ public class ProductRepository {
 </dependency>
 ```
 
-Define the container using Spring Boot's `@ServiceConnection` model:
+Define a `CassandraContainer` bean with Spring Boot's `@ServiceConnection` to automatically configure the connection to the Cassandra container:
 
 ```java
 @TestConfiguration(proxyBeanMethods = false)
