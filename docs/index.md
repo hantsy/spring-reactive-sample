@@ -10,7 +10,7 @@ The chapters build on each other, but each page stands on its own:
 
 1. **[Preface](preface.md)** — who this book is for and how the examples are organized.
 2. **[Getting Started](start/intro.md)** — the Reactive Streams specification, Project Reactor's `Mono`/`Flux`, and your first WebFlux application — with and without Spring Boot.
-3. **[Web Programming](web/intro.md)** — annotated controllers and functional routing, exception handling, multipart uploads, Server-Sent Events, WebSocket, view rendering, and the `WebClient` HTTP client.
+3. **[Web Programming](web/intro.md)** — annotated controllers and functional routing, exception handling, multipart uploads (including `PartEvent` streaming), Server-Sent Events, WebSocket, view rendering, the `WebClient` HTTP client, and Spring 7 API versioning.
 4. **[Data Operations](data/intro.md)** — reactive repositories and templates for MongoDB, Redis, Cassandra, Couchbase, Elasticsearch, Neo4j, and R2DBC for relational databases, plus the native reactive drivers.
 5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method-level constraints, custom user details services, and form login.
 6. **[Session](session/intro.md)** — reactive `WebSession` with in-memory, Redis, and MongoDB stores, plus header-based session ids.

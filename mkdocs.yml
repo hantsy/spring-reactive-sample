@@ -63,6 +63,7 @@ nav:
       - web/websocket.md
       - web/view.md
       - web/client.md
+      - web/api-versioning.md
   - Data Operations:
       - data/intro.md
       - data/mongo.md
