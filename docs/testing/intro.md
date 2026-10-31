@@ -54,4 +54,4 @@ The key methods:
 - `thenCancel()` — cancel the subscription mid-stream
 - `as(StepVerifier::create)` — adapt an existing `Mono`/`Flux` chain into a verifier
 
-`StepVerifier` appears everywhere in this book — from repository tests in the [Data Operations](../data/intro.md) chapter to the `WebClient` tests in [Web Programming](../web/client.md#mocking-a-target-http-api-with-wiremock). The next page moves up the stack to testing the web layer itself.
+`StepVerifier` appears everywhere in this book — from repository tests in the [Data Operations](../data/intro.md) chapter to the `WebClient` tests in [Testing Web Components](web-components.md#mocking-a-target-http-api-with-wiremock). The next page moves up the stack to testing the web layer itself.

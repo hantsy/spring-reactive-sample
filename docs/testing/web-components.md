@@ -149,3 +149,66 @@ A Java `WebFilter` test follows the same shape: `@Import` the filter, request a 
 ## Against a running server
 
 Slice tests exercise the request-handling stack only. When a test needs the real HTTP contract — SSE, WebSocket, cookies — bind the client to a live server instead; see [Spring Test Context and Slices](spring-test.md#integration-tests-over-a-real-server).
+
+## Mocking a target HTTP API with WireMock
+
+The mirror image of the tests above: when your application is the *client*, stub the remote API with [WireMock](https://wiremock.org/) and assert the reactive call chain. The [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) sample tests its `PostClient` wrapper with `@WireMockTest(httpPort = 8080)` — the same port the client targets — and `StepVerifier` for the assertions:
+
+```java
+@SpringJUnitConfig(classes = { ClientConfig.class, Jackson2ObjectMapperConfig.class })
+@WireMockTest(httpPort = 8080)
+public class PostClientTest {
+
+    @Autowired
+    PostClient postClient;
+
+    @SneakyThrows
+    @Test
+    public void testGetAllPosts() {
+        var data = List.of(
+                new Post(UUID.randomUUID(), "title1", "content1", Status.DRAFT, LocalDateTime.now()),
+                new Post(UUID.randomUUID(), "title2", "content2", Status.PUBLISHED, LocalDateTime.now())
+        );
+        stubFor(get("/posts")
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "application/json")
+                        .withResponseBody(Body.fromJsonBytes(Json.toByteArray(data)))));
+
+        postClient.allPosts()
+                .as(StepVerifier::create)
+                .expectNextCount(2)
+                .verifyComplete();
+
+        verify(getRequestedFor(urlEqualTo("/posts"))
+                .withHeader("Accept", equalTo("application/json")));
+    }
+
+    @SneakyThrows
+    @Test
+    public void testCreatePost() {
+        var id = UUID.randomUUID();
+        var data = new Post(null, "title1", "content1", Status.DRAFT, null);
+
+        stubFor(post("/posts")
+                .willReturn(aResponse()
+                        .withHeader("Location", "/posts/" + id)
+                        .withStatus(201)));
+
+        postClient.save(data)
+                .as(StepVerifier::create)
+                .consumeNextWith(entity -> {
+                    assertThat(entity.getHeaders().getLocation().toString()).isEqualTo("/posts/" + id);
+                    assertThat(entity.getStatusCode().value()).isEqualTo(201);
+                })
+                .verifyComplete();
+    }
+}
+```
+
+Reading the wiring:
+
+- `@WireMockTest(httpPort = 8080)` starts WireMock on the port the `WebClient` under test points at — no code changes between test and production.
+- `stubFor(...)` registers the expected request and response; `verify(...)` asserts the client actually sent the expected headers and payload.
+- The reactive result is asserted with `.as(StepVerifier::create)` — see [Testing](intro.md) for the signal-level assertions.
+
+The dependency is `com.github.tomakehurst:wiremock-standalone` (test scope). For the complete codes, check the [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) sample's `PostClientTest`.
