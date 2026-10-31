@@ -74,8 +74,6 @@ Restart the application, and test the endpoints.
 ...
 ```
 
-Check the complete codes, [spring-reactive-sample/boot](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start).
-
 ## Bootstrap
 
 By default, when `spring-boot-starter-webflux` is included in the classpath, it uses Netty as the embedded server to serve HTTP requests.
@@ -149,3 +147,7 @@ You can use Undertow as the runtime, but note that Undertow examples in this rep
 	<artifactId>spring-boot-starter-undertow</artifactId>
 </dependency>
 ```
+
+## Sample
+
+For the complete codes, check [spring-reactive-sample/boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start).

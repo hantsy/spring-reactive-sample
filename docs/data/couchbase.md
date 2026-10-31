@@ -116,8 +116,6 @@ class TestcontainersConfiguration {
 }
 ```
 
-The complete example lives in [boot-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-couchbase).
-
 ## Spring Data Couchbase
 
 ### Spring configuration
@@ -213,8 +211,6 @@ couchbase.password=password
 couchbase.connection-string=couchbase://localhost
 couchbase.bucket-name=default
 ```
-
-For the complete codes, check [spring-reactive-sample/data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase).
 
 ### Boot starter
 

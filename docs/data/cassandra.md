@@ -151,8 +151,6 @@ class DemoApplicationTests {
 }
 ```
 
-The working example lives in the [boot-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-cassandra) module.
-
 ## Spring Data Cassandra
 
 ### Spring configuration
@@ -240,8 +238,6 @@ Next change the former `PostRepository` to the following:
 interface PostRepository extends ReactiveCassandraRepository<Post, String>{}
 ```
 
-For the complete codes, check [spring-reactive-sample/data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/data-cassandra).
-
 ### Boot starter
 
 into your project dependencies.
@@ -254,8 +250,6 @@ into your project dependencies.
 ```
 
 No need extra configuration, Spring Boot will autoconfigure Cassandra and registers all essential beans for you.
-
-For the complete codes, check [spring-reactive-sample/boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-cassandra).
 
 ### Seeding sample data
 

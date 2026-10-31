@@ -153,7 +153,6 @@ class Post {
     private String title;
     private String content;
 
-
 }
 ```
 
@@ -219,8 +218,6 @@ When the Mongo service is started, it is ready for bootstrapping the application
 mvn spring-boot:run
 ```
 
-For the complete codes, check [spring-reactive-sample/data-mongo](https://github.com/hantsy/spring-reactive-sample/blob/master/data-mongo).
-
 Configure the MongoDB connection in the _application.yml_ file:
 
 ```yml
@@ -242,8 +239,6 @@ If you are using Spring Boot, the configuration can be simplified. Just need to 
 ```
 
 No need extra configuration class, Spring Boot will enable reactive support for MongoDB in this project. `ReactiveMongoTemplate` and `ReactiveMongoRepository` will be configured automatically.
-
-For the complete codes, check [spring-reactive-sample/boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo).
 
 ### Seeding sample data
 
@@ -316,7 +311,6 @@ curl -v http://localhost:8080/posts
 
 ### Customizing queries
 
-
 As other Spring Data projects, Spring Data Mongo Reactive also supports query derivation in the `Repository`.
 
 For example:
@@ -350,7 +344,6 @@ Flux<Post> findByKeyword(String q);
 ```
 
 ### ReactiveMongoTemplate
-
 
 The `ReactiveMongoTemplate` provides a programmatic approach to execute queries in a fluent API.
 
@@ -411,7 +404,6 @@ class PostRepository {
 
 ### Pagination
 
-
 Almost all reactive variants(Mongo, R2dbc etc.) are support `Pageable` as a method parameter in the `Repository`.
 
 ```java
@@ -448,7 +440,6 @@ Mono<Long> countByTitleContains(String title)
     It can not return a `Page` object in Spring Data reactive API.
 
 ### Data auditing support
-
 
 Spring Data Mongo supports data auditing as Spring Data JPA, it can set the current user and created/last modified timestamp to a field automatically.
 
@@ -489,10 +480,7 @@ class Post {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo).
-
 ### QueryDSL
-
 
 Spring Data Mongo provide reactive support in the its QueryDSL extension.
 
@@ -546,10 +534,7 @@ An example to use QueryDSL API in your codes.
 this.postRepository.findAll(QPost.post.title.containsIgnoreCase("my"))
 ```
 
-For the complete codes, check [spring-reactive-sample/boot-data-mongo-querydsl](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo-querydsl).
-
 ### Tailable query
-
 
 The `tailable` query is a Mongo specific feature. A _tailable_ document works an infinite streams, performing a query on a `tailable` document is similar to connect to a message broker, when a new document is inserted, it will be emitted to all query stream connected.
 
@@ -569,7 +554,6 @@ Please check the following more comprehensive examples, all provide Mongo `taila
 - [Angular and RSocket Sample](https://github.com/hantsy/angular-spring-rsocket-sample)
 
 ### GridFS: file upload and download
-
 
 A step further — and closer to a real world application — is to store uploads in MongoDB via `ReactiveGridFsTemplate` and stream them back for download.
 
@@ -663,8 +647,6 @@ public class DemoApplicationTests {
     }
 }
 ```
-
-For the complete codes, check [spring-reactive-sample/multipart-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart-data-mongo) and [spring-reactive-sample/boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs).
 
 ## All samples
 

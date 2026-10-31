@@ -125,8 +125,6 @@ class FavoriteController {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/data-redis](https://github.com/hantsy/spring-reactive-sample/blob/master/data-redis).
-
 For Spring Boot applications, the configuration can be simplified. Just add `spring-boot-starter-data-redis-reactive` into the project dependencies.
 
 ```xml
@@ -137,8 +135,6 @@ For Spring Boot applications, the configuration can be simplified. Just add `spr
 ```
 
 Spring boot provides auto-configuration for Redis, and registers `ReactiveRedisConnectionFactory` for you automatically.
-
-For the complete codes, check [spring-reactive-sample/boot-data-redis](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-redis).
 
 ## ReactiveRedisTemplate
 
@@ -178,7 +174,6 @@ class PostRepository {
     public Mono<Post> findById(String id) {
         return this.findAll().filter(p -> p.getId().equals(id)).last();
     }
-
 
     public Mono<Long> save(Post post){
         return this.reactiveRedisOperations.opsForList().rightPush("posts", post);
@@ -237,7 +232,7 @@ class PostController {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message). For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../int/message-channel.md).
+For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../int/message-channel.md).
 
 ## Working with the native client
 

@@ -80,8 +80,6 @@ class TestcontainersConfiguration {
 }
 ```
 
-The full project is under [boot-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-elasticsearch).
-
 ## Spring Data Elasticsearch
 
 ### Entity and repository
@@ -111,8 +109,6 @@ Create `PostRepository` interface.
 interface PostRepository extends ReactiveElasticsearchRepository<Post, String> {
 }
 ```
-
-For the complete codes, check [spring-reactive-sample/boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-elasticsearch).
 
 ### Seeding sample data
 

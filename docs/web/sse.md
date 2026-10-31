@@ -73,7 +73,6 @@ public class MessageController {
 
 Every `POST /messages` fans out to all SSE subscribers of `GET /messages`.
 
-Source codes: [spring-reactive-sample/sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse).
 
 ## Client side
 
@@ -91,3 +90,7 @@ client.get()
 In a browser, the built-in `EventSource` API consumes the same endpoint.
 
 For a complete real world application, see [hantsy/angular-spring-sse-sample](https://github.com/hantsy/angular-spring-sse-sample/), in which the client is built with Angular and the server side is a simple Spring Boot application that uses SSE to broadcast chat messages — backed by a MongoDB tailable cursor, see [Tailable Query](../data/mongo.md#tailable-query).
+
+## Sample
+
+Source codes: [spring-reactive-sample/sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse).

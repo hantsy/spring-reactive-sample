@@ -64,8 +64,11 @@ public void getAllPostsWillBeOk_viaIntegration() {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl).
 
 ## What's next
 
 The DSL scales to real pipelines: add `.filter(...)`, `.transform(...)`, `.split(...)` between the gateway and the outbound gateway, and swap the outbound target for any messaging middleware. For channel patterns that connect Integration with Redis pub/sub and Reactor `Sinks`, see [Reactive Message Channels](message-channel.md).
+
+## Sample
+
+For the complete codes, check [spring-reactive-sample/integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl).

@@ -84,8 +84,6 @@ class TestcontainersConfiguration {
 }
 ```
 
-Everything lives in the [boot-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) module.
-
 ## Spring Data Neo4j
 
 ### Getting started with Spring Boot
@@ -315,8 +313,6 @@ After it run successfully, try to use `curl` command to verify the exposed APIs.
 # curl http://localhost:8080/posts
 [{"id":0,"title":"Post two","content":"The content of Post two","createdDate":"2020-11-04T10:35:14.1619567","updatedDate":"2020-11-04T10:35:14.1619567","createdBy":"hantsy","updatedBy":"hantsy"},{"id":1,"title":"Post one","content":"The content of Post one","createdDate":"2020-11-04T10:35:14.1481498","updatedDate":"2020-11-04T10:35:14.1481498","createdBy":"hantsy","updatedBy":"hantsy"}]
 ```
-
-For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
 ### Customizing queries
 
@@ -549,8 +545,6 @@ public class PostRepository {
 
 ```
 
-For the complete codes, check [spring-reactive-sample/boot-data-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-cypher).
-
 ### ReactiveNeo4jOperations
 
 Like other Spring Data modules, Spring Data Neo4j provides a `ReactiveNeo4jOperations`(and the implementation `ReactiveNeo4jTemplate`), it allows your to perform operations on Neo4j databases but by programmatic approaches.
@@ -563,21 +557,17 @@ Here is an example of `PostRepository` which is reimplemented by `ReactiveNeo4jO
 public class PostRepository  {
     private final ReactiveNeo4jOperations template;
 
-
     public Mono<Long> count() {
         return this.template.count(Post.class);
     }
-
 
     public Flux<Post> findAll() {
         return this.template.findAll(Post.class);
     }
 
-
     public Mono<Post> findById(Long id) {
         return this.template.findById(id, Post.class);
     }
-
 
     public Flux<Post> findByTitleContains(String title) {
         var postNode = node("Post").named("p");
@@ -590,22 +580,17 @@ public class PostRepository  {
         );
     }
 
-
-
     public Mono<Post> save(Post post) {
         return this.template.save(post);
     }
-
 
     public Flux<Post> saveAll(List<Post> data) {
         return this.template.saveAll(data);
     }
 
-
     public Mono<Void> deleteById(Long id) {
         return this.template.deleteById(id, Post.class);
     }
-
 
     public Mono<Void> deleteAll() {
         return this.template.deleteAll(Post.class);
@@ -615,8 +600,6 @@ public class PostRepository  {
 ```
 
 It is similar to the ReactiveNeo4jClient, but more simple. Have a look at the `findAll`, the literal queries are replaced by Java Query Criteria APIs.
-
-For the complete codes, check [spring-reactive-sample/boot-data-neo4j-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-template).
 
 ### Data auditing support
 
@@ -698,8 +681,6 @@ You can also verify it via `curl` .
 > curl http://localhost:8080/posts
 [{"id":2,"title":"Post one","content":"The content of Post one","createdDate":"2020-11-08T10:22:24.5543561","updatedDate":"2020-11-08T10:22:24.5543561","createdBy":"hantsy","updatedBy":"hantsy"},{"id":3,"title":"Post two","content":"The content of Post two","createdDate":"2020-11-08T10:22:24.5623567","updatedDate":"2020-11-08T10:22:24.5623567","createdBy":"hantsy","updatedBy":"hantsy"}]
 ```
-
-For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
 ### Testing
 
@@ -835,7 +816,6 @@ public class PostRepositoryWithTestContainersTest {
         registry.add("spring.neo4j.authentication.password", neo4jContainer::getAdminPassword);
     }
 
-
     @Autowired
     private PostRepository posts;
 
@@ -903,7 +883,6 @@ Alternatively, you can create a `ApplicationContextInitializer` to start a Neo4j
 @Slf4j
 public class PostRepositoryTest {
 
-
     static class TestContainerInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
         @Override
@@ -927,8 +906,6 @@ public class PostRepositoryTest {
 ```
 
 In the above, we use a `ContextConfiguration` to apply the context initializers. In the real world application, you can extract `TestContainerInitializer` to a standalone class, and thus it is easy to reuse in any tests that requires a running Neo4j server instance.
-
-For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
 ## All samples
 
