@@ -1,0 +1,61 @@
+name: samples
+
+# One workflow for the samples listed in dynamic-monorepo.config.json, which all ran the
+# same "JDK 25 + Maven package" job. The `plan` job works out which sample folders a push
+# or pull request touched and only those are built. Samples that need services
+# (MongoDB, Redis, Elasticsearch, ...) or other special steps keep their own workflows.
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+permissions:
+  contents: read
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      samples: ${{ steps.plan.outputs.test }}
+      has_samples: ${{ steps.plan.outputs.has_test }}
+      paths: ${{ steps.plan.outputs.paths }}
+    steps:
+    - uses: actions/checkout@v7
+    - uses: Continuous-Actions/dynamic-monorepo@v1
+      id: plan
+
+  build:
+    name: ${{ matrix.sample }}
+    needs: plan
+    if: needs.plan.outputs.has_samples == 'true'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sample: ${{ fromJSON(needs.plan.outputs.samples) }}
+    defaults:
+      run:
+        working-directory: ${{ fromJSON(needs.plan.outputs.paths)[matrix.sample] }}
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v5
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        if [ -f mvnw ]; then
+          chmod +x mvnw
+          ./mvnw -B package --file pom.xml
+        else
+          mvn -B package --file pom.xml
+        fi
