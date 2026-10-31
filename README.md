@@ -127,6 +127,15 @@ The following table lists all sample codes available in this repository.
 | [boot-data-redis-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis-template) | Spring Data Redis template example |
 
 
+| [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) | R2DBC `ConnectionFactory` variants for PostgreSQL, H2, MySQL, MariaDB, Oracle |
+| [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient) | Spring R2DBC `DatabaseClient` example |
+| [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate) | Spring Data R2DBC `R2dbcEntityTemplate` example |
+| [r2dbc-repository](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-repository) | Spring Data R2DBC `R2dbcRepository` example |
+| [r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-auditing) | `@EnableR2dbcAuditing` example |
+| [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate) | R2DBC versioned migrations with [r2dbc-migrate](https://github.com/nkonev/r2dbc-migrate) |
+| [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq) | R2DBC and jOOQ example (code generation from `schema.sql`) |
+
+
 ### Legacy Codes
 
 Some example codes are becoming deprecated over time; for example, the [SDN Rx project](https://github.com/neo4j/sdn-rx), maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). [Reactor Kafka](https://github.com/reactor/reactor-kafka) and [Reactor Rabbit](https://github.com/reactor/reactor-rabbitmq) are discontinued, [Netty 5 support(the development is inactive) was finally removed](https://github.com/spring-projects/spring-framework/issues/28847) in the Spring framework. 
