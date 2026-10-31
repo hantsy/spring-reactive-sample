@@ -258,7 +258,7 @@ Flowable.just("a", "b", "c")
     .subscribe(System.out::println);
 ```
 
-See [RxJava 3 in a controller](../web/intro.md#rxjava-3) for the WebFlux integration.
+See [RxJava 3](../other/rxjava.md) for the WebFlux integration.
 
 ### SmallRye Mutiny
 
@@ -271,7 +271,7 @@ Uni.createFrom().item("hello")
     .subscribe().with(System.out::println);
 ```
 
-See [Mutiny in a controller](../web/intro.md#smallrye-mutiny) for the WebFlux integration.
+See [SmallRye Mutiny](../other/mutiny.md) for the WebFlux integration.
 
 ### The JDK Flow API
 
@@ -304,7 +304,7 @@ publisher.submit("hello");
 publisher.close();
 ```
 
-Spring adapts between `Flow.Publisher` and Reactive Streams types — see [The JDK Flow API](../web/intro.md#the-jdk-flow-api) and the runnable [java9 sample](https://github.com/hantsy/spring-reactive-sample/tree/master/java9).
+Spring adapts between `Flow.Publisher` and Reactive Streams types — see [The JDK Flow API](../other/java9.md) and the runnable [java9 sample](https://github.com/hantsy/spring-reactive-sample/tree/master/java9).
 
 ### Choosing an implementation
 

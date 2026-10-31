@@ -15,7 +15,7 @@ The chapters build on each other, but each page stands on its own:
 5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method-level constraints, custom user details services, and form login.
 6. **[Testing](testing/intro.md)** — `StepVerifier`, `WebTestClient` for web components and Spring Security, Testcontainers for the data layer, Spring test contexts and slices, and the Kotlin toolkit (Kotest, MockK, coroutines-test).
 7. **[Kotlin](kotlin/intro.md)** — annotated controllers and `RouterFunctions` in Kotlin, coroutines, the beans/`coRouter` DSLs, `CoWebFilter`, and coroutine-friendly events, caching, and scheduling.
-8. **[Reactive Ecosystem](other/mutiny.md)** — the wider reactive ecosystem: Mutiny and the JDK Flow API, Groovy, cross-cutting concerns (caching, events, scheduling, RestDocs), reactive `WebSession` with Spring Session, and Spring Integration with reactive message channels.
+8. **[Reactive Ecosystem](other/mutiny.md)** — the wider reactive ecosystem: alternative reactive libraries (Mutiny, RxJava 3, the JDK Flow API), Groovy, cross-cutting concerns (caching, events, scheduling, RestDocs), reactive `WebSession` with Spring Session, and Spring Integration with reactive message channels.
 
 ## Running the samples
 

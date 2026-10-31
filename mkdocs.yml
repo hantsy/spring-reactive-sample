@@ -97,6 +97,7 @@ nav:
   - Reactive Ecosystem:
       - Reactive libraries:
           - other/mutiny.md
+          - other/rxjava.md
           - other/java9.md
           - other/groovy.md
       - Cross-cutting concerns:
