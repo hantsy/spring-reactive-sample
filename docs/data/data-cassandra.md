@@ -87,7 +87,9 @@ class Post {
 
 Add `@PrimaryKey` on `id` field, it indicates `id` is the primary key of `posts` table.
 
-> Unlike Mongo and other NoSQL, in Cassandra, you have to fill the `id` field manually before it is inserted.
+!!! note
+
+    Unlike Mongo and other NoSQL, in Cassandra, you have to fill the `id` field manually before it is inserted.
 
 Next change the former `PostRepository` to the following:
 

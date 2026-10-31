@@ -59,7 +59,9 @@ public WebExceptionHandler exceptionHandler() {
 }
 ```
 
-> NOTE: `WebExceptionHandler` is a low-level API. It also works for the exception handling in the annotated controller case — the `@ExceptionHandler` mechanism itself is implemented as a chain of `WebExceptionHandler`s.
+!!! note
+
+    `WebExceptionHandler` is a low-level API. It also works for the exception handling in the annotated controller case — the `@ExceptionHandler` mechanism itself is implemented as a chain of `WebExceptionHandler`s.
 
 ### Registering a WebExceptionHandler in Spring Boot
 

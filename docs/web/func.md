@@ -124,4 +124,6 @@ class PostHandler {
 
 For the complete codes, check [spring-reactive-sample/boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) and [spring-reactive-sample/routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes).
 
-> NOTE: The `RouterFunction` is ported back to the Servlet stack since Spring Framework 5.2 — check my example [hantsy/spring-webmvc-functional-sample](https://github.com/hantsy/spring-webmvc-functional-sample).
+!!! note
+
+    The `RouterFunction` is ported back to the Servlet stack since Spring Framework 5.2 — check my example [hantsy/spring-webmvc-functional-sample](https://github.com/hantsy/spring-webmvc-functional-sample).

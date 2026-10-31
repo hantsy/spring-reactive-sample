@@ -32,6 +32,8 @@ public class SecurityWebFilter implements WebFilter{
 }
 ```
 
-> NOTE: In production applications prefer Spring Security for authentication and authorization. This example demonstrates how a simple WebFilter can be used for small checks or prototyping.
+!!! note
+
+    In production applications prefer Spring Security for authentication and authorization. This example demonstrates how a simple WebFilter can be used for small checks or prototyping.
 
 For the complete codes, check [spring-reactive-sample/web-filter](https://github.com/hantsy/spring-reactive-sample/blob/master/web-filter).

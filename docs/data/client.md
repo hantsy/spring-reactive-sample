@@ -335,8 +335,9 @@ Create a new project at [Spring Initializr](https://start.spring.io/) with:
 - **Java**: 21
 - **Dependencies**: `Spring Data Elasticsearch`, `Webflux`, `Lombok`, `Testcontainers`
 
-> [!IMPORTANT]
-> Unlike the other stores in this guide, Elasticsearch is an exception: the official Elasticsearch Java Client SDK does **not** include a reactive client. Spring Data Elasticsearch fills this gap by providing its own `ReactiveElasticsearchClient` wrapper built on top of the low-level REST client. As a consequence, you cannot use a lightweight `spring-boot-starter-elasticsearch` alone — you must pull in the full Spring Data Elasticsearch starter to access the reactive client.
+!!! important
+
+    Unlike the other stores in this guide, Elasticsearch is an exception: the official Elasticsearch Java Client SDK does **not** include a reactive client. Spring Data Elasticsearch fills this gap by providing its own `ReactiveElasticsearchClient` wrapper built on top of the low-level REST client. As a consequence, you cannot use a lightweight `spring-boot-starter-elasticsearch` alone — you must pull in the full Spring Data Elasticsearch starter to access the reactive client.
 
 ```xml
 <!-- Runtime -->
@@ -478,8 +479,9 @@ Head to [Spring Initializr](https://start.spring.io/) and generate a project wit
 
 The `spring-boot-starter-mongodb` starter exposes both the synchronous and reactive `MongoClient` beans. When used in a reactive application, the starter registers a `com.mongodb.reactivestreams.client.MongoClient` bean automatically.
 
-> [!TIP]
-> The starter transitively includes the synchronous `mongodb-driver-sync` driver even when you only need the reactive driver. For a leaner classpath, explicitly exclude `mongodb-driver-sync` and declare `mongodb-driver-reactivestreams` directly, as shown below:
+!!! tip
+
+    The starter transitively includes the synchronous `mongodb-driver-sync` driver even when you only need the reactive driver. For a leaner classpath, explicitly exclude `mongodb-driver-sync` and declare `mongodb-driver-reactivestreams` directly, as shown below:
 
 ```xml
 <!-- Runtime -->
@@ -827,8 +829,9 @@ Spring Boot 4's modularized autoconfiguration makes it practical to depend on a 
 | Neo4j | `spring-boot-starter-neo4j` | `Driver` | `ReactiveSession` + `Mono.usingWhen(...)` |
 | Redis | _(no dedicated client starter)_ | via `spring-boot-starter-data-redis-reactive` | `ReactiveRedisTemplate` / Lettuce reactive commands |
 
-> [!TIP]
-> Across all stores, `StepVerifier` from the `reactor-test` module is your best friend for asserting reactive sequences in integration tests. Pair it with `@ServiceConnection`-backed Testcontainers for a hermetic, repeatable test environment without any manual port configuration.
+!!! tip
+
+    Across all stores, `StepVerifier` from the `reactor-test` module is your best friend for asserting reactive sequences in integration tests. Pair it with `@ServiceConnection`-backed Testcontainers for a hermetic, repeatable test environment without any manual port configuration.
 
 The most important takeaway is knowing **when not to use** these raw clients: once your application needs query composition, pagination, auditing, or object mapping, reach for the full Spring Data repository abstraction instead. The native driver approach shines for targeted, performance-sensitive operations where you want maximum control with minimum overhead.
 

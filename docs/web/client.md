@@ -291,4 +291,6 @@ public class DemoApplicationTests {
 
 The usage of the `WebTestClient` API is very similar to `WebClient`, but it provides methods to assert the response result.
 
-> NOTE: Although `WebClient` and `WebTestClient` look similar, `WebTestClient` is a distinct test utility and is not derived from `WebClient`.
+!!! note
+
+    Although `WebClient` and `WebTestClient` look similar, `WebTestClient` is a distinct test utility and is not derived from `WebClient`.

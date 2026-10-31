@@ -41,7 +41,9 @@ You can create a configuration class to derive this interface and override the m
 class WebConfig implements WebFluxConfigurer {}
 ```
 
-> NOTE: For Spring Boot applications, no extra steps are required to activate **WebFlux** if _spring-boot-starter-webflux_ is included in the classpath.
+!!! note
+
+    For Spring Boot applications, no extra steps are required to activate **WebFlux** if _spring-boot-starter-webflux_ is included in the classpath.
 
 ## RxJava 3
 
@@ -116,7 +118,9 @@ For the complete codes, check [spring-reactive-sample/java9](https://github.com/
 
 [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny/) support is added in Spring Framework 5.3.10. For developers, you can use Mutiny APIs instead of Reactor to build Spring WebFlux applications.
 
-> NOTE: Earlier versions of SmallRye Mutiny implemented the Reactive Streams API; current versions use the JDK Flow API instead.
+!!! note
+
+    Earlier versions of SmallRye Mutiny implemented the Reactive Streams API; current versions use the JDK Flow API instead.
 
 Add the following project dependencies.
 

@@ -24,7 +24,9 @@ For none Spring Boot project, add the following dependencies to the _pom.xml_.
 </dependency>
 ```
 
-> **NOTE**: You have to use `lettuce` as Redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
+!!! note
+
+    You have to use `lettuce` as Redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
 
 Create a `@Configuration` class to configure Redis and enable Reactive support.
 

@@ -5,7 +5,9 @@ A working example is worth a thousand words. Let's write code and explore the re
 
 As an example, I will reuse the same concept in my former [Spring Boot sample codes](https://github.com/hantsy/angularjs-springmvc-sample-boot) which is a simple blog application.
 
-> In this post, we prepare the codes manually and do not use Spring Boot autoconfiguration. I think it will help you to understand the essential configuration in a Spring WebFlux application.
+!!! note
+
+    In this post, we prepare the codes manually and do not use Spring Boot autoconfiguration. I think it will help you to understand the essential configuration in a Spring WebFlux application.
 
 In the following steps we will start with creating RESTful APIs for `Post`.
 
@@ -21,7 +23,9 @@ Before writing some real codes, make sure you have installed the essential softw
     - [Apache NetBeans IDE](https://netbeans.apache.org/)
     - [VS Code](https://code.visualstudio.com/) with the Java and Spring Boot extensions
 
-> **NOTE**: Do not forget to add path which includes `java` and `mvn` command into your system environment variable **PATH** .
+!!! note
+
+    Do not forget to add path which includes `java` and `mvn` command into your system environment variable **PATH** .
 
 ## Generate project skeleton
 
@@ -36,7 +40,9 @@ $ mvn archetype:generate -DgroupId=com.example \
 	-DinteractiveMode=false \
 ```
 
-> **NOTE**: I would like Unix like bash to run commands in my terminal. Under Windows system, you can choose CygWin or convert it to Windows form.
+!!! note
+
+    I would like Unix like bash to run commands in my terminal. Under Windows system, you can choose CygWin or convert it to Windows form.
 
 Import the generated codes into your IDE..
 
@@ -256,7 +262,9 @@ The application code is ready. Let's bootstrap the application.
 
 According to the official documentation (see the Web on Reactive Stack section), Spring Framework 7 provides several options to bootstrap a reactive web application: https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html#spring-webflux
 
-> Spring WebFlux is supported on Tomcat, Jetty, Servlet 3.1+ containers, as well as on non-Servlet runtimes such as Netty and Undertow.
+!!! quote
+
+    Spring WebFlux is supported on Tomcat, Jetty, Servlet 3.1+ containers, as well as on non-Servlet runtimes such as Netty and Undertow.
 
 ![Spring Webflux](./webflux.png)
 
@@ -588,7 +596,9 @@ public class AppInitializer extends AbstractReactiveWebInitializer {
 }
 ```
 
-> The former `AbstractAnnotationConfigDispatcherHandlerInitializer` is problematic, check notes I added in the sample codes [spring-reactive-sample/war](https://github.com/hantsy/spring-reactive-sample/blob/master/war/src/main/java/com/example/demo/AppInitializer.java)
+!!! note
+
+    The former `AbstractAnnotationConfigDispatcherHandlerInitializer` is problematic, check notes I added in the sample codes [spring-reactive-sample/war](https://github.com/hantsy/spring-reactive-sample/blob/master/war/src/main/java/com/example/demo/AppInitializer.java)
 
 Next change the project packaging from **jar** to **war** in pom.xml.
 

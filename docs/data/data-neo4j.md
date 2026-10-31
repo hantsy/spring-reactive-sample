@@ -1,9 +1,11 @@
 
 # Spring Data Neo4j
 
-> The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0. If you are using SDN Rx it is better to upgrade to the official Spring Data Neo4j.
+!!! note
 
-> This post explains using Spring Data Neo4j with Spring Framework 7 and Spring Boot 4.
+    The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0. If you are using SDN Rx it is better to upgrade to the official Spring Data Neo4j.
+
+    This page explains using Spring Data Neo4j with Spring Framework 7 and Spring Boot 4.
 
 ## Getting Started
 
@@ -71,7 +73,9 @@ class Post {
 
 A Neo4j entity is annotated with a `@Node` annotation.
 
-> We used the `@Data`, `@ToString`, `@Builder` annotations provided in Lombok to erases the tedious methods, such as setters, getters, hashCode, equals, and toString in a POJO class.
+!!! note
+
+    We used the `@Data`, `@ToString`, `@Builder` annotations provided in Lombok to erases the tedious methods, such as setters, getters, hashCode, equals, and toString in a POJO class.
 
 Create a `Repository` for the `Post` entity.
 
@@ -155,7 +159,9 @@ public ReactiveTransactionManager reactiveTransactionManager(
 }
 ```
 
-> NOTE: If you are from SDN Rx, adding a transaction manager is a must now.
+!!! note
+
+    If you are from SDN Rx, adding a transaction manager is a must now.
 
 Add a `CommandLineRunner` bean to initialize some sample data. Here we use `PostRepository` to insert two `Post` sample data.
 
@@ -212,7 +218,9 @@ spring.neo4j.authentication.username=neo4j
 spring.neo4j.authentication.password=test
 ```
 
-> Note: if you are migrating from [SDN RX](https://github.com/neo4j/sdn-rx/), you need to replace all namespaces with the new `spring.neo4j` prefix.
+!!! note
+
+    if you are migrating from [SDN RX](https://github.com/neo4j/sdn-rx/), you need to replace all namespaces with the new `spring.neo4j` prefix.
 
 Now, you can run the application directly in IDEs, or using the following Maven command.
 
@@ -273,7 +281,9 @@ interface PostRepository extends ReactiveNeo4jRepository<Post, Long> {
 
 Here we use a `regex` pattern in the where clause.
 
-> More details about the syntax of Cypher Query Language, please check the [official Neo4j documentation](https://neo4j.com/developer/cypher/).
+!!! note
+
+    More details about the syntax of Cypher Query Language, please check the [official Neo4j documentation](https://neo4j.com/developer/cypher/).
 
 Add a test method to verify it.
 
@@ -576,7 +586,9 @@ public ReactiveAuditorAware<String> reactiveAuditorAware() {
 }
 ```
 
-> Note : in the real world applications, you can retrieve the current user from current SecurityContextHolder.
+!!! note
+
+    in the real world applications, you can retrieve the current user from current SecurityContextHolder.
 
 By default Spring Boot do not autoconfigure the auditing feature. Do not forget to add a `@EnableReactiveNeo4jAuditing` annotation on the `@Configuration` class to activate the data auditing feature.
 
@@ -797,7 +809,9 @@ In the above codes,
 - Generally, you can add `@BeforeEach`, `@AfterEach` methods to hook the JUnit test lifecycle.
 - In the `@Test` method, we usually utilizes reactor's `StepVerifier` to assert the result.
 
-> In the original [SDN Rx](https://github.com/neo4j/sdn-rx/), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
+!!! note
+
+    In the original [SDN Rx](https://github.com/neo4j/sdn-rx/), it provided a `@ReactiveDataNeo4jTest` for testing reactive applications, this annotation is not available in Spring Boot 2.4.
 
 Alternatively, you can create a `ApplicationContextInitializer` to start a Neo4j Docker container manually.
 

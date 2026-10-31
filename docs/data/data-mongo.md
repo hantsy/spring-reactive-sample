@@ -83,7 +83,9 @@ spring:
 
 Before starting up your application, make sure there is a running MongoDB instance in your local system.
 
-> **NOTE**: If you have not installed it, go to the [MongoDB download page](https://www.mongodb.com/download-center) to get a copy of MongoDB and install it.
+!!! note
+
+    If you have not installed it, go to the [MongoDB download page](https://www.mongodb.com/download-center) to get a copy of MongoDB and install it.
 
 Alternatively, if you are familiar with Docker, it is simple to start a MongoDB instance via Docker Compose file.
 
@@ -330,7 +332,9 @@ For example:
 Mono<Long> countByTitleContains(String title)
 ```
 
-> It can not return a `Page` object in Spring Data reactive API.
+!!! note
+
+    It can not return a `Page` object in Spring Data reactive API.
 
 ## Data Auditing Support
 
