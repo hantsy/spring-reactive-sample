@@ -1,4 +1,4 @@
-# Spring Reactive Programming
+# Reactive Programming with Spring WebFlux
 
 This book and sample repository introduce reactive programming with Spring Framework 7 and Spring Boot 4. It is a practical guide for developers who want to learn Spring WebFlux, Reactor, and the wider reactive ecosystem through runnable examples.
 
