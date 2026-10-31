@@ -33,7 +33,7 @@ This chapter covers reactive data access in the Spring ecosystem. Every major Sp
 ## Chapter roadmap
 
 1. [Database Client Modules](client.md) — Spring Boot 4 lightweight starters and the native reactive drivers behind them
-2. [Spring Data Mongo](data-mongo.md) — repositories, templates, pagination, auditing, QueryDSL, tailable queries
-3. [Spring Data Redis](data-redis.md) — `ReactiveRedisConnectionFactory`, `ReactiveRedisTemplate`, and Redis pub/sub messaging
-4. [Spring Data Cassandra](data-cassandra.md), [Couchbase](data-couchbase.md), [Elasticsearch](data-elasticsearch.md), [Neo4j](data-neo4j.md) — the other NoSQL stores
-5. [Spring Data R2DBC](data-r2dbc.md) — reactive relational access
+2. [Spring Data Mongo](mongo.md) — repositories, templates, pagination, auditing, QueryDSL, tailable queries
+3. [Spring Data Redis](redis.md) — `ReactiveRedisConnectionFactory`, `ReactiveRedisTemplate`, and Redis pub/sub messaging
+4. [Spring Data Cassandra](cassandra.md), [Couchbase](couchbase.md), [Elasticsearch](elasticsearch.md), [Neo4j](neo4j.md) — the other NoSQL stores
+5. [Spring Data R2DBC](r2dbc.md) — reactive relational access

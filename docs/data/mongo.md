@@ -453,3 +453,174 @@ Please check the following more comprehensive examples, all provide Mongo `taila
 - [Angular and Websocket Sample](https://github.com/hantsy/angular-spring-websocket-sample)
 - [Angular and Server Sent Event Sample](https://github.com/hantsy/angular-spring-sse-sample)
 - [Angular and RSocket Sample](https://github.com/hantsy/angular-spring-rsocket-sample)
+
+## Working with the native client
+
+The MongoDB driver provides both synchronous and reactive variants. The `spring-boot-starter-mongodb` starter registers a reactive `com.mongodb.reactivestreams.client.MongoClient` bean when used in a reactive context. The returned driver collections produce publisher instances that can be wrapped using `Mono.from(...)` or `Flux.from(...)`.
+
+!!! tip
+
+    The starter transitively includes the synchronous `mongodb-driver-sync` driver even when you only need the reactive driver. For a leaner classpath, explicitly exclude `mongodb-driver-sync` and declare `mongodb-driver-reactivestreams` directly:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mongodb</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>mongodb-driver-reactivestreams</artifactId>
+</dependency>
+```
+
+### Implementing a thin repository
+
+The reactive collections return standard Reactive Streams `Publisher` objects, which convert to Project Reactor's `Mono` or `Flux` using `Mono.from(...)` or `Flux.from(...)`:
+
+```java
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class ProductRepository {
+    private final MongoClient mongoClient;
+    private MongoCollection<Product> productsCollection;
+
+    @PostConstruct
+    public void init() {
+        this.productsCollection = mongoClient
+                .getDatabase("test")
+                .getCollection("products", Product.class);
+    }
+
+    public Mono<Product> save(Product product) {
+        return Mono.from(this.productsCollection.insertOne(product))
+                .mapNotNull(result -> {
+                    log.debug("save product result: {}", result);
+                    var id = result.getInsertedId().asObjectId().getValue().toHexString();
+                    return product.withId(id);
+                });
+    }
+}
+```
+
+### Testing with Testcontainers
+
+```java
+@TestConfiguration(proxyBeanMethods = false)
+class TestcontainersConfiguration {
+
+    @Bean
+    @ServiceConnection
+    MongoDBContainer mongoDbContainer() {
+        return new MongoDBContainer(DockerImageName.parse("mongo:latest"));
+    }
+}
+```
+
+Explore [boot-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mongo) to see `Mono.from(...)` bridging the raw driver publishers into Reactor, with `StepVerifier` asserting document insertion and retrieval without a single blocking call.
+## GridFS: file upload and download
+
+A step further — and closer to a real world application — is to store uploads in MongoDB via `ReactiveGridFsTemplate` and stream them back for download.
+
+### Step 1: declare a ReactiveGridFsTemplate bean
+
+```java
+@Bean
+public ReactiveGridFsTemplate reactiveGridFsTemplate() throws Exception {
+    return new ReactiveGridFsTemplate(reactiveMongoDbFactory(), mappingMongoConverter());
+}
+```
+
+### Step 2: handle upload and download in a controller
+
+```java
+@RestController()
+@RequestMapping(value = "/multipart")
+@RequiredArgsConstructor
+public class MultipartController {
+
+    private final ReactiveGridFsTemplate gridFsTemplate;
+
+    @PostMapping("")
+    public Mono<ResponseEntity> upload(@RequestPart Mono<FilePart> fileParts) {
+        return fileParts
+            .flatMap(part -> this.gridFsTemplate.store(part.content(), part.filename()))
+            .map((id) -> ok().body(Map.of("id", id.toHexString())));
+    }
+
+    @GetMapping("{id}")
+    public Flux<Void> read(@PathVariable String id, ServerWebExchange exchange) {
+        return this.gridFsTemplate.findOne(query(where("_id").is(id)))
+            .log()
+            .flatMap(gridFsTemplate::getResource)
+            .flatMapMany(r -> exchange.getResponse().writeWith(r.getDownloadStream()));
+    }
+}
+```
+
+In the above codes, `upload` stores the `FilePart` content in GridFS and returns the generated id to the client. The `read` method looks the file up by id and writes its content into the web response.
+
+### Step 3: build multipart requests on the client
+
+The `MultipartBodyBuilder` assembles multipart bodies on the client side. The following test uploads a file and reads it back:
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Slf4j
+public class DemoApplicationTests {
+
+    @LocalServerPort
+    private int port;
+
+    WebTestClient client;
+
+    @BeforeEach
+    public void setup() {
+        this.client = WebTestClient.bindToServer()
+            .baseUrl("http://localhost:" + this.port)
+            .build();
+    }
+
+    private MultiValueMap<String, HttpEntity<?>> generateBody() {
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("fileParts", new ClassPathResource("/foo.txt", DemoApplicationTests.class));
+        return builder.build();
+    }
+
+    @Test
+    public void testUpload() throws IOException {
+        byte[] result = client
+            .post()
+            .uri("/multipart")
+            .bodyValue(generateBody())
+            .exchange()
+            .expectStatus().isOk()
+            .expectBody().returnResult().getResponseBody();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map bodyMap = objectMapper.readValue(result, Map.class);
+
+        String fileId = (String) bodyMap.get("id");
+        log.debug("updated file id:" + fileId);
+        assertNotNull(fileId);
+
+        client
+            .get()
+            .uri("/multipart/{id}", fileId)
+            .exchange()
+            .expectStatus().isOk();
+    }
+}
+```
+
+For the complete codes, check [spring-reactive-sample/multipart-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart-data-mongo) and [spring-reactive-sample/boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs).

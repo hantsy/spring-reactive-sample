@@ -20,7 +20,7 @@ The [spring-session-data-redis](https://spring.io/projects/spring-session) modul
 </dependency>
 ```
 
-Lettuce is the required driver for reactive Redis support (see [Spring Data Redis](../data/data-redis.md)).
+Lettuce is the required driver for reactive Redis support (see [Spring Data Redis](../data/redis.md)).
 
 ## Step 2: configure the Redis connection factory
 

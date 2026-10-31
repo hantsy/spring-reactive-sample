@@ -1,7 +1,7 @@
 
 # Mongo-backed sessions
 
-The [spring-session-data-mongodb](https://github.com/spring-projects/spring-session) module stores sessions in MongoDB through the reactive Mongo driver — a natural choice when your application already uses [Spring Data Mongo](../data/data-mongo.md).
+The [spring-session-data-mongodb](https://github.com/spring-projects/spring-session) module stores sessions in MongoDB through the reactive Mongo driver — a natural choice when your application already uses [Spring Data Mongo](../data/mongo.md).
 
 ## Step 1: add the dependencies
 

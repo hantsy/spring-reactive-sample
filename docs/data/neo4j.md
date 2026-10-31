@@ -848,3 +848,85 @@ public class PostRepositoryTest {
 In the above, we use a `ContextConfiguration` to apply the context initializers. In the real world application, you can extract `TestContainerInitializer` to a standalone class, and thus it is easy to reuse in any tests that requires a running Neo4j server instance.
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
+
+## Working with the native client
+
+The official Neo4j Java driver supports synchronous, asynchronous, and reactive execution models. The `spring-boot-starter-neo4j` starter bootstraps the `Driver`; request a `ReactiveSession` from it at runtime, and manage the session lifecycle with Project Reactor's `Mono.usingWhen(...)` resource management construct.
+
+### Project setup
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-neo4j</artifactId>
+</dependency>
+```
+
+### Implementing a thin repository
+
+Open a `ReactiveSession`, execute Cypher, and let `Mono.usingWhen(...)` guarantee the session is closed on completion or error — this avoids connection leaks in high-throughput reactive systems:
+
+```java
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class ProductRepository {
+    private final Driver driver;
+
+    public Mono<Product> save(Product product) {
+        String query = """
+                MERGE (p:Product {id: $id})
+                ON CREATE SET p.name=$name, p.price=$price
+                ON MATCH SET p.name=$name, p.price=$price
+                RETURN p.id as id, p.name as name, p.price as price
+                """;
+        Map<String, Object> parameters = Map.of(
+                "id", product.id() != null ? product.id() : UUID.randomUUID().toString(),
+                "name", product.name(),
+                "price", Values.value(product.price().toString())
+        );
+
+        SessionConfig sessionConfig = SessionConfig.builder()
+                .withBookmarkManager(driver.executableQueryBookmarkManager())
+                .build();
+
+        // Open, execute, and automatically close the reactive session
+        return Mono.usingWhen(
+                Mono.fromSupplier(() -> driver.session(ReactiveSession.class, sessionConfig)),
+                session -> Mono.fromDirect(session.executeWrite(tc -> Mono.from(tc.run(query, parameters))
+                        .flatMapMany(ReactiveResult::records)
+                        .single()
+                        .map(result -> {
+                            log.debug("saving product {}", result);
+                            return new Product(
+                                    result.get("id").asString(),
+                                    result.get("name").asString(),
+                                    new BigDecimal(result.get("price").asString())
+                                );
+                        })
+                )),
+                ReactiveSession::close
+        );
+    }
+}
+```
+
+### Testing with Testcontainers
+
+```java
+@TestConfiguration(proxyBeanMethods = false)
+class TestcontainersConfiguration {
+
+    @Bean
+    @ServiceConnection
+    Neo4jContainer neo4jContainer() {
+        return new Neo4jContainer(DockerImageName.parse("neo4j:latest"));
+    }
+}
+```
+
+Everything lives in the [boot-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) module.

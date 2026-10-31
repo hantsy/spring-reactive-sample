@@ -222,3 +222,14 @@ class PostController {
 ```
 
 For the complete codes, check [spring-reactive-sample/data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message). For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../int/message-channel.md).
+
+## Working with the native client
+
+Redis is the exception among the stores in this chapter. Unlike Cassandra's `CqlSession` or MongoDB's `MongoClient`, Spring Boot 4 does not provide a dedicated lightweight client starter for Redis, because it supports multiple Redis client libraries with fundamentally different programming models:
+
+- **Lettuce** — the default, fully non-blocking reactive client backed by Netty.
+- **Jedis** — a synchronous, thread-safe client often chosen for its simplicity in blocking scenarios.
+
+Redis connectivity continues to be managed through `spring-boot-starter-data-redis` (blocking) and `spring-boot-starter-data-redis-reactive` (reactive with Lettuce), both of which configure the higher-level `ReactiveRedisTemplate` rather than exposing the raw driver directly.
+
+If you need to work with the Lettuce driver directly in a reactive context, you can inject `io.lettuce.core.api.reactive.RedisReactiveCommands` after including `spring-boot-starter-data-redis-reactive` — the [Redis Messaging](#redis-messaging) section above shows the `ReactiveRedisMessageListenerContainer` for pub/sub.

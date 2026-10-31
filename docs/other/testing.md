@@ -198,4 +198,4 @@ class DemoApplicationTests { /* ... */ }
 
 ## Test slices
 
-Spring Boot provides reactive test slices that load only the configuration a test needs — `@WebFluxTest` for controllers, `@DataMongoTest` for Mongo repositories, and friends. For repository slices that need a real store, combine the slice with Testcontainers as shown above; see [Spring Data Neo4j — Testing](../data/data-neo4j.md#testing) for a worked example with `@DataNeo4jTest`.
+Spring Boot provides reactive test slices that load only the configuration a test needs — `@WebFluxTest` for controllers, `@DataMongoTest` for Mongo repositories, and friends. For repository slices that need a real store, combine the slice with Testcontainers as shown above; see [Spring Data Neo4j — Testing](../data/neo4j.md#testing) for a worked example with `@DataNeo4jTest`.

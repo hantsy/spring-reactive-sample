@@ -1,7 +1,7 @@
 
 # Spring Data Couchbase
 
-Spring Data Couchbase adds reactive support on top of the Couchbase Java SDK 3.x. It provides a `ReactiveCouchbaseTemplate` and `ReactiveCouchbaseRepository` alongside the blocking variants, and the SDK itself exposes a `ReactiveCollection` for raw document operations — see [Database Client Modules](client.md#couchbase-cluster) for the raw client approach.
+Spring Data Couchbase adds reactive support on top of the Couchbase Java SDK 3.x. It provides a `ReactiveCouchbaseTemplate` and `ReactiveCouchbaseRepository` alongside the blocking variants, and the SDK itself exposes a `ReactiveCollection` for raw document operations — see [Working with the native client](#working-with-the-native-client) below for the raw client approach.
 
 ## Getting started
 
@@ -162,3 +162,87 @@ public void init() {
         );
 }
 ```
+
+## Working with the native client
+
+The `spring-boot-starter-couchbase` starter auto-configures a Couchbase `Cluster` bean. By obtaining the collection reference, you can perform document operations directly. For reactive operations, call `.reactive()` on the collection to obtain a `ReactiveCollection` — the Couchbase Java SDK exposes it natively, so no additional reactive driver is needed.
+
+### Project setup
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-couchbase</artifactId>
+</dependency>
+```
+
+### Implementing a thin repository
+
+```java
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class ProductRepository {
+    private final Cluster cluster;
+    private ReactiveCollection productCollection;
+
+    @PostConstruct
+    public void init() {
+        this.productCollection = this.cluster
+                .bucket("demo")
+                .defaultCollection()
+                .reactive();
+    }
+
+    public Mono<Product> save(Product product) {
+        String id = product.id() != null ? product.id() : UUID.randomUUID().toString();
+        return this.productCollection.upsert(id, product)
+                .mapNotNull(result -> {
+                    log.debug("saving product result: {}", result);
+                    return new Product(id, product.name(), product.price());
+                });
+    }
+}
+```
+
+### Testing with Testcontainers
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-testcontainers</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers-couchbase</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers-junit-jupiter</artifactId>
+    <scope>test</scope>
+</dependency>
+```
+
+```java
+@TestConfiguration(proxyBeanMethods = false)
+class TestcontainersConfiguration {
+
+    @Bean
+    @ServiceConnection
+    public CouchbaseContainer couchbaseContainer() {
+        return new CouchbaseContainer("couchbase/server")
+                .withCredentials("Administrator", "password")
+                .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
+                .withStartupAttempts(5)
+                .withStartupTimeout(Duration.ofSeconds(120));
+    }
+}
+```
+
+The complete example lives in [boot-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-couchbase).

@@ -66,13 +66,13 @@ nav:
   - Data Operations:
       - data/intro.md
       - data/client.md
-      - data/data-mongo.md
-      - data/data-redis.md
-      - data/data-cassandra.md
-      - data/data-couchbase.md
-      - data/data-elasticsearch.md
-      - data/data-neo4j.md
-      - data/data-r2dbc.md
+      - data/mongo.md
+      - data/redis.md
+      - data/cassandra.md
+      - data/couchbase.md
+      - data/elasticsearch.md
+      - data/neo4j.md
+      - data/r2dbc.md
   - Security:
       - security/intro.md
       - security/start.md
@@ -92,8 +92,13 @@ nav:
       - int/webflux.md
       - int/dsl.md
       - int/message-channel.md
+  - Kotlin:
+      - kotlin/intro.md
+      - kotlin/coroutines.md
+      - kotlin/dsl.md
+      - kotlin/co-web-filter.md
+      - kotlin/misc.md
   - Other Topics:
-      - other/kotlin.md
       - other/groovy.md
       - other/cache.md
       - other/event.md

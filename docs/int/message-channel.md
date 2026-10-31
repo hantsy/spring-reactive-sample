@@ -24,7 +24,7 @@ The [Spring Integration chapter](webflux.md) wires it between a `WebFluxInboundE
 
 ## Redis pub/sub (Spring Data Redis)
 
-Redis channels work across processes: any application subscribed to the channel receives messages published by any other. Spring Data Redis exposes this through `ReactiveRedisMessageListenerContainer`, which returns a `Flux` of received messages — see [Spring Data Redis — Redis Messaging](../data/data-redis.md#redis-messaging) for the full walkthrough:
+Redis channels work across processes: any application subscribed to the channel receives messages published by any other. Spring Data Redis exposes this through `ReactiveRedisMessageListenerContainer`, which returns a `Flux` of received messages — see [Spring Data Redis — Redis Messaging](../data/redis.md#redis-messaging) for the full walkthrough:
 
 ```java
 @Bean

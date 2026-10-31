@@ -15,7 +15,8 @@ The chapters build on each other, but each page stands on its own:
 5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method-level constraints, custom user details services, and form login.
 6. **[Session](session/intro.md)** — reactive `WebSession` with in-memory, Redis, and MongoDB stores, plus header-based session ids.
 7. **[Integration](int/intro.md)** — Spring Integration with reactive message channels, the `IntegrationFlow` DSL, and channel patterns across the ecosystem.
-8. **[Other Topics](other/kotlin.md)** — Kotlin and Groovy, caching, events, scheduling, RestDocs, testing, Mutiny, and the Flow API.
+8. **[Kotlin](kotlin/intro.md)** — coroutines, the `BeanRegistrarDsl`/`coRouter` DSLs, `CoWebFilter`, and coroutine-friendly events, caching, and scheduling.
+9. **[Other Topics](other/groovy.md)** — Groovy, caching, events, scheduling, RestDocs, testing, Mutiny, and the Flow API.
 
 ## Running the samples
 

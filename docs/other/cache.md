@@ -1,7 +1,7 @@
 
 # Caching
 
-Since Spring 6.1, the caching abstraction supports reactive return types: a `@Cacheable` method may return `Mono` or `Flux`, and the cache stores the completion rather than the publisher. The repository ships three samples that differ only in the `CacheManager`: an in-memory `ConcurrentHashMap`, Caffeine, and Redis. All three combine the cache with a [Spring Data R2DBC](../data/data-r2dbc.md) backed `PostRepository` on PostgreSQL.
+Since Spring 6.1, the caching abstraction supports reactive return types: a `@Cacheable` method may return `Mono` or `Flux`, and the cache stores the completion rather than the publisher. The repository ships three samples that differ only in the `CacheManager`: an in-memory `ConcurrentHashMap`, Caffeine, and Redis. All three combine the cache with a [Spring Data R2DBC](../data/r2dbc.md) backed `PostRepository` on PostgreSQL.
 
 ## Step 1: enable caching
 
