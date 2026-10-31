@@ -49,7 +49,7 @@ Import the generated codes into your IDE..
 Open _pom.xml_ in your IDE editor, add some modifications:
 
 1. Add `spring-boot-starter-parent` as parent POM to manage the versions of all required dependencies for this project.
-2. Add `spring-webflux`, `jackson-databind`, `reactor-core` as dependencies to get Spring Web Reactive support
+2. Add `spring-webflux`, Jackson 3 (`tools.jackson.core:jackson-databind`), and Reactor as dependencies to get Spring Web Reactive support
 3. Add `logback` as logging framework, `jcl-over-slf4j` is a bridge for Spring jcl and slf4j.
 4. Add Lombok to erase the tedious getters, setters, etc for POJO classes. More details go to [Lombok project](https://projectlombok.org).
 
@@ -93,7 +93,7 @@ The final pom.xml looks like:
         </dependency>
 
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
+            <groupId>tools.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
         </dependency>
 
@@ -104,7 +104,7 @@ The final pom.xml looks like:
 
         <dependency>
             <groupId>io.projectreactor.netty</groupId>
-            <artifactId>reactor-core</artifactId>
+            <artifactId>reactor-netty</artifactId>
         </dependency>
 
         <dependency>
