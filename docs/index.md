@@ -13,11 +13,9 @@ The chapters build on each other, but each page stands on its own:
 3. **[Web Programming](web/intro.md)** — annotated controllers and functional routing, exception handling, multipart uploads (including `PartEvent` streaming), Server-Sent Events, WebSocket, view rendering, the `WebClient` HTTP client, and Spring 7 API versioning.
 4. **[Data Operations](data/intro.md)** — reactive repositories and templates for MongoDB, Redis, Cassandra, Couchbase, Elasticsearch, Neo4j, and R2DBC for relational databases, plus the native reactive drivers.
 5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method-level constraints, custom user details services, and form login.
-6. **[Session](session/intro.md)** — reactive `WebSession` with in-memory, Redis, and MongoDB stores, plus header-based session ids.
-7. **[Integration](int/intro.md)** — Spring Integration with reactive message channels, the `IntegrationFlow` DSL, and channel patterns across the ecosystem.
-8. **[Testing](testing/intro.md)** — `StepVerifier`, `WebTestClient` for web components, Testcontainers for the data layer, Spring test contexts and slices, and the Kotlin toolkit (Kotest, MockK, coroutines-test).
-9. **[Kotlin](kotlin/intro.md)** — annotated controllers and `RouterFunctions` in Kotlin, coroutines, the beans/`coRouter` DSLs, `CoWebFilter`, and coroutine-friendly events, caching, and scheduling.
-9. **[Reactive Ecosystem](other/groovy.md)** — Groovy, caching, events, scheduling, RestDocs, testing, Mutiny, and the JDK Flow API.
+6. **[Testing](testing/intro.md)** — `StepVerifier`, `WebTestClient` for web components and Spring Security, Testcontainers for the data layer, Spring test contexts and slices, and the Kotlin toolkit (Kotest, MockK, coroutines-test).
+7. **[Kotlin](kotlin/intro.md)** — annotated controllers and `RouterFunctions` in Kotlin, coroutines, the beans/`coRouter` DSLs, `CoWebFilter`, and coroutine-friendly events, caching, and scheduling.
+8. **[Reactive Ecosystem](other/mutiny.md)** — the wider reactive ecosystem: Mutiny and the JDK Flow API, Groovy, cross-cutting concerns (caching, events, scheduling, RestDocs), reactive `WebSession` with Spring Session, and Spring Integration with reactive message channels.
 
 ## Running the samples
 

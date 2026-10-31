@@ -81,17 +81,6 @@ nav:
       - security/method.md
       - security/user-details-repo.md
       - security/form.md
-  - Session:
-      - session/intro.md
-      - session/in-memory.md
-      - session/redis.md
-      - session/mongo.md
-      - session/header.md
-  - Integration:
-      - int/intro.md
-      - int/webflux.md
-      - int/dsl.md
-      - int/message-channel.md
   - Testing:
       - testing/intro.md
       - testing/web-components.md
@@ -106,10 +95,23 @@ nav:
       - kotlin/dsl.md
       - kotlin/misc.md
   - Reactive Ecosystem:
-      - other/groovy.md
-      - other/cache.md
-      - other/event.md
-      - other/schedule.md
-      - other/restdocs.md
-      - other/mutiny.md
-      - other/java9.md
+      - Reactive libraries:
+          - other/mutiny.md
+          - other/java9.md
+          - other/groovy.md
+      - Cross-cutting concerns:
+          - other/cache.md
+          - other/event.md
+          - other/schedule.md
+          - other/restdocs.md
+      - Spring Session:
+          - session/intro.md
+          - session/in-memory.md
+          - session/redis.md
+          - session/mongo.md
+          - session/header.md
+      - Spring Integration:
+          - int/intro.md
+          - int/webflux.md
+          - int/dsl.md
+          - int/message-channel.md
