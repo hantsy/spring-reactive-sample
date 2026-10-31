@@ -3,6 +3,8 @@
 
 Spring WebFlux treats Kotlin coroutines as first-class citizens: a controller method can be a `suspend` function returning a single value, or a regular function returning `Flow<T>` for streams. Spring bridges to and from Reactor internally, so the reactive server stack stays unchanged.
 
+The samples referenced here are [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) and [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) in this repository, plus [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) and its [SecurityWebFilter](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) in the spring6-sandbox repository.
+
 ## A suspend controller
 
 From the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample of the spring6-sandbox repository:
@@ -42,7 +44,7 @@ Notes on the style:
 - Nullability replaces `switchIfEmpty`: `findById` returns `Post?`, and the Elvis operator (`?:`) throws the not-found exception.
 - Validation (`@Valid`, `@NotBlank`) works the same as in Java, and `@ExceptionHandler` handles both validation and domain exceptions.
 
-The [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) sample of this repository shows the same pattern against MongoDB, including a `ProblemDetail`-based exception handler:
+The [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) sample of this repository shows the same pattern against MongoDB, with a `ProblemDetail`-based exception handler:
 
 ```kotlin
 @ExceptionHandler(value = [PostNotFoundException::class])
@@ -90,7 +92,33 @@ flowOf("test 1", "test 2", "test 3")
 
 The extensions come from `org.springframework.transaction.reactive` (`executeAndAwait`, `transactional`).
 
-## Testing coroutines
+## CoWebFilter
+
+`CoWebFilter` is the coroutine variant of the reactive `WebFilter` contract from [Web Programming](../web/web-filter.md). Instead of returning `Mono<Void>`, the `filter` method is a `suspend` function, and the chain exposes a `CoWebFilterChain` whose `filter` call suspends.
+
+From the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample of the spring6-sandbox repository — the same security-check example as the Java [WebFilter](../web/web-filter.md) page, written with coroutines:
+
+```kotlin
+import org.springframework.http.HttpStatus
+import org.springframework.stereotype.Component
+import org.springframework.web.server.CoWebFilter
+import org.springframework.web.server.CoWebFilterChain
+import org.springframework.web.server.ServerWebExchange
+
+@Component
+class SecurityWebFilter : CoWebFilter() {
+    override suspend fun filter(exchange: ServerWebExchange, chain: CoWebFilterChain) {
+        if (!exchange.request.queryParams.containsKey("user")) {
+            exchange.response.statusCode = HttpStatus.UNAUTHORIZED
+        }
+        return chain.filter(exchange)
+    }
+}
+```
+
+Declared as a `@Component`, the filter is picked up by component scanning and registered into the `WebHandler` chain — the same behavior as a Java `WebFilter`, with the method body written in sequential coroutine style. A `CoWebFilter` can also handle exceptions thrown by the downstream chain — the `ExceptionFilter` in the [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample maps a domain exception to a 404 response, see [Kotlin DSLs](dsl.md#exceptionfilter-a-cowebfilter-for-error-mapping).
+
+## Testing
 
 `kotlinx-coroutines-test` provides `runTest`, and [MockK](https://mockk.io/) provides `coEvery`/`coVerify` for suspending functions — from the sample's `PostControllerTest`:
 
@@ -131,4 +159,41 @@ class PostControllerTest {
 }
 ```
 
+The filter tests use the same tools — verify the `SecurityWebFilter` contract with `WebFluxTest` and `runTest`:
+
+```kotlin
+@OptIn(ExperimentalCoroutinesApi::class)
+@WebFluxTest(controllers = [HelloController::class])
+class WebFilterTests {
+
+    @TestConfiguration
+    @Import(value = [SecurityWebFilter::class])
+    class TestConfig
+
+    @Autowired
+    private lateinit var client: WebTestClient
+
+    @Test
+    fun `authentication failed with no user params`() = runTest {
+        client.get().uri("/hello")
+            .exchange()
+            .expectStatus().isUnauthorized
+    }
+
+    @Test
+    fun `authentication passed with user params`() = runTest {
+        client.get().uri("/hello?user=Hantsy")
+            .exchange()
+            .expectStatus().isOk
+    }
+}
+```
+
 The test dependencies: `kotlinx-coroutines-test`, `com.ninja-squad:springmockk`, and `io.kotest:kotest-assertions-core-jvm`.
+
+## When to use which filter contract
+
+| Contract | Signature | Use when |
+| :--- | :--- | :--- |
+| `WebFilter` | `Mono<Void> filter(ServerWebExchange, WebFilterChain)` | Java code, or Kotlin code already working with Reactor types |
+| `CoWebFilter` | `suspend fun filter(ServerWebExchange, CoWebFilterChain)` | Kotlin coroutines code that prefers sequential, null-safe logic |

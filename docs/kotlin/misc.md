@@ -5,7 +5,23 @@ Spring's reactive support for application events, the caching abstraction, and t
 
 ## Application events
 
-An `@EventListener` can drive coroutine code. The listener method stays a regular function; inside it, use `runBlocking` when you need to block until coroutine work completes — from the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample:
+An `@EventListener` supports suspend functions directly: since Spring Framework 6.1 the listener method can be declared `suspend` (or return `Flow`), and Spring bridges the coroutine completion into the event multicaster:
+
+```kotlin
+@Component
+class GreetingListener {
+
+    @EventListener
+    suspend fun onGreetingEvent(event: Greeting) {
+        log.debug("received event: {}", event)
+        // ... suspend calls inside the listener body
+    }
+}
+```
+
+This mirrors the Java pattern in [Application Events](../other/event.md) — publish with `ApplicationEventPublisher`, observe with `@EventListener` — with the handler body written in coroutine style.
+
+When the surrounding contract requires a blocking method — Spring Boot lifecycle hooks such as `CommandLineRunner`, for example — wrap the coroutine work in `runBlocking { ... }`, as the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample does for data initialization:
 
 ```kotlin
 @Component
@@ -20,8 +36,6 @@ class DataInitializer(private val posts: PostRepository) {
     }
 }
 ```
-
-This mirrors the Java pattern in [Application Events](../other/event.md) — publish with `ApplicationEventPublisher`, observe with `@EventListener` — with the handler body written in coroutine style. The same works in Spring Boot lifecycle hooks (`ApplicationRunner`, `CommandLineRunner`) via `runBlocking { ... }`.
 
 ## Scheduling
 

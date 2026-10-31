@@ -94,9 +94,9 @@ nav:
       - int/message-channel.md
   - Kotlin:
       - kotlin/intro.md
+      - kotlin/kotlin.md
       - kotlin/coroutines.md
       - kotlin/dsl.md
-      - kotlin/co-web-filter.md
       - kotlin/misc.md
   - Other Topics:
       - other/groovy.md
