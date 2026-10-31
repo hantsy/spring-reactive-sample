@@ -138,7 +138,7 @@ this.rest
 
 ## Mocking the HTTP edge with WireMock
 
-For client-side tests, the [WebClient samples](../web/client.md#testing-a-webclient-with-wiremock) run a [WireMock](https://wiremock.org/) server on the port the client targets and stub each endpoint. See the `client` sample's `PostClientTest` for the full pattern.
+For client-side tests, the [WebClient samples](../web/client.md#mocking-a-target-http-api-with-wiremock) run a [WireMock](https://wiremock.org/) server on the port the client targets and stub each endpoint. See the `client` sample's `PostClientTest` for the full pattern.
 
 ## Integration tests with Testcontainers
 

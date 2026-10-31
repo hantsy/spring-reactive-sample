@@ -214,7 +214,7 @@ Add the dependency:
 
 Each connector swaps in with one builder call — `.clientConnector(connector)` — while the `PostClient` layer above stays untouched. For the complete codes of each variant, check [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty), [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient), and [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5).
 
-## Testing a WebClient with WireMock
+## Mocking a target Http API with WireMock
 
 The samples test `PostClient` against [WireMock](https://wiremock.org/) using `@WireMockTest(httpPort = 8080)` — the same port the client targets — and assert the reactive sequences with `StepVerifier`:
 
