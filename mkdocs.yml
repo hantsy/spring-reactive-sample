@@ -98,7 +98,7 @@ nav:
       - kotlin/coroutines.md
       - kotlin/dsl.md
       - kotlin/misc.md
-  - Other Topics:
+  - Reactive Ecosystem:
       - other/groovy.md
       - other/cache.md
       - other/event.md
