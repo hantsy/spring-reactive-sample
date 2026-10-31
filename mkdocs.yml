@@ -22,7 +22,7 @@ theme:
     - navigation.tabs
     - navigation.sections
     - navigation.expand
-    - toc.integrate
+    - toc.follow
 
 extra:
   social:
