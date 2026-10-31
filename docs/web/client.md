@@ -269,7 +269,7 @@ public class PostClientTest {
 }
 ```
 
-See [Testing](../other/testing.md) for the full picture of reactive testing utilities.
+See [Testing](../testing/intro.md) for the full picture of reactive testing utilities.
 
 ## WebTestClient
 

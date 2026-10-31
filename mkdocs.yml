@@ -92,6 +92,12 @@ nav:
       - int/webflux.md
       - int/dsl.md
       - int/message-channel.md
+  - Testing:
+      - testing/intro.md
+      - testing/web-components.md
+      - testing/testcontainers.md
+      - testing/spring-test.md
+      - testing/kotlin.md
   - Kotlin:
       - kotlin/intro.md
       - kotlin/kotlin.md
@@ -104,6 +110,5 @@ nav:
       - other/event.md
       - other/schedule.md
       - other/restdocs.md
-      - other/testing.md
       - other/mutiny.md
       - other/java9.md

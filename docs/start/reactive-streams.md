@@ -241,7 +241,7 @@ StepVerifier.create(Flux.just("a", "b"))
     .verifyComplete();
 ```
 
-See [Testing](../other/testing.md) for a full treatment.
+See [Testing](../testing/intro.md) for a full treatment.
 
 ## Other implementations
 
