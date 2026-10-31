@@ -9,38 +9,38 @@ The exception handling in _reactive_ `@RestController` is similar to the one in 
 
 1. Create an `Exception` class.
 
-   ```java
-   public class PostNotFoundException extends RuntimeException {
-       public PostNotFoundException(Long id) {
-           super("Post:" + id +" is not found.");
-       }
-   }
-   ```
+    ```java
+    public class PostNotFoundException extends RuntimeException {
+        public PostNotFoundException(Long id) {
+            super("Post:" + id +" is not found.");
+        }
+    }
+    ```
 
 2. Throw exception in your codes.
 
-   ```java
-   @GetMapping(value = "/{id}")
-   public Mono<Post> get(@PathVariable(value = "id") Long id) {
-       return this.posts.findById(id).switchIfEmpty(Mono.error(new PostNotFoundException(id)));
-   }
-   ```
+    ```java
+    @GetMapping(value = "/{id}")
+    public Mono<Post> get(@PathVariable(value = "id") Long id) {
+        return this.posts.findById(id).switchIfEmpty(Mono.error(new PostNotFoundException(id)));
+    }
+    ```
 
 3. Create a standalone `@ControllerAdvice` annotated class or `@ExceptionHandler` annotated method in your controller class to handle the exceptions.
 
-   ```java
-   @RestControllerAdvice
-   @Slf4j
-   class RestExceptionHandler {
+    ```java
+    @RestControllerAdvice
+    @Slf4j
+    class RestExceptionHandler {
 
-       @ExceptionHandler(PostNotFoundException.class)
-       public ResponseEntity<?> postNotFound(PostNotFoundException ex) {
-           log.debug("handling exception: {}", ex.toString());
-           return ResponseEntity.notFound().build();
-       }
+        @ExceptionHandler(PostNotFoundException.class)
+        public ResponseEntity<?> postNotFound(PostNotFoundException ex) {
+            log.debug("handling exception: {}", ex.toString());
+            return ResponseEntity.notFound().build();
+        }
 
-   }
-   ```
+    }
+    ```
 
 `@RestControllerAdvice` only works for `@RestController`.
 

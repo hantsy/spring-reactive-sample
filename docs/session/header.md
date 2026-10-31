@@ -77,18 +77,18 @@ public class SessionController {
 
 1. Authenticate and request the session id:
 
-   ```bash
-   curl -u user:password http://localhost:8080/sessionId
-   # {"id":"..."}
-   ```
+    ```bash
+    curl -u user:password http://localhost:8080/sessionId
+    # {"id":"..."}
+    ```
 
-   The response carries the `X-SESSION-ID` header with the same value.
+    The response carries the `X-SESSION-ID` header with the same value.
 
 2. Call a protected endpoint with the header instead of Basic auth:
 
-   ```bash
-   curl -H "X-SESSION-ID: <id>" http://localhost:8080/posts
-   ```
+    ```bash
+    curl -H "X-SESSION-ID: <id>" http://localhost:8080/posts
+    ```
 
 The test in the sample asserts exactly this contract:
 
