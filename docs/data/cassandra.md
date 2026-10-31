@@ -1,105 +1,12 @@
+# Accessing Cassandra with Spring Data Cassandra
 
-# Spring Data Cassandra
+Cassandra is a wide-column distributed database. Spring Data Cassandra adds reactive support on top of the Cassandra Java driver, and the driver itself exposes a reactive `executeReactive` extension for the thin-client path.
 
-Spring Data Cassandra adds basic Reactive support.
+This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, try the native client, then move to the Spring Data abstractions.
 
-Follow the [Getting Started](../start/intro.md) chapter to create a freestyle (no Spring Boot) or Spring Boot based project skeleton.
+## Getting started
 
-If you are not using Spring Boot, first add the following dependencies to your project.
-
-```xml
-<dependency>
-	<groupId>org.springframework.data</groupId>
-	<artifactId>spring-data-cassandra</artifactId>
-</dependency>
-```
-
-Create a `@Configuration` class to configure Cassandra and add `@EnableReactiveCassandraRepositories` to enable reactive `Repository` support.
-
-```java
-@Configuration
-@EnableReactiveCassandraRepositories(basePackageClasses = {CassandraConfig.class})
-public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
-
-    @Value("${cassandra.keyspace-name}")
-    String keySpace;
-
-    @Value("${cassandra.contact-points}")
-    String contactPoints;
-
-    @Override
-    protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
-
-        CreateKeyspaceSpecification specification = CreateKeyspaceSpecification.createKeyspace(keySpace)
-            .ifNotExists()
-            .with(KeyspaceOption.DURABLE_WRITES, true);
-        //.withNetworkReplication(DataCenterReplication.dcr("foo", 1), DataCenterReplication.dcr("bar", 2));
-
-        return Arrays.asList(specification);
-    }
-
-    @Override
-    protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
-        return Arrays.asList(DropKeyspaceSpecification.dropKeyspace(keySpace));
-    }
-
-    @Override
-    protected String getKeyspaceName() {
-        return keySpace;
-    }
-
-    @Override
-    protected String getContactPoints() {
-        return contactPoints;
-    }
-
-    @Override
-    public SchemaAction getSchemaAction() {
-        return SchemaAction.RECREATE;
-    }
-
-}
-```
-
-The `getKeyspaceCreations` configures how to create the keyspace when Cassandra is started, here we create the keyspace if it does not existed.
-
-The `getSchemaAction` specifies the action of schema generation.
-
-Create a `Post` class to present the table in Cassandra, and add add a `@Table` annotation on this class.
-
-```java
-@Data
-@ToString
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Table("posts")
-class Post {
-
-    @PrimaryKey()
-    @Builder.Default
-    private String id = UUID.randomUUID().toString();
-    private String title;
-    private String content;
-
-}
-```
-
-Add `@PrimaryKey` on `id` field, it indicates `id` is the primary key of `posts` table.
-
-!!! note
-
-    Unlike Mongo and other NoSQL, in Cassandra, you have to fill the `id` field manually before it is inserted.
-
-Next change the former `PostRepository` to the following:
-
-```java
-interface PostRepository extends ReactiveCassandraRepository<Post, String>{}
-```
-
-For the complete codes, check [spring-reactive-sample/data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/data-cassandra).
-
-Alternatively, for Spring Boot applications, just need to add `spring-boot-starter-data-cassandra-reactive` into your project dependencies.
+Generate a project skeleton from [Spring Initializr](https://start.spring.io) as described in the [Getting Started](../start/intro.md) chapter — choose **Spring WebFlux** and **Spring Data for Apache Cassandra** — or add the starter to an existing `pom.xml`:
 
 ```xml
 <dependency>
@@ -108,32 +15,19 @@ Alternatively, for Spring Boot applications, just need to add `spring-boot-start
 </dependency>
 ```
 
-No need extra configuration, Spring Boot will autoconfigure Cassandra and registers all essential beans for you.
+For a freestyle Spring project (no Spring Boot auto-configuration), use the plain dependency instead:
 
-For the complete codes, check [spring-reactive-sample/boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-cassandra).
+```xml
+<dependency>
+	<groupId>org.springframework.data</groupId>
+	<artifactId>spring-data-cassandra</artifactId>
+</dependency>
+```
 
-Add some sample data via a `CommandLineRunner` bean or a `ApplicationRunner` bean.
+Start a Cassandra server with the `docker-compose.yml` in the repository root:
 
-```java
-public void init() {
-	log.info("start data initialization  ...");
-	this.posts
-		.deleteAll()
-		.thenMany(
-			Flux
-				.just("Post one", "Post two")
-				.flatMap(
-					title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-				)
-		)
-		.log()
-		.subscribe(
-			null,
-			null,
-			() -> log.info("done initialization...")
-		);
-
-}
+```bash
+docker-compose up cassandra
 ```
 
 ## Working with the native client
@@ -256,3 +150,141 @@ class DemoApplicationTests {
 ```
 
 The working example lives in the [boot-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-cassandra) module.
+
+## Spring Data Cassandra
+
+### Spring configuration
+
+For the freestyle path, create a `@Configuration` class and add `@EnableReactiveCassandraRepositories` to enable reactive `Repository` support:
+
+```java
+@Configuration
+@EnableReactiveCassandraRepositories(basePackageClasses = {CassandraConfig.class})
+public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
+
+    @Value("${cassandra.keyspace-name}")
+    String keySpace;
+
+    @Value("${cassandra.contact-points}")
+    String contactPoints;
+
+    @Override
+    protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
+
+        CreateKeyspaceSpecification specification = CreateKeyspaceSpecification.createKeyspace(keySpace)
+            .ifNotExists()
+            .with(KeyspaceOption.DURABLE_WRITES, true);
+        //.withNetworkReplication(DataCenterReplication.dcr("foo", 1), DataCenterReplication.dcr("bar", 2));
+
+        return Arrays.asList(specification);
+    }
+
+    @Override
+    protected List<DropKeyspaceSpecification> getKeyspaceDrops() {
+        return Arrays.asList(DropKeyspaceSpecification.dropKeyspace(keySpace));
+    }
+
+    @Override
+    protected String getKeyspaceName() {
+        return keySpace;
+    }
+
+    @Override
+    protected String getContactPoints() {
+        return contactPoints;
+    }
+
+    @Override
+    public SchemaAction getSchemaAction() {
+        return SchemaAction.RECREATE;
+    }
+
+}
+```
+
+The `getKeyspaceCreations` configures how to create the keyspace when Cassandra is started, here we create the keyspace if it does not existed.
+
+The `getSchemaAction` specifies the action of schema generation.
+
+Create a `Post` class to present the table in Cassandra, and add add a `@Table` annotation on this class.
+
+```java
+@Data
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table("posts")
+class Post {
+
+    @PrimaryKey()
+    @Builder.Default
+    private String id = UUID.randomUUID().toString();
+    private String title;
+    private String content;
+
+}
+```
+
+Add `@PrimaryKey` on `id` field, it indicates `id` is the primary key of `posts` table.
+
+!!! note
+
+    Unlike Mongo and other NoSQL, in Cassandra, you have to fill the `id` field manually before it is inserted.
+
+Next change the former `PostRepository` to the following:
+
+```java
+interface PostRepository extends ReactiveCassandraRepository<Post, String>{}
+```
+
+For the complete codes, check [spring-reactive-sample/data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/data-cassandra).
+
+### Boot starter
+
+into your project dependencies.
+
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-cassandra-reactive</artifactId>
+</dependency>
+```
+
+No need extra configuration, Spring Boot will autoconfigure Cassandra and registers all essential beans for you.
+
+For the complete codes, check [spring-reactive-sample/boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-cassandra).
+
+### Seeding sample data
+
+Add some sample data via a `CommandLineRunner` bean or a `ApplicationRunner` bean.
+
+```java
+public void init() {
+	log.info("start data initialization  ...");
+	this.posts
+		.deleteAll()
+		.thenMany(
+			Flux
+				.just("Post one", "Post two")
+				.flatMap(
+					title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+				)
+		)
+		.log()
+		.subscribe(
+			null,
+			null,
+			() -> log.info("done initialization...")
+		);
+
+}
+```
+
+## All samples
+
+| Sample | Description |
+| :--- | :--- |
+| [data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/data-cassandra) | Freestyle Spring configuration with `ReactiveCassandraRepository` |
+| [boot-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-cassandra) | Native `CqlSession` (thin client) with `executeReactive` |
+| [boot-data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-cassandra) | Spring Boot starter with `ReactiveCassandraRepository` |

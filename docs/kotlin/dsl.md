@@ -12,7 +12,7 @@ Spring provides Kotlin DSLs for both halves of a WebFlux application — bean de
 
 ## The beans DSL
 
-The Kotlin beans DSL (`org.springframework.context.support.beans`) replaces annotation configuration with functional registration. From the [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) sample:
+The Kotlin `BeanDefinitionDSL` (`org.springframework.context.support.beans`) replaces annotation configuration with functional registration.
 
 ```kotlin
 fun beans() = beans {
@@ -58,11 +58,13 @@ Reading the DSL:
 
 - `bean { ... }` registers a bean with a supplier; `ref<T>()` resolves another bean by type.
 - The DSL registers any bean the application needs — a `CommandLineRunner` for data initialization, the `RouterFunction`, even a `CorsWebFilter`.
-- With Spring Boot, apply it with `addInitializers(beans())`; in a plain Spring application, register it on a `GenericApplicationContext` — the [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-dsl) sample shows that variant with `RouterFunctions.toWebHandler(...)`.
+- With Spring Boot, apply it with `addInitializers(beans())`; in a plain Spring application, register it on a `GenericApplicationContext` 
+
+Check the [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-dsl) sample shows that variant with `RouterFunctions.toWebHandler(...)`. And the [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) sample shows the Spring Boot variant.
 
 ### The router DSL
 
-The `router { }` function (RouterFunctionDsl) declares functional routes with a nesting style that reads top-down, replacing the `andRoute` chain from [Annotation-Driven Kotlin and RouterFunctions](kotlin.md#routerfunctions-in-kotlin):
+The `router { }` function (`RouterFunctionDsl`) declares functional routes with a nesting style that reads top-down, replacing the `andRoute` chain from [Annotation-Driven Kotlin and RouterFunctions](kotlin.md#routerfunctions-in-kotlin):
 
 ```kotlin
 class PostRoutes(private val postHandler: PostHandler) {
@@ -82,7 +84,7 @@ The handlers here are ordinary `Mono<ServerResponse>` methods — the same shape
 
 ## The coroutine variant: coRouter and suspend handlers
 
-The [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample combines the beans DSL with `coRouter { }` (CoRouterFunctionDsl) and coroutine handlers backed by a `CoroutineCrudRepository`:
+The following example demonstrates the use of `coRouter { }` (`CoRouterFunctionDsl`) and coroutine handlers backed by a `CoroutineCrudRepository`:
 
 ```kotlin
 class PostRoutes(private val postHandler: PostHandler) {
@@ -156,6 +158,8 @@ bean {
 }
 ```
 
+Check the [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample.
+
 ### ExceptionFilter: a CoWebFilter for error mapping
 
 The same sample registers a `CoWebFilter` that maps a domain exception thrown by the downstream chain to a 404 response — see [Coroutines](coroutines.md#cowebfilter) for the `CoWebFilter` contract:
@@ -176,7 +180,7 @@ class ExceptionFilter : CoWebFilter() {
 
 ## BeanRegistrarDsl in Spring Framework 7
 
-Spring Framework 7 evolves the bean registration API into `BeanRegistrarDsl` — a registrar class you `@Import` instead of an initializer. From the [bean-registrar-kotlin-dsl](https://github.com/hantsy/spring7-sandbox/tree/main/bean-registrar-kotlin-dsl) sample of the spring7-sandbox repository:
+Spring Framework 7 evolves the bean registration API into `BeanRegistrarDsl` — a registrar class you `@Import` instead of an initializer. 
 
 ```kotlin
 class MyBeanRegistrar : BeanRegistrarDsl({
@@ -201,8 +205,5 @@ class CustomConfig
 
 `registerBean(name = ..., prototype = ..., backgroundInit = ...)` controls the bean metadata explicitly, and `profile("foo") { ... }` scopes registrations to a profile. The `beans { }` DSL above remains fully supported; prefer `BeanRegistrarDsl` for new Spring Framework 7 code.
 
-## Related samples
+Check the [bean-registrar-kotlin-dsl](https://github.com/hantsy/spring7-sandbox/tree/main/bean-registrar-kotlin-dsl) sample of the spring7-sandbox repository for a complete example.
 
-- [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) and [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) — the Boot variants of the beans DSL with `router { }`/`coRouter { }`
-- [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-dsl) — the plain Spring (no Boot) beans DSL variant
-- [hantsy/spring-kotlin-dsl-sample](https://github.com/hantsy/spring-kotlin-dsl-sample) — a dedicated repository for the DSLs

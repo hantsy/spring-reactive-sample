@@ -1,13 +1,23 @@
+# Accessing Redis with Spring Data Redis
 
-# Spring Data Redis
+Redis is a key-value store that doubles as a lightweight message broker. Spring Data Redis provides a reactive variant of `RedisConnectionFactory` — `ReactiveRedisConnectionFactory` — which returns a `ReactiveConnection`, plus `ReactiveRedisTemplate` and reactive pub/sub support.
 
-Spring Data Redis provides a reactive variant of `RedisConnectionFactory` aka `ReactiveRedisConnectionFactory` which return a `ReactiveConnection`.
+This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, work with the reactive connection, then move to `ReactiveRedisTemplate` and messaging.
 
-## Getting Started
+## Getting started
 
-Follow the [Getting Started](../start/intro.md) chapter to create a base project skeleton, either freestyle (manual wiring) or a Spring Boot 4 starter.
+Generate a project skeleton from [Spring Initializr](https://start.spring.io) as described in the [Getting Started](../start/intro.md) chapter — choose **Spring WebFlux** and **Spring Data Redis (Reactive)** — or add the starter to an existing `pom.xml`:
 
-For none Spring Boot project, add the following dependencies to the _pom.xml_.
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+</dependency>
+```
+
+Spring Boot auto-configures a `ReactiveRedisConnectionFactory` for you.
+
+For a freestyle Spring project (no Spring Boot auto-configuration), use the plain dependencies instead — Lettuce is the required driver for reactive support:
 
 ```xml
 <dependency>
@@ -24,11 +34,15 @@ For none Spring Boot project, add the following dependencies to the _pom.xml_.
 </dependency>
 ```
 
-!!! note
+Start a Redis server with the `docker-compose.yml` in the repository root:
 
-    You have to use `lettuce` as Redis driver to get reactive support in `spring-data-redis`, and add `commons-pool2` to support Redis connection pool.
+```bash
+docker-compose up redis
+```
 
-Create a `@Configuration` class to configure Redis and enable Reactive support.
+## Spring configuration
+
+For the freestyle path, create a `@Configuration` class to configure Redis and enable reactive support:
 
 ```java
 @Configuration
@@ -51,7 +65,9 @@ public class RedisConfig {
 
 `LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans.
 
-In your components, you can inject a `ReactiveRedisConnectionFactory` bean to get a `ReactiveConnection`.
+`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans.
+
+## Working with the reactive connection
 
 ```java
 @Inject ReactiveRedisConnectionFactory factory;
@@ -233,3 +249,13 @@ Redis is the exception among the stores in this chapter. Unlike Cassandra's `Cql
 Redis connectivity continues to be managed through `spring-boot-starter-data-redis` (blocking) and `spring-boot-starter-data-redis-reactive` (reactive with Lettuce), both of which configure the higher-level `ReactiveRedisTemplate` rather than exposing the raw driver directly.
 
 If you need to work with the Lettuce driver directly in a reactive context, you can inject `io.lettuce.core.api.reactive.RedisReactiveCommands` after including `spring-boot-starter-data-redis-reactive` — the [Redis Messaging](#redis-messaging) section above shows the `ReactiveRedisMessageListenerContainer` for pub/sub.
+
+## All samples
+
+| Sample | Description |
+| :--- | :--- |
+| [data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis) | Freestyle Spring configuration with `ReactiveRedisConnectionFactory` |
+| [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message) | Reactive pub/sub with `ReactiveRedisMessageListenerContainer` |
+| [boot-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis) | Spring Boot starter with `ReactiveRedisTemplate` |
+| [boot-data-redis-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis-template) | `ReactiveRedisTemplate` variants |
+| [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) | Reactive caching with `RedisCacheManager` — see [Caching](../other/cache.md) |

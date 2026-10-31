@@ -1,9 +1,9 @@
 
-# Spring Data R2DBC
+# Accessing RDBMS with Spring R2DBC and Spring Data R2DBC
 
 R2DBC (Reactive Relational Database Connectivity) brings non-blocking access to relational databases. Spring provides two layers on top of it: the core `spring-r2dbc` module (a `ConnectionFactory`, `DatabaseClient`, and `R2dbcTransactionManager`) and Spring Data R2DBC (`R2dbcEntityTemplate`, `R2dbcRepository`, auditing, entity callbacks).
 
-Like every store in this chapter, this page covers both styles — the **thin client** (`DatabaseClient`, raw `ConnectionFactory`) and the **rich Spring Data** abstractions (`R2dbcEntityTemplate`, `R2dbcRepository`).
+This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, work with the **thin client** first (`ConnectionFactory`, `DatabaseClient`), then move to the **rich Spring Data** abstractions (`R2dbcEntityTemplate`, `R2dbcRepository`).
 
 !!! note "Dedicated repository"
 
@@ -419,6 +419,19 @@ To run any sample application itself, start a PostgreSQL server with Docker:
 ```bash
 docker-compose up postgres
 ```
+
+## All samples
+
+| Sample | Description |
+| :--- | :--- |
+| [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) | `ConnectionFactory` variants for PostgreSQL, H2, MySQL, MariaDB, Oracle |
+| [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient) | `DatabaseClient` CRUD, generated values, batch inserts, transactions |
+| [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate) | `R2dbcEntityTemplate` criteria queries and `@Version` optimistic locking |
+| [r2dbc-repository](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-repository) | `R2dbcRepository` with derived queries and `@Query` |
+| [r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-auditing) | `@EnableR2dbcAuditing` with Boot auto-configuration |
+| [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate) | Versioned SQL migrations via the r2dbc-migrate starter |
+| [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq) | Type-safe SQL with jOOQ, metamodel generated from `schema.sql` |
+| [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) | R2DBC repository combined with reactive caching — see [Caching](../other/cache.md) |
 
 ## Legacy samples and further resources
 

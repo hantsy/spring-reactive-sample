@@ -1,11 +1,12 @@
+# Accessing Elasticsearch with Spring Data Elasticsearch
 
-# Spring Data ElasticSearch
+Elasticsearch is a search engine that also works well as a document-oriented NoSQL store. Spring Data Elasticsearch adds reactive support through its own `ReactiveElasticsearchClient` and `ReactiveElasticsearchRepository`.
 
-ElasticSearch is well known as a search engine, also working well as document based NoSQL.
+This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, try the native client, then move to the Spring Data abstractions.
 
-Spring Data ElasticSearch adds basic Reactive support.
+## Getting started
 
-Generate a project skeleton from [Spring Intializr](https://start.spring.io).
+Generate a project skeleton from [Spring Initializr](https://start.spring.io) as described in the [Getting Started](../start/intro.md) chapter — choose **Spring WebFlux** and **Spring Data Elasticsearch** — or add the starter to an existing `pom.xml`:
 
 ```xml
 <dependency>
@@ -14,61 +15,7 @@ Generate a project skeleton from [Spring Intializr](https://start.spring.io).
 </dependency>
 ```
 
-Create a `Post` class to present a document in ElasticSearch, and add a `@Document` annotation on the class level.
-
-```java
-@Data
-@ToString
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Document
-class Post {
-
-    @Id
-    private String id;
-    private String title;
-
-    @Field("content")
-    private String content;
-
-}
-```
-
-Create `PostRepository` interface.
-
-```java
-interface PostRepository extends ReactiveElasticsearchRepository<Post, String> {
-}
-```
-
-For the complete codes, check [spring-reactive-sample/boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-elasticsearch).
-
-Add some sample data via a `CommandLineRunner` bean or a `ApplicationRunner` bean.
-
-```java
-public void init() {
-	log.info("start data initialization  ...");
-	this.posts
-		.deleteAll()
-		.thenMany(
-			Flux
-				.just("Post one", "Post two")
-				.flatMap(
-					title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-				)
-		)
-		.log()
-		.subscribe(
-			null,
-			null,
-			() -> log.info("done initialization...")
-		);
-
-}
-```
-
-To run the application, you have to serve a running ElasticSearch server firstly.
+Start an Elasticsearch server with the `docker-compose.yml` in the repository root:
 
 ```bash
 docker-compose up elasticsearch
@@ -134,3 +81,74 @@ class TestcontainersConfiguration {
 ```
 
 The full project is under [boot-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-elasticsearch).
+
+## Spring Data Elasticsearch
+
+### Entity and repository
+
+```java
+@Data
+@ToString
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Document
+class Post {
+
+    @Id
+    private String id;
+    private String title;
+
+    @Field("content")
+    private String content;
+
+}
+```
+
+Create `PostRepository` interface.
+
+```java
+interface PostRepository extends ReactiveElasticsearchRepository<Post, String> {
+}
+```
+
+For the complete codes, check [spring-reactive-sample/boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-elasticsearch).
+
+### Seeding sample data
+
+Add some sample data via a `CommandLineRunner` bean or a `ApplicationRunner` bean.
+
+```java
+public void init() {
+	log.info("start data initialization  ...");
+	this.posts
+		.deleteAll()
+		.thenMany(
+			Flux
+				.just("Post one", "Post two")
+				.flatMap(
+					title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
+				)
+		)
+		.log()
+		.subscribe(
+			null,
+			null,
+			() -> log.info("done initialization...")
+		);
+
+}
+```
+
+To run the application, you have to serve a running ElasticSearch server firstly.
+
+```bash
+docker-compose up elasticsearch
+```
+
+## All samples
+
+| Sample | Description |
+| :--- | :--- |
+| [boot-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-elasticsearch) | Native `ReactiveElasticsearchClient` (thin client) with Testcontainers |
+| [boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-elasticsearch) | Spring Boot starter with `ReactiveElasticsearchRepository` |

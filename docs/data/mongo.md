@@ -1,13 +1,21 @@
+# Accessing MongoDB with Spring Data Mongo
 
-# Spring Data Mongo
+MongoDB is a document database with first-class Reactive Streams support in its Java driver. Spring Data Mongo provides reactive variants of `MongoTemplate` and `MongoRepository` — `ReactiveMongoTemplate` and `ReactiveMongoRepository` — plus the thin native-driver path via `spring-boot-starter-mongodb`.
 
-Spring Data Mongo provides reactive variants of `MongoTemplate` and `MongoRepository`, aka `ReactiveMongoTemplate` and `ReactiveMongoRepository` which have reactive capabilities.
+This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, try the thin native client, then move to the Spring Data abstractions.
 
-## Getting Started
+## Getting started
 
-Follow the [Getting Started](../start/intro.md) chapter to create a freestyle or Spring Boot based project skeleton.
+Generate a project skeleton from [Spring Initializr](https://start.spring.io) as described in the [Getting Started](../start/intro.md) chapter — choose **Spring WebFlux** and **Spring Data MongoDB** — or add the starter to an existing `pom.xml`:
 
-For a freestyle Spring project, add the following into project dependencies.
+```xml
+<dependency>
+	<groupId>org.springframework.boot</groupId>
+	<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+</dependency>
+```
+
+For a freestyle Spring project (no Spring Boot auto-configuration), use the plain dependencies instead:
 
 ```xml
 <dependency>
@@ -19,6 +27,93 @@ For a freestyle Spring project, add the following into project dependencies.
 	<artifactId>mongodb-driver-reactivestreams</artifactId>
 </dependency>
 ```
+
+Before starting the application, make sure a MongoDB server is running. Start one with the `docker-compose.yml` in the repository root:
+
+```bash
+docker-compose up mongodb
+```
+
+## Working with the native client
+
+The `spring-boot-starter-mongodb` starter registers a reactive `com.mongodb.reactivestreams.client.MongoClient` bean when used in a reactive context — no Spring Data repository required.
+
+The MongoDB driver provides both synchronous and reactive variants. The `spring-boot-starter-mongodb` starter registers a reactive `com.mongodb.reactivestreams.client.MongoClient` bean when used in a reactive context. The returned driver collections produce publisher instances that can be wrapped using `Mono.from(...)` or `Flux.from(...)`.
+
+!!! tip
+
+    The starter transitively includes the synchronous `mongodb-driver-sync` driver even when you only need the reactive driver. For a leaner classpath, explicitly exclude `mongodb-driver-sync` and declare `mongodb-driver-reactivestreams` directly:
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-mongodb</artifactId>
+    <exclusions>
+        <exclusion>
+            <groupId>org.mongodb</groupId>
+            <artifactId>mongodb-driver-sync</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>
+<dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>mongodb-driver-reactivestreams</artifactId>
+</dependency>
+```
+
+### Implementing a thin repository
+
+The reactive collections return standard Reactive Streams `Publisher` objects, which convert to Project Reactor's `Mono` or `Flux` using `Mono.from(...)` or `Flux.from(...)`:
+
+```java
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class ProductRepository {
+    private final MongoClient mongoClient;
+    private MongoCollection<Product> productsCollection;
+
+    @PostConstruct
+    public void init() {
+        this.productsCollection = mongoClient
+                .getDatabase("test")
+                .getCollection("products", Product.class);
+    }
+
+    public Mono<Product> save(Product product) {
+        return Mono.from(this.productsCollection.insertOne(product))
+                .mapNotNull(result -> {
+                    log.debug("save product result: {}", result);
+                    var id = result.getInsertedId().asObjectId().getValue().toHexString();
+                    return product.withId(id);
+                });
+    }
+}
+```
+
+### Testing with Testcontainers
+
+```java
+@TestConfiguration(proxyBeanMethods = false)
+class TestcontainersConfiguration {
+
+    @Bean
+    @ServiceConnection
+    MongoDBContainer mongoDbContainer() {
+        return new MongoDBContainer(DockerImageName.parse("mongo:latest"));
+    }
+}
+```
+
+Explore [boot-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mongo) to see `Mono.from(...)` bridging the raw driver publishers into Reactor, with `StepVerifier` asserting document insertion and retrieval without a single blocking call.
+
+## Spring Data Mongo
+
+### Spring configuration
 
 Create a `@Configuration` class to enable Reactive support.
 
@@ -126,6 +221,17 @@ mvn spring-boot:run
 
 For the complete codes, check [spring-reactive-sample/data-mongo](https://github.com/hantsy/spring-reactive-sample/blob/master/data-mongo).
 
+Configure the MongoDB connection in the _application.yml_ file:
+
+```yml
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/blog
+```
+
+### Boot starter
+
 If you are using Spring Boot, the configuration can be simplified. Just need to add `spring-boot-starter-data-mongodb-reactive` into the project dependencies.
 
 ```xml
@@ -138,6 +244,8 @@ If you are using Spring Boot, the configuration can be simplified. Just need to 
 No need extra configuration class, Spring Boot will enable reactive support for MongoDB in this project. `ReactiveMongoTemplate` and `ReactiveMongoRepository` will be configured automatically.
 
 For the complete codes, check [spring-reactive-sample/boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo).
+
+### Seeding sample data
 
 Add some sample data into MongoDB when starting the application.
 
@@ -206,7 +314,8 @@ curl -v http://localhost:8080/posts
 [{"id":"599149d53c44062e08c58b86","title":"Post one","content":"content of Post one","createdDate":[2017,8,14,14,57,25,71000000]},{"id":"599149d53c44062e08c58b87","title":"Post two","content":"content of Post two","createdDate":[2017,8,14,14,57,25,173000000]}]* Connection #0 to host localhost left intact
 ```
 
-## Customizing Queries
+### Customizing queries
+
 
 As other Spring Data projects, Spring Data Mongo Reactive also supports query derivation in the `Repository`.
 
@@ -240,7 +349,8 @@ Or add q custom `@Query` to execute the raw query statement on Mongo directly. T
 Flux<Post> findByKeyword(String q);
 ```
 
-## ReactiveMongoTemplate
+### ReactiveMongoTemplate
+
 
 The `ReactiveMongoTemplate` provides a programmatic approach to execute queries in a fluent API.
 
@@ -299,7 +409,8 @@ class PostRepository {
 }
 ```
 
-## Pagination
+### Pagination
+
 
 Almost all reactive variants(Mongo, R2dbc etc.) are support `Pageable` as a method parameter in the `Repository`.
 
@@ -336,7 +447,8 @@ Mono<Long> countByTitleContains(String title)
 
     It can not return a `Page` object in Spring Data reactive API.
 
-## Data Auditing Support
+### Data auditing support
+
 
 Spring Data Mongo supports data auditing as Spring Data JPA, it can set the current user and created/last modified timestamp to a field automatically.
 
@@ -379,7 +491,8 @@ class Post {
 
 For the complete codes, check [spring-reactive-sample/boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo).
 
-## QueryDSL
+### QueryDSL
+
 
 Spring Data Mongo provide reactive support in the its QueryDSL extension.
 
@@ -435,7 +548,8 @@ this.postRepository.findAll(QPost.post.title.containsIgnoreCase("my"))
 
 For the complete codes, check [spring-reactive-sample/boot-data-mongo-querydsl](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-mongo-querydsl).
 
-## Tailable Query
+### Tailable query
+
 
 The `tailable` query is a Mongo specific feature. A _tailable_ document works an infinite streams, performing a query on a `tailable` document is similar to connect to a message broker, when a new document is inserted, it will be emitted to all query stream connected.
 
@@ -454,81 +568,8 @@ Please check the following more comprehensive examples, all provide Mongo `taila
 - [Angular and Server Sent Event Sample](https://github.com/hantsy/angular-spring-sse-sample)
 - [Angular and RSocket Sample](https://github.com/hantsy/angular-spring-rsocket-sample)
 
-## Working with the native client
+### GridFS: file upload and download
 
-The MongoDB driver provides both synchronous and reactive variants. The `spring-boot-starter-mongodb` starter registers a reactive `com.mongodb.reactivestreams.client.MongoClient` bean when used in a reactive context. The returned driver collections produce publisher instances that can be wrapped using `Mono.from(...)` or `Flux.from(...)`.
-
-!!! tip
-
-    The starter transitively includes the synchronous `mongodb-driver-sync` driver even when you only need the reactive driver. For a leaner classpath, explicitly exclude `mongodb-driver-sync` and declare `mongodb-driver-reactivestreams` directly:
-
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-webflux</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-mongodb</artifactId>
-    <exclusions>
-        <exclusion>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongodb-driver-sync</artifactId>
-        </exclusion>
-    </exclusions>
-</dependency>
-<dependency>
-    <groupId>org.mongodb</groupId>
-    <artifactId>mongodb-driver-reactivestreams</artifactId>
-</dependency>
-```
-
-### Implementing a thin repository
-
-The reactive collections return standard Reactive Streams `Publisher` objects, which convert to Project Reactor's `Mono` or `Flux` using `Mono.from(...)` or `Flux.from(...)`:
-
-```java
-@Component
-@RequiredArgsConstructor
-@Slf4j
-public class ProductRepository {
-    private final MongoClient mongoClient;
-    private MongoCollection<Product> productsCollection;
-
-    @PostConstruct
-    public void init() {
-        this.productsCollection = mongoClient
-                .getDatabase("test")
-                .getCollection("products", Product.class);
-    }
-
-    public Mono<Product> save(Product product) {
-        return Mono.from(this.productsCollection.insertOne(product))
-                .mapNotNull(result -> {
-                    log.debug("save product result: {}", result);
-                    var id = result.getInsertedId().asObjectId().getValue().toHexString();
-                    return product.withId(id);
-                });
-    }
-}
-```
-
-### Testing with Testcontainers
-
-```java
-@TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
-
-    @Bean
-    @ServiceConnection
-    MongoDBContainer mongoDbContainer() {
-        return new MongoDBContainer(DockerImageName.parse("mongo:latest"));
-    }
-}
-```
-
-Explore [boot-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mongo) to see `Mono.from(...)` bridging the raw driver publishers into Reactor, with `StepVerifier` asserting document insertion and retrieval without a single blocking call.
-## GridFS: file upload and download
 
 A step further — and closer to a real world application — is to store uploads in MongoDB via `ReactiveGridFsTemplate` and stream them back for download.
 
@@ -624,3 +665,19 @@ public class DemoApplicationTests {
 ```
 
 For the complete codes, check [spring-reactive-sample/multipart-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart-data-mongo) and [spring-reactive-sample/boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs).
+
+## All samples
+
+| Sample | Description |
+| :--- | :--- |
+| [data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo) | Freestyle Spring configuration with `ReactiveMongoRepository` |
+| [data-mongo-pageable](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo-pageable) | Pagination support |
+| [data-mongo-transaction](https://github.com/hantsy/spring-reactive-sample/tree/master/data-mongo-transaction) | Reactive transactions |
+| [boot-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mongo) | Native reactive `MongoClient` (thin client) |
+| [boot-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo) | Repository, auditing, Testcontainers |
+| [boot-data-mongo-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-template) | `ReactiveMongoTemplate` |
+| [boot-data-mongo-querydsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-querydsl) | QueryDSL support |
+| [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | GridFS file storage |
+| [boot-data-mongo-tailable](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-tailable) | Tailable cursor as an infinite stream |
+| [multipart-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart-data-mongo) | Multipart upload into GridFS |
+| [security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo) | Mongo-backed user details for Spring Security |

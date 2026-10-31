@@ -1,13 +1,94 @@
+# Accessing Neo4j with Spring Data Neo4j
 
-# Spring Data Neo4j
+Neo4j is a graph database. The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0 — this page explains Spring Data Neo4j with Spring Framework 7 and Spring Boot 4, covering the repositories, `ReactiveNeo4jClient`, `ReactiveNeo4jTemplate`, auditing, and the native `Driver` (thin client).
 
-!!! note
+This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, try the native client, then move to the Spring Data abstractions.
 
-    The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0. If you are using SDN Rx it is better to upgrade to the official Spring Data Neo4j.
+## Working with the native client
 
-    This page explains using Spring Data Neo4j with Spring Framework 7 and Spring Boot 4.
+The official Neo4j Java driver supports synchronous, asynchronous, and reactive execution models. The `spring-boot-starter-neo4j` starter bootstraps the `Driver`; request a `ReactiveSession` from it at runtime, and manage the session lifecycle with Project Reactor's `Mono.usingWhen(...)` resource management construct.
 
-## Getting Started
+### Project setup
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-neo4j</artifactId>
+</dependency>
+```
+
+### Implementing a thin repository
+
+Open a `ReactiveSession`, execute Cypher, and let `Mono.usingWhen(...)` guarantee the session is closed on completion or error — this avoids connection leaks in high-throughput reactive systems:
+
+```java
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class ProductRepository {
+    private final Driver driver;
+
+    public Mono<Product> save(Product product) {
+        String query = """
+                MERGE (p:Product {id: $id})
+                ON CREATE SET p.name=$name, p.price=$price
+                ON MATCH SET p.name=$name, p.price=$price
+                RETURN p.id as id, p.name as name, p.price as price
+                """;
+        Map<String, Object> parameters = Map.of(
+                "id", product.id() != null ? product.id() : UUID.randomUUID().toString(),
+                "name", product.name(),
+                "price", Values.value(product.price().toString())
+        );
+
+        SessionConfig sessionConfig = SessionConfig.builder()
+                .withBookmarkManager(driver.executableQueryBookmarkManager())
+                .build();
+
+        // Open, execute, and automatically close the reactive session
+        return Mono.usingWhen(
+                Mono.fromSupplier(() -> driver.session(ReactiveSession.class, sessionConfig)),
+                session -> Mono.fromDirect(session.executeWrite(tc -> Mono.from(tc.run(query, parameters))
+                        .flatMapMany(ReactiveResult::records)
+                        .single()
+                        .map(result -> {
+                            log.debug("saving product {}", result);
+                            return new Product(
+                                    result.get("id").asString(),
+                                    result.get("name").asString(),
+                                    new BigDecimal(result.get("price").asString())
+                                );
+                        })
+                )),
+                ReactiveSession::close
+        );
+    }
+}
+```
+
+### Testing with Testcontainers
+
+```java
+@TestConfiguration(proxyBeanMethods = false)
+class TestcontainersConfiguration {
+
+    @Bean
+    @ServiceConnection
+    Neo4jContainer neo4jContainer() {
+        return new Neo4jContainer(DockerImageName.parse("neo4j:latest"));
+    }
+}
+```
+
+Everything lives in the [boot-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) module.
+
+## Spring Data Neo4j
+
+### Getting started with Spring Boot
 
 Generate a Spring WebFlux project using https://start.spring.io and choose:
 
@@ -237,7 +318,7 @@ After it run successfully, try to use `curl` command to verify the exposed APIs.
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
-## Customizing Queries
+### Customizing queries
 
 Like other Spring Data modules, Spring Data Neo4j also supports derived query methods.
 
@@ -299,7 +380,7 @@ void testFindByQuery() {
 
 Here the `findByTitleContains` method has to accept a Regex pattern.
 
-## ReactiveNeo4jClient
+### ReactiveNeo4jClient
 
 Once Spring Data Neo4j is configured in a reactive application, a `ReactiveNeo4jClient` bean is available in the Spring application context.
 
@@ -470,7 +551,7 @@ public class PostRepository {
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-cypher).
 
-## ReactiveNeo4jOperations
+### ReactiveNeo4jOperations
 
 Like other Spring Data modules, Spring Data Neo4j provides a `ReactiveNeo4jOperations`(and the implementation `ReactiveNeo4jTemplate`), it allows your to perform operations on Neo4j databases but by programmatic approaches.
 
@@ -537,7 +618,7 @@ It is similar to the ReactiveNeo4jClient, but more simple. Have a look at the `f
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-template).
 
-## Data Auditing Support
+### Data auditing support
 
 Change the original `Post` entity, add the following fields to capture the timestamp and auditor when saving and updating the entity.
 
@@ -620,7 +701,7 @@ You can also verify it via `curl` .
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
-## Testing
+### Testing
 
 Since version 1.4, Spring Boot provided a new test harness so-called **test slice** to test features easier than previous version, which included a series of `AutoConfigureXXX` to allow developers to test desired features in an isolated environment.
 
@@ -849,84 +930,11 @@ In the above, we use a `ContextConfiguration` to apply the context initializers.
 
 For the complete codes, check [spring-reactive-sample/boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-data-neo4j).
 
-## Working with the native client
+## All samples
 
-The official Neo4j Java driver supports synchronous, asynchronous, and reactive execution models. The `spring-boot-starter-neo4j` starter bootstraps the `Driver`; request a `ReactiveSession` from it at runtime, and manage the session lifecycle with Project Reactor's `Mono.usingWhen(...)` resource management construct.
-
-### Project setup
-
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-webflux</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-neo4j</artifactId>
-</dependency>
-```
-
-### Implementing a thin repository
-
-Open a `ReactiveSession`, execute Cypher, and let `Mono.usingWhen(...)` guarantee the session is closed on completion or error — this avoids connection leaks in high-throughput reactive systems:
-
-```java
-@Component
-@RequiredArgsConstructor
-@Slf4j
-public class ProductRepository {
-    private final Driver driver;
-
-    public Mono<Product> save(Product product) {
-        String query = """
-                MERGE (p:Product {id: $id})
-                ON CREATE SET p.name=$name, p.price=$price
-                ON MATCH SET p.name=$name, p.price=$price
-                RETURN p.id as id, p.name as name, p.price as price
-                """;
-        Map<String, Object> parameters = Map.of(
-                "id", product.id() != null ? product.id() : UUID.randomUUID().toString(),
-                "name", product.name(),
-                "price", Values.value(product.price().toString())
-        );
-
-        SessionConfig sessionConfig = SessionConfig.builder()
-                .withBookmarkManager(driver.executableQueryBookmarkManager())
-                .build();
-
-        // Open, execute, and automatically close the reactive session
-        return Mono.usingWhen(
-                Mono.fromSupplier(() -> driver.session(ReactiveSession.class, sessionConfig)),
-                session -> Mono.fromDirect(session.executeWrite(tc -> Mono.from(tc.run(query, parameters))
-                        .flatMapMany(ReactiveResult::records)
-                        .single()
-                        .map(result -> {
-                            log.debug("saving product {}", result);
-                            return new Product(
-                                    result.get("id").asString(),
-                                    result.get("name").asString(),
-                                    new BigDecimal(result.get("price").asString())
-                                );
-                        })
-                )),
-                ReactiveSession::close
-        );
-    }
-}
-```
-
-### Testing with Testcontainers
-
-```java
-@TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
-
-    @Bean
-    @ServiceConnection
-    Neo4jContainer neo4jContainer() {
-        return new Neo4jContainer(DockerImageName.parse("neo4j:latest"));
-    }
-}
-```
-
-Everything lives in the [boot-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) module.
+| Sample | Description |
+| :--- | :--- |
+| [boot-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-neo4j) | Native `Driver` (thin client) with `ReactiveSession` + `Mono.usingWhen` |
+| [boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j) | Spring Boot starter with `ReactiveNeo4jRepository` and auditing |
+| [boot-data-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-cypher) | Custom Cypher queries with `ReactiveNeo4jClient` |
+| [boot-data-neo4j-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-template) | `ReactiveNeo4jTemplate` |

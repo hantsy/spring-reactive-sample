@@ -5,9 +5,10 @@ Spring WebFlux treats Kotlin coroutines as first-class citizens: a controller me
 
 The samples referenced here are [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) and [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) in this repository, plus [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) and its [SecurityWebFilter](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) in the spring6-sandbox repository.
 
-## A suspend controller
+## Suspend methods in `@RestController`
 
-From the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample of the spring6-sandbox repository:
+Use `suspend` functions to erase the Reactor Mono/Flux wrapper types, allowing you to write code that looks synchronous while still being non-blocking.
+
 
 ```kotlin
 @RestController
@@ -58,7 +59,9 @@ suspend fun handlePostNotFoundException(e: PostNotFoundException): ProblemDetail
 }
 ```
 
-## CoroutineCrudRepository
+Check the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample from the spring6-sandbox repository.
+
+## Coroutine friendly Repository
 
 Spring Data provides `CoroutineCrudRepository` for coroutine-based data access — add `kotlinx-coroutines-reactor` and the store's reactive driver:
 
@@ -96,7 +99,7 @@ The extensions come from `org.springframework.transaction.reactive` (`executeAnd
 
 `CoWebFilter` is the coroutine variant of the reactive `WebFilter` contract from [Web Programming](../web/web-filter.md). Instead of returning `Mono<Void>`, the `filter` method is a `suspend` function, and the chain exposes a `CoWebFilterChain` whose `filter` call suspends.
 
-From the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample of the spring6-sandbox repository — the same security-check example as the Java [WebFilter](../web/web-filter.md) page, written with coroutines:
+The following example demonstrates a simple security check using a `CoWebFilter`.
 
 ```kotlin
 import org.springframework.http.HttpStatus
@@ -116,11 +119,17 @@ class SecurityWebFilter : CoWebFilter() {
 }
 ```
 
-Declared as a `@Component`, the filter is picked up by component scanning and registered into the `WebHandler` chain — the same behavior as a Java `WebFilter`, with the method body written in sequential coroutine style. A `CoWebFilter` can also handle exceptions thrown by the downstream chain — the `ExceptionFilter` in the [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample maps a domain exception to a 404 response, see [Kotlin DSLs](dsl.md#exceptionfilter-a-cowebfilter-for-error-mapping).
+Declared as a `@Component`, the filter is picked up by component scanning and registered into the `WebHandler` chain — the same behavior as a Java `WebFilter`, with the method body written in sequential coroutine style. 
+
+Check the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample from the spring6-sandbox repository.
+
+A `CoWebFilter` can also handle exceptions thrown by the downstream chain — the `ExceptionFilter` in the [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample maps a domain exception to a 404 response, see [Kotlin DSLs](dsl.md#exceptionfilter-a-cowebfilter-for-error-mapping).
 
 ## Testing
 
-`kotlinx-coroutines-test` provides `runTest`, and [MockK](https://mockk.io/) provides `coEvery`/`coVerify` for suspending functions — from the sample's `PostControllerTest`:
+`kotlinx-coroutines-test` provides `runTest`, and [MockK](https://mockk.io/) provides `coEvery`/`coVerify` for suspending functions, [Spring Mockk](https://github.com/Ninja-Squad/springmockk) provides integration with Spring's testing framework, such as `@MockkBean/@SpykBean`. 
+
+The following `PostControllerTest` demonstrates how to test a controller with a mocked repository using `runTest` and MockK:
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
