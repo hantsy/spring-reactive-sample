@@ -26,7 +26,7 @@ This chapter walks through the first steps of building Spring WebFlux applicatio
 
 Before you begin, make sure you have:
 
-- JDK 21. Install one from [Adoptium](https://adoptium.net/), Oracle, or your preferred vendor.
+- JDK 21. Install one from [Eclipse Temurin](https://adoptium.net/), Oracle, or your preferred vendor.
 - [Apache Maven](https://maven.apache.org) 3.9+ or [Gradle](https://gradle.org)
 - A working IDE: [IntelliJ IDEA](https://www.jetbrains.com/idea/), [Eclipse IDE](https://eclipseide.org/) (with [Spring Tools](https://spring.io/tools)), [Apache NetBeans](https://netbeans.apache.org/), or [VS Code](https://code.visualstudio.com/) with the Java and Spring Boot extensions
 - Basic familiarity with Spring or Java web development

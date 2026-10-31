@@ -15,7 +15,7 @@ In the following steps we will start with creating RESTful APIs for `Post`.
 
 Before writing some real codes, make sure you have installed the essential software:
 
-- Java 21. Install a JDK from [Adoptium](https://adoptium.net/), Oracle, or your preferred vendor.
+- Java 21. Install a JDK from [Eclipse Temurin](https://adoptium.net/), Oracle, or your preferred vendor.
 - [Apache Maven](https://maven.apache.org) or [Gradle](https://gradle.org)
 - Your favorite IDE:
     - [IntelliJ IDEA](https://www.jetbrains.com/idea/) (Community or Ultimate Edition)
