@@ -11,14 +11,14 @@ This page introduces the Reactive Streams specification and its implementations 
 
 ## Reactive Streams: the specification
 
-[Reactive Streams](https://github.com/reactive-streams/reactive-streams-jvm) is an initiative to provide a standard for asynchronous stream processing with non-blocking backpressure. It encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
+[Reactive Streams](https://github.com/reactive-streams/reactive-streams-jvm) — official site [reactive-streams.org](https://www.reactive-streams.org/) — is an initiative to provide a standard for asynchronous stream processing with non-blocking backpressure. It encompasses efforts aimed at runtime environments (JVM and JavaScript) as well as network protocols.
 
 The JVM specification is a small set of four interfaces, defined in the `org.reactivestreams` package:
 
-- `Publisher<T>` — produces a potentially unbounded number of sequenced elements, publishing them according to the demand received from its `Subscriber`(s).
-- `Subscriber<T>` — receives the signals produced by a `Publisher`: `onSubscribe`, then zero or more `onNext`, and finally `onComplete` or `onError`.
-- `Subscription` — represents the one-to-one lifecycle between a `Subscriber` and a `Publisher`. It carries the demand signal (`request(long n)`) and `cancel()`.
-- `Processor<T, R>` — a processing stage that is both a `Subscriber` and a `Publisher`, obeying the contracts of both.
+- [`Publisher<T>`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html) — produces a potentially unbounded number of sequenced elements, publishing them according to the demand received from its `Subscriber`(s).
+- [`Subscriber<T>`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html) — receives the signals produced by a `Publisher`: `onSubscribe`, then zero or more `onNext`, and finally `onComplete` or `onError`.
+- [`Subscription`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html) — represents the one-to-one lifecycle between a `Subscriber` and a `Publisher`. It carries the demand signal (`request(long n)`) and `cancel()`.
+- [`Processor<T, R>`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Processor.html) — a processing stage that is both a `Subscriber` and a `Publisher`, obeying the contracts of both.
 
 The interfaces are intentionally tiny:
 
@@ -112,8 +112,8 @@ The [Reactor project](https://projectreactor.io/) works closely with the Spring 
 
 Reactor provides two types that implement `org.reactivestreams.Publisher`:
 
-- `Flux<T>` — a `Publisher` that emits 0 to N elements, and then completes either successfully or with an error.
-- `Mono<T>` — a `Publisher` that emits at most one item via `onNext` and then terminates with an `onComplete` signal (a successful `Mono`, with or without a value), or emits only a single `onError` signal (a failed `Mono`).
+- [`Flux<T>`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html) — a `Publisher` that emits 0 to N elements, and then completes either successfully or with an error.
+- [`Mono<T>`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Mono.html) — a `Publisher` that emits at most one item via `onNext` and then terminates with an `onComplete` signal (a successful `Mono`, with or without a value), or emits only a single `onError` signal (a failed `Mono`).
 
 | Concept | Reactor | Analogy |
 | :--- | :--- | :--- |
@@ -275,7 +275,7 @@ See [Mutiny in a controller](../web/intro.md#smallrye-mutiny) for the WebFlux in
 
 ### The JDK Flow API
 
-The JDK ships `java.util.concurrent.Flow`, which packages the Reactive Streams interfaces inside the JDK and adds a ready-made `SubmissionPublisher` implementation. The JDK also includes a reactive `java.net.http.HttpClient` built on the Flow API.
+The JDK ships [`java.util.concurrent.Flow`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Flow.html), which packages the Reactive Streams interfaces inside the JDK and adds a ready-made [`SubmissionPublisher`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/SubmissionPublisher.html) implementation. The JDK also includes a reactive [`java.net.http.HttpClient`](https://docs.oracle.com/en/java/javase/21/docs/api/java.net.http/java/net/http/HttpClient.html) built on the Flow API.
 
 ```java
 SubmissionPublisher<String> publisher = new SubmissionPublisher<>();
@@ -326,6 +326,27 @@ Spring WebFlux builds on Reactive Streams and Project Reactor by default, but st
 - **A reactive HTTP client.** `WebClient` performs non-blocking HTTP requests and integrates with Reactor and other reactive types — see [WebClient](../web/client.md).
 - **Server runtimes.** Reactor Netty is the default server for Spring Boot's WebFlux starter; Tomcat, Jetty, and Undertow are also supported — see the bootstrapping options in [Create a WebFlux application from scratch](first.md#bootstrap).
 - **The wider ecosystem.** Spring Data (R2DBC, reactive repositories), Spring Security (`ServerHttpSecurity`, reactive user details), and Spring Session (reactive `WebSession` storage) all accept and return Reactive Streams types — the following chapters cover each of them.
+
+## References
+
+**Specification**
+
+- [Reactive Streams specification](https://github.com/reactive-streams/reactive-streams-jvm) — the JVM specification, TCK, and examples
+- [reactive-streams.org](https://www.reactive-streams.org/) — the official site
+- [`org.reactivestreams` Javadoc](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/package-summary.html) — [`Publisher`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Publisher.html), [`Subscriber`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscriber.html), [`Subscription`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Subscription.html), [`Processor`](http://www.reactivestreams.org/reactive-streams-1.0.3-javadoc/org/reactivestreams/Processor.html)
+
+**Projects**
+
+- [Project Reactor](https://projectreactor.io/) — [reference docs](https://projectreactor.io/docs/core/release/reference/), [API Javadoc](https://projectreactor.io/docs/core/release/api/), [`Flux`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Flux.html), [`Mono`](https://projectreactor.io/docs/core/release/api/reactor/core/publisher/Mono.html)
+- [RxJava 3](https://github.com/ReactiveX/RxJava) — [3.x Javadoc](http://reactivex.io/RxJava/3.x/javadoc/)
+- [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny/) — [Javadoc](https://javadoc.io/doc/io.smallrye.reactive/mutiny)
+- [Reactor Netty](https://projectreactor.io/docs/netty/release/reference/index.html) — the default WebFlux server runtime
+- [Spring WebFlux reference](https://docs.spring.io/spring-framework/reference/web-reactive.html) — the official framework documentation
+
+**JDK**
+
+- [`java.util.concurrent.Flow`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/Flow.html) and [`SubmissionPublisher`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/concurrent/SubmissionPublisher.html)
+- [`java.net.http.HttpClient`](https://docs.oracle.com/en/java/javase/21/docs/api/java.net.http/java/net/http/HttpClient.html) — the JDK's reactive HTTP client
 
 ## Where to go next
 
