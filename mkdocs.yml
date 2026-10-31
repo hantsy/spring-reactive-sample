@@ -95,6 +95,7 @@ nav:
   - Testing:
       - testing/intro.md
       - testing/web-components.md
+      - testing/security.md
       - testing/testcontainers.md
       - testing/spring-test.md
       - testing/kotlin.md

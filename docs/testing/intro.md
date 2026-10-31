@@ -6,9 +6,10 @@ Testing reactive code needs tools that understand asynchrony: assertions on sequ
 ## Chapter roadmap
 
 1. [Testing Web Components](web-components.md) — `WebTestClient` against controllers, exception handling, `RouterFunction`s, and filters, with `@MockitoBean`/`@MockitoSpyBean` for the dependencies.
-2. [Data Operations with Testcontainers](testcontainers.md) — real databases in Docker for the data layer: the plain Spring initializer pattern and the Boot `@DynamicPropertySource`/`@ServiceConnection` styles.
-3. [Spring Test Context and Slices](spring-test.md) — `SpringJUnitConfig`, `@SpringBootTest`, and the Boot test slices (`@WebFluxTest`, `@JsonTest`, `@DataMongoTest`, and friends).
-4. [Testing in Kotlin](kotlin.md) — Kotest, MockK, Spring MockK (`@MockkBean`/`@MockkSpyBean`), and `kotlinx-coroutines-test`.
+2. [Testing Spring Security](security.md) — mock users, JWT and OIDC mutators, CSRF handling, and skipping the security layer in web-layer tests.
+3. [Data Operations with Testcontainers](testcontainers.md) — real databases in Docker for the data layer: the plain Spring initializer pattern and the Boot `@DynamicPropertySource`/`@ServiceConnection` styles.
+4. [Spring Test Context and Slices](spring-test.md) — `SpringJUnitConfig`, `@SpringBootTest`, and the Boot test slices (`@WebFluxTest`, `@JsonTest`, `@DataMongoTest`, and friends).
+5. [Testing in Kotlin](kotlin.md) — Kotest, MockK, Spring MockK (`@MockkBean`/`@MockkSpyBean`), and `kotlinx-coroutines-test`.
 
 ## StepVerifier: verify a Publisher
 
