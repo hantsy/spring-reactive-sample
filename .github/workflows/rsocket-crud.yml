@@ -1,0 +1,35 @@
+name: rsocket-crud
+
+on:
+  push:
+    paths:
+      - "rsocket-crud/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "rsocket-crud/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: rsocket-crud
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v6
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Build with Maven
+      run: ./mvnw -B package --file pom.xml
