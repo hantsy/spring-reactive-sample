@@ -5,13 +5,17 @@ Reactive code is not tested in the same way as blocking code. Instead of asserti
 
 This is why the reactive stack comes with a dedicated testing toolkit. The examples in this repository use it throughout the stack, from repository tests to full web integration tests.
 
-## Chapter roadmap
+## A friendly reading path
 
-1. [Testing Web Components](web-components.md) — `WebTestClient` against controllers, exception handlers, `RouterFunction`s, and filters, with `@MockitoBean` / `@MockitoSpyBean` for dependencies.
-2. [Testing Spring Security](security.md) — mock users, JWT/OIDC-style customization, CSRF handling, and simplified security tests for the web layer.
-3. [Data Operations with Testcontainers](testcontainers.md) — real database containers for MongoDB, Redis, PostgreSQL, and friends using the plain Spring initializer and Boot `@ServiceConnection` patterns.
-4. [Spring Test Context and Slices](spring-test.md) — `SpringJUnitConfig`, `@SpringBootTest`, and the Boot test slices such as `@WebFluxTest`, `@JsonTest`, and `@DataMongoTest`.
-5. [Testing in Kotlin](kotlin.md) — Kotest, MockK, Spring MockK, and coroutine-aware testing helpers.
+For reactive testing, the easiest way to learn is to move from simple web assertions to the more realistic integration scenarios:
+
+- start with [Testing Web Components](web-components.md) to learn how to test controllers, filters, and routing with `WebTestClient`
+- move to [Testing Spring Security](security.md) when you want to verify protected endpoints and request-level authorization
+- continue with [Data Operations with Testcontainers](testcontainers.md) for realistic database-backed tests with real containers
+- then read [Spring Test Context and Slices](spring-test.md) to understand the broader testing support available in Spring itself
+- finish with [Testing in Kotlin](kotlin.md) for coroutine-aware and Kotlin-native testing patterns
+
+This order keeps the learning curve gentle: you first validate the web layer in isolation, then add security and real infrastructure, and finally explore the Kotlin-specific testing tools.
 
 ## StepVerifier: verify a Publisher
 

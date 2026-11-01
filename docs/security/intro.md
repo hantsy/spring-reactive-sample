@@ -23,11 +23,14 @@ This chapter focuses on Spring Security's WebFlux support and shows how it fits 
 
 It helps if you already know the basics of Spring Security and have a working WebFlux app from the [Getting Started](../start/intro.md) chapter.
 
-## Chapter roadmap
+## A friendly reading path
 
-1. [An Introduction to Spring Security](start.md) — how the reactive security model differs from the servlet version
-2. [Configure Spring Security](config.md) — `@EnableWebFluxSecurity` and `ServerHttpSecurity`, verified with `curl`
-3. [Configure Spring Security in Spring Boot](config-boot.md) — the starter-based auto-configuration path
-4. [Method level constraints](method.md) — `@PreAuthorize` on reactive methods
-5. [Customize UserDetailsRepository](user-details-repo.md) — load users from properties or a database
-6. [Form based authentication](form.md) — secure server-rendered pages and login flows
+A natural way through this section is to begin with the general security model and then move into the more concrete configuration pieces:
+
+- start with [An Introduction to Spring Security](start.md) to understand how the reactive model differs from the servlet-based approach
+- continue with [Configure Spring Security](config.md) to see the core `ServerHttpSecurity` setup and how it behaves in practice
+- then read [Configure Spring Security in Spring Boot](config-boot.md) for the auto-configuration-based variant you will usually reach for in real projects
+- move into [Method level constraints](method.md) to protect business logic and endpoints with authorization rules
+- finish with [Customize UserDetailsRepository](user-details-repo.md) and [Form based authentication](form.md) for user management and login flows
+
+The chapters are ordered to build from concept to implementation: first the model, then the configuration, then the practical details that make security feel real in a reactive application.

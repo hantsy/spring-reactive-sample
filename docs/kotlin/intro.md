@@ -142,16 +142,13 @@ class PostController(private val posts: PostRepository) {
 
 This keeps the Spring model intact while making the code feel much more natural to Kotlin developers.
 
-## Chapter roadmap
+## A friendly reading path
 
-1. [Annotation-Driven Kotlin and RouterFunctions](kotlin.md) — the Kotlin versions of the classic Java programming models.
-2. [Coroutines](coroutines.md) — `suspend` controllers, `Flow`, `CoroutineCrudRepository`, `CoWebFilter`, and coroutine-aware testing.
-3. [Kotlin DSLs](dsl.md) — `router { }`, `coRouter { }`, the beans DSL, and `BeanRegistrarDsl`.
-4. [Events, caching, and scheduling](misc.md) — coroutine-friendly events, caching, scheduling, and `kotlinx.serialization`.
+If you are new to the Kotlin side of Spring, a good flow is to move from the familiar patterns to the more Kotlin-specific ones:
 
-## Suggested reading order
+- start with [Annotation-Driven Kotlin and RouterFunctions](kotlin.md) to see the Kotlin equivalents of the usual Spring WebFlux code you already know
+- then read [Coroutines](coroutines.md) to learn how `suspend` functions, `Flow`, and coroutine-aware Spring APIs make the code feel more natural
+- next, explore [Kotlin DSLs](dsl.md) for the more expressive, declarative functional style
+- finish with [Events, caching, and scheduling](misc.md) for the practical integration details that show up in real applications
 
-- [Annotation-Driven Kotlin and RouterFunctions](kotlin.md) — the best place to start if you are already comfortable with Spring MVC or WebFlux patterns
-- [Coroutines](coroutines.md) — the most important chapter if your goal is to write modern, coroutine-friendly services
-- [Kotlin DSLs](dsl.md) — useful when you want to lean into the functional style and expressive route configuration
-- [Events, caching, and scheduling](misc.md) — valuable for bootstrapping and cross-cutting concerns in Kotlin apps
+The order is intentional: it starts with the familiar Spring shape, then moves into Kotlin-native idioms, and finishes with the parts that matter most when you build real applications.

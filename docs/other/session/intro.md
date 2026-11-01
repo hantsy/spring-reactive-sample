@@ -46,11 +46,13 @@ An external store is recommended for production: sessions survive restarts and a
 - **Server-side sessions** (this chapter) — simplest to reason about; pairs naturally with form login and HTTP Basic; use Redis or Mongo for clustered deployments.
 - **Token strategies** (JWT, OAuth2) — stateless; consider when the API is consumed by mobile apps or other services.
 
-## Chapter roadmap
+## A friendly reading path
 
-1. [In-memory sessions](in-memory.md) — `@EnableSpringWebSession` with a `ReactiveMapSessionRepository`
-2. [Redis-backed sessions](redis.md) — `@EnableRedisWebSession` with Lettuce
-3. [Mongo-backed sessions](mongo.md) — `@EnableMongoWebSession` with the reactive Mongo driver
-4. [Header-based session id](header.md) — a custom `WebSessionIdResolver` for API clients
+The session chapter is easiest to read in the same order you would apply it in a real application:
 
-Familiarity with [Spring Security](../../security/intro.md) is helpful — the samples combine Spring Session with security configurations.
+- start with [In-memory sessions](in-memory.md) to see the basic reactive session model without adding external infrastructure
+- then read [Redis-backed sessions](redis.md) when you want a production-friendly, shared session store
+- continue with [Mongo-backed sessions](mongo.md) for a document-store option that also fits a reactive ecosystem
+- finish with [Header-based session id](header.md) for API-first clients that do not want to rely on cookies
+
+If you are already working with [Spring Security](../../security/intro.md), the examples in this section will feel especially relevant because they fit directly into the authenticated request flow.
