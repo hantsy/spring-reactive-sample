@@ -24,7 +24,7 @@ The [Spring Integration chapter](webflux.md) wires it between a `WebFluxInboundE
 
 ## Redis pub/sub (Spring Data Redis)
 
-Redis channels work across processes: any application subscribed to the channel receives messages published by any other. Spring Data Redis exposes this through `ReactiveRedisMessageListenerContainer`, which returns a `Flux` of received messages — see [Spring Data Redis — Redis Messaging](../data/redis.md#redis-messaging) for the full walkthrough:
+Redis channels work across processes: any application subscribed to the channel receives messages published by any other. Spring Data Redis exposes this through `ReactiveRedisMessageListenerContainer`, which returns a `Flux` of received messages — see [Spring Data Redis — Redis Messaging](../../data/redis.md#redis-messaging) for the full walkthrough:
 
 ```java
 @Bean
@@ -46,7 +46,7 @@ The subscription stays open for the lifetime of the container — a stream of me
 
 ## Reactor Sinks
 
-When all producers and consumers live in the same process, a Reactor `Sinks.Many` is the simplest channel. The [SSE example](../web/sse.md#broadcasting-with-sinks) and the [WebSocket example](../web/websocket.md) both use it as a broadcast hub:
+When all producers and consumers live in the same process, a Reactor `Sinks.Many` is the simplest channel. The [SSE example](../../web/sse.md#broadcasting-with-sinks) and the [WebSocket example](../../web/websocket.md) both use it as a broadcast hub:
 
 ```java
 @Service
@@ -64,7 +64,7 @@ public class MessageService {
 }
 ```
 
-The same pattern drives the reactive `@EventListener` in the [Application Events](../other/event.md) sample: the listener forwards each event into a `Sinks.Many` so any part of the application can subscribe to the event stream as a `Flux`.
+The same pattern drives the reactive `@EventListener` in the [Application Events](../event.md) sample: the listener forwards each event into a `Sinks.Many` so any part of the application can subscribe to the event stream as a `Flux`.
 
 ## Choosing between them
 

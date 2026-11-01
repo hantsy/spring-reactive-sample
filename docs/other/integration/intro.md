@@ -28,7 +28,7 @@ Both samples share the same skeleton — a WebFlux app serving `GET /posts` from
 GET /all ──▶ WebFluxInboundEndpoint ──▶ FluxMessageChannel ──▶ WebFluxRequestExecutingMessageHandler ──▶ GET /posts
 ```
 
-The samples are plain Spring applications (no Spring Boot auto-configuration) built with the manual wiring from the [Getting Started](../start/intro.md) chapter, with one extra dependency:
+The samples are plain Spring applications (no Spring Boot auto-configuration) built with the manual wiring from the [Getting Started](../../start/intro.md) chapter, with one extra dependency:
 
 ```xml
 <dependency>

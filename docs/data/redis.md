@@ -252,7 +252,7 @@ class PostController {
 }
 ```
 
-You can explore the messaging example in [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message). For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../int/message-channel.md).
+You can explore the messaging example in [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message). For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../other/integration/message-channel.md).
 
 ## Working with the native client
 

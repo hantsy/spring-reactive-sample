@@ -106,13 +106,13 @@ nav:
           - other/schedule.md
           - other/restdocs.md
       - Spring Session:
-          - session/intro.md
-          - session/in-memory.md
-          - session/redis.md
-          - session/mongo.md
-          - session/header.md
+          - other/session/intro.md
+          - other/session/in-memory.md
+          - other/session/redis.md
+          - other/session/mongo.md
+          - other/session/header.md
       - Spring Integration:
-          - int/intro.md
-          - int/webflux.md
-          - int/dsl.md
-          - int/message-channel.md
+          - other/integration/intro.md
+          - other/integration/webflux.md
+          - other/integration/dsl.md
+          - other/integration/message-channel.md

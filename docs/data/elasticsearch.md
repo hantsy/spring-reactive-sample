@@ -163,7 +163,10 @@ curl -v http://localhost:8080/posts
 
 ## Working with the native client
 
-The `ReactiveElasticsearchClient` that Spring Data provides can be used directly, without repositories. Inject it and chain document operations in non-blocking Reactor streams.
+The `ReactiveElasticsearchClient` that Spring Data provides can be used directly, without repositories. Inject it and chain document operations in non-blocking Reactor streams. 
+
+!!! note
+    ElasticSearch does not provide a reactive client SDK for connecting to Elasticsearch services.
 
 ### Implementing a repository with `ReactiveElasticsearchClient`
 

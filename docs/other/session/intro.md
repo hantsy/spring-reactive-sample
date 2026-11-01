@@ -51,4 +51,4 @@ An external store is recommended for production: sessions survive restarts and a
 3. [Mongo-backed sessions](mongo.md) — `@EnableMongoWebSession` with the reactive Mongo driver
 4. [Header-based session id](header.md) — a custom `WebSessionIdResolver` for API clients
 
-Familiarity with [Spring Security](../security/intro.md) is helpful — the samples combine Spring Session with security configurations.
+Familiarity with [Spring Security](../../security/intro.md) is helpful — the samples combine Spring Session with security configurations.
