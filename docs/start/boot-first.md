@@ -150,4 +150,4 @@ You can use Undertow as the runtime, but note that Undertow examples in this rep
 
 ## Sample
 
-For the complete codes, check [spring-reactive-sample/boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start).
+You can explore the complete codes in [spring-reactive-sample/boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start).

@@ -85,4 +85,4 @@ class RestWebExceptionHandler implements WebExceptionHandler {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/exception-handler) and [spring-reactive-sample/boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler).
+You can explore the complete codes in [spring-reactive-sample/exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/exception-handler) and [spring-reactive-sample/boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler).

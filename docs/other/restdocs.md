@@ -54,4 +54,4 @@ public class ApiDocumentation {
 
 Running the test produces the snippets under `target/generated-snippets/sample/` — `httpie-request.adoc`, `curl-request.adoc`, `response-body.adoc`, and friends — which the Asciidoctor build then composes into the published API reference.
 
-For the complete codes, check [spring-reactive-sample/restdocs](https://github.com/hantsy/spring-reactive-sample/tree/master/restdocs).
+You can explore the complete codes in [spring-reactive-sample/restdocs](https://github.com/hantsy/spring-reactive-sample/tree/master/restdocs).

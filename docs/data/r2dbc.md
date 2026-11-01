@@ -91,7 +91,7 @@ R2DBC has no schema generation. Pick one of the three approaches used across the
     r2dbc.migrate.resources-path=classpath:/db/migration/*.sql
     ```
 
-    Migrations live in `src/main/resources/db/migration/` as `V1__schema.sql`, `V2__sample_data.sql`, and so on — see the [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate) sample.
+    Migrations live in `src/main/resources/db/migration/` as `V1__schema.sql`, `V2__sample_data.sql`, and so on. You can explore the migrations example in [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate).
 
 ## DatabaseClient (thin client)
 
@@ -151,7 +151,7 @@ public Flux<Post> findAll() {
 }
 ```
 
-See the [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient) sample for the complete CRUD repository built on `DatabaseClient` — including generated values, batch inserts through `inConnectionMany(...)`, and transactions with `TransactionalOperator`.
+You can explore the complete `DatabaseClient` CRUD repository — including generated values, batch inserts through `inConnectionMany(...)`, and transactions with `TransactionalOperator` — in [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient).
 
 ## R2dbcEntityTemplate
 
@@ -257,7 +257,7 @@ public class DatabaseConfig extends AbstractR2dbcConfiguration {
 }
 ```
 
-See the [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate) sample.
+You can explore this approach in [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate).
 
 ## R2dbcRepository
 
@@ -294,7 +294,7 @@ interface PostRepository extends R2dbcRepository<Post, UUID> {
 }
 ```
 
-See the [r2dbc-repository](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-repository) sample.
+You can explore this approach in [r2dbc-repository](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-repository).
 
 ## Auditing
 
@@ -340,7 +340,7 @@ record Post(
 }
 ```
 
-In a real application, resolve the auditor from Spring Security's reactive context instead of a hard-coded value. See the [r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-auditing) sample.
+In a real application, resolve the auditor from Spring Security's reactive context instead of a hard-coded value. You can explore the auditing example in [r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-auditing).
 
 ## jOOQ for complex queries
 
@@ -390,7 +390,7 @@ class PostService {
 }
 ```
 
-The jOOQ metamodel (`POSTS`, `COMMENTS`, ...) is generated from `schema.sql` by the `jooq-codegen-maven` plugin with a `DDLDatabase`, so the SQL schema stays the single source of truth. See the [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq) sample and the [jOOQ guide](https://github.com/hantsy/spring-r2dbc-sample/blob/master/docs/jooq.md) in the dedicated repository.
+The jOOQ metamodel (`POSTS`, `COMMENTS`, ...) is generated from `schema.sql` by the `jooq-codegen-maven` plugin with a `DDLDatabase`, so the SQL schema stays the single source of truth. You can explore the jOOQ example in [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq), and the [jOOQ guide](https://github.com/hantsy/spring-r2dbc-sample/blob/master/docs/jooq.md) in the dedicated repository.
 
 ## Testing with Testcontainers
 
@@ -419,19 +419,6 @@ To run any sample application itself, start a PostgreSQL server with Docker:
 ```bash
 docker-compose up postgres
 ```
-
-## All samples
-
-| Sample | Description |
-| :--- | :--- |
-| [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) | `ConnectionFactory` variants for PostgreSQL, H2, MySQL, MariaDB, Oracle |
-| [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient) | `DatabaseClient` CRUD, generated values, batch inserts, transactions |
-| [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate) | `R2dbcEntityTemplate` criteria queries and `@Version` optimistic locking |
-| [r2dbc-repository](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-repository) | `R2dbcRepository` with derived queries and `@Query` |
-| [r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-auditing) | `@EnableR2dbcAuditing` with Boot auto-configuration |
-| [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate) | Versioned SQL migrations via the r2dbc-migrate starter |
-| [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq) | Type-safe SQL with jOOQ, metamodel generated from `schema.sql` |
-| [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) | R2DBC repository combined with reactive caching — see [Caching](../other/cache.md) |
 
 ## Legacy samples and further resources
 

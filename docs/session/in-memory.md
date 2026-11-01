@@ -103,7 +103,7 @@ public void createAttribute() {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/session](https://github.com/hantsy/spring-reactive-sample/tree/master/session).
+You can explore the complete codes in [spring-reactive-sample/session](https://github.com/hantsy/spring-reactive-sample/tree/master/session).
 
 ## What's next
 

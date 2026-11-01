@@ -1,48 +1,45 @@
 # Accessing Redis with Spring Data Redis
 
-Redis is a key-value store that doubles as a lightweight message broker. Spring Data Redis provides a reactive variant of `RedisConnectionFactory` — `ReactiveRedisConnectionFactory` — which returns a `ReactiveConnection`, plus `ReactiveRedisTemplate` and reactive pub/sub support.
+Redis is a key-value store that doubles as a lightweight message broker. In Spring, you can work with Redis in two common ways:
 
-This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, work with the reactive connection, then move to `ReactiveRedisTemplate` and messaging.
+- by using Spring Data Redis — the `ReactiveRedisConnectionFactory`, `ReactiveRedisTemplate`, and reactive pub/sub support
+- by working directly with the Lettuce driver's reactive commands through a `ReactiveConnection`
+
+This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and Redis.
 
 ## Getting started
 
-Generate a project skeleton from [Spring Initializr](https://start.spring.io) as described in the [Getting Started](../start/intro.md) chapter — choose **Spring WebFlux** and **Spring Data Redis (Reactive)** — or add the starter to an existing `pom.xml`:
+The quickest way to start is to generate a project from [Spring Initializr](https://start.spring.io), as described in the [Getting Started](../start/intro.md) chapter. Select **Spring WebFlux** and **Spring Data Redis (Reactive)**.
+
+If you are adding Redis to an existing project, include the following dependency in your `pom.xml`:
 
 ```xml
 <dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-redis-reactive</artifactId>
 </dependency>
 ```
 
 Spring Boot auto-configures a `ReactiveRedisConnectionFactory` for you.
 
-For a freestyle Spring project (no Spring Boot auto-configuration), use the plain dependencies instead — Lettuce is the required driver for reactive support:
+If you are building a plain Spring project without Boot auto-configuration, use the following dependencies instead — Lettuce is the required driver for reactive support:
 
 ```xml
 <dependency>
-	<groupId>org.springframework.data</groupId>
-	<artifactId>spring-data-redis</artifactId>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-redis</artifactId>
 </dependency>
 <dependency>
-	<groupId>io.lettuce</groupId>
-	<artifactId>lettuce-core</artifactId>
+    <groupId>io.lettuce</groupId>
+    <artifactId>lettuce-core</artifactId>
 </dependency>
 <dependency>
-	<groupId>org.apache.commons</groupId>
-	<artifactId>commons-pool2</artifactId>
+    <groupId>org.apache.commons</groupId>
+    <artifactId>commons-pool2</artifactId>
 </dependency>
 ```
 
-Start a Redis server with the `docker-compose.yml` in the repository root:
-
-```bash
-docker-compose up redis
-```
-
-## Spring configuration
-
-For the freestyle path, create a `@Configuration` class to configure Redis and enable reactive support:
+In that case, you also need a configuration class to enable reactive Redis support:
 
 ```java
 @Configuration
@@ -63,84 +60,20 @@ public class RedisConfig {
 }
 ```
 
-`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans.
+`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces — when a `LettuceConnectionFactory` is declared, both are registered as Spring beans.
 
-`LettuceConnectionFactory` implements `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` interfaces, when a `LettuceConnectionFactory` is declared, both `RedisConnectionFactory` and `ReactiveRedisConnectionFactory` are registered as Spring beans.
+You can explore this setup in [data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis).
 
-## Working with the reactive connection
+With Spring Boot, the connection is usually configured automatically from `application.properties`:
 
-```java
-@Inject ReactiveRedisConnectionFactory factory;
-
-ReactiveRedisConnection conn = factory.getReactiveConnection();
+```properties
+spring.data.redis.host=localhost
+spring.data.redis.port=6379
 ```
 
-`ReactiveConnection` provides some reactive methods for Redis operations.
+## Defining the data model
 
-For example, create a favorites list for posts.
-
-```java
-conn.setCommands()
-	.sAdd(
-		ByteBuffer.wrap("users:user:favorites".getBytes()),
-		this.posts.findAll()
-			.stream()
-			.map(p -> p.getId().getBytes())
-			.map(ByteBuffer::wrap)
-			.collect(Collectors.toList())
-	)
-	.log()
-	.subscribe(null, null, ()-> log.info("added favorites..."));
-```
-
-And show my favorites in the controller.
-
-```java
-@RestController()
-@RequestMapping(value = "/favorites")
-class FavoriteController {
-
-    private final ReactiveRedisConnectionFactory factory;
-
-    public FavoriteController(ReactiveRedisConnectionFactory factory) {
-        this.factory = factory;
-    }
-
-    @GetMapping("")
-    public Mono<List<String>> all() {
-        return this.factory.getReactiveConnection()
-                .setCommands()
-                .sMembers(ByteBuffer.wrap("users:user:favorites".getBytes()))
-                .map(FavoriteController::toString)
-                .collectList();
-    }
-
-    private static String toString(ByteBuffer byteBuffer) {
-
-        byte[] bytes = new byte[byteBuffer.remaining()];
-        byteBuffer.get(bytes);
-        return new String(bytes);
-    }
-
-}
-```
-
-For Spring Boot applications, the configuration can be simplified. Just add `spring-boot-starter-data-redis-reactive` into the project dependencies.
-
-```xml
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-data-redis-reactive</artifactId>
-</dependency>
-```
-
-Spring boot provides auto-configuration for Redis, and registers `ReactiveRedisConnectionFactory` for you automatically.
-
-## ReactiveRedisTemplate
-
-Beside the `ReactiveRedisConnectionFactory`, Spring Data Redis also provides a variant for `RedisTemplate`.
-
-Let's try to add some sample via a generic Repository interface. Create a `Post` class to present a Redis hash data, add `@RedisHash("posts")` to `Post` class.
+Create a `Post` class to present a Redis hash:
 
 ```java
 @Data
@@ -155,16 +88,23 @@ class Post {
     private String id;
     private String title;
     private String content;
-
 }
 ```
 
-Create a `PostRepository` and use `ReactiveRedisOperations` to access the Redis database.
+The annotations in this example are straightforward:
+
+1. `@RedisHash` marks the class as a Redis hash stored under the `posts` collection.
+2. `@Id` identifies the identifier field.
+
+## Creating a repository
+
+Spring Data Redis does not provide a reactive variant of a repository interface like Mongo does. Instead, compose the data access on `ReactiveRedisOperations`:
 
 ```java
 @Repository
 @RequiredArgsConstructor
 class PostRepository {
+
     private final ReactiveRedisOperations<String, Post> reactiveRedisOperations;
 
     public Flux<Post> findAll(){
@@ -185,9 +125,89 @@ class PostRepository {
 }
 ```
 
+Once the bean is created, you can inject it into controllers or services.
+
+## Exposing a REST API
+
+A small controller is enough to expose a reactive read API:
+
+```java
+@RestController
+@RequestMapping("/posts")
+class PostController {
+
+    private final PostRepository posts;
+
+    public PostController(PostRepository posts) {
+        this.posts = posts;
+    }
+
+    @GetMapping("")
+    public Flux<Post> all() {
+        return this.posts.findAll();
+    }
+}
+```
+
+The write path is covered by the [Redis Messaging](#redis-messaging) section below — new posts arrive as pub/sub messages rather than direct saves.
+
+## Seeding sample data
+
+You can use an `@EventListener` on `ContextRefreshedEvent` to insert a few sample records when the application starts:
+
+```java
+@Component
+@Slf4j
+@RequiredArgsConstructor
+class DataInitializer {
+
+    private final PostRepository posts;
+
+    @EventListener(value = ContextRefreshedEvent.class)
+    public void init() {
+        log.info("start data initialization  ...");
+        this.initPosts();
+        log.info("done data initialization  ...");
+    }
+
+    private void initPosts() {
+        this.posts.deleteAll()
+                .thenMany(
+                        Flux.just("Post one", "Post two")
+                                .flatMap(title -> this.posts.save(
+                                        Post.builder().id(UUID.randomUUID().toString())
+                                                .title(title).content("content of " + title).build()))
+                )
+                .subscribe(null, null, () -> log.info("done posts initialization..."));
+    }
+}
+```
+
+## Running the application
+
+Before starting the app, make sure Redis is running locally.
+
+If you prefer Docker, it is easy to start Redis with the Docker Compose file in the repository root:
+
+```bash
+docker-compose up redis
+```
+
+Then launch the application:
+
+```bash
+mvn spring-boot:run
+```
+
+You can test the API with `curl`:
+
+```bash
+curl -v http://localhost:8080/posts
+```
+
 ## Redis Messaging
 
-Redis is well known as a key value database, and it is also a light-weight messaging broker.
+Redis is well known as a key-value database, and it is also a lightweight messaging broker.
 
 Declare a `ReactiveRedisMessageListenerContainer` bean to receive messages from Redis pub/sub channels reactively:
 
@@ -219,8 +239,8 @@ The `container.receive(ChannelTopic.of("posts"))` call subscribes to the `posts`
 Send a message using the `ReactiveRedisOperations` bean:
 
 ```java
-@RestController()
-@RequestMapping(value = "/posts")
+@RestController
+@RequestMapping("/posts")
 @RequiredArgsConstructor
 class PostController {
 
@@ -232,25 +252,75 @@ class PostController {
 }
 ```
 
-For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../int/message-channel.md).
+You can explore the messaging example in [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message). For a wider view of reactive message channels — Redis pub/sub, Spring Integration `FluxMessageChannel`, and Reactor `Sinks` side by side — see [Reactive Message Channels](../int/message-channel.md).
 
 ## Working with the native client
 
-Redis is the exception among the stores in this chapter. Unlike Cassandra's `CqlSession` or MongoDB's `MongoClient`, Spring Boot 4 does not provide a dedicated lightweight client starter for Redis, because it supports multiple Redis client libraries with fundamentally different programming models:
+Beside the connection factory, you can inject a `ReactiveRedisConnectionFactory` bean and get a `ReactiveConnection` for lower-level Redis operations.
 
-- **Lettuce** — the default, fully non-blocking reactive client backed by Netty.
-- **Jedis** — a synchronous, thread-safe client often chosen for its simplicity in blocking scenarios.
+```java
+@Inject ReactiveRedisConnectionFactory factory;
 
-Redis connectivity continues to be managed through `spring-boot-starter-data-redis` (blocking) and `spring-boot-starter-data-redis-reactive` (reactive with Lettuce), both of which configure the higher-level `ReactiveRedisTemplate` rather than exposing the raw driver directly.
+ReactiveRedisConnection conn = factory.getReactiveConnection();
+```
 
-If you need to work with the Lettuce driver directly in a reactive context, you can inject `io.lettuce.core.api.reactive.RedisReactiveCommands` after including `spring-boot-starter-data-redis-reactive` — the [Redis Messaging](#redis-messaging) section above shows the `ReactiveRedisMessageListenerContainer` for pub/sub.
+`ReactiveConnection` provides reactive methods for the Redis command groups. For example, create a favorites list for posts:
 
-## All samples
+```java
+conn.setCommands()
+    .sAdd(
+        ByteBuffer.wrap("users:user:favorites".getBytes()),
+        this.posts.findAll()
+            .stream()
+            .map(p -> p.getId().getBytes())
+            .map(ByteBuffer::wrap)
+            .collect(Collectors.toList())
+    )
+    .log()
+    .subscribe(null, null, () -> log.info("added favorites..."));
+```
 
-| Sample | Description |
-| :--- | :--- |
-| [data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis) | Freestyle Spring configuration with `ReactiveRedisConnectionFactory` |
-| [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message) | Reactive pub/sub with `ReactiveRedisMessageListenerContainer` |
-| [boot-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis) | Spring Boot starter with `ReactiveRedisTemplate` |
-| [boot-data-redis-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis-template) | `ReactiveRedisTemplate` variants |
-| [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) | Reactive caching with `RedisCacheManager` — see [Caching](../other/cache.md) |
+And show the favorites in a controller:
+
+```java
+@RestController
+@RequestMapping("/favorites")
+class FavoriteController {
+
+    private final ReactiveRedisConnectionFactory factory;
+
+    public FavoriteController(ReactiveRedisConnectionFactory factory) {
+        this.factory = factory;
+    }
+
+    @GetMapping("")
+    public Mono<List<String>> all() {
+        return this.factory.getReactiveConnection()
+                .setCommands()
+                .sMembers(ByteBuffer.wrap("users:user:favorites".getBytes()))
+                .map(FavoriteController::toString)
+                .collectList();
+    }
+
+    private static String toString(ByteBuffer byteBuffer) {
+        byte[] bytes = new byte[byteBuffer.remaining()];
+        byteBuffer.get(bytes);
+        return new String(bytes);
+    }
+}
+```
+
+## Testing with Testcontainers
+
+Define a `RedisContainer` bean and map its port for the test context. From the [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) sample:
+
+```java
+private static final RedisContainer REDIS = new RedisContainer(DEFAULT_IMAGE_NAME.withTag(DEFAULT_TAG));
+
+TestPropertyValues.of(
+        "redis.host=" + REDIS.getHost(),
+        "redis.port=" + REDIS.getFirstMappedPort()
+).applyTo(context.getEnvironment());
+```
+
+You can explore the template-based example in [boot-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis) and [boot-data-redis-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis-template), and the reactive caching example in [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) — see [Caching](../other/cache.md) for the cache manager configuration.

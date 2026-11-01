@@ -100,4 +100,4 @@ public class TypedGreetingEventTest {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/event](https://github.com/hantsy/spring-reactive-sample/tree/master/event).
+You can explore the complete codes in [spring-reactive-sample/event](https://github.com/hantsy/spring-reactive-sample/tree/master/event).

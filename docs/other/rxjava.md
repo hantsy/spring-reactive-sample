@@ -96,4 +96,4 @@ StepVerifier.create(posts.findAll())
     .verifyComplete();
 ```
 
-For the complete codes, check [spring-reactive-sample/rxjava3](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava3).
+You can explore the complete codes in [spring-reactive-sample/rxjava3](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava3).

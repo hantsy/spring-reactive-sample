@@ -397,7 +397,7 @@ When it is started, let's try to verify if it works.
 [{"id":1,"title":"First Post","content":"content of First Post"},{"id":2,"title":"Second Post","content":"content of Second Post"}]
 ```
 
-For the complete codes, check [spring-reactive-sample/vanilla-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-tomcat).
+You can explore the complete codes in [spring-reactive-sample/vanilla-tomcat](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-tomcat).
 
 ### Eclipse Jetty
 
@@ -481,7 +481,7 @@ Since Jetty 11, the Jetty artifact IDs changed: the servlet support moved into e
 
 Similarly, you can run the application directly in your IDEs.
 
-For the complete codes, check [spring-reactive-sample/vanilla-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-jetty).
+You can explore the complete codes in [spring-reactive-sample/vanilla-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla-jetty).
 
 Alternatively, you can run the application in Reactor Netty, or JBoss Undertow.
 
@@ -528,7 +528,7 @@ And add `reactor-netty` in your project dependencies.
 </dependency>
 ```
 
-For the complete codes, check [spring-reactive-sample/vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla).
+You can explore the complete codes in [spring-reactive-sample/vanilla](https://github.com/hantsy/spring-reactive-sample/tree/master/vanilla).
 
 ### Undertow (deprecated)
 
@@ -708,4 +708,4 @@ public class Application {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/register-bean](https://github.com/hantsy/spring-reactive-sample/blob/master/register-bean).
+You can explore the complete codes in [spring-reactive-sample/register-bean](https://github.com/hantsy/spring-reactive-sample/blob/master/register-bean).

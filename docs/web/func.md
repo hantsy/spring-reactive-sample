@@ -128,4 +128,4 @@ class PostHandler {
 
 ## Sample
 
-For the complete codes, check [spring-reactive-sample/boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start), [spring-reactive-sample/boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes), and [spring-reactive-sample/routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes).
+You can explore the complete codes in [spring-reactive-sample/boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start), [spring-reactive-sample/boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes), and [spring-reactive-sample/routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes).

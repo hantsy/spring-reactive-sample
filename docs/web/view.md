@@ -110,7 +110,7 @@ An example of Thymeleaf template.
 </html>
 ```
 
-Source codes: [spring-reactive-sample/mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-thymeleaf) and [spring-reactive-sample/boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-thymeleaf) .
+You can explore the sample in [spring-reactive-sample/mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-thymeleaf) and [spring-reactive-sample/boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-thymeleaf) .
 
 ## Freemarker
 
@@ -201,7 +201,7 @@ An example of Freemarker template.
 </html>
 ```
 
-Source codes: [spring-reactive-sample/mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-freemarker) and [spring-reactive-sample/boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-freemarker) .
+You can explore the sample in [spring-reactive-sample/mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-freemarker) and [spring-reactive-sample/boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-freemarker) .
 
 ## Mustache
 
@@ -452,4 +452,4 @@ An example of Mustache template file.
 {{>footer}}
 ```
 
-Source codes: [spring-reactive-sample/mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-mustache) and [spring-reactive-sample/boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-mustache) .
+You can explore the sample in [spring-reactive-sample/mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/mvc-mustache) and [spring-reactive-sample/boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/blob/master/boot-mvc-mustache) .

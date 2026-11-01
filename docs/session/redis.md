@@ -62,4 +62,4 @@ redis-cli keys "spring:session*"
 
 You will find the session keyed under the `spring:session` prefix, storing the attributes and metadata.
 
-For the complete codes, check [spring-reactive-sample/session-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-redis).
+You can explore the complete codes in [spring-reactive-sample/session-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-redis).

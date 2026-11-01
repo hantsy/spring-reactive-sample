@@ -74,4 +74,4 @@ The request succeeds and returns the newly created post.
 
 The commented `currentUserMatchesPath` fragment above demonstrates a dynamic rule: it grants access only when the authenticated username matches the `{user}` path variable of the exchange. Wire it with `.pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)` to activate it.
 
-For the complete codes, check [spring-reactive-sample/security](https://github.com/hantsy/spring-reactive-sample/tree/master/security) and [spring-reactive-sample/security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo), which applies the same rule against a Mongo-backed user store.
+You can explore the complete codes in [spring-reactive-sample/security](https://github.com/hantsy/spring-reactive-sample/tree/master/security) and [spring-reactive-sample/security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo), which applies the same rule against a Mongo-backed user store.

@@ -142,7 +142,7 @@ public static void main(String[] args) {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
+You can explore the complete codes in [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
 
 ## Choosing the HTTP client connector
 
@@ -212,7 +212,7 @@ Add the dependency:
 </dependency>
 ```
 
-Each connector swaps in with one builder call — `.clientConnector(connector)` — while the `PostClient` layer above stays untouched. For the complete codes of each variant, check [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty), [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient), and [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5).
+Each connector swaps in with one builder call — `.clientConnector(connector)` — while the `PostClient` layer above stays untouched. You can explore each connector variant in [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty), [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient), and [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5).
 
 ## Testing the client
 

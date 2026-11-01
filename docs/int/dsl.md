@@ -71,4 +71,4 @@ The DSL scales to real pipelines: add `.filter(...)`, `.transform(...)`, `.split
 
 ## Sample
 
-For the complete codes, check [spring-reactive-sample/integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl).
+You can explore the complete codes in [spring-reactive-sample/integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl).

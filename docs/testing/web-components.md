@@ -211,4 +211,4 @@ Reading the wiring:
 - `stubFor(...)` registers the expected request and response; `verify(...)` asserts the client actually sent the expected headers and payload.
 - The reactive result is asserted with `.as(StepVerifier::create)` — see [Testing](intro.md) for the signal-level assertions.
 
-The dependency is `com.github.tomakehurst:wiremock-standalone` (test scope). For the complete codes, check the [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) sample's `PostClientTest`.
+The dependency is `com.github.tomakehurst:wiremock-standalone` (test scope). You can explore the complete codes in the [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) sample's `PostClientTest`.

@@ -1,126 +1,39 @@
 # Accessing Couchbase with Spring Data Couchbase
 
-Couchbase is a distributed JSON document database. Spring Data Couchbase adds reactive support on top of the Couchbase Java SDK 3.x — a `ReactiveCouchbaseTemplate` and `ReactiveCouchbaseRepository` — and the SDK itself exposes a `ReactiveCollection` for the thin-client path.
+Couchbase is a distributed JSON document database. Its Java SDK 3.x exposes a reactive `ReactiveCollection` natively. In Spring, you can work with Couchbase in two common ways:
 
-This page follows the flow used across the chapter: generate a project as in [Getting Started](../start/intro.md), add the dependency, try the native client, then move to the Spring Data abstractions.
+- by using Spring Data Couchbase repositories and templates
+- by working directly with the SDK's `Cluster` and `ReactiveCollection`
+
+This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and Couchbase.
 
 ## Getting started
 
-Generate a project skeleton from [Spring Initializr](https://start.spring.io) as described in the [Getting Started](../start/intro.md) chapter — choose **Spring WebFlux** and **Spring Data Couchbase (Reactive)** — or add the starter to an existing `pom.xml`:
+The quickest way to start is to generate a project from [Spring Initializr](https://start.spring.io), as described in the [Getting Started](../start/intro.md) chapter. Select **Spring WebFlux** and **Spring Data Couchbase (Reactive)**.
 
-```xml
-<dependency>
-	<groupId>org.springframework.boot</groupId>
-	<artifactId>spring-boot-starter-data-couchbase-reactive</artifactId>
-</dependency>
-```
-
-For a freestyle Spring project (no Spring Boot auto-configuration), use the plain dependencies instead:
-
-```xml
-<dependency>
-	<groupId>org.springframework.data</groupId>
-	<artifactId>spring-data-couchbase</artifactId>
-</dependency>
-<dependency>
-	<groupId>com.couchbase.client</groupId>
-	<artifactId>java-client</artifactId>
-</dependency>
-```
-
-Start a Couchbase server with the `docker-compose.yml` in the repository root:
-
-```bash
-docker-compose up couchbase
-```
-
-## Working with the native client
-
-The `spring-boot-starter-couchbase` starter auto-configures a Couchbase `Cluster` bean. By obtaining the collection reference, you can perform document operations directly. For reactive operations, call `.reactive()` on the collection to obtain a `ReactiveCollection` — the Couchbase Java SDK exposes it natively, so no additional reactive driver is needed.
-
-### Project setup
+If you are adding Couchbase to an existing project, include the following dependency in your `pom.xml`:
 
 ```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-webflux</artifactId>
-</dependency>
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-couchbase</artifactId>
+    <artifactId>spring-boot-starter-data-couchbase-reactive</artifactId>
 </dependency>
 ```
 
-### Implementing a thin repository
-
-```java
-@Component
-@RequiredArgsConstructor
-@Slf4j
-public class ProductRepository {
-    private final Cluster cluster;
-    private ReactiveCollection productCollection;
-
-    @PostConstruct
-    public void init() {
-        this.productCollection = this.cluster
-                .bucket("demo")
-                .defaultCollection()
-                .reactive();
-    }
-
-    public Mono<Product> save(Product product) {
-        String id = product.id() != null ? product.id() : UUID.randomUUID().toString();
-        return this.productCollection.upsert(id, product)
-                .mapNotNull(result -> {
-                    log.debug("saving product result: {}", result);
-                    return new Product(id, product.name(), product.price());
-                });
-    }
-}
-```
-
-### Testing with Testcontainers
+If you are building a plain Spring project without Boot auto-configuration, use the following dependencies instead:
 
 ```xml
 <dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-testcontainers</artifactId>
-    <scope>test</scope>
+    <groupId>org.springframework.data</groupId>
+    <artifactId>spring-data-couchbase</artifactId>
 </dependency>
 <dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>testcontainers-couchbase</artifactId>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>org.testcontainers</groupId>
-    <artifactId>testcontainers-junit-jupiter</artifactId>
-    <scope>test</scope>
+    <groupId>com.couchbase.client</groupId>
+    <artifactId>java-client</artifactId>
 </dependency>
 ```
 
-```java
-@TestConfiguration(proxyBeanMethods = false)
-class TestcontainersConfiguration {
-
-    @Bean
-    @ServiceConnection
-    public CouchbaseContainer couchbaseContainer() {
-        return new CouchbaseContainer("couchbase/server")
-                .withCredentials("Administrator", "password")
-                .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
-                .withStartupAttempts(5)
-                .withStartupTimeout(Duration.ofSeconds(120));
-    }
-}
-```
-
-## Spring Data Couchbase
-
-### Spring configuration
-
-Create a `@Configuration` class extending `AbstractCouchbaseConfiguration`, and add `@EnableReactiveCouchbaseRepositories` to enable reactive `Repository` support:
+In that case, you also need a configuration class extending `AbstractCouchbaseConfiguration`, with `@EnableReactiveCouchbaseRepositories` to enable reactive `Repository` support:
 
 ```java
 @Configuration
@@ -161,9 +74,20 @@ public class CouchbaseConfig extends AbstractCouchbaseConfiguration {
 }
 ```
 
-### Entity and repository
+You can explore this setup in [data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase).
 
-Create a `Post` class to represent a document in Couchbase, and add a `@Document` annotation at the class level:
+With Spring Boot, the connection is usually configured automatically from `application.properties`:
+
+```properties
+spring.couchbase.connection-string=couchbase://localhost
+spring.couchbase.username=Administrator
+spring.couchbase.password=password
+spring.data.couchbase.bucket-name=default
+```
+
+## Defining the document model
+
+Create a `Post` class that maps to a Couchbase document:
 
 ```java
 @Data
@@ -184,57 +108,76 @@ class Post {
 }
 ```
 
-- `@Document` marks the class as a Couchbase document.
-- `@Id` designates the document key; `@GeneratedValue(strategy = GenerationType.UNIQUE)` lets Spring Data generate a unique key for you.
-- `@Field` maps a differently named field in the document.
+The annotations in this example are straightforward:
 
-Create the `PostRepository` interface:
+1. `@Document` marks the class as a Couchbase document.
+2. `@Id` designates the document key; `@GeneratedValue(strategy = GenerationType.UNIQUE)` lets Spring Data generate a unique key for you.
+3. `@Field` maps a differently named field in the document.
+
+## Creating a repository
+
+Define a repository interface by extending `ReactiveCouchbaseRepository`:
 
 ```java
 @ViewIndexed(designDoc = "post", viewName = "all")
 interface PostRepository extends ReactiveCouchbaseRepository<Post, String> {}
 ```
 
-### Run against a Couchbase server
+Once Spring creates the repository bean, you can inject it into controllers or services.
 
-Start a Couchbase server first:
+## Exposing a REST API
 
-```bash
-docker-compose up couchbase
+A small controller is enough to expose a reactive CRUD API:
+
+```java
+@RestController
+@RequestMapping("/posts")
+class PostController {
+
+    private final PostRepository posts;
+
+    public PostController(PostRepository posts) {
+        this.posts = posts;
+    }
+
+    @GetMapping("")
+    public Flux<Post> all() {
+        return this.posts.findAll();
+    }
+
+    @PostMapping("")
+    public Mono<Post> create(@RequestBody Post post) {
+        post.setId(UUID.randomUUID().toString());
+        return this.posts.save(post);
+    }
+
+    @GetMapping("/{id}")
+    public Mono<Post> get(@PathVariable("id") String id) {
+        return this.posts.findById(id);
+    }
+
+    @PutMapping("/{id}")
+    public Mono<Post> update(@PathVariable("id") String id, @RequestBody Post post) {
+        return this.posts.findById(id)
+            .map(p -> {
+                p.setTitle(post.getTitle());
+                p.setContent(post.getContent());
+
+                return p;
+            })
+            .flatMap(p -> this.posts.save(p));
+    }
+
+    @DeleteMapping("/{id}")
+    public Mono<Void> delete(@PathVariable("id") String id) {
+        return this.posts.deleteById(id);
+    }
+}
 ```
 
-Open http://localhost:8091 to create the administrator user account and bucket. Set the connection properties in `application.properties`:
+## Seeding sample data
 
-```properties
-couchbase.user=Administrator
-couchbase.password=password
-couchbase.connection-string=couchbase://localhost
-couchbase.bucket-name=default
-```
-
-### Boot starter
-
-For Spring Boot applications, add `spring-boot-starter-data-couchbase-reactive` to the project dependencies and configure the connection in `application.properties`:
-
-```xml
-<dependency>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-data-couchbase-reactive</artifactId>
-</dependency>
-```
-
-```properties
-spring.couchbase.connection-string=couchbase://localhost
-spring.couchbase.username=Administrator
-spring.couchbase.password=password
-spring.data.couchbase.bucket-name=default
-```
-
-No extra configuration class is needed — Spring Boot auto-configures Couchbase and registers all essential beans. The [boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-couchbase) sample uses a `WebFlux.fn` handler layer on top of the repository.
-
-### Seeding sample data
-
-Add sample data via a `CommandLineRunner` bean or an `ApplicationRunner` bean:
+You can use a `CommandLineRunner` to insert a few sample records when the application starts:
 
 ```java
 public void init() {
@@ -257,10 +200,94 @@ public void init() {
 }
 ```
 
-## All samples
+`CommandLineRunner` ensures the initialization logic runs once the application has started.
 
-| Sample | Description |
-| :--- | :--- |
-| [data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase) | Freestyle Spring configuration with `ReactiveCouchbaseRepository` |
-| [boot-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-couchbase) | Native `Cluster` (thin client) with `ReactiveCollection` |
-| [boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-couchbase) | Spring Boot starter with `ReactiveCouchbaseRepository` |
+## Running the application
+
+Before starting the app, make sure Couchbase is running locally.
+
+If you prefer Docker, start Couchbase with the Docker Compose file in the repository root:
+
+```bash
+docker-compose up couchbase
+```
+
+Then open http://localhost:8091 to create the administrator user account and bucket, and launch the application:
+
+```bash
+mvn spring-boot:run
+```
+
+You can test the API with `curl`:
+
+```bash
+curl -v http://localhost:8080/posts
+```
+
+## Working with the native client
+
+The `spring-boot-starter-couchbase` starter auto-configures a Couchbase `Cluster` bean. By obtaining the collection reference, you can perform document operations directly — call `.reactive()` on the collection to obtain a `ReactiveCollection`; the SDK exposes it natively, so no additional reactive driver is needed.
+
+### Project setup
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-couchbase</artifactId>
+</dependency>
+```
+
+### Implementing a repository with `ReactiveCollection`
+
+```java
+@Component
+@RequiredArgsConstructor
+@Slf4j
+public class ProductRepository {
+    private final Cluster cluster;
+    private ReactiveCollection productCollection;
+
+    @PostConstruct
+    public void init() {
+        this.productCollection = this.cluster
+                .bucket("demo")
+                .defaultCollection()
+                .reactive();
+    }
+
+    public Mono<Product> save(Product product) {
+        String id = product.id() != null ? product.id() : UUID.randomUUID().toString();
+        return this.productCollection.upsert(id, product)
+                .mapNotNull(result -> {
+                    log.debug("saving product result: {}", result);
+                    return new Product(id, product.name(), product.price());
+                });
+    }
+}
+```
+
+## Testing with Testcontainers
+
+Define a `CouchbaseContainer` bean with Spring Boot's `@ServiceConnection` — the bucket and credentials are provisioned for the ephemeral server:
+
+```java
+@TestConfiguration(proxyBeanMethods = false)
+class TestcontainersConfiguration {
+
+    @Bean
+    @ServiceConnection
+    public CouchbaseContainer couchbaseContainer() {
+        return new CouchbaseContainer("couchbase/server")
+                .withCredentials("Administrator", "password")
+                .withBucket(new BucketDefinition("demo").withPrimaryIndex(true))
+                .withStartupAttempts(5)
+                .withStartupTimeout(Duration.ofSeconds(120));
+    }
+}
+```
+
+You can explore the native-client example in [boot-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-couchbase), and the repository-based one in [boot-data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-couchbase).

@@ -70,4 +70,4 @@ public class SessionConfig {
 
 Start the application, submit the attribute form at http://localhost:8080, and inspect the `blog` database — the sessions live in a dedicated collection with the attributes and a TTL index for expiry.
 
-For the complete codes, check [spring-reactive-sample/session-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-mongo).
+You can explore the complete codes in [spring-reactive-sample/session-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-mongo).

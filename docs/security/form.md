@@ -98,4 +98,4 @@ By default, Spring Security provides a simple login form page. Alternatively you
         .loginPage("/login"))
 ```
 
-Source codes: [spring-reactive-sample/security-form](https://github.com/hantsy/spring-reactive-sample/tree/master/security-form).
+You can explore the sample in [spring-reactive-sample/security-form](https://github.com/hantsy/spring-reactive-sample/tree/master/security-form).

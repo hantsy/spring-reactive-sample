@@ -76,4 +76,4 @@ class PostController {
 
 Spring handles the adaptation: a `Multi` is streamed like a `Flux`, a `Uni` resolves like a `Mono`, and Mutiny operators (`onItem().transform(...)`, `chain(...)`, and so on) work inside the methods.
 
-For the complete codes, check [spring-reactive-sample/smallrye-mutiny](https://github.com/hantsy/spring-reactive-sample/tree/master/smallrye-mutiny).
+You can explore the complete codes in [spring-reactive-sample/smallrye-mutiny](https://github.com/hantsy/spring-reactive-sample/tree/master/smallrye-mutiny).

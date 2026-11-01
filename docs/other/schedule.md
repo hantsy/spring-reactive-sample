@@ -77,4 +77,4 @@ public class ReactiveCounterTest {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/schedule](https://github.com/hantsy/spring-reactive-sample/tree/master/schedule).
+You can explore the complete codes in [spring-reactive-sample/schedule](https://github.com/hantsy/spring-reactive-sample/tree/master/schedule).

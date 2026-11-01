@@ -93,7 +93,7 @@ class WebConfig {
 
 In a non-Spring Boot application, you have to declare the `WebSocketHandlerAdapter` bean explicitly. Spring Boot auto-configures it when `spring-boot-starter-webflux` is on the classpath.
 
-Source codes: [spring-reactive-sample/websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket).
+You can explore the sample in [spring-reactive-sample/websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket).
 
 ## Client side
 
@@ -123,7 +123,7 @@ client.execute(new URI("ws://localhost:8080/echo"),
     .block(Duration.ofMillis(5000));
 ```
 
-Source codes: [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
+You can explore the sample in [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
 
 For a complete real world example application, see [hantsy/angular-spring-websocket-sample](https://github.com/hantsy/angular-spring-websocket-sample/), which combines a Mongo tailable cursor, WebFlux, and an Angular client.
 

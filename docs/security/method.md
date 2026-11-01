@@ -45,4 +45,4 @@ Mono<Post> delete(Long id) {
 
 With the URL-level rules replaced by the annotation, a `DELETE /posts/{id}` call from a non-admin user is rejected with 403 before the repository method runs.
 
-For the complete codes, check [spring-reactive-sample/security-method](https://github.com/hantsy/spring-reactive-sample/tree/master/security-method).
+You can explore the complete codes in [spring-reactive-sample/security-method](https://github.com/hantsy/spring-reactive-sample/tree/master/security-method).

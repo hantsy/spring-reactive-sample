@@ -127,4 +127,4 @@ To run the application, start PostgreSQL (and Redis for the Redis variant):
 docker-compose up postgres redis
 ```
 
-For the complete codes, check [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache), [cache-caffeine](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-caffeine), and [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis).
+You can explore the complete codes in [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache), [cache-caffeine](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-caffeine), and [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis).

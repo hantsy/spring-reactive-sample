@@ -49,4 +49,4 @@ client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 
 Inside a Spring application, prefer [WebClient with the JDK connector](../web/client.md#jdk-httpclient), which wraps the same `HttpClient` behind the `ClientHttpConnector` abstraction.
 
-For the complete codes, check [spring-reactive-sample/java9](https://github.com/hantsy/spring-reactive-sample/tree/master/java9).
+You can explore the complete codes in [spring-reactive-sample/java9](https://github.com/hantsy/spring-reactive-sample/tree/master/java9).

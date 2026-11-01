@@ -44,7 +44,7 @@ public class MultipartController {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/multipart](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart).
+You can explore the complete codes in [spring-reactive-sample/multipart](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart).
 
 ## Streaming with PartEvent
 

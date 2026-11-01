@@ -116,4 +116,4 @@ this.rest
         .expectStatus().isOk();
 ```
 
-For the complete codes, check [spring-reactive-sample/session-header](https://github.com/hantsy/spring-reactive-sample/tree/master/session-header).
+You can explore the complete codes in [spring-reactive-sample/session-header](https://github.com/hantsy/spring-reactive-sample/tree/master/session-header).

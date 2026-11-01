@@ -100,7 +100,7 @@ public class IntegrationTests {
 }
 ```
 
-For the complete codes, check [spring-reactive-sample/integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration).
+You can explore the complete codes in [spring-reactive-sample/integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration).
 
 ## What's next
 

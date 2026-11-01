@@ -24,7 +24,7 @@ admin=password,ROLE_USER,ROLE_ADMIN
 
 The key is the username; the value is the password and its roles.
 
-Source codes: [spring-reactive-sample/security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties)
+You can explore the sample in [spring-reactive-sample/security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties)
 
 ## Load users from a database
 
@@ -104,4 +104,4 @@ PasswordEncoder passwordEncoder() {
 }
 ```
 
-Source codes: [spring-reactive-sample/security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo).
+You can explore the sample in [spring-reactive-sample/security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo).
