@@ -21,7 +21,7 @@
     <maven.compiler.release>25</maven.compiler.release>
     <kotlin.version>2.4.0</kotlin.version>
     <kotest.version>6.2.0</kotest.version>
-    <mockk.version>1.13.8</mockk.version>
+    <mockk.version>1.14.11</mockk.version>
   </properties>
   <dependencies>
     <dependency>
