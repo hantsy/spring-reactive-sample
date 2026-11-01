@@ -298,6 +298,22 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/rsocket-crud"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/rsocket-integration"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/rsocket-tcp"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/rsocket-websocket"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/rxjava3"
     schedule:
       interval: "monthly"

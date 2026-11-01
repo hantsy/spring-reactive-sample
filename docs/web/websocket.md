@@ -133,4 +133,4 @@ For a complete real world example application, see [hantsy/angular-spring-websoc
 | :--- | :--- |
 | Server → client only (notifications, feeds) | [Server Sent Events](sse.md) — simpler, plain HTTP, auto-reconnect |
 | Bi-directional (chat, collaborative editing) | WebSocket |
-| Request/response with backpressure over the network | RSocket — see [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample) |
+| Request/response with backpressure over the network | RSocket — see the [RSocket chapter](../other/rsocket/intro.md) |

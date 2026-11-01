@@ -111,6 +111,12 @@ nav:
           - other/event.md
           - other/schedule.md
           - other/restdocs.md
+      - RSocket:
+          - other/rsocket/intro.md
+          - other/rsocket/tcp.md
+          - other/rsocket/websocket.md
+          - other/rsocket/crud.md
+          - other/rsocket/integration.md
       - Spring Session:
           - other/session/intro.md
           - other/session/in-memory.md

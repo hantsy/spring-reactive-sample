@@ -25,7 +25,7 @@ The chapters build on one another, but each topic is written to stand on its own
 5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method security, custom user services, and form-based authentication.
 6. **[Testing](testing/intro.md)** — `StepVerifier`, `WebTestClient`, Testcontainers, and Spring Test integration.
 7. **[Kotlin](kotlin/intro.md)** — Kotlin-first WebFlux development with coroutines and DSLs.
-8. **[Reactive Ecosystem](other/mutiny.md)** — Mutiny, RxJava 3, JDK Flow, Groovy, caching, events, scheduling, Spring Session, and Spring Integration.
+8. **[Reactive Ecosystem](other/mutiny.md)** — Mutiny, RxJava 3, JDK Flow, Groovy, caching, events, scheduling, RSocket (TCP, WebSocket, CRUD, Spring Integration), Spring Session, and Spring Integration.
 
 ## Start with a sample
 

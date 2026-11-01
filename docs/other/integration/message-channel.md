@@ -71,4 +71,4 @@ The same pattern drives the reactive `@EventListener` in the [Application Events
 - Stay **in-process** and need to plug into Integration endpoints? Use `FluxMessageChannel`.
 - Stay **in-process** with a plain publisher/subscriber split? Use `Sinks.Many`.
 - Need messages to cross **process or instance boundaries** without standing up a full broker? Use Redis pub/sub.
-- Need durability, replay, and ordering guarantees at scale? Move to a real broker — Kafka or RabbitMQ — through their reactive clients (see the [Spring Pulsar legacy sample](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-pulsar) for the pattern).
+- Need durability, replay, and ordering guarantees at scale? Move to a real broker — Kafka or RabbitMQ — through their reactive clients (see the [Spring Pulsar legacy sample](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-pulsar) for the pattern). For multiplexed messaging over TCP/WebSocket with backpressure, see the [RSocket chapter](../rsocket/intro.md).
