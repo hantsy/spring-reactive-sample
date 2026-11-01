@@ -1,14 +1,14 @@
 
 # An introduction to Reactive Web
 
-Unlike the traditional Servlet stack, the Reactive Web stack introduced in Spring Framework 5 was rewritten from scratch using the Reactive Streams specification and the Reactor API.
+The reactive web stack in Spring is not just a different controller style. It is a different execution model built around non-blocking I/O, backpressure-friendly stream processing, and Reactor primitives such as `Mono` and `Flux`.
 
-There are two important abstractions in the _Reactive Web_ stack that handle a web request.
+At the heart of the stack are two important abstractions:
 
-- [`WebHandler`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/server/WebHandler.html) — the _high-level_ API that assembles the resources such as `WebFilter`, `ExceptionHandler`, and so on to handle web requests from a client.
-- [`HttpHandler`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/server/reactive/HttpHandler.html) — the _low-level_ API that adapts web handlers to the underlying runtime environment, such as Netty, as well as Servlet containers which provide async capability.
+- [`WebHandler`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/server/WebHandler.html) — the high-level entry point that assembles the pieces of a web request, including filters, exception handlers, and routing logic
+- [`HttpHandler`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/http/server/reactive/HttpHandler.html) — the lower-level bridge between Spring's web layer and the runtime, such as Reactor Netty or a Servlet container with async support
 
-You can review the `Application` class in the [Getting Started](../start/first.md#bootstrap) chapter to see both abstractions wired together:
+You can see both abstractions working together in the bootstrap code from the [Getting Started](../start/first.md#bootstrap) chapter:
 
 ```java
 HttpHandler handler = WebHttpHandlerBuilder.applicationContext(context).build();
@@ -19,11 +19,11 @@ return httpServer.handle(adapter);
 
 !!! tip "Base projects for this chapter"
 
-    The examples in this chapter extend the two applications assembled in [Getting Started](../start/intro.md): the [vanilla application](../start/first.md) (manual wiring, no Spring Boot) and the [Spring Boot application](../start/boot-first.md) (`spring-boot-starter-webflux`). Each page names the sample in the repository that holds the complete code.
+    The examples in this section extend the two applications introduced earlier in the book: the [vanilla application](../start/first.md) (manual wiring, no Spring Boot) and the [Spring Boot application](../start/boot-first.md) built with `spring-boot-starter-webflux`. Each page points to the exact sample in the repository.
 
 ## Enabling WebFlux
 
-To activate _Reactive Web_, create a `@Configuration` class and add an [`@EnableWebFlux`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/reactive/config/EnableWebFlux.html) annotation to enable WebFlux support.
+To activate the reactive web stack, create a `@Configuration` class and add [`@EnableWebFlux`](https://docs.spring.io/spring-framework/docs/current/javadoc-api/org/springframework/web/reactive/config/EnableWebFlux.html):
 
 ```java
 @Configuration
@@ -31,9 +31,7 @@ To activate _Reactive Web_, create a `@Configuration` class and add an [`@Enable
 class WebConfig {}
 ```
 
-Similar to the existing `WebMvcConfigurer` in the Servlet stack, there is a `WebFluxConfigurer` interface for you to customize the details of web resources, validation, CORS, and so on.
-
-You can create a configuration class to derive this interface and override the methods to customize the built-in configuration.
+If you are familiar with the traditional `WebMvcConfigurer`, you will feel at home with `WebFluxConfigurer`. It gives you a place to customize validation, CORS, resource handling, and other built-in web behaviors:
 
 ```java
 @Configuration
@@ -43,11 +41,13 @@ class WebConfig implements WebFluxConfigurer {}
 
 !!! note
 
-    For Spring Boot applications, no extra steps are required to activate **WebFlux** if _spring-boot-starter-webflux_ is included in the classpath.
+    If you are using Spring Boot, there is usually nothing additional to do: adding `spring-boot-starter-webflux` is enough to activate the stack.
 
 ## Alternative reactive types
 
-WebFlux is unopinionated about the reactive library: RxJava 3, SmallRye Mutiny, and the JDK `Flow` API can all appear as controller return types, and Spring adapts them automatically. The runnable guides live in the [Reactive libraries](../other/mutiny.md) section of the Reactive Ecosystem chapter:
+WebFlux is deliberately library-agnostic. Controller methods can return `Flux`, `Mono`, or types from RxJava 3, SmallRye Mutiny, or the JDK `Flow` API, and Spring adapts them automatically.
+
+The runnable examples for these alternative reactive libraries live in the [Reactive libraries](../other/mutiny.md) section of the ecosystem chapter:
 
 - [RxJava 3](../other/rxjava.md)
 - [SmallRye Mutiny](../other/mutiny.md)

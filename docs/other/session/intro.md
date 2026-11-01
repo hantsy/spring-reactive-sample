@@ -1,7 +1,9 @@
 
 # Spring Session (Reactive)
 
-This chapter describes session management for reactive applications. Unlike traditional servlet sessions, reactive session support uses non-blocking stores and integration points that work with the WebFlux runtime.
+Session management in a reactive application is not just a small variant of the servlet model. WebFlux introduces a different runtime model, so the session abstraction is also different: it is built around `WebSession`, non-blocking repositories, and integrations that work with the reactive pipeline.
+
+This chapter shows how to use Spring Session in a WebFlux application without falling back to blocking servlet assumptions.
 
 ## WebSession: the reactive session
 

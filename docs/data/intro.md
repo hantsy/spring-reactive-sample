@@ -1,54 +1,64 @@
 
 # An introduction to Spring Data (Reactive)
 
-This chapter covers reactive data access in the Spring ecosystem. Every major Spring Data store module ships a reactive variant, and Spring Data R2DBC provides non-blocking access to relational databases. All of them return `Mono` and `Flux`, so they compose naturally with WebFlux.
+This chapter introduces the reactive data story in the Spring ecosystem. Every major Spring Data module includes a reactive option, and Spring Data R2DBC brings non-blocking access to relational databases. The common thread is simple: repositories and templates return `Mono` and `Flux`, so they fit naturally into a WebFlux application.
 
 ## What this chapter covers
 
-- The reactive repository pattern and the available store integrations (MongoDB, Redis, Cassandra, Couchbase, Elasticsearch, Neo4j)
-- R2DBC for reactive relational access
-- Working directly with the store's native reactive drivers (the *thin client* style) and with the rich Spring Data abstractions (`XXXRepository`, `XXXTemplate`)
-- Mapping, pagination, auditing, and query derivation in reactive repositories
+- the reactive repository pattern across the major Spring Data stores
+- MongoDB, Redis, Cassandra, Couchbase, Elasticsearch, and Neo4j in a reactive setup
+- Spring Data R2DBC for relational databases
+- thin-client access to native reactive drivers and the richer Spring Data abstractions (`XXXRepository`, `XXXTemplate`)
+- mapping, pagination, auditing, and query derivation in real-world examples
 
-## Quick notes
+## A quick rule of thumb
 
-- Traditional JDBC and JPA are blocking and should be avoided in critical reactive paths. R2DBC provides the reactive relational API; check driver support and maturity for your database.
-- Reactive repositories return `Flux` instead of `List` and `Mono` instead of a plain entity. There is no `Page` result in the reactive API — use `Pageable` parameters plus a separate `count` query, or Reactor's `skip`/`take` operators.
+- Use traditional JDBC/JPA only when blocking access is acceptable.
+- In a reactive application, favor R2DBC or a reactive database driver.
+- Reactive repositories return `Flux` instead of `List` and `Mono` instead of a single entity.
+- There is no `Page` object in the reactive API; use `Pageable` parameters plus a separate `count` query, or `skip`/`take` operators.
 
-## Choosing thin client vs rich Spring Data
+## Thin client vs. rich Spring Data
 
-The thin client approach involves using the store's native SDK directly, which is autoconfigured by a lightweight starter. This gives you maximum control and minimal overhead, but you have to handle query composition, pagination, and object mapping manually. The rich Spring Data approach, on the other hand, provides higher-level abstractions that handle these concerns for you, at the cost of some additional overhead and less direct control over the underlying driver. You can focus on your model and business logic, while Spring Data takes care of the plumbing.
+There are two common ways to work with a database in a reactive Spring app:
+
+- a thin client approach, where you use the database's native SDK directly
+- a rich Spring Data approach, where you leverage Spring Data repositories, templates, and mapping support
+
+The thin client is ideal when you want direct control over the driver and very targeted access patterns. It usually gives you maximum efficiency, but it also means more manual work for query composition, pagination, and object mapping.
+
+The richer Spring Data abstraction is often easier to maintain when the application needs query derivation, auditing, pagination, or mapping support. You spend less time wiring infrastructure and more time modeling the domain.
 
 | Style | API | Best for |
 | :--- | :--- | :--- |
-| **Thin client** | The store's native SDK, autoconfigured by a lightweight starter | Targeted, performance-sensitive operations; maximum control, minimum overhead |
-| **Rich Spring Data** | `ReactiveMongoRepository`, `ReactiveRedisTemplate`, `R2dbcRepository`, ... | Query derivation, pagination, auditing, object mapping |
+| **Thin client** | native driver + starter autoconfiguration | performance-sensitive operations, fine control, low overhead |
+| **Rich Spring Data** | `ReactiveMongoRepository`, `ReactiveRedisTemplate`, `R2dbcRepository`, ... | query derivation, pagination, auditing, object mapping |
 
-The most important rule of thumb: once your application needs query composition, pagination, auditing, or object mapping, reach for the full Spring Data repository abstraction. The native driver approach shines for targeted operations where you want direct control of the driver.
+A good rule: if your app needs anything beyond a simple CRUD flow, Spring Data often saves time and reduces boilerplate.
 
-## Summary of the lightweight starters
+## Spring Boot 4 starter landscape
 
-One breaking change in Spring Boot 4 is that the single monolithic `spring-boot-autoconfigure` module is split into smaller, fine-grained feature- and library-specific modules. Spring Boot 4 also modularizes Spring Data dependencies by moving database drivers and client SDKs into dedicated modules, allowing you to include only what your application actually needs.
+Spring Boot 4 modularizes the old monolithic auto-configuration model into more focused starter modules. That makes it easier to include only the database and driver support your application actually needs.
 
 | Database | Starter | Autoconfigured Bean | Reactive Pattern |
 |---|---|---|---|
 | Cassandra | `spring-boot-starter-cassandra` | `CqlSession` | `executeReactive()` → `Mono.from(ReactiveResultSet)` — see [Cassandra](cassandra.md) |
 | Couchbase | `spring-boot-starter-couchbase` | `Cluster` | `collection.reactive()` → `ReactiveCollection` — see [Couchbase](couchbase.md) |
-| Elasticsearch | `spring-boot-starter-data-elasticsearch` | `ReactiveElasticsearchClient` | Spring Data wrapper (no official reactive SDK) — see [Elasticsearch](elasticsearch.md) |
+| Elasticsearch | `spring-boot-starter-data-elasticsearch` | `ReactiveElasticsearchClient` | Spring Data wrapper — see [Elasticsearch](elasticsearch.md) |
 | MongoDB | `spring-boot-starter-mongodb` | `MongoClient` (reactive streams) | `Mono.from(...)` / `Flux.from(...)` — see [Mongo](mongo.md) |
 | Neo4j | `spring-boot-starter-neo4j` | `Driver` | `ReactiveSession` + `Mono.usingWhen(...)` — see [Neo4j](neo4j.md) |
-| R2DBC | `spring-boot-starter-r2dbc` | `DatabaseClient` | Hand-written SQL — see [R2DBC](r2dbc.md) |
-| Redis | _(no dedicated client starter)_ | via `spring-boot-starter-data-redis-reactive` | `ReactiveRedisTemplate` / Lettuce reactive commands — see [Redis](redis.md) |
+| R2DBC | `spring-boot-starter-r2dbc` | `DatabaseClient` | handwritten SQL — see [R2DBC](r2dbc.md) |
+| Redis | via `spring-boot-starter-data-redis-reactive` | reactive Redis connection and templates | `ReactiveRedisTemplate` / Lettuce commands — see [Redis](redis.md) |
 
 !!! tip
 
-    Across all stores, `StepVerifier` from the `reactor-test` module is your best friend for asserting reactive sequences in integration tests. Pair it with `@ServiceConnection`-backed Testcontainers for a hermetic, repeatable test environment without any manual port configuration.
+    `StepVerifier` from the `reactor-test` module is invaluable for checking reactive flows in tests. Pair it with Testcontainers and `@ServiceConnection` to keep each integration test isolated and deterministic.
 
 See the [Spring Boot 4 Modularization](https://github.com/hantsy/spring7-sandbox/blob/master/docs/modularization.md) guide in the companion [spring7-sandbox](https://github.com/hantsy/spring7-sandbox) repository.
 
 ## Chapter roadmap
 
-1. [Accessing MongoDB with Spring Data Mongo](mongo.md) — repositories, templates, pagination, auditing, QueryDSL, tailable queries, GridFS
-2. [Accessing Redis with Spring Data Redis](redis.md) — `ReactiveRedisConnectionFactory`, `ReactiveRedisTemplate`, and Redis pub/sub messaging
-3. [Accessing Cassandra with Spring Data Cassandra](cassandra.md), [Couchbase](couchbase.md), [Elasticsearch](elasticsearch.md), [Neo4j](neo4j.md) — the other NoSQL stores
-4. [Accessing RDBMS with Spring R2DBC and Spring Data R2DBC](r2dbc.md) — DatabaseClient, `R2dbcEntityTemplate`, repositories, auditing, jOOQ
+1. [Accessing MongoDB with Spring Data Mongo](mongo.md) — repositories, templates, pagination, auditing, QueryDSL, tailable queries, and GridFS
+2. [Accessing Redis with Spring Data Redis](redis.md) — `ReactiveRedisConnectionFactory`, `ReactiveRedisTemplate`, and pub/sub messaging
+3. [Accessing Cassandra with Spring Data Cassandra](cassandra.md), [Couchbase](couchbase.md), [Elasticsearch](elasticsearch.md), [Neo4j](neo4j.md) — the other major NoSQL stores
+4. [Accessing RDBMS with Spring R2DBC and Spring Data R2DBC](r2dbc.md) — `DatabaseClient`, `R2dbcEntityTemplate`, repositories, auditing, and jOOQ

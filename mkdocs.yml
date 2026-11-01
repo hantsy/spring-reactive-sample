@@ -1,10 +1,14 @@
-site_name: Reactive Programming with Spring WebFlux
-site_description: A collection of tutorials and code snippets for Spring WebFlux and the reactive Spring ecosystem.
+site_name: Reactive Spring
+site_description: A practical guide to Spring WebFlux, Reactor, and the reactive ecosystem, built around runnable examples.
 site_author: Hantsy Bai
 site_url: https://hantsy.github.io/spring-reactive-sample/
+repo_name: hantsy/spring-reactive-sample
+repo_url: https://github.com/hantsy/spring-reactive-sample
 
 theme:
   name: material
+  icon:
+    repo: fontawesome/brands/github
   palette:
     - scheme: default
       primary: green
@@ -22,7 +26,9 @@ theme:
     - navigation.tabs
     - navigation.sections
     - navigation.expand
+    - navigation.indexes
     - toc.follow
+    - content.code.copy
 
 extra:
   social:

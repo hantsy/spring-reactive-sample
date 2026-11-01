@@ -1,17 +1,19 @@
 # Accessing Cassandra with Spring Data Cassandra
 
-Cassandra is a wide-column distributed database built for high write throughput and linear scalability. Its Java driver exposes a reactive execution model natively. In Spring, you can work with Cassandra in two common ways:
+Cassandra is a wide-column database built for very high write throughput and linear scalability. In the Java ecosystem, its driver exposes a reactive execution model, and Spring makes it easy to use that model without giving up repository-style ergonomics.
 
-- by using Spring Data Cassandra repositories
-- by working directly with the driver's `CqlSession` and its reactive `executeReactive` extension
+In this chapter, we look at the two main patterns:
 
-This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and Cassandra.
+- using Spring Data Cassandra repositories
+- working directly with the native reactive driver through `CqlSession`
+
+The examples below follow the same practical style as the other chapters in this book: small, readable, and close to the way you would build a real application.
 
 ## Getting started
 
-The quickest way to start is to generate a project from [Spring Initializr](https://start.spring.io), as described in the [Getting Started](../start/intro.md) chapter. Select **Spring WebFlux** and **Spring Data for Apache Cassandra**.
+The fastest path is to generate a project from [Spring Initializr](https://start.spring.io), as described in the [Getting Started](../start/intro.md) chapter. Choose **Spring WebFlux** and **Spring Data for Apache Cassandra**.
 
-If you are adding Cassandra to an existing project, include the following dependency in your `pom.xml`:
+If you are adding Cassandra to an existing project, include the following dependency:
 
 ```xml
 <dependency>
@@ -20,7 +22,7 @@ If you are adding Cassandra to an existing project, include the following depend
 </dependency>
 ```
 
-If you are building a plain Spring project without Boot auto-configuration, use the following dependency instead:
+If you are building a plain Spring project without Boot auto-configuration, use this dependency instead:
 
 ```xml
 <dependency>
@@ -29,7 +31,7 @@ If you are building a plain Spring project without Boot auto-configuration, use 
 </dependency>
 ```
 
-In that case, you also need a configuration class to enable reactive Cassandra support:
+You also need a configuration class to enable reactive Cassandra support:
 
 ```java
 @Configuration
@@ -44,12 +46,9 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 
     @Override
     protected List<CreateKeyspaceSpecification> getKeyspaceCreations() {
-
         CreateKeyspaceSpecification specification = CreateKeyspaceSpecification.createKeyspace(keySpace)
             .ifNotExists()
             .with(KeyspaceOption.DURABLE_WRITES, true);
-        //.withNetworkReplication(DataCenterReplication.dcr("foo", 1), DataCenterReplication.dcr("bar", 2));
-
         return Arrays.asList(specification);
     }
 
@@ -75,9 +74,9 @@ public class CassandraConfig extends AbstractReactiveCassandraConfiguration {
 }
 ```
 
-The `getKeyspaceCreations` method configures how the keyspace is created when the application starts — here it creates the keyspace if it does not exist. The `getSchemaAction` method specifies the schema generation behavior.
+The keyspace setup is straightforward: create the keyspace if it does not already exist, and keep the schema behavior explicit. The repository layer then handles most of the CRUD work for you.
 
-You can explore this setup in [data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/data-cassandra).
+You can explore this example in [data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/data-cassandra).
 
 With Spring Boot, the connection is usually configured automatically from `application.properties`:
 
@@ -100,7 +99,7 @@ Create a `Post` class that maps to a Cassandra table:
 @Table("posts")
 class Post {
 
-    @PrimaryKey()
+    @PrimaryKey
     @Builder.Default
     private String id = UUID.randomUUID().toString();
     private String title;
@@ -108,13 +107,13 @@ class Post {
 }
 ```
 
-The annotations in this example are straightforward:
+The annotations are simple:
 
-1. `@Table` marks the class as a Cassandra table mapping.
+1. `@Table` maps the class to a Cassandra table.
 2. `@PrimaryKey` identifies the primary key field.
-3. `@Builder.Default` provides a generated ID by default.
+3. `@Builder.Default` gives the record an ID by default.
 
-Unlike Mongo and other NoSQL stores, Cassandra requires you to fill the `id` field before inserting — the `@Builder.Default` value covers it.
+Unlike MongoDB and some other document stores, Cassandra expects the identifier to be set before insertion. The default value covers that for us.
 
 ## Creating a repository
 
@@ -124,7 +123,7 @@ Define a repository interface by extending `ReactiveCassandraRepository`:
 interface PostRepository extends ReactiveCassandraRepository<Post, String> {}
 ```
 
-Once Spring creates the repository bean, you can inject it into controllers or services.
+Once Spring creates the repository bean, it can be injected into any controller or service without additional ceremony.
 
 ## Exposing a REST API
 
@@ -141,12 +140,12 @@ class PostController {
         this.posts = posts;
     }
 
-    @GetMapping("")
+    @GetMapping
     public Flux<Post> all() {
         return this.posts.findAll();
     }
 
-    @PostMapping("")
+    @PostMapping
     public Mono<Post> create(@RequestBody Post post) {
         post.setId(UUID.randomUUID().toString());
         return this.posts.save(post);
@@ -160,13 +159,12 @@ class PostController {
     @PutMapping("/{id}")
     public Mono<Post> update(@PathVariable("id") String id, @RequestBody Post post) {
         return this.posts.findById(id)
-            .map(p -> {
-                p.setTitle(post.getTitle());
-                p.setContent(post.getContent());
-
-                return p;
+            .map(existing -> {
+                existing.setTitle(post.getTitle());
+                existing.setContent(post.getContent());
+                return existing;
             })
-            .flatMap(p -> this.posts.save(p));
+            .flatMap(this.posts::save);
     }
 
     @DeleteMapping("/{id}")
@@ -176,40 +174,41 @@ class PostController {
 }
 ```
 
-Note how `create` assigns the ID explicitly — as mentioned above, Cassandra does not generate it for you.
+Notice that the `create` method assigns the ID explicitly. Cassandra does not generate it for you the way some document databases do.
 
 ## Seeding sample data
 
-You can use a `CommandLineRunner` to insert a few sample records when the application starts:
+You can use a `CommandLineRunner` to insert a few example records during startup:
 
 ```java
 public void init() {
-    log.info("start data initialization  ...");
+    log.info("Start data initialization...");
     this.posts
         .deleteAll()
         .thenMany(
-            Flux
-                .just("Post one", "Post two")
-                .flatMap(
-                    title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-                )
+            Flux.just("Post one", "Post two")
+                .flatMap(title -> this.posts.save(
+                    Post.builder()
+                        .title(title)
+                        .content("content of " + title)
+                        .build()))
         )
         .log()
         .subscribe(
             null,
             null,
-            () -> log.info("done initialization...")
+            () -> log.info("Data initialization complete.")
         );
 }
 ```
 
-`CommandLineRunner` ensures the initialization logic runs once the application has started.
+This pattern is useful when you want a clean, reproducible bootstrap for a demo or tutorial application.
 
 ## Running the application
 
 Before starting the app, make sure Cassandra is running locally.
 
-If you prefer Docker, it is easy to start Cassandra with the Docker Compose file in the repository root:
+If you prefer Docker, you can start it directly from the repository's compose file:
 
 ```bash
 docker-compose up cassandra

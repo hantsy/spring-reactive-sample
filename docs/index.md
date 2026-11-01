@@ -1,32 +1,50 @@
 # Reactive Programming with Spring WebFlux
 
-This book and sample repository introduce reactive programming with Spring Framework 7 and Spring Boot 4. It is a practical guide for developers who want to learn Spring WebFlux, Reactor, and the wider reactive ecosystem through runnable examples.
+This book is a hands-on guide to reactive programming with **Spring Framework 7** and **Spring Boot 4**. Instead of explaining concepts in the abstract, it walks through real examples from the repository and shows how they fit together in a production-style Spring application.
 
-Every concept is demonstrated with a small, self-contained sample from the [repository](https://github.com/hantsy/spring-reactive-sample), and every code fragment in these pages is taken from the actual sample code — clone the repository and run each sample as you read.
+If you want to learn by doing, this is the right place. Each chapter pairs a concise explanation with runnable code from the [repository](https://github.com/hantsy/spring-reactive-sample), so you can read a concept, open the sample, and try it immediately.
 
-## Reading order
+## What you will learn
 
-The chapters build on each other, but each page stands on its own:
+This site covers the reactive stack from the ground up:
 
-1. **[Preface](preface.md)** — who this book is for and how the examples are organized.
-2. **[Getting Started](start/intro.md)** — the Reactive Streams specification, Project Reactor's `Mono`/`Flux`, and your first WebFlux application — with and without Spring Boot.
-3. **[Web Programming](web/intro.md)** — annotated controllers and functional routing, exception handling, multipart uploads (including `PartEvent` streaming), Server-Sent Events, WebSocket, view rendering, the `WebClient` HTTP client, and Spring 7 API versioning.
-4. **[Data Operations](data/intro.md)** — reactive repositories and templates for MongoDB, Redis, Cassandra, Couchbase, Elasticsearch, Neo4j, and R2DBC for relational databases, plus the native reactive drivers.
-5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method-level constraints, custom user details services, and form login.
-6. **[Testing](testing/intro.md)** — `StepVerifier`, `WebTestClient` for web components and Spring Security, Testcontainers for the data layer, Spring test contexts and slices, and the Kotlin toolkit (Kotest, MockK, coroutines-test).
-7. **[Kotlin](kotlin/intro.md)** — annotated controllers and `RouterFunctions` in Kotlin, coroutines, the beans/`coRouter` DSLs, `CoWebFilter`, and coroutine-friendly events, caching, and scheduling.
-8. **[Reactive Ecosystem](other/mutiny.md)** — the wider reactive ecosystem: alternative reactive libraries (Mutiny, RxJava 3, the JDK Flow API), Groovy, cross-cutting concerns (caching, events, scheduling, RestDocs), reactive `WebSession` with Spring Session, and Spring Integration with reactive message channels.
+- the core ideas behind Reactive Streams, Reactor, and WebFlux
+- how to build HTTP APIs with annotated controllers and functional routing
+- how to access data reactively with MongoDB, Redis, Cassandra, Couchbase, Neo4j, Elasticsearch, and R2DBC
+- how to secure reactive apps and test them with realistic tools
+- how Kotlin and the broader reactive ecosystem fit into the same architecture
 
-## Running the samples
+## Reading path
 
-Clone the repository and start any sample as described in [Getting Started — Running the examples](start/intro.md#running-the-examples). Backing stores (MongoDB, Redis, PostgreSQL, and friends) are provided by the `docker-compose.yml` in the repository root.
+The chapters build on one another, but each topic is written to stand on its own:
+
+1. **[Preface](preface.md)** — the intent behind the book and how the examples are organized.
+2. **[Getting Started](start/intro.md)** — Reactor basics, Reactive Streams, and your first WebFlux app with and without Spring Boot.
+3. **[Web Programming](web/intro.md)** — controllers, functional routing, error handling, uploads, SSE, WebSocket, view rendering, `WebClient`, and API versioning.
+4. **[Data Operations](data/intro.md)** — reactive data access with MongoDB, Redis, Cassandra, Couchbase, Neo4j, Elasticsearch, and relational databases via R2DBC.
+5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method security, custom user services, and form-based authentication.
+6. **[Testing](testing/intro.md)** — `StepVerifier`, `WebTestClient`, Testcontainers, and Spring Test integration.
+7. **[Kotlin](kotlin/intro.md)** — Kotlin-first WebFlux development with coroutines and DSLs.
+8. **[Reactive Ecosystem](other/mutiny.md)** — Mutiny, RxJava 3, JDK Flow, Groovy, caching, events, scheduling, Spring Session, and Spring Integration.
+
+## Start with a sample
+
+Each chapter is backed by a runnable example in the repository. Clone it, start a dependency, and run the module you want to explore.
 
 ```bash
 git clone https://github.com/hantsy/spring-reactive-sample
 cd spring-reactive-sample
+
 docker-compose up mongodb   # start a backing store
-cd boot-data-mongo          # pick a sample
+cd boot-data-mongo          # choose a sample module
 ./mvnw spring-boot:run
 ```
 
-The current source codes target **Spring Framework 7 / Spring Boot 4**. Older releases are tagged in the repository: [boot-3](https://github.com/hantsy/spring-reactive-sample/releases/tag/boot-3) for Spring Boot 3.x and [v1.0](https://github.com/hantsy/spring-reactive-sample/releases/tag/v1.0) for Spring Boot 2.x.
+## Repository status
+
+The examples in this repo target **Spring Framework 7 / Spring Boot 4**. If you need older material, the repository still keeps tagged releases for:
+
+- [Spring Boot 3.x](https://github.com/hantsy/spring-reactive-sample/releases/tag/boot-3)
+- [Spring Boot 2.x](https://github.com/hantsy/spring-reactive-sample/releases/tag/v1.0)
+
+This keeps the learning path practical: you can move from the modern stack to earlier versions when you need to compare behavior or migrate an older application.

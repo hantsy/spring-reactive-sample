@@ -1,13 +1,18 @@
 
 # WebClient and Reactive HTTP Clients
 
-In the Servlet stack, `RestTemplate` and `AsyncRestTemplate` perform HTTP requests. In the WebFlux stack, Spring adds `WebClient` — a non-blocking, reactive HTTP client that integrates with Reactor and other reactive types.
+If `RestTemplate` was the usual client in the Servlet era, `WebClient` is the equivalent in the reactive stack. It is non-blocking, composable, and integrates naturally with Reactor streams.
 
-`WebClient` supports streaming request and response bodies, runs on several pluggable HTTP client libraries, and is the foundation for consuming other reactive services.
+In practice, you use `WebClient` for:
+
+- calling other HTTP services from a reactive app
+- streaming request or response bodies
+- composing asynchronous flows without blocking a worker thread
+- replacing imperative client code with a reactive API that fits the rest of the application
 
 ## Getting started
 
-The simplest way to create a client is a static factory. The following example sends a `GET` request to the `/posts` URI and retrieves posts:
+The simplest client is created from a base URL:
 
 ```java
 WebClient client = WebClient.create("http://localhost:8080");
@@ -20,9 +25,11 @@ client
     .subscribe(post -> System.out.println("post: " + post));
 ```
 
+This pattern is enough when you want a quick ad hoc call. For anything larger than a tiny sample, it is worth wrapping the client in a dedicated class.
+
 ## Building a client
 
-For more control, use the builder. It lets you configure the `ClientHttpConnector` (the underlying HTTP client), the codecs, `ExchangeStrategies`, default headers, and filters:
+The builder gives you more control over the underlying connector, codecs, exchange strategies, default headers, and filters.
 
 ```java
 var reactorHttpClient = HttpClient.create()
@@ -32,29 +39,27 @@ var reactorHttpClient = HttpClient.create()
 
 WebClient client = WebClient.builder()
     .clientConnector(new ReactorClientHttpConnector(reactorHttpClient))
-    .codecs(
-        clientCodecConfigurer -> {
-            // use defaultCodecs() to apply the default codecs
-            // clientCodecConfigurer.defaultCodecs();
+    .codecs(clientCodecConfigurer -> {
+        // use defaultCodecs() to apply the default codecs
+        // clientCodecConfigurer.defaultCodecs();
 
-            // alter a registered encoder/decoder based on the default config.
-            // clientCodecConfigurer.defaultCodecs().jacksonJsonEncoder(...)
+        // alter a registered encoder/decoder based on the default config.
+        // clientCodecConfigurer.defaultCodecs().jacksonJsonEncoder(...)
 
-            // or use customCodecs to register codecs from scratch.
-            clientCodecConfigurer.customCodecs()
-                    .register(new JacksonJsonDecoder(objectMapper));
-            clientCodecConfigurer.customCodecs()
-                    .register(new JacksonJsonEncoder(objectMapper));
-        }
-    )
+        // or use customCodecs to register codecs from scratch.
+        clientCodecConfigurer.customCodecs().register(new JacksonJsonDecoder(objectMapper));
+        clientCodecConfigurer.customCodecs().register(new JacksonJsonEncoder(objectMapper));
+    })
     .exchangeStrategies(ExchangeStrategies.withDefaults())
     .baseUrl("http://localhost:8080")
     .build();
 ```
 
+The value here is not just configuration. It means the client can match the runtime requirements of the service it talks to while staying reusable in the rest of the application.
+
 ## A typed client class
 
-Rather than scattering `WebClient` calls through the application, wrap them in a dedicated client class. The sample uses `exchangeToMono`/`exchangeToFlux` to inspect the response status and convert error responses with `response.createError()`:
+A nicer pattern is to create a dedicated client wrapper instead of calling `WebClient` directly from multiple services. The sample below uses `exchangeToMono` and `exchangeToFlux` to inspect response status and convert error responses into proper reactive results:
 
 ```java
 @RequiredArgsConstructor
@@ -120,7 +125,7 @@ public class PostClient {
 }
 ```
 
-Then drive the flows in an application class:
+Then the application can use the client without worrying about low-level transport details:
 
 ```java
 public static void main(String[] args) {
@@ -142,15 +147,15 @@ public static void main(String[] args) {
 }
 ```
 
-You can explore the complete codes in [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
+You can explore the complete code in [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
 
 ## Choosing the HTTP client connector
 
-The `ClientHttpConnector` abstracts the underlying HTTP client. By default, `WebClient` uses `ReactorClientHttpConnector` (Reactor Netty). Spring also ships connectors for other clients:
+The `ClientHttpConnector` abstracts the actual HTTP implementation underneath `WebClient`. By default, Spring uses Reactor Netty, but you can switch to other connectors without changing the client code itself.
 
 | Connector | Underlying client | Extra dependency |
 | :--- | :--- | :--- |
-| `ReactorClientHttpConnector` (default) | Reactor Netty | none (in WebFlux) |
+| `ReactorClientHttpConnector` (default) | Reactor Netty | none (included with WebFlux) |
 | `JettyClientHttpConnector` | Jetty Reactive HttpClient | `org.eclipse.jetty:jetty-reactive-httpclient` |
 | `JdkClientHttpConnector` | JDK `java.net.http.HttpClient` | none |
 | `HttpComponentsClientHttpConnector` | Apache HttpClient 5 | `org.apache.httpcomponents.client5:httpclient5` |
@@ -212,7 +217,7 @@ Add the dependency:
 </dependency>
 ```
 
-Each connector swaps in with one builder call — `.clientConnector(connector)` — while the `PostClient` layer above stays untouched. You can explore each connector variant in [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty), [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient), and [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5).
+Each connector swaps in with one builder call — `.clientConnector(connector)` — while the `PostClient` layer above stays unchanged. You can explore each variant in [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty), [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient), and [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5).
 
 ## Testing the client
 

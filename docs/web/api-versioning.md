@@ -1,13 +1,22 @@
 
 # API Versioning
 
-Spring Framework 7 adds built-in API versioning support on both the server and the client side. The version can be carried in a URI path segment, a request parameter, an HTTP header, or a media type parameter, and routes can be mapped per version with a `version` attribute on the mapping annotations.
+API versioning is usually introduced only when an application has already grown enough to need contract changes without breaking older clients. Spring Framework 7 makes this easier by adding built-in versioning support on both the server and the client side.
 
-This page covers the **reactive (WebFlux)** flavor; the same concepts apply to the Servlet stack. The samples referenced here are [api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/api-versioning-webflux) and [boot-api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/boot-api-versioning-webflux) in the spring7-sandbox repository — see its [API Versioning guide](https://github.com/hantsy/spring7-sandbox/blob/main/docs/api-versioning.md) for the full treatment including WebMVC.
+A version can be carried in:
+
+- a URI path segment
+- a request parameter
+- an HTTP header
+- a media type parameter
+
+The server can then route requests using a `version` attribute on the mapping annotations. This page looks at the WebFlux flavor of the feature.
+
+The examples referenced here live in the spring7-sandbox repository: [api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/api-versioning-webflux) and [boot-api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/boot-api-versioning-webflux). See the [API Versioning guide](https://github.com/hantsy/spring7-sandbox/blob/main/docs/api-versioning.md) for the full WebMVC and WebFlux treatment.
 
 ## Server-side configuration
 
-Implement `WebFluxConfigurer` and override `configureApiVersioning` to declare where the version is read from and which versions are supported:
+Implement `WebFluxConfigurer` and override `configureApiVersioning` to declare where the version is read from and which versions the service supports:
 
 ```java
 @Configuration
@@ -35,27 +44,27 @@ public class WebConfig implements WebFluxConfigurer {
 }
 ```
 
-The version resolution strategies, exactly one of which is active at a time:
+The version resolution strategies are mutually exclusive:
 
-- `usePathSegment(0)` — read the version from a URI path segment, for example `/api/v1/resource`
-- `useRequestHeader("X-API-Version")` — read it from an HTTP header, for example `X-API-Version: 1`
-- `useRequestParam("version")` — read it from a request parameter, for example `/api/resource?version=1`
-- `useMediaTypeParameter(MediaType.APPLICATION_JSON, "version")` — append a version parameter to the `Accept` header value, for example `application/json;version=1`
+- `usePathSegment(0)` — read the version from a URI path segment, such as `/api/v1/resource`
+- `useRequestHeader("X-API-Version")` — read it from an HTTP header, such as `X-API-Version: 1`
+- `useRequestParam("version")` — read it from a query parameter, such as `/api/resource?version=1`
+- `useMediaTypeParameter(MediaType.APPLICATION_JSON, "version")` — read it from the media type, such as `application/json;version=1`
 
-Versions are parsed with `SemanticApiVersionParser` by default, and `setDefaultVersion("1.0")` handles requests that carry no version at all.
+`SemanticApiVersionParser` is the default parser, and `setDefaultVersion("1.0")` handles requests that do not specify a version at all.
 
 ## Versioned routes
 
-Mapping annotations accept a `version` attribute. Requests without a version map to the unversioned method; requests carrying a version map to the method that declares it:
+Mapping annotations accept a `version` attribute. Requests without a version fall through to the default route, while versioned requests resolve to the matching method.
 
 ```java
 @RestController
 @RequestMapping("/hello")
 public class GreetingController {
 
-    @GetMapping()
+    @GetMapping
     public String helloDefault() {
-        return "Hello v1.0(Default)";
+        return "Hello v1.0 (default)";
     }
 
     @GetMapping(version = "1.1")
@@ -70,11 +79,11 @@ public class GreetingController {
 }
 ```
 
-In a Spring Boot 4 WebFlux application, the same `WebConfig` applies, and Boot exposes properties for it — the WebMVC counterpart reads `spring.mvc.api-versioning.*` (see the [spring7-sandbox guide](https://github.com/hantsy/spring7-sandbox/blob/main/docs/api-versioning.md) for the full property list).
+In a Spring Boot 4 WebFlux application, the same configuration applies. Boot also exposes properties for this feature, while the WebMVC counterpart uses `spring.mvc.api-versioning.*` properties.
 
 ## Client-side versioning with WebClient
 
-`WebClient` participates in versioning through `ApiVersionInserter` — it declares where the version is written — and `defaultApiVersion` sets a fallback for requests that do not name one:
+`WebClient` participates in the same strategy via `ApiVersionInserter`, and `defaultApiVersion` gives clients a fallback when a specific version is not requested:
 
 ```java
 this.client = WebClient.builder()
@@ -85,12 +94,11 @@ this.client = WebClient.builder()
                 //.usePathSegment(0)
                 //.useQueryParam("version")
                 //.withVersionFormatter(ApiVersionFormatter)
-                .build()
-        )
+                .build())
         .build();
 ```
 
-The inserter strategies mirror the server side — `useHeader`, `usePathSegment`, `useQueryParam`, or `withVersionFormatter` for custom rendering — and must agree with how the server resolves versions.
+The client-side strategies mirror the server side: `useHeader`, `usePathSegment`, `useQueryParam`, or custom formatting with `withVersionFormatter`. The server and client must agree on the same versioning mechanism.
 
 Per-request versions override the default:
 
@@ -98,10 +106,10 @@ Per-request versions override the default:
 this.client.get().uri("/hello")
         .apiVersion("1.1")
         .retrieve()
-        .bodyToMono(String.class)
+        .bodyToMono(String.class);
 ```
 
-A full integration test drives all three versions against the running server:
+A full integration test can drive all versions against the running server:
 
 ```java
 @SpringJUnitConfig(classes = Application.class)
@@ -137,7 +145,7 @@ public class IntegrationTests {
 
 ## Testing with WebTestClient
 
-`WebTestClient` supports the same contract. In a `@WebFluxTest` slice, register a `WebTestClientBuilderCustomizer` (in Boot 4 it lives in the `org.springframework.boot.webtestclient.autoconfigure` package) to configure the versioning on the test client:
+`WebTestClient` supports the same contract. In a `@WebFluxTest` slice, customize the client builder with the API versioning settings used by the app:
 
 ```java
 @WebFluxTest(controllers = GreetingController.class)
@@ -167,4 +175,4 @@ public class GreetingControllerTest {
 }
 ```
 
-For the complete codes, check [api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/api-versioning-webflux) (plain Spring) and [boot-api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/boot-api-versioning-webflux) (Spring Boot) in the spring7-sandbox repository.
+For the complete code, see [api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/api-versioning-webflux) and [boot-api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/boot-api-versioning-webflux) in the spring7-sandbox repo.

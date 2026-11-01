@@ -1,11 +1,13 @@
 # Accessing Elasticsearch with Spring Data Elasticsearch
 
-Elasticsearch is a search engine that also works well as a document-oriented NoSQL store. In Spring, you can work with Elasticsearch in two common ways:
+Elasticsearch is a natural fit for full-text search, log analytics, and document lookup at scale. It is not the first tool many people think of for a small CRUD app, but once a service needs flexible search, ranking, and query composition, it becomes invaluable.
 
-- by using Spring Data Elasticsearch repositories — backed by Spring Data's own `ReactiveElasticsearchClient`
-- by working directly with the `ReactiveElasticsearchClient` that the repositories sit on
+In Spring, there are two common ways to work with it:
 
-This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and Elasticsearch.
+- through Spring Data Elasticsearch repositories, which sit on top of the framework's `ReactiveElasticsearchClient`
+- directly with the reactive client when you need finer control over the query pipeline
+
+The example below keeps the setup intentionally lightweight while showing the practical patterns you need in a reactive WebFlux service.
 
 !!! important
 

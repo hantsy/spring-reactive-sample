@@ -1,11 +1,13 @@
 # Accessing Redis with Spring Data Redis
 
-Redis is a key-value store that doubles as a lightweight message broker. In Spring, you can work with Redis in two common ways:
+Redis is a fast, lightweight data store that is often used for caching, counters, queues, and small message bursts. In a Spring WebFlux application, it fits naturally alongside Reactor streams because both are designed around async, non-blocking work.
 
-- by using Spring Data Redis — the `ReactiveRedisConnectionFactory`, `ReactiveRedisTemplate`, and reactive pub/sub support
-- by working directly with the Lettuce driver's reactive commands through a `ReactiveConnection`
+You can work with Redis in two common ways:
 
-This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and Redis.
+- through Spring Data Redis, using `ReactiveRedisConnectionFactory`, `ReactiveRedisTemplate`, and reactive pub/sub support
+- directly through the Lettuce client, where you compose driver-level operations with Reactor types
+
+This example keeps things practical: we wire up a tiny reactive API, persist a few documents, and show how the code looks in a real application rather than in a theoretical abstraction.
 
 ## Getting started
 

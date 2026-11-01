@@ -1,43 +1,49 @@
 
 # Getting Started
 
-This chapter walks through the first steps of building Spring WebFlux applications. Start here to get a working app, then deepen your knowledge with the subsequent chapters.
+This section is the entry point for the book. If you are new to reactive programming, start here. If you already know the basics, use it as a quick check of the foundations before moving into the more specialized chapters.
 
-## What this chapter covers
+At a high level, this part is about answering three questions:
 
-- Core reactive concepts and when to use them
-- Building a minimal WebFlux application from scratch (`RouterFunction` + `HandlerFunction`, manual wiring)
-- Bootstrapping a WebFlux application with Spring Boot (starters and auto-configuration)
-- Running and testing the examples included in this repository
+- what reactive programming is and why it matters in modern Spring apps
+- how `Mono` and `Flux` model asynchronous data streams
+- how to build a first WebFlux application, either manually or with Spring Boot
 
-## How to use this chapter
+## What you will cover
 
-- Follow the tutorials in order if you are new to reactive programming
-- Skip the manual wiring if you prefer to use Spring Boot first
-- Try the runnable examples in the repository to reinforce each concept
+- the Reactive Streams specification and the role of Project Reactor
+- the difference between imperative and reactive code
+- minimal WebFlux applications built with `RouterFunction` and `HandlerFunction`
+- the same idea expressed with Spring Boot auto-configuration
+- the repository examples you can run locally while reading
 
-## Chapter roadmap
+## Suggested reading path
 
-1. [Reactive Streams and Spring WebFlux](reactive-streams.md) — the specification and the reactive libraries behind WebFlux, with runnable code fragments.
-2. [Create a WebFlux application from scratch](first.md) — low-level wiring without Spring Boot auto-configuration, on Tomcat, Jetty, Reactor Netty, or Undertow.
-3. [Create a WebFlux application with Spring Boot](boot-first.md) — the fast path using `spring-boot-starter-webflux`.
+If you are new to the stack, a sensible order is:
+
+1. [Reactive Streams and Spring WebFlux](reactive-streams.md)
+2. [Create a WebFlux application from scratch](first.md)
+3. [Create a WebFlux application with Spring Boot](boot-first.md)
+
+This keeps the learning curve gentle: you understand the reactive model first, then move to the Spring Boot convenience layer.
 
 ## Prerequisites
 
-Before you begin, make sure you have:
+Before you start, make sure you have:
 
-- JDK 21. Install one from [Eclipse Temurin](https://adoptium.net/), Oracle, or your preferred vendor.
+- JDK 21 or newer
 - [Apache Maven](https://maven.apache.org) 3.9+ or [Gradle](https://gradle.org)
-- A working IDE: [IntelliJ IDEA](https://www.jetbrains.com/idea/), [Eclipse IDE](https://eclipseide.org/) (with [Spring Tools](https://spring.io/tools)), [Apache NetBeans](https://netbeans.apache.org/), or [VS Code](https://code.visualstudio.com/) with the Java and Spring Boot extensions
-- Basic familiarity with Spring or Java web development
-- Docker, to run the backing stores (MongoDB, Redis, PostgreSQL, and friends) with the `docker-compose.yml` in the repository root
+- an IDE such as [IntelliJ IDEA](https://www.jetbrains.com/idea/), [VS Code](https://code.visualstudio.com/), or [Eclipse IDE](https://eclipseide.org/)
+- a basic understanding of Spring and Java web development
+- Docker for the database-backed examples in the repository
 
 ## Running the examples
 
-Every sample in the [repository](https://github.com/hantsy/spring-reactive-sample) is an independent Maven module. To run one:
+Every sample in the [repository](https://github.com/hantsy/spring-reactive-sample) is an independent Maven module. You can run them one by one as you work through the book:
 
-1. Clone the repository.
-2. Change into the sample directory, for example `vanilla`.
-3. Run the application with `./mvnw spring-boot:run` for Spring Boot samples, or `./mvnw package exec:java` / the main class for samples wired by hand.
+1. clone the repository
+2. change into the sample directory you want to study, such as `vanilla`
+3. run it with `./mvnw spring-boot:run` for Boot-based samples
+4. use the module's main class or `./mvnw package exec:java` for the manual wiring samples
 
-The tutorials are independent and include runnable examples and configuration notes. Refer to the later chapters ([Reactive Web](../web/intro.md), [Data Operations](../data/intro.md), [Security](../security/intro.md)) for integration patterns and production considerations.
+The examples are intentionally small and independent, which makes them useful for experimentation. Once the basics are clear, the later chapters on [Reactive Web](../web/intro.md), [Data Operations](../data/intro.md), and [Security](../security/intro.md) show how these ideas work in larger applications.

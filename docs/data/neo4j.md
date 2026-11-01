@@ -1,11 +1,13 @@
 # Accessing Neo4j with Spring Data Neo4j
 
-Neo4j is a graph database. The effort of [Spring Data Neo4j RX](https://github.com/neo4j/sdn-rx/) has been merged into the official Spring Data Neo4j project since Spring Data Neo4j 6.0 — if you are using SDN Rx, upgrade to the official Spring Data Neo4j. In Spring, you can work with Neo4j in two common ways:
+Neo4j is a graph database, which makes it a strong fit for linked data, social structures, recommendation models, and traversal-heavy queries. In Spring, the reactive story is largely about the same idea: keep the data pipeline non-blocking while modeling the domain as a set of connected entities.
 
-- by using Spring Data Neo4j repositories and `ReactiveNeo4jTemplate`
-- by working directly with the driver's `ReactiveSession` through `ReactiveNeo4jClient`
+You can work with Neo4j in two common ways:
 
-This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and Neo4j.
+- through Spring Data Neo4j repositories and `ReactiveNeo4jTemplate`
+- directly through the driver API with `ReactiveSession` and `ReactiveNeo4jClient`
+
+The sample here stays intentionally small. It gives you the essentials for wiring a reactive repository into a WebFlux controller, while keeping the structure close to what you would use in a production service.
 
 ## Getting started
 

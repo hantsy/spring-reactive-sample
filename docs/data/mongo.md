@@ -1,11 +1,13 @@
 # Accessing MongoDB with Spring Data Mongo
 
-MongoDB is a document-oriented database with excellent support for reactive programming through its Java driver. In Spring, you can work with MongoDB in two common ways:
+MongoDB is one of the most natural fits for a reactive stack. It stores documents in a JSON-like shape, and its Java driver is built around streaming operations that align well with Reactor and WebFlux.
 
-- by using Spring Data MongoDB repositories and templates
-- by working directly with the reactive MongoDB driver through `MongoClient`
+In Spring, you typically work with MongoDB in one of two ways:
 
-This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and MongoDB.
+- through Spring Data MongoDB repositories and templates
+- directly with the reactive MongoDB driver via `MongoClient` when you need more control over the data flow
+
+The example below keeps the focus on the real-world flow: a small reactive API, a document model, and a straightforward repository setup that you can adapt to a real service.
 
 ## Getting started
 

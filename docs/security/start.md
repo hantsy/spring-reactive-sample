@@ -1,9 +1,9 @@
 
 # An Introduction to Spring Security
 
-To align with the reactive WebFlux programming model, Spring Security introduced reactive support (`spring-security-web`, `spring-security-config`). The reactive stack is no longer a separate artifact: since Spring Security 5.x the reactive classes ship inside the same core modules the servlet stack uses, so `spring-security-webflux` — the name you may remember from the early Spring Security 5 milestones — no longer exists.
+Reactive applications still need security, but the APIs look different from the Servlet world. In Spring Security, the reactive stack swaps the classic servlet filters and request objects for their non-blocking equivalents.
 
-At runtime, the reactive stack swaps every Servlet-era primitive for a reactive counterpart:
+The core mapping looks like this:
 
 | Servlet stack | Reactive stack |
 | :--- | :--- |
@@ -14,9 +14,11 @@ At runtime, the reactive stack swaps every Servlet-era primitive for a reactive 
 | `@EnableWebSecurity` | `@EnableWebFluxSecurity` |
 | `ServletRequest`/`ServletResponse` | `ServerWebExchange` |
 
-The programming model is otherwise the same: a security filter chain intercepts exchanges, an authentication manager resolves credentials against a `ReactiveUserDetailsService`, and authorization rules apply per path pattern or per method.
+The underlying idea is the same: a filter chain intercepts each request, authentication resolves a principal, and authorization rules decide whether the request should pass through. The difference is that the entire flow works with reactive primitives and non-blocking exchange objects.
 
-Include the dependencies (versions are managed by `spring-boot-starter-parent`):
+The early `spring-security-webflux` artifact name is an older memory aid; the modern stack ships under the same core Spring Security modules, and the reactive pieces are part of the standard security setup.
+
+Add the security dependencies like this (versioning is typically managed by `spring-boot-starter-parent`):
 
 ```xml
 <dependency>
@@ -33,4 +35,4 @@ Include the dependencies (versions are managed by `spring-boot-starter-parent`):
 </dependency>
 ```
 
-For Spring Boot applications, a single starter is enough — see [Configure Spring Security in Spring Boot applications](config-boot.md).
+For Spring Boot applications, a single starter is enough. See [Configure Spring Security in Spring Boot applications](config-boot.md).

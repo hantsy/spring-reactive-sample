@@ -1,19 +1,21 @@
 
 # Testing
 
-Testing reactive code needs tools that understand asynchrony: assertions on sequences of signals rather than single values, mocks for suspending or publisher-returning methods, and integration tests that never block. The Spring reactive stack ships a layered toolkit, and every sample in this repository exercises at least one layer.
+Reactive code is not tested in the same way as blocking code. Instead of asserting one final value, you typically verify a sequence of events: what was emitted, in what order, whether the stream completed, and whether an error appeared at the right time.
+
+This is why the reactive stack comes with a dedicated testing toolkit. The examples in this repository use it throughout the stack, from repository tests to full web integration tests.
 
 ## Chapter roadmap
 
-1. [Testing Web Components](web-components.md) — `WebTestClient` against controllers, exception handling, `RouterFunction`s, and filters, with `@MockitoBean`/`@MockitoSpyBean` for the dependencies.
-2. [Testing Spring Security](security.md) — mock users, JWT and OIDC mutators, CSRF handling, and skipping the security layer in web-layer tests.
-3. [Data Operations with Testcontainers](testcontainers.md) — real databases in Docker for the data layer: the plain Spring initializer pattern and the Boot `@DynamicPropertySource`/`@ServiceConnection` styles.
-4. [Spring Test Context and Slices](spring-test.md) — `SpringJUnitConfig`, `@SpringBootTest`, and the Boot test slices (`@WebFluxTest`, `@JsonTest`, `@DataMongoTest`, and friends).
-5. [Testing in Kotlin](kotlin.md) — Kotest, MockK, Spring MockK (`@MockkBean`/`@MockkSpyBean`), and `kotlinx-coroutines-test`.
+1. [Testing Web Components](web-components.md) — `WebTestClient` against controllers, exception handlers, `RouterFunction`s, and filters, with `@MockitoBean` / `@MockitoSpyBean` for dependencies.
+2. [Testing Spring Security](security.md) — mock users, JWT/OIDC-style customization, CSRF handling, and simplified security tests for the web layer.
+3. [Data Operations with Testcontainers](testcontainers.md) — real database containers for MongoDB, Redis, PostgreSQL, and friends using the plain Spring initializer and Boot `@ServiceConnection` patterns.
+4. [Spring Test Context and Slices](spring-test.md) — `SpringJUnitConfig`, `@SpringBootTest`, and the Boot test slices such as `@WebFluxTest`, `@JsonTest`, and `@DataMongoTest`.
+5. [Testing in Kotlin](kotlin.md) — Kotest, MockK, Spring MockK, and coroutine-aware testing helpers.
 
 ## StepVerifier: verify a Publisher
 
-`StepVerifier` (from the `reactor-test` module) is the foundation: it subscribes to a `Publisher` and asserts the exact sequence of signals — `onNext` values, then completion or error:
+`StepVerifier` is the foundation of reactive testing. It subscribes to a `Publisher` and asserts the exact sequence of signals — the values produced, the completion signal, and any error.
 
 ```java
 StepVerifier.create(posts.findAll())
@@ -23,35 +25,32 @@ StepVerifier.create(posts.findAll())
     .verify();
 ```
 
-Common patterns used across the samples:
+This pattern is used all over the repository:
 
 ```java
-// assert a count of elements
 postClient.allPosts()
         .as(StepVerifier::create)
         .expectNextCount(2)
         .verifyComplete();
 
-// assert with custom assertions and cancellation
 counter.getInvocationCount()
         .as(StepVerifier::create)
         .consumeNextWith(count -> assertThat(count).isGreaterThan(0))
         .thenCancel()
         .verify();
 
-// build into the call chain with as(StepVerifier::create)
 posts.findByTitleLike("one")
     .as(StepVerifier::create)
     .consumeNextWith(p -> assertEquals("Post one", p.getTitle()))
     .verifyComplete();
 ```
 
-The key methods:
+The most useful methods are:
 
-- `expectNext(T... values)` / `expectNextCount(long)` — assert the emitted values or their count
-- `consumeNextWith(Consumer)` — assert each element with a custom assertion
-- `expectError(Class)` / `verifyComplete()` — terminate the verification
-- `thenCancel()` — cancel the subscription mid-stream
-- `as(StepVerifier::create)` — adapt an existing `Mono`/`Flux` chain into a verifier
+- `expectNext(...)` / `expectNextCount(...)` — assert values or counts
+- `consumeNextWith(...)` — run a custom assertion against each emitted element
+- `expectError(...)` / `verifyComplete()` — validate completion or failure behavior
+- `thenCancel()` — cancel a subscription mid-stream
+- `as(StepVerifier::create)` — adapt any existing `Mono` or `Flux` chain for verification
 
-`StepVerifier` appears everywhere in this book — from repository tests in the [Data Operations](../data/intro.md) chapter to the `WebClient` tests in [Testing Web Components](web-components.md#mocking-a-target-http-api-with-wiremock). The next page moves up the stack to testing the web layer itself.
+`StepVerifier` is the workhorse for repository tests in the [Data Operations](../data/intro.md) chapter and for HTTP client tests in [Testing Web Components](web-components.md#mocking-a-target-http-api-with-wiremock). The next page moves one level up: testing the web layer itself.

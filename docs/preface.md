@@ -1,33 +1,44 @@
 # Preface
 
-When Spring introduced its reactive stack in the Spring 5 era, I followed it closely and published a long article — [Reactive Programming with Spring 5](https://hantsy.medium.com/reactive-programming-with-spring-5-3bfc5d324ba0) — to introduce the new reactive features (see the original article). This site gathers example projects and step-by-step guides that have since been updated for Spring Framework 7 and Spring Boot 4. Example code is available at <https://github.com/hantsy/spring-reactive-sample>.
+When Spring introduced its reactive programming stack in the Spring 5 era, I followed it closely and wrote an early article, [Reactive Programming with Spring 5](https://hantsy.medium.com/reactive-programming-with-spring-5-3bfc5d324ba0), to explain the new ideas in practical terms. This site is the evolution of that work: it takes the original material, refreshes it for **Spring Framework 7** and **Spring Boot 4**, and turns it into a more structured, hands-on guide.
 
-Over time, parts of the original article became outdated and the example code needed refreshing to match the latest Spring and Boot releases. To address this, the material has been restructured into a short, hands-on book while the examples were updated in parallel.
+The examples remain the core of the learning experience. Instead of long theoretical explanations, the book shows how reactive programming looks in real Spring applications — from a minimal HTTP service to database access, security, testing, and Kotlin integrations.
 
-## Audience
+## Who this book is for
 
-This is a hands-on guide to the Spring Reactive Web stack (Spring WebFlux).
+This is a practical guide to the Spring reactive stack, especially **Spring WebFlux**.
 
-It is not a comprehensive reference for the entire Spring framework. If you are new to Spring, consider reading [Spring in Action](https://www.manning.com/books/spring-in-action-sixth-edition) or [Pro Spring](https://www.apress.com/gp/book/9781430261520) first.
+It is not a full reference for the entire Spring ecosystem. If you are learning Spring for the first time, it helps to have some background in Spring MVC, dependency injection, and Java application development. A basic understanding of modern Java and Maven or Gradle will make the journey smoother.
 
-I assume you have some experience developing Spring applications and are comfortable with modern Java (Java 21).
+## Why the examples matter
 
-## Example Codes
+At the heart of this book is a simple idea: _one runnable example is worth more than a thousand words_.
 
-When introducing new concepts, I believe that _one example exceeds one thousand words_. For reactive features across Spring and its ecosystem — including Spring Data, Spring Security, Spring Session, and more — the book uses simple, runnable examples to demonstrate each idea.
+Reactive features in Spring span many layers — WebFlux, Spring Data, Spring Security, Spring Session, Kotlin coroutines, and the wider reactive ecosystem. Rather than explaining every concept in isolation, the book uses small, real examples to show how they behave in context.
 
-All example codes used in this book are available in the GitHub repository: [hantsy/spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample). In the README file, I listed all examples clearly with a simple description, you can select any of them and practice yourself.
+The source code for every chapter lives in the GitHub repository: [hantsy/spring-reactive-sample](https://github.com/hantsy/spring-reactive-sample). The README lists each sample and gives you a quick description, so you can jump directly to the module that matches your interest.
 
-## Contribution
+## How to read this book
 
-Any form of contribution is welcome.
+You do not need to read every chapter in a single sitting. A good path is:
 
-Please [file an issue](https://github.com/hantsy/spring-reactive-sample/issues) if there is an error found in the sample codes or some content of the book itself, or send a request for that is missing in the book.
+1. read the core concepts in the Getting Started chapters
+2. try one WebFlux example locally
+3. move to data access, security, or testing when the use case matches your project
+4. return to the Kotlin and ecosystem chapters when you need a broader view
 
-If my work is helpful, please help me to spread it out to your circles or [buy me a coffee](https://www.buymeacoffee.com/hantsy).:)
+The goal is not to memorize APIs; it is to understand how the pieces fit together in a reactive application.
 
-## About Me
+## Contributing
 
-I am a self-employed freelancer from China with about 20 years of software engineering experience. If you need some development and technical consulting service, please drop me an email, my email address is <hantsy@gmail.com>.
+Feedback is welcome.
 
-Enjoy reading!
+If you find an error in the code samples or a gap in the documentation, please [open an issue](https://github.com/hantsy/spring-reactive-sample/issues). If a concept is missing or a sample would be useful, a pull request or issue report is always appreciated.
+
+If this book has been useful to you, sharing it with others or supporting the project is a great way to keep the work going.
+
+## About the author
+
+I am a self-employed software engineer and consultant based in China, with more than 20 years of experience building Java and Spring applications. If you need technical consulting or development help, you can reach me at <hantsy@gmail.com>.
+
+Enjoy the reading, and happy coding.

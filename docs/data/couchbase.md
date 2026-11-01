@@ -1,11 +1,13 @@
 # Accessing Couchbase with Spring Data Couchbase
 
-Couchbase is a distributed JSON document database. Its Java SDK 3.x exposes a reactive `ReactiveCollection` natively. In Spring, you can work with Couchbase in two common ways:
+Couchbase blurs the line between document storage and a richer distributed data platform. It is especially useful when you want JSON documents, flexible indexing, and a lower-latency data layer without giving up the convenience of Spring abstractions.
 
-- by using Spring Data Couchbase repositories and templates
-- by working directly with the SDK's `Cluster` and `ReactiveCollection`
+In Spring, you usually work with Couchbase in one of two ways:
 
-This chapter focuses on the reactive ecosystem and shows how to build a small, practical application using Spring WebFlux and Couchbase.
+- through Spring Data Couchbase repositories and templates
+- directly with the Java SDK's `Cluster` and `ReactiveCollection` when you need a more explicit control flow
+
+The sample here focuses on the WebFlux-friendly path and demonstrates the patterns you would use in a real application without adding unnecessary ceremony.
 
 ## Getting started
 
