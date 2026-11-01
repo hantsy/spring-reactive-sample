@@ -1,6 +1,6 @@
-# Reactive Programming with Spring WebFlux
+# Just Enough Spring WebFlux
 
-This book is a hands-on guide to reactive programming with **Spring Framework 7** and **Spring Boot 4**. Instead of explaining concepts in the abstract, it walks through real examples from the repository and shows how they fit together in a production-style Spring application.
+A hands-on guide to reactive programming with **Spring Framework 7** and **Spring Boot 4**. Instead of explaining concepts in the abstract, it walks through real examples from the repository and shows how they fit together in a production-style Spring application.
 
 If you want to learn by doing, this is the right place. Each chapter pairs a concise explanation with runnable code from the [repository](https://github.com/hantsy/spring-reactive-sample), so you can read a concept, open the sample, and try it immediately.
 
