@@ -1,9 +1,7 @@
 
 # RSocket with Spring Integration
 
-Spring Integration adds first-class RSocket support to its messaging model: an RSocket server can act as an inbound gateway in an Integration flow, and an Integration flow can drive an outbound RSocket gateway. This tutorial combines the former server and client examples from the [rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/integration) repository into one application, with the client flow covered by tests.
-
-The complete example lives in [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket).
+Spring Integration adds first-class RSocket support to its messaging model: an RSocket server can act as an inbound gateway in an Integration flow, and an Integration flow can drive an outbound RSocket gateway. 
 
 ## Getting started
 
@@ -86,7 +84,7 @@ Reading the wiring:
 
 ## The client side: an outbound gateway
 
-The former client application declared a `ClientRSocketConnector` pointing at the server and an outbound gateway flow that exposes the remote call as a `Function<Flux<String>, Flux<String>>`:
+The client example declares a `ClientRSocketConnector` pointing at the server and an outbound gateway flow that exposes the remote call as a `Function<Flux<String>, Flux<String>>`:
 
 ```java
 @Bean
@@ -112,7 +110,7 @@ In a single Spring Boot application, the server connector binds port 7000 and th
 
 ## Testing
 
-The former client's REST/SSE endpoint becomes a test: start the client connector, apply the gateway function, and verify the uppercased channel result:
+To test the outbound gateway, start the client connector, apply the gateway function, and verify the uppercased channel result:
 
 ```java
 @SpringBootTest
@@ -142,4 +140,4 @@ public class IntegrationTests {
 }
 ```
 
-You can explore the complete code in [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket).
+See the complete example and tests in [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket).

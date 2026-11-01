@@ -1,9 +1,7 @@
 
 # Building a CRUD application with RSocket
 
-The [TCP](tcp.md) and [WebSocket](websocket.md) examples use routes to exchange simple greetings. The CRUD example from [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/crud) has been ported to this repository's [rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud) module. It demonstrates a more realistic application backed by Spring Data R2DBC, with an RSocket server exposing persistence routes and a WebFlux client calling them with `RSocketRequester`.
-
-The complete example lives in [rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud) — the former client application from the [crud](https://github.com/hantsy/rsocket-sample/tree/master/crud) sample is included as tests.
+The [TCP](tcp.md) and [WebSocket](websocket.md) examples use routes to exchange simple greetings. The [rsocket-crud example](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud) demonstrates a more realistic application backed by Spring Data R2DBC, with an RSocket server exposing persistence routes and a WebFlux client calling them with `RSocketRequester`.
 
 ## The server application
 
@@ -291,4 +289,4 @@ public class IntegrationTests {
 }
 ```
 
-You can explore the complete codes in [rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud).
+See the complete example and tests in [rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud).

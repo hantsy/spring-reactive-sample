@@ -1,9 +1,7 @@
 
 # RSocket over WebSocket
 
-TCP is RSocket's native transport, but **WebSocket** is often a better fit for browser-facing deployments: RSocket runs multiplexed over a single WebSocket connection. The WebSocket examples from [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/websocket) have been ported to this repository's [rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-websocket) module. They use the same greeting handlers as [RSocket over TCP](tcp.md), with transport-specific configuration.
-
-The complete example lives in [rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-websocket).
+WebSocket provides a full-duplex connection over HTTP, making it a useful transport for browser-facing applications. RSocket can run over WebSocket just as it does over TCP.
 
 ## Getting started
 

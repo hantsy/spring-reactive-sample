@@ -1,7 +1,7 @@
 
 # RSocket over TCP
 
-The TCP examples from [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/tcp) have been ported to the [rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-tcp) module in this repository. They demonstrate all four interaction models, with tests exercising the client-side calls.
+TCP is a reliable, connection-oriented transport. RSocket uses TCP to carry its messaging protocol between clients and servers. 
 
 ## Getting started
 

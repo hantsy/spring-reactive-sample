@@ -1,9 +1,7 @@
 
 # RSocket
 
-RSocket is a protocol for multiplexed, binary messaging over TCP, WebSocket, and other transports. Unlike HTTP's request/response flow, it supports four interaction models natively, and Spring gives them a natural programming model: `spring-boot-starter-rsocket` starts the server, `@MessageMapping` exposes routes, and `RSocketRequester` calls remote endpoints from the client.
-
-This chapter brings the examples from the companion [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample) project into smaller, runnable modules inside this repository.
+RSocket is a binary messaging protocol that runs over transports such as TCP and WebSocket. It supports four interaction models—request/response, request/stream, fire-and-forget, and channel—while Spring provides a familiar programming model for building RSocket servers and clients.
 
 ## The four interaction models
 
@@ -16,9 +14,11 @@ Every RSocket exchange follows one of four interaction models. Each one maps nea
 | Fire-and-Forget | 1 → 0 | `Mono<T>` → `Mono<Void>` | `hello` |
 | Channel | N → N (bidirectional) | `Flux<T>` → `Flux<R>` | `greet-channel` |
 
-## The raw rsocket-java API
+## RSsocket Java API
 
-Before Spring wraps it for us, it is worth looking at the plain [rsocket-java](https://github.com/rsocket/rsocket-java) API. The [vanilla](https://github.com/hantsy/rsocket-sample/tree/master/vanilla) example in the companion repository runs a raw server and client side by side: the server accepts connections and echoes payloads back to the caller.
+Before jumping into Spring wrapper, it is worth looking at the plain [rsocket-java](https://github.com/rsocket/rsocket-java) API. 
+
+The following code snippet demonstrates how to start an RSocket server and build a client to interact with it.
 
 ```java
 final RSocket responseHandler = new RSocket() {
@@ -44,7 +44,12 @@ socket.requestResponse(DefaultPayload.create("Hello"))
         .subscribe(r -> System.out.println(r.getDataUtf8()));
 ```
 
-The types come directly from rsocket-java — `io.rsocket.core.RSocketServer`, `io.rsocket.core.RSocketConnector`, and `io.rsocket.transport.netty.*`. Every interaction model follows the same pattern (`requestResponse`, `requestStream`, `fireAndForget`, and `requestChannel` on the `RSocket` interface). The vanilla sample includes complete Request/Response, Request/Stream, Fire-and-Forget, and Request/Channel examples.
+The types come directly from rsocket-java:
+
+* `io.rsocket.core.RSocketServer.create()` starts an RSocket server.
+* `io.rsocket.core.RSocketConnector.create()` starts an RSocket client.
+
+ Every interaction model follows the same pattern (`requestResponse`, `requestStream`, `fireAndForget`, and `requestChannel` on the `RSocket` interface). 
 
 ## Spring's RSocket support
 
