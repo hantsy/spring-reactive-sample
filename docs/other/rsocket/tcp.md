@@ -1,11 +1,11 @@
 
 # RSocket over TCP
 
-This page builds a small RSocket application that serves the four interaction models over a TCP transport, then exercises each of them from a client. The complete example lives in [rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-tcp) — the client of the former [tcp/client](https://github.com/hantsy/rsocket-sample/tree/master/tcp/client) sample is included as tests.
+The TCP examples from [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/tcp) have been ported to the [rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-tcp) module in this repository. They demonstrate all four interaction models, with tests exercising the client-side calls.
 
 ## Getting started
 
-The quickest way to start is to generate a project from [Spring Initializr](https://start.spring.io), as described in the [Getting Started](../../start/intro.md) chapter. Select **Spring WebFlux**, **RSocket**, and **Lombok** — the resulting dependency is the RSocket starter:
+The fastest way to begin is to generate a project from [Spring Initializr](https://start.spring.io), as described in the [Getting Started](../../start/intro.md) chapter. Select **Spring WebFlux**, **RSocket**, and **Lombok** — the resulting dependency is the RSocket starter:
 
 ```xml
 <dependency>
@@ -23,7 +23,7 @@ spring.rsocket.server.transport=tcp
 
 ## Defining the message payload
 
-The client and server exchange a simple payload object:
+The client and server exchange a very small payload object:
 
 ```java
 @Data
@@ -34,7 +34,7 @@ class Greeting {
 
 ## Serving routes with @MessageMapping
 
-`@MessageMapping` handles incoming RSocket routes exactly like `@GetMapping` handles HTTP paths. The return types map to the four interaction models:
+`@MessageMapping` handles incoming RSocket routes the same way `@GetMapping` handles HTTP paths. The return type tells Spring which interaction model to use:
 
 ```java
 @Controller
@@ -71,10 +71,10 @@ class GreetingServerController {
 
 Reading the handlers:
 
-1. `hello` — a **fire-and-forget** route: the `Mono<Void>` return completes when the payload is consumed, and nothing is sent back.
-2. `greet.{name}` — a **request/response** route; `@DestinationVariable` captures the `.{name}` route variable, and the `Mono<String>` reply is delivered to the caller.
-3. `greet-stream` — a **request/stream** route: one incoming `Greeting` produces an infinite `Flux<String>` of periodic greetings.
-4. `greet-channel` — a **channel** route: the handler receives a `Flux<Greeting>` (the client's upstream stream) and returns a transformed `Flux<String>` — a bidirectional exchange.
+1. `hello` — a **fire-and-forget** route: the `Mono<Void>` completes when the payload is consumed, and nothing is sent back.
+2. `greet.{name}` — a **request/response** route: `@DestinationVariable` captures the `.{name}` segment, and the `Mono<String>` reply is sent back to the caller.
+3. `greet-stream` — a **request/stream** route: one incoming `Greeting` yields an endless `Flux<String>` of periodic greetings.
+4. `greet-channel` — a **channel** route: the handler receives a `Flux<Greeting>` from the client and returns a transformed `Flux<String>`, creating a bidirectional exchange.
 
 Start the server:
 
@@ -84,7 +84,7 @@ mvn spring-boot:run
 
 ## Calling the routes with RSocketRequester
 
-The client side connects with an `RSocketRequester`, built from the auto-configured `Builder` and a Netty TCP transport:
+The client side uses an `RSocketRequester`, built from the auto-configured `Builder` and a Netty TCP transport:
 
 ```java
 @Bean
@@ -94,7 +94,7 @@ public RSocketRequester rSocketRequester(RSocketRequester.Builder b) {
 }
 ```
 
-Then call the routes from a REST controller — each RSocket interaction model behind an HTTP endpoint:
+Then call the routes from a REST controller — each interaction model exposed behind a tiny HTTP endpoint:
 
 ```java
 @Slf4j
@@ -134,11 +134,11 @@ class GreetingController {
 }
 ```
 
-Note the client-side verbs: `.send()` for fire-and-forget, `.retrieveMono()` for a single reply, `.retrieveFlux()` for streams and channels — and `.data(Flux...)` to feed a channel's upstream.
+The client-side verbs are straightforward: `.send()` for fire-and-forget calls, `.retrieveMono()` for a single reply, `.retrieveFlux()` for streams and channels, and `.data(Flux...)` when the upstream is a channel.
 
 ## Testing
 
-In the ported module the client code becomes tests: connect with the builder, then verify each interaction model with `StepVerifier`.
+In the ported module, the client code becomes tests. We connect with the builder and verify each interaction model with `StepVerifier`:
 
 ```java
 @SpringBootTest
@@ -179,6 +179,6 @@ public class IntegrationTests {
 }
 ```
 
-The `@LocalRSocketServerPort` annotation of earlier Boot versions no longer exists in Boot 4, so the tests connect to the fixed port from `application.properties`.
+The `@LocalRSocketServerPort` annotation from earlier Boot versions no longer exists in Boot 4, so the tests connect to the fixed port configured in `application.properties`.
 
-You can explore the complete codes in [rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-tcp).
+See the complete example and tests in [rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-tcp).

@@ -9,7 +9,7 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.example</groupId>
-  <artifactId>rsocket-integration-example</artifactId>
+  <artifactId>integration-rsocket-example</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>spring-reactive-sample-integration</name>
   <description>Spring Integration RSocket example</description>

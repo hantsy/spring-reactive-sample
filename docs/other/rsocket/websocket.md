@@ -1,13 +1,13 @@
 
 # RSocket over WebSocket
 
-TCP is RSocket's native transport, but in browser-facing deployments the usual choice is **WebSocket**: the RSocket protocol is multiplexed over a single WebSocket connection. This page serves the same greeting handlers as [RSocket over TCP](tcp.md) but switches the transport to WebSocket with two property lines.
+TCP is RSocket's native transport, but **WebSocket** is often a better fit for browser-facing deployments: RSocket runs multiplexed over a single WebSocket connection. The WebSocket examples from [hantsy/rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/websocket) have been ported to this repository's [rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-websocket) module. They use the same greeting handlers as [RSocket over TCP](tcp.md), with transport-specific configuration.
 
 The complete example lives in [rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-websocket).
 
 ## Getting started
 
-The dependency is the same RSocket starter as the TCP example:
+The dependency is the same RSocket starter as in the TCP example:
 
 ```xml
 <dependency>
@@ -16,7 +16,7 @@ The dependency is the same RSocket starter as the TCP example:
 </dependency>
 ```
 
-The transport switch is pure configuration. In `application.properties`, select WebSocket as the transport and define a mapping path under which the RSocket endpoint is exposed on the web server:
+The transport change is mostly configuration. In `application.properties`, choose WebSocket as the transport and define the path under which the RSocket endpoint is exposed on the web server:
 
 ```properties
 server.port=8081
@@ -26,10 +26,10 @@ spring.rsocket.server.mapping-path=/rsocket
 spring.rsocket.server.transport=websocket
 ```
 
-Notes:
+A couple of practical notes:
 
 - With `transport=websocket`, the RSocket endpoint shares the HTTP server (`server.port`) instead of binding its own port.
-- `spring.rsocket.server.mapping-path` scopes the endpoint to `/rsocket`, so regular HTTP endpoints — like the plain `@GetMapping` controller below — can coexist on the same server.
+- `spring.rsocket.server.mapping-path` scopes the endpoint to `/rsocket`, so regular HTTP endpoints — such as a plain `@GetMapping` controller below — can live on the same server.
 
 ```java
 @RestController
@@ -42,11 +42,11 @@ public class HelloController {
 }
 ```
 
-The `@MessageMapping` handlers are identical to the TCP example — see [RSocket over TCP](tcp.md#serving-routes-with-messagemapping) for the full controller.
+The `@MessageMapping` handlers are the same as in the TCP example. See [RSocket over TCP](tcp.md#serving-routes-with-messagemapping) for the full controller.
 
 ## Connecting a client over WebSocket
 
-The client side swaps only the transport: `WebsocketClientTransport` points at the mapping path on the web server's port.
+The client side only changes the transport: `WebsocketClientTransport` points at the mapped path on the web server's port.
 
 ```java
 @Bean
@@ -56,7 +56,7 @@ public RSocketRequester rSocketRequester(RSocketRequester.Builder b) {
 }
 ```
 
-Then call the routes exactly as over TCP — `.send()` for fire-and-forget, `.retrieveMono()` and `.retrieveFlux()` for the rest.
+After that, the calls are the same as over TCP: `.send()` for fire-and-forget, `.retrieveMono()` and `.retrieveFlux()` for the rest.
 
 ## Testing
 
@@ -92,7 +92,7 @@ public class IntegrationTests {
 }
 ```
 
-You can explore the complete codes in [rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-websocket).
+See the complete example and tests in [rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-websocket).
 
 ## TCP or WebSocket?
 
@@ -100,7 +100,7 @@ You can explore the complete codes in [rsocket-websocket](https://github.com/han
 | :--- | :--- | :--- |
 | Endpoint | Own port (`spring.rsocket.server.port`) | Shared with the HTTP server |
 | Path routing | Not applicable | `spring.rsocket.server.mapping-path` |
-| Typical clients | JVM-to-JVM services | Browsers, deployments behind HTTP infrastructure |
+| Typical clients | JVM-to-JVM services | Browsers and HTTP-based deployments |
 | Configuration | `spring.rsocket.server.transport=tcp` | `spring.rsocket.server.transport=websocket` |
 
-The handler and requester code is identical either way — only the transport properties and the client `Transport` change.
+The handler and requester code stays the same either way — only the transport properties and the client transport implementation change.

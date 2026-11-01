@@ -302,7 +302,7 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/rsocket-integration"
+    directory: "/integration-rsocket"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"

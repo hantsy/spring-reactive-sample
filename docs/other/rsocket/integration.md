@@ -1,13 +1,13 @@
 
 # RSocket with Spring Integration
 
-Spring Integration adds RSocket support to its messaging model: an RSocket server can be an Integration flow's inbound gateway, and an Integration flow can drive an outbound RSocket gateway. This page merges the former server and client samples of the [rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/integration) repository into a single application — the client flow becomes part of the tests.
+Spring Integration adds first-class RSocket support to its messaging model: an RSocket server can act as an inbound gateway in an Integration flow, and an Integration flow can drive an outbound RSocket gateway. This tutorial combines the former server and client examples from the [rsocket-sample](https://github.com/hantsy/rsocket-sample/tree/master/integration) repository into one application, with the client flow covered by tests.
 
-The complete example lives in [rsocket-integration](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-integration).
+The complete example lives in [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket).
 
 ## Getting started
 
-Alongside the RSocket starter, bring in Spring Integration and its RSocket module:
+Alongside the RSocket starter, add Spring Integration and its RSocket support:
 
 ```xml
 <dependency>
@@ -24,7 +24,7 @@ Alongside the RSocket starter, bring in Spring Integration and its RSocket modul
 </dependency>
 ```
 
-The server side serves an RSocket server over TCP on port 7000:
+The server exposes an RSocket endpoint over TCP on port 7000:
 
 ```properties
 spring.rsocket.server.port=7000
@@ -36,7 +36,7 @@ spring.integration.rsocket.server.messageMappingEnabled=true
 
 ## The server side: an inbound gateway
 
-The application declares a `ServerRSocketConnector` and an `IntegrationFlow` with an RSocket inbound gateway — the flow receives a `Flux<String>` on the `/uppercase` route and transforms every element to uppercase:
+The application declares a `ServerRSocketConnector` and an `IntegrationFlow` with an RSocket inbound gateway. The flow receives a `Flux<String>` on the `/uppercase` route and transforms every element to uppercase:
 
 ```java
 @SpringBootApplication
@@ -76,13 +76,13 @@ public class Application {
 
 Reading the wiring:
 
-1. The custom `ServerRSocketMessageHandler` shares the Boot-auto-configured `RSocketStrategies` (codecs) with Integration's message handler.
-2. `RSockets.inboundGateway("/uppercase")` maps the `/uppercase` route to the flow; `interactionModels(requestChannel)` restricts it to the channel model — a `Flux` in, a `Flux` out.
-3. The `transform` step uppercases every incoming element — any Integration DSL step (`.filter`, `.split`, `.enrichHeaders`, ...) can follow.
+1. The custom `ServerRSocketMessageHandler` shares the Boot auto-configured `RSocketStrategies` (including codecs) with Integration's message handler.
+2. `RSockets.inboundGateway("/uppercase")` maps the `/uppercase` route to the flow; `interactionModels(requestChannel)` narrows it to the channel model, which means a `Flux` in and a `Flux` out.
+3. The `transform` step uppercases every incoming element. After that, any Integration DSL step such as `.filter`, `.split`, or `.enrichHeaders` can follow.
 
 !!! note
 
-    Spring Integration 7 removed the `IntegrationFlows` factory class — declare the flows with the static `IntegrationFlow.from(...)` methods instead, as above.
+    Spring Integration 7 removed the `IntegrationFlows` factory class. Declare the flows with the static `IntegrationFlow.from(...)` methods instead, as shown above.
 
 ## The client side: an outbound gateway
 
@@ -108,7 +108,7 @@ public IntegrationFlow rsocketUpperCaseRequestFlow(ClientRSocketConnector client
 }
 ```
 
-Merged into one application, the server connector binds port 7000 and the client connector (with `setAutoStartup(false)`) is started on demand — the flow is a bean of type `Function<Flux<String>, Flux<String>>` that any component can inject and apply.
+In a single Spring Boot application, the server connector binds port 7000 and the client connector (with `setAutoStartup(false)`) starts on demand. The result is a bean of type `Function<Flux<String>, Flux<String>>` that other components can inject and call directly.
 
 ## Testing
 
@@ -142,4 +142,4 @@ public class IntegrationTests {
 }
 ```
 
-You can explore the complete codes in [rsocket-integration](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-integration).
+You can explore the complete code in [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket).
