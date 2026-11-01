@@ -15,7 +15,7 @@
     <description>Spring R2dbc Jooq example</description>
     <properties>
         <java.version>25</java.version>
-        <jooq.version>3.20.10</jooq.version>
+        <jooq.version>3.21.9</jooq.version>
     </properties>
     <dependencies>
         <dependency>
