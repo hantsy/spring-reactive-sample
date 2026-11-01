@@ -1,12 +1,20 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://help.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# Dependabot configuration for dependency updates.
+# The repository is a set of standalone Maven example modules (no root aggregator pom),
+# so every module directory has its own entry. The legacy/ folder is excluded.
+# https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
 updates:
   - package-ecosystem: "github-actions"
     directory: "/"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-cassandra"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-couchbase"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -19,10 +27,6 @@ updates:
       interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/boot-data-elasticsearch"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-mongo-auditing"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -42,15 +46,31 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/boot-data-mongo-template"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/boot-data-neo4j"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-neo4j"
+    directory: "/boot-data-neo4j-cypher"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-neo4j-template"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/boot-data-redis"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-data-redis-template"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-elasticsearch"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -62,11 +82,15 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-jetty"
+    directory: "/boot-kotlin"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-kotlin"
+    directory: "/boot-kotlin-co"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/boot-kotlin-co-dsl"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -74,15 +98,7 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-kotlin-co"
-    schedule:
-      interval: "monthly"    
-  - package-ecosystem: "maven"
-    directory: "/boot-kotlin-co-dsl"
-    schedule:
-      interval: "monthly"      
-  - package-ecosystem: "maven"
-    directory: "/boot-data-mongo-template"
+    directory: "/boot-mongo"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -98,19 +114,7 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-date-neo4j-template"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-neo4j-cypher"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-redis-template"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-routes"
+    directory: "/boot-neo4j"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -122,38 +126,9 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/boot-tomcat"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-undertow"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-pulsar"
-    schedule:
-      interval: "monthly" 
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-kafka/sender"
-    schedule:
-      interval: "monthly"   
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-kafka/receiver"
-    schedule:
-      interval: "monthly"  
-
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-rabbitmq/sender"
-    schedule:
-      interval: "monthly"  
-  - package-ecosystem: "maven"
-    directory: "/boot-reactor-rabbitmq/receiver"
-    schedule:
-      interval: "monthly"  
-  - package-ecosystem: "maven"
     directory: "/cache"
     schedule:
-      interval: "monthly"     
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/cache-caffeine"
     schedule:
@@ -167,11 +142,7 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/client-jetty"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/client-reactor-netty2"
+    directory: "/client-apache-httpclient5"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -179,9 +150,9 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/client-apache-httpclient5"
+    directory: "/client-jetty"
     schedule:
-      interval: "monthly"      
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/data-cassandra"
     schedule:
@@ -219,15 +190,19 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/event"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/exception-handler"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/groovy-dsl"
+    directory: "/groovy"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/groovy"
+    directory: "/groovy-dsl"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -248,6 +223,10 @@ updates:
       interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/kotlin"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/kotlin-co"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -279,6 +258,34 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
+    directory: "/r2dbc-auditing"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/r2dbc-connection-factories"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/r2dbc-databaseclient"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/r2dbc-entitytemplate"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/r2dbc-jooq"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/r2dbc-migrate"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
+    directory: "/r2dbc-repository"
+    schedule:
+      interval: "monthly"
+  - package-ecosystem: "maven"
     directory: "/register-bean"
     schedule:
       interval: "monthly"
@@ -295,13 +302,9 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/event"
-    schedule:
-      interval: "monthly" 
-  - package-ecosystem: "maven"
     directory: "/schedule"
     schedule:
-      interval: "monthly"        
+      interval: "monthly"
   - package-ecosystem: "maven"
     directory: "/security"
     schedule:
@@ -315,11 +318,11 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/security-user-properties"
+    directory: "/security-method"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/security-method"
+    directory: "/security-user-properties"
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
@@ -351,10 +354,6 @@ updates:
     schedule:
       interval: "monthly"
   - package-ecosystem: "maven"
-    directory: "/vanilla-reactor-netty2"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
     directory: "/vanilla-jetty"
     schedule:
       interval: "monthly"
@@ -374,23 +373,3 @@ updates:
     directory: "/websocket"
     schedule:
       interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-cassandra"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-couchbase"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-elasticsearch"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-mongo"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "devcontainers"
-    directory: "/"
-    schedule:
-      interval: weekly
