@@ -1,7 +1,7 @@
 
 # Building a CRUD application with RSocket
 
-The [TCP](tcp.md) and [WebSocket](websocket.md) examples use routes to exchange simple greetings. The [rsocket-crud example](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud) demonstrates a more realistic application backed by Spring Data R2DBC, with an RSocket server exposing persistence routes and a WebFlux client calling them with `RSocketRequester`.
+The [TCP](tcp.md) and [WebSocket](websocket.md) examples use routes to exchange simple greetings. The [boot-rsocket-crud example](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud) demonstrates a more realistic application backed by Spring Data R2DBC, with an RSocket server exposing persistence routes and a WebFlux client calling them with `RSocketRequester`.
 
 ## The server application
 
@@ -28,10 +28,13 @@ The server exposes the RSocket API over TCP:
 ```properties
 spring.rsocket.server.port=7000
 spring.rsocket.server.transport=tcp
-spring.r2dbc.url=r2dbc:h2:mem:///blogdb?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+spring.r2dbc.url=r2dbc:h2:mem:///blogdb?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_LOWER=TRUE
 spring.r2dbc.username=sa
 spring.r2dbc.password=
+spring.sql.init.mode=always
 ```
+
+`DATABASE_TO_LOWER=TRUE` makes H2 fold unquoted identifiers to lower case, like PostgreSQL does. Spring Data R2DBC quotes the names it takes from `@Table("posts")` and `@Column("title")`, and plain H2 stores those same identifiers in upper case, so `"posts"` does not match `POSTS` without this option.
 
 If you are new to Spring Data R2DBC, start with [Accessing RDBMS with Spring R2DBC and Spring Data R2DBC](../../data/r2dbc.md).
 
@@ -110,15 +113,16 @@ class PostController {
 }
 ```
 
-As a bonus, add a `@Query` method to the repository and a route that filters posts by keyword:
+As a bonus, add a derived query method to the repository and a route that filters posts by keyword:
 
 ```java
 interface PostRepository extends R2dbcRepository<Post, Integer> {
 
-    @Query("SELECT * FROM posts WHERE title like $1")
     Flux<Post> findByTitleContains(String name);
 }
 ```
+
+The `Contains` keyword lets Spring Data build the `LIKE '%…%'` condition for the database it is talking to. A hand-written `@Query` with `$1` markers and a bare `LIKE` is PostgreSQL specific, and would not match anything without the `%` wildcards.
 
 ```java
 @MessageMapping("posts.titleContains")
@@ -139,12 +143,13 @@ CREATE TABLE IF NOT EXISTS posts (id SERIAL PRIMARY KEY, title VARCHAR(255), con
 ```sql
 -- data.sql
 DELETE FROM posts;
-INSERT INTO posts (title, content) VALUES ('post one in data.sql', 'content of post one in data.sql');
+INSERT INTO posts (title, content) VALUES ('Post one', 'The content of post one');
+INSERT INTO posts (title, content) VALUES ('Post two', 'The content of post two');
 ```
 
 !!! note
 
-    In the early Boot 2.3 milestones, the `ConnectionFactoryInitializer` auto-configuration had not been ported yet, so the samples declared the bean by hand. Modern Spring Boot initializes `schema.sql` and `data.sql` for R2DBC automatically; the explicit `ConnectionFactoryInitializer` bean is only shown here for completeness.
+    Spring Boot runs `schema.sql` and `data.sql` for R2DBC on its own; `spring.sql.init.mode=always` forces it for the in-memory database. Declaring a `ConnectionFactoryInitializer` bean by hand on top of that — the workaround used before the R2DBC auto-configuration existed — executes the scripts a second time.
 
 Start the server:
 
@@ -218,7 +223,7 @@ The payload object travels between the client and server as a normal Java bean. 
 
 This gives you a clean, reactive CRUD flow: the client sends `save`, `findById`, `findAll`, and `delete` requests over RSocket, while the server persists them through Spring Data R2DBC and streams the results back as reactive data.
 
-See the complete example and tests in [rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud).
+See the complete example and tests in [boot-rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud).
 
 ```java
 @Data
@@ -289,4 +294,4 @@ public class IntegrationTests {
 }
 ```
 
-See the complete example and tests in [rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud).
+See the complete example and tests in [boot-rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud).

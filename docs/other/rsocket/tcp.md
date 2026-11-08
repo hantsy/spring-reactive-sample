@@ -181,4 +181,4 @@ public class IntegrationTests {
 
 The `@LocalRSocketServerPort` annotation from earlier Boot versions no longer exists in Boot 4, so the tests connect to the fixed port configured in `application.properties`.
 
-See the complete example and tests in [rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-tcp).
+See the complete example and tests in [boot-rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-tcp).
