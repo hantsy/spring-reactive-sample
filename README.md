@@ -89,9 +89,9 @@ The following table lists all sample codes available in this repository.
 | [integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration) | Spring Integration example |
 | [integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl) | Spring Integration Java 8 DSL example |
 | [restdocs](https://github.com/hantsy/spring-reactive-sample/tree/master/restdocs) | Spring RestDocs example |
-| [rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-tcp) | RSocket over TCP — the four interaction models |
-| [rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-websocket) | RSocket over WebSocket |
-| [rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/rsocket-crud) | RSocket CRUD example with Spring Data R2DBC |
+| [boot-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-tcp) | RSocket over TCP — the four interaction models |
+| [boot-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-websocket) | RSocket over WebSocket |
+| [boot-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud) | RSocket CRUD example with Spring Data R2DBC |
 | [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket) | RSocket with Spring Integration (merged server/client) |
 
 ### Spring Boot Samples
@@ -129,6 +129,8 @@ The following table lists all sample codes available in this repository.
 | [boot-data-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-cypher) | Spring Data Neo4j using Cypher example |
 | [boot-data-neo4j-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-template) | Spring Data Neo4j template example |
 | [boot-data-redis-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis-template) | Spring Data Redis template example |
+| [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-r2dbc) | Spring Boot R2DBC example with `DatabaseClient` and Testcontainers |
+| [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc) | Spring Data R2DBC `R2dbcRepository` example with Testcontainers |
 
 
 | [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) | R2DBC `ConnectionFactory` variants for PostgreSQL, H2, MySQL, MariaDB, Oracle |

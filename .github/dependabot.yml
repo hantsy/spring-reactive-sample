@@ -31,6 +31,7 @@ updates:
       - /boot-data-neo4j
       - /boot-data-neo4j-cypher
       - /boot-data-neo4j-template
+      - /boot-data-r2dbc
       - /boot-data-redis
       - /boot-data-redis-template
       - /boot-elasticsearch
@@ -45,6 +46,10 @@ updates:
       - /boot-mvc-mustache
       - /boot-mvc-thymeleaf
       - /boot-neo4j
+      - /boot-r2dbc
+      - /boot-rsocket-crud
+      - /boot-rsocket-tcp
+      - /boot-rsocket-websocket
       - /boot-start
       - /boot-start-routes
       - /cache
@@ -91,9 +96,6 @@ updates:
       - /register-bean
       - /restdocs
       - /routes
-      - /rsocket-crud
-      - /rsocket-tcp
-      - /rsocket-websocket
       - /rxjava3
       - /schedule
       - /security
