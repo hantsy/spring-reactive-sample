@@ -203,9 +203,12 @@ class TestcontainersConfiguration {
     @Bean
     @ServiceConnection
     ElasticsearchContainer elasticsearchContainer() {
-        return new ElasticsearchContainer(DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch:7.17.10"));
+        return new ElasticsearchContainer(DockerImageName.parse("docker.elastic.co/elasticsearch/elasticsearch:9.3.3"))
+                .withEnv(Map.of("xpack.security.enabled", "false"));
     }
 }
 ```
+
+The image has to be a recent server. Spring Data Elasticsearch 6 talks to the cluster only through the modern `co.elastic.clients` Java client — the `RestHighLevelClient`-based `ElasticsearchRestTemplate` from the Elasticsearch 7 era has been removed — so an Elasticsearch 7 container fails with requests the old server rejects, such as `POST /posts/_pit does not support having a body`. `xpack.security.enabled=false` keeps the connection on plain HTTP.
 
 You can explore the native-client example in [boot-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-elasticsearch), and the repository-based one in [boot-data-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-elasticsearch).
