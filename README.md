@@ -89,9 +89,9 @@ The following table lists all sample codes available in this repository.
 | [integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration) | Spring Integration example |
 | [integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl) | Spring Integration Java 8 DSL example |
 | [restdocs](https://github.com/hantsy/spring-reactive-sample/tree/master/restdocs) | Spring RestDocs example |
-| [boot-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-tcp) | RSocket over TCP — the four interaction models |
-| [boot-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-websocket) | RSocket over WebSocket |
-| [boot-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud) | RSocket CRUD example with Spring Data R2DBC |
+| [boot-rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-tcp) | RSocket over TCP — the four interaction models |
+| [boot-rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-websocket) | RSocket over WebSocket |
+| [boot-rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud) | RSocket CRUD example with Spring Data R2DBC |
 | [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket) | RSocket with Spring Integration (merged server/client) |
 
 ### Spring Boot Samples
