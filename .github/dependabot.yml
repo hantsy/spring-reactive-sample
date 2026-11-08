@@ -1,6 +1,8 @@
 # Dependabot configuration for dependency updates.
 # The repository is a set of standalone Maven example modules (no root aggregator pom),
-# so every module directory has its own entry. The legacy/ folder is excluded.
+# so all module directories are folded into a single `maven` entry via `directories`.
+# The legacy/ folder is deliberately left out and gets no updates.
+# Updates are grouped by dependency family so one bump opens one PR, not one per module.
 # https://docs.github.com/en/code-security/dependabot/working-with-dependabot/dependabot-options-reference
 
 version: 2
@@ -9,383 +11,183 @@ updates:
     directory: "/"
     schedule:
       interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-cassandra"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-couchbase"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-cassandra"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-couchbase"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-elasticsearch"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-mongo"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-mongo-gridfs"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-mongo-querydsl"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-mongo-tailable"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-mongo-template"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-neo4j"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-neo4j-cypher"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-neo4j-template"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-redis"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-data-redis-template"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-elasticsearch"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-exception-handler"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-groovy"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-kotlin"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-kotlin-co"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-kotlin-co-dsl"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-kotlin-dsl"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-mongo"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-mvc-freemarker"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-mvc-mustache"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-mvc-thymeleaf"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-neo4j"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-start"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/boot-start-routes"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/cache"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/cache-caffeine"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/cache-redis"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/client"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/client-apache-httpclient5"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/client-jdk11-httpclient"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/client-jetty"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-cassandra"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-couchbase"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-elasticsearch"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-mongo"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-mongo-pageable"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-mongo-transaction"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-neo4j"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-redis"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/data-redis-message"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/event"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/exception-handler"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/groovy"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/groovy-dsl"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/integration"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/integration-dsl"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/java8"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/java9"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/kotlin"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/kotlin-co"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/kotlin-dsl"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/kotlin-routes"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/multipart"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/multipart-data-mongo"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/mvc-freemarker"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/mvc-mustache"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/mvc-thymeleaf"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/r2dbc-auditing"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/r2dbc-connection-factories"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/r2dbc-databaseclient"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/r2dbc-entitytemplate"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/r2dbc-jooq"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/r2dbc-migrate"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/r2dbc-repository"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/register-bean"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/restdocs"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/routes"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/rsocket-crud"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/integration-rsocket"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/rsocket-tcp"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/rsocket-websocket"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/rxjava3"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/schedule"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/security"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/security-data-mongo"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/security-form"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/security-method"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/security-user-properties"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/session"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/session-data-mongo"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/session-data-redis"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/session-header"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/smallrye-mutiny"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/sse"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/vanilla"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/vanilla-jetty"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/vanilla-tomcat"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/war"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/web-filter"
-    schedule:
-      interval: "monthly"
-  - package-ecosystem: "maven"
-    directory: "/websocket"
-    schedule:
-      interval: "monthly"
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+
+  - package-ecosystem: "maven"
+    directories:
+      - /boot-cassandra
+      - /boot-couchbase
+      - /boot-data-cassandra
+      - /boot-data-couchbase
+      - /boot-data-elasticsearch
+      - /boot-data-mongo
+      - /boot-data-mongo-gridfs
+      - /boot-data-mongo-querydsl
+      - /boot-data-mongo-tailable
+      - /boot-data-mongo-template
+      - /boot-data-neo4j
+      - /boot-data-neo4j-cypher
+      - /boot-data-neo4j-template
+      - /boot-data-redis
+      - /boot-data-redis-template
+      - /boot-elasticsearch
+      - /boot-exception-handler
+      - /boot-groovy
+      - /boot-kotlin
+      - /boot-kotlin-co
+      - /boot-kotlin-co-dsl
+      - /boot-kotlin-dsl
+      - /boot-mongo
+      - /boot-mvc-freemarker
+      - /boot-mvc-mustache
+      - /boot-mvc-thymeleaf
+      - /boot-neo4j
+      - /boot-start
+      - /boot-start-routes
+      - /cache
+      - /cache-caffeine
+      - /cache-redis
+      - /client
+      - /client-apache-httpclient5
+      - /client-jdk11-httpclient
+      - /client-jetty
+      - /data-cassandra
+      - /data-couchbase
+      - /data-elasticsearch
+      - /data-mongo
+      - /data-mongo-pageable
+      - /data-mongo-transaction
+      - /data-neo4j
+      - /data-redis
+      - /data-redis-message
+      - /event
+      - /exception-handler
+      - /groovy
+      - /groovy-dsl
+      - /integration
+      - /integration-dsl
+      - /integration-rsocket
+      - /java8
+      - /java9
+      - /kotlin
+      - /kotlin-co
+      - /kotlin-dsl
+      - /kotlin-routes
+      - /multipart
+      - /multipart-data-mongo
+      - /mvc-freemarker
+      - /mvc-mustache
+      - /mvc-thymeleaf
+      - /r2dbc-auditing
+      - /r2dbc-connection-factories
+      - /r2dbc-databaseclient
+      - /r2dbc-entitytemplate
+      - /r2dbc-jooq
+      - /r2dbc-migrate
+      - /r2dbc-repository
+      - /register-bean
+      - /restdocs
+      - /routes
+      - /rsocket-crud
+      - /rsocket-tcp
+      - /rsocket-websocket
+      - /rxjava3
+      - /schedule
+      - /security
+      - /security-data-mongo
+      - /security-form
+      - /security-method
+      - /security-user-properties
+      - /session
+      - /session-data-mongo
+      - /session-data-redis
+      - /session-header
+      - /smallrye-mutiny
+      - /sse
+      - /vanilla
+      - /vanilla-jetty
+      - /vanilla-tomcat
+      - /war
+      - /web-filter
+      - /websocket
+    schedule:
+      interval: "monthly"
+    # All modules now share one entry, so the default limit of 5 would apply to the
+    # whole repository instead of to a single module.
+    open-pull-requests-limit: 20
+    # Maven dependency names are matched as `groupId:artifactId`.
+    # A dependency joins the first group whose patterns it matches; `other` is last.
+    groups:
+      spring:
+        patterns:
+          - "org.springframework:*"
+          - "org.springframework.boot:*"
+          - "org.springframework.data:*"
+          - "org.springframework.security:*"
+          - "org.springframework.session:*"
+          - "org.springframework.integration:*"
+          - "org.springframework.restdocs:*"
+        group-by: dependency-name
+      reactive:
+        patterns:
+          - "io.projectreactor:*"
+          - "io.projectreactor.netty:*"
+          - "io.projectreactor.kotlin:*"
+          - "io.netty:*"
+          - "io.r2dbc:*"
+          - "io.smallrye.reactive:*"
+          - "io.reactivex.rxjava3:*"
+        group-by: dependency-name
+      kotlin:
+        patterns:
+          - "org.jetbrains.kotlin:*"
+          - "org.jetbrains.kotlinx:*"
+        group-by: dependency-name
+      jackson:
+        patterns:
+          - "tools.jackson*:*"
+          - "com.fasterxml.jackson*:*"
+        group-by: dependency-name
+      logging:
+        patterns:
+          - "org.slf4j:*"
+          - "ch.qos.logback:*"
+        group-by: dependency-name
+      test-containers:
+        patterns:
+          - "org.testcontainers:*"
+          - "com.redis.testcontainers:*"
+        group-by: dependency-name
+      testing:
+        patterns:
+          - "org.junit*:*"
+          - "org.mockito:*"
+          - "org.assertj:*"
+          - "org.hamcrest:*"
+          - "org.skyscreamer:*"
+          - "com.jayway.jsonpath:*"
+          - "net.bytebuddy:*"
+          - "org.awaitility:*"
+          - "io.mockk:*"
+          - "io.kotest:*"
+          - "com.ninja-squad:*"
+          - "com.github.tomakehurst:*"
+          - "org.seleniumhq.selenium:*"
+          - "org.htmlunit:*"
+        group-by: dependency-name
+      maven-plugins:
+        patterns:
+          - "org.apache.maven*:*"
+          - "org.codehaus.mojo:*"
+          - "org.codehaus.gmavenplus:*"
+          - "org.codehaus.cargo:*"
+          - "org.asciidoctor:*"
+          - "com.mysema.maven:*"
+        group-by: dependency-name
+      other:
+        patterns:
+          - "*"
+        group-by: dependency-name
