@@ -190,6 +190,39 @@ class PostControllerTest {
 }
 ```
 
+The `boot-kotlin-co` sample's `PostControllerTests` follows the same pattern, with the controller tests running through `@WebFluxTest` and a mocked `PostRepository` — and with JUnit 6 native Kotlin support the tests can use the new `suspend fun` syntax directly:
+
+```kotlin
+@OptIn(ExperimentalCoroutinesApi::class)
+@WebFluxTest(
+    controllers = [PostController::class]
+)
+class PostControllerTests {
+
+    @Autowired
+    private lateinit var client: WebTestClient
+
+    @MockkBean
+    private lateinit var posts: PostRepository
+
+    @Test
+    suspend fun `get all posts`() {
+        coEvery { posts.findAll() } returns
+                flowOf(
+                    Post(id = "1", title = "post one", content = "content of post one"),
+                    Post(id = "2", title = "post two", content = "content of post two")
+                )
+        client.get()
+            .uri("/posts")
+            .exchange()
+            .expectStatus().isOk
+            .expectBody().jsonPath("$.size()").isEqualTo(2)
+
+        coVerify(exactly = 1) { posts.findAll() }
+    }
+}
+```
+
 The filter tests use the same tools — verify the `SecurityWebFilter` contract with `WebFluxTest` and `runTest`:
 
 ```kotlin
