@@ -163,24 +163,6 @@ bean {
 
 Check the [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample.
 
-### ExceptionFilter: a CoWebFilter for error mapping
-
-The same sample registers a `CoWebFilter` that maps a domain exception thrown by the downstream chain to a 404 response — see [Coroutines](coroutines.md#cowebfilter) for the `CoWebFilter` contract:
-
-```kotlin
-@Component
-class ExceptionFilter : CoWebFilter() {
-    override suspend fun filter(exchange: ServerWebExchange, chain: CoWebFilterChain) {
-        try {
-            chain.filter(exchange)
-        } catch (e: PostNotFoundException) {
-            exchange.response.statusCode = HttpStatus.NOT_FOUND
-            exchange.response.setComplete().awaitSingleOrNull()
-        }
-    }
-}
-```
-
 ## BeanRegistrarDsl in Spring Framework 7
 
 Spring Framework 7 evolves the bean registration API into `BeanRegistrarDsl` — a registrar class you `@Import` instead of an initializer. 

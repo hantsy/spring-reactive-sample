@@ -123,7 +123,25 @@ Declared as a `@Component`, the filter is picked up by component scanning and re
 
 Check the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample from the spring6-sandbox repository.
 
-A `CoWebFilter` can also handle exceptions thrown by the downstream chain — the `ExceptionFilter` in the [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample maps a domain exception to a 404 response, see [Kotlin DSLs](dsl.md#exceptionfilter-a-cowebfilter-for-error-mapping).
+### ExceptionFilter: a CoWebFilter for error mapping
+
+A `CoWebFilter` can also handle exceptions thrown by the downstream chain. The [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample registers an `ExceptionFilter` that maps a domain exception to a 404 response:
+
+```kotlin
+@Component
+class ExceptionFilter : CoWebFilter() {
+    override suspend fun filter(exchange: ServerWebExchange, chain: CoWebFilterChain) {
+        try {
+            chain.filter(exchange)
+        } catch (e: PostNotFoundException) {
+            exchange.response.statusCode = HttpStatus.NOT_FOUND
+            exchange.response.setComplete().awaitSingleOrNull()
+        }
+    }
+}
+```
+
+See [Kotlin DSLs](dsl.md) for the rest of that sample.
 
 ## Testing
 
