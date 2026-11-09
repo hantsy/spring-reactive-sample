@@ -107,7 +107,7 @@ fun `test save and query`() = runTest {
 }
 ```
 
-The `awaitSingle()` extension (from `kotlinx.coroutines.reactor`) bridges the reactive `Mono` into the coroutine; `awaitSingleOrNull()`, `awaitFirst()`, and `awaitToList()` cover the other shapes — see the transaction extensions in [Coroutines](../kotlin/coroutines.md#transactions-in-coroutines).
+The `awaitSingle()` extension (from `kotlinx.coroutines.reactor`) bridges the reactive `Mono` into the coroutine; `awaitSingleOrNull()`, `awaitFirst()`, and `awaitToList()` cover the other shapes — see the transaction extensions in [Coroutines](../kotlin/coroutines.md#transactions-with-coroutines).
 
 ## Kotest assertions
 
