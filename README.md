@@ -39,8 +39,6 @@ The following table lists all sample codes available in this repository.
 | [java9](https://github.com/hantsy/spring-reactive-sample/tree/master/java9) | Same as **vanilla**, with Java 9 Flow API support (see [SPR-16052](https://jira.spring.io/browse/SPR-16052)) |
 | [rxjava3](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava3) | Same as **vanilla**, but uses RxJava 3 instead of Reactor (since Spring 5.3.0) |
 | [smallrye-mutiny](https://github.com/hantsy/spring-reactive-sample/tree/master/smallrye-mutiny) | Same as **vanilla**, but uses [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) instead of Reactor (since Spring 5.3.10) |
-| [rxjava3](https://github.com/hantsy/spring-reactive-sample/tree/master/rxjava3) | Same as **vanilla**, but use Rxjava3 instead of Reactor, since Spring 5.3.0 |
-| [smallrye-mutiny](https://github.com/hantsy/spring-reactive-sample/tree/master/smallrye-mutiny) | Same as **vanilla**, but use [SmallRye Mutiny](https://smallrye.io/smallrye-mutiny) instead of Reactor, since Spring 5.3.10 |
 | [war](https://github.com/hantsy/spring-reactive-sample/tree/master/war) | Replaces the manual bootstrap with Spring `ApplicationInitializer`, can be packaged as a **war** file for external servlet containers |
 | [routes](https://github.com/hantsy/spring-reactive-sample/tree/master/routes) | Uses `RouterFunction` instead of `@Controller` |
 | [register-bean](https://github.com/hantsy/spring-reactive-sample/tree/master/register-bean) | Programmatic bean registration in `ApplicationContext` at bootstrap |
@@ -92,11 +90,6 @@ The following table lists all sample codes available in this repository.
 | [integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration) | Spring Integration example |
 | [integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl) | Spring Integration Java 8 DSL example |
 | [restdocs](https://github.com/hantsy/spring-reactive-sample/tree/master/restdocs) | Spring RestDocs example |
-| [boot-rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-tcp) | RSocket over TCP — the four interaction models |
-| [boot-rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-websocket) | RSocket over WebSocket |
-| [boot-rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud) | RSocket CRUD example with Spring Data R2DBC |
-| [boot-rsocketexchange](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocketexchange) | Declarative RSocket client (`@RSocketExchange`) with R2DBC PostgreSQL and Testcontainers |
-| [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket) | RSocket with Spring Integration (merged server/client) |
 
 ### Spring Boot Samples
 
@@ -137,10 +130,18 @@ The following table lists all sample codes available in this repository.
 | [boot-data-neo4j-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-cypher) | Spring Data Neo4j using Cypher example |
 | [boot-data-neo4j-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j-template) | Spring Data Neo4j template example |
 | [boot-data-redis-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis-template) | Spring Data Redis template example |
+| [boot-rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-tcp) | RSocket over TCP — the four interaction models |
+| [boot-rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-websocket) | RSocket over WebSocket |
+| [boot-rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud) | RSocket CRUD example with Spring Data R2DBC |
+| [boot-rsocketexchange](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocketexchange) | Declarative RSocket client (`@RSocketExchange`) with R2DBC PostgreSQL and Testcontainers |
+| [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket) | RSocket with Spring Integration (merged server/client) |
 | [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-r2dbc) | Spring Boot R2DBC example with `DatabaseClient` and Testcontainers |
 | [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc) | Spring Data R2DBC `R2dbcRepository` example with Testcontainers |
 
+### R2DBC Samples
 
+| Name | Description |
+| :--- | :--- |
 | [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) | R2DBC `ConnectionFactory` variants for PostgreSQL, H2, MySQL, MariaDB, Oracle |
 | [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient) | Spring R2DBC `DatabaseClient` example |
 | [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate) | Spring Data R2DBC `R2dbcEntityTemplate` example |
@@ -149,31 +150,30 @@ The following table lists all sample codes available in this repository.
 | [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate) | R2DBC versioned migrations with [r2dbc-migrate](https://github.com/nkonev/r2dbc-migrate) |
 | [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq) | R2DBC and jOOQ example (code generation from `schema.sql`) |
 
-
 ### Legacy Codes
 
-Some example codes are becoming deprecated over time; for example, the [SDN Rx project](https://github.com/neo4j/sdn-rx), maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). [Reactor Kafka](https://github.com/reactor/reactor-kafka) and [Reactor Rabbit](https://github.com/reactor/reactor-rabbitmq) are discontinued, [Netty 5 support(the development is inactive) was finally removed](https://github.com/spring-projects/spring-framework/issues/28847) in the Spring framework. 
+Some example codes are becoming deprecated over time; for example, the [SDN Rx project](https://github.com/neo4j/sdn-rx), maintained by the Neo4j team, has been discontinued. It is highly recommended to migrate to the official [Spring Data Neo4j](https://github.com/spring-projects/spring-data-neo4j). [Reactor Kafka](https://github.com/reactor/reactor-kafka) and [Reactor Rabbit](https://github.com/reactor/reactor-rabbitmq) are discontinued, [Netty 5 support(the development is inactive) was finally removed](https://github.com/spring-projects/spring-framework/issues/28847) in the Spring framework.
 
 Spring Data R2dbc 1.2 introduced many breaking changes, so I created another [Spring R2dbc Sample repository](https://github.com/hantsy/spring-r2dbc-sample) to introduce the new features.
 
 Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/spring-framework/issues/27443), and other projects, such as Spring Data, will remove RxJava/RxJava2 support soon.
 
-| name                                                         | description                                                  |
-| :----------------------------------------------------------- | ------------------------------------------------------------ |
+| Name | Description |
+| :--- | :--- |
 | [data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/data-r2dbc) | Spring Data R2dbc Example. (*Deprecated*, go to [hantsy/spring-r2dbc-sample](https://github.com/hantsy/spring-r2dbc-sample) to update yourself) |
-| [data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/data-r2dbc-postgresql) | Spring Data R2dbc Example, but use PostgreSQL instead(*Deprecated*) |
-| [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-r2dbc) | Spring Data R2dbc example using `DatabaseClient`(*Deprecated*) |
-| [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc) | Spring Data R2dbc example(*Deprecated*)                      |
-| [boot-data-r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-auditing) | `@EnableR2dbcAuditing` example(*Deprecated*)     |
-| [boot-data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-postgresql) | Same as boot-data-r2dbc, but use PostgresSQL instead(*Deprecated*) |
-| [boot-data-r2dbc-mysql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-mysql) | Same as boot-data-r2dbc, but use MySQL instead(*Deprecated*) |
-| [boot-data-r2dbc-mssql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-mssql) | Same as boot-data-r2dbc, but use MS SQL instead(*Deprecated*) |
-| [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example but use `ReactiveNeo4jClient`(*Deprecated*) |
-| [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx-cypher) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example using Cypher queries(*Deprecated*) |
-| [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example(*Deprecated*) |
-| [rxjava](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava) | Same as **vanilla**, but use Rxjava instead of Reactor       |
-| [rxjava-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava-jdbc) | Accessing database with rxjava-jdbc.  **NOTE: rxjava-jdbc is a wrapper of blocking Jdbc APIs** |
-| [rxjava2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava2) | Same as **vanilla**, but use Rxjava2 instead of Reactor      |
+| [data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/data-r2dbc-postgresql) | Spring Data R2dbc Example, but use PostgreSQL instead (*Deprecated*) |
+| [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-r2dbc) | Spring Data R2dbc example using `DatabaseClient` (*Deprecated*) |
+| [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc) | Spring Data R2dbc example (*Deprecated*) |
+| [boot-data-r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-auditing) | `@EnableR2dbcAuditing` example (*Deprecated*) |
+| [boot-data-r2dbc-postgresql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-postgresql) | Same as boot-data-r2dbc, but use PostgresSQL instead (*Deprecated*) |
+| [boot-data-r2dbc-mysql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-mysql) | Same as boot-data-r2dbc, but use MySQL instead (*Deprecated*) |
+| [boot-data-r2dbc-mssql](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-r2dbc-mssql) | Same as boot-data-r2dbc, but use MS SQL instead (*Deprecated*) |
+| [boot-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example but use `ReactiveNeo4jClient` (*Deprecated*) |
+| [boot-neo4j-rx-cypher](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-neo4j-rx-cypher) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example using Cypher queries (*Deprecated*) |
+| [boot-data-neo4j-rx](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-data-neo4j-rx) | [SDN Rx](https://github.com/neo4j/sdn-rx) Example (*Deprecated*) |
+| [rxjava](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava) | Same as **vanilla**, but use Rxjava instead of Reactor |
+| [rxjava-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava-jdbc) | Accessing database with rxjava-jdbc. **NOTE: rxjava-jdbc is a wrapper of blocking Jdbc APIs** |
+| [rxjava2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava2) | Same as **vanilla**, but use Rxjava2 instead of Reactor |
 | [rxjava2-jdbc](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/rxjava2-jdbc) | Accessing database with rxjava2-jdbc. **NOTE: rxjava2-jdbc is a wrapper of blocking Jdbc APIs** |
 | [websocket-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/websocket-reactor-netty2) | WebSocket example with Reactor Netty 2 |
 | [vanilla-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/vanilla-reactor-netty2) | Same as **vanilla**, but uses Reactor Netty 2.x as the runtime |
@@ -192,7 +192,6 @@ Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/sp
   * [Notes on Reactive Programming Part I: The Reactive Landscape](https://spring.io/blog/2016/06/07/notes-on-reactive-programming-part-i-the-reactive-landscape)
   * [Notes on Reactive Programming Part II: Writing Some Code](https://spring.io/blog/2016/06/13/notes-on-reactive-programming-part-ii-writing-some-code)
   * [Notes on Reactive Programming Part III: A Simple HTTP Server Application](https://spring.io/blog/2016/07/20/notes-on-reactive-programming-part-iii-a-simple-http-server-application)
-
 * [Reactive Programming in the Netflix API with RxJava](https://medium.com/netflix-techblog/reactive-programming-in-the-netflix-api-with-rxjava-7811c3a1496a)
 * [Reactor by Example](https://www.infoq.com/articles/reactor-by-example)
 * [New in Spring 5: Functional Web Framework](https://spring.io/blog/2016/09/22/new-in-spring-5-functional-web-framework)
