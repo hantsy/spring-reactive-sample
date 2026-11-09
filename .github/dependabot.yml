@@ -46,6 +46,7 @@ updates:
       - /boot-mvc-mustache
       - /boot-mvc-thymeleaf
       - /boot-neo4j
+      - /boot-problem-details
       - /boot-r2dbc
       - /boot-rsocket-crud
       - /boot-rsocket-tcp
@@ -86,6 +87,7 @@ updates:
       - /mvc-freemarker
       - /mvc-mustache
       - /mvc-thymeleaf
+      - /problem-details
       - /r2dbc-auditing
       - /r2dbc-connection-factories
       - /r2dbc-databaseclient

@@ -86,3 +86,7 @@ class RestWebExceptionHandler implements WebExceptionHandler {
 ```
 
 You can explore the complete codes in [spring-reactive-sample/exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/exception-handler) and [spring-reactive-sample/boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler).
+
+!!! tip
+
+    Spring supports the standard error response format defined by [RFC 9457](https://www.rfc-editor.org/rfc/rfc9457). See [Problem Details](problem-details.md) for the `ProblemDetail` based approach.

@@ -88,6 +88,7 @@ The following table lists all sample codes available in this repository.
 | [session-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-redis) | Spring Data Redis based `ReactiveSessionRepository` example |
 | [session-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-mongo) | Spring Data Mongo based `ReactiveSessionRepository` example |
 | [exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/exception-handler) | Exception Handler example |
+| [problem-details](https://github.com/hantsy/spring-reactive-sample/tree/master/problem-details) | RFC 9457 `ProblemDetail` error responses in a manual WebFlux + R2DBC application |
 | [integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration) | Spring Integration example |
 | [integration-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-dsl) | Spring Integration Java 8 DSL example |
 | [restdocs](https://github.com/hantsy/spring-reactive-sample/tree/master/restdocs) | Spring RestDocs example |
@@ -127,6 +128,7 @@ The following table lists all sample codes available in this repository.
 | [boot-data-mongo-gridfs](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-gridfs) | Spring Data Mongo example with GridFS support |
 | [boot-data-mongo-tailable](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-tailable) | Spring Data Mongo tailable document example |
 | [boot-exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-exception-handler) | Global Exception Handler example |
+| [boot-problem-details](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-problem-details) | RFC 9457 `ProblemDetail` error responses with Spring Boot's built-in `spring.webflux.problemdetails.enabled` support |
 | [boot-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-cassandra) | Spring Boot Cassandra example |
 | [boot-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-couchbase) | Spring Boot Couchbase example |
 | [boot-elasticsearch](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-elasticsearch) | Spring Boot ElasticSearch example |
