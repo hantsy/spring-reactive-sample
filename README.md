@@ -51,6 +51,13 @@ The following table lists all sample codes available in this repository.
 | [data-redis-message](https://github.com/hantsy/spring-reactive-sample/tree/master/data-redis-message) | Spring Data Redis Reactive example with `ReactiveRedisMessageListenerContainer` |
 | [data-cassandra](https://github.com/hantsy/spring-reactive-sample/tree/master/data-cassandra) | Spring Data Cassandra Reactive example |
 | [data-couchbase](https://github.com/hantsy/spring-reactive-sample/tree/master/data-couchbase) | Spring Data Couchbase Reactive example |
+| [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) | R2DBC `ConnectionFactory` variants for PostgreSQL, H2, MySQL, MariaDB, Oracle |
+| [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient) | Spring R2DBC `DatabaseClient` example |
+| [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate) | Spring Data R2DBC `R2dbcEntityTemplate` example |
+| [r2dbc-repository](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-repository) | Spring Data R2DBC `R2dbcRepository` example |
+| [r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-auditing) | `@EnableR2dbcAuditing` example |
+| [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate) | R2DBC versioned migrations with [r2dbc-migrate](https://github.com/nkonev/r2dbc-migrate) |
+| [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq) | R2DBC and jOOQ example (code generation from `schema.sql`) |
 | [security](https://github.com/hantsy/spring-reactive-sample/tree/master/security) | Adds Spring Security Reactive support to **vanilla** |
 | [security-form](https://github.com/hantsy/spring-reactive-sample/tree/master/security-form) | Same as **security**, with login form example |
 | [security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties) | Same as **security**, but stores users in *users.properties* |
@@ -137,18 +144,6 @@ The following table lists all sample codes available in this repository.
 | [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket) | RSocket with Spring Integration (merged server/client) |
 | [boot-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-r2dbc) | Spring Boot R2DBC example with `DatabaseClient` and Testcontainers |
 | [boot-data-r2dbc](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-r2dbc) | Spring Data R2DBC `R2dbcRepository` example with Testcontainers |
-
-### R2DBC Samples
-
-| Name | Description |
-| :--- | :--- |
-| [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) | R2DBC `ConnectionFactory` variants for PostgreSQL, H2, MySQL, MariaDB, Oracle |
-| [r2dbc-databaseclient](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-databaseclient) | Spring R2DBC `DatabaseClient` example |
-| [r2dbc-entitytemplate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-entitytemplate) | Spring Data R2DBC `R2dbcEntityTemplate` example |
-| [r2dbc-repository](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-repository) | Spring Data R2DBC `R2dbcRepository` example |
-| [r2dbc-auditing](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-auditing) | `@EnableR2dbcAuditing` example |
-| [r2dbc-migrate](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-migrate) | R2DBC versioned migrations with [r2dbc-migrate](https://github.com/nkonev/r2dbc-migrate) |
-| [r2dbc-jooq](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-jooq) | R2DBC and jOOQ example (code generation from `schema.sql`) |
 
 ### Legacy Codes
 

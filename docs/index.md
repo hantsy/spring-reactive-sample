@@ -1,4 +1,4 @@
-# Just Enough Spring WebFlux
+# Spring WebFlux Cookbook
 
 A hands-on guide to reactive programming with **Spring Framework 7** and **Spring Boot 4**. Instead of explaining concepts in the abstract, it walks through real examples from the repository and shows how they fit together in a production-style Spring application.
 
