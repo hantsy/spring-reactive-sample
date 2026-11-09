@@ -223,8 +223,6 @@ class PostControllerTests {
 }
 ```
 
-The filter tests use the same tools — verify the `SecurityWebFilter` contract with `WebFluxTest` and `runTest`:
-
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
 @WebFluxTest(controllers = [HelloController::class])
