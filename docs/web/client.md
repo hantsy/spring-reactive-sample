@@ -149,6 +149,8 @@ public static void main(String[] args) {
 
 You can explore the complete code in [spring-reactive-sample/client](https://github.com/hantsy/spring-reactive-sample/tree/master/client).
 
+To remove the request-building code entirely, declare the same operations as an annotated interface — see [HTTP Interfaces with @HttpExchange](httpexchange.md).
+
 ## Choosing the HTTP client connector
 
 The `ClientHttpConnector` abstracts the actual HTTP implementation underneath `WebClient`. By default, Spring uses Reactor Netty, but you can switch to other connectors without changing the client code itself.

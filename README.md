@@ -66,12 +66,14 @@ The following table lists all sample codes available in this repository.
 | [sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse) | Server Send Event example |
 | [websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket) | WebSocket example |
 | [web-filter](https://github.com/hantsy/spring-reactive-sample/tree/master/web-filter) | `WebFilter` example |
+| [api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning-webflux) | WebFlux API versioning with manual `ApiVersionConfigurer` configuration (Spring Framework 7) |
 | [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in Groovy |
 | [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example |
 | [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) | `WebClient` example for calling backend reactive APIs |
 | [client-jetty](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jetty) | `WebClient` with Jetty Reactive HttpClient |
 | [client-jdk11-httpclient](https://github.com/hantsy/spring-reactive-sample/tree/master/client-jdk11-httpclient) | `WebClient` with JDK 11 HttpClient |
 | [client-apache-httpclient5](https://github.com/hantsy/spring-reactive-sample/tree/master/client-apache-httpclient5) | `WebClient` with Apache HttpClient 5 |
+| [httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/httpexchange-webclient) | `@HttpExchange` HTTP Service Client backed by `WebClient`, created manually via `HttpServiceProxyFactory` |
 | [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) | Cache Async/Reactive support with in-memory `ConcurrentHashMap` |
 | [cache-caffeine](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-caffeine) | Cache Async/Reactive support with Caffeine |
 | [cache-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/cache-redis) | Cache Async/Reactive support with Redis |
@@ -100,6 +102,8 @@ The following table lists all sample codes available in this repository.
 | :--- | :--- |
 | [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) | Spring Boot example with 3 Maven profiles to switch between Jetty, Tomcat, and Undertow |
 | [boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) | Simple `RouterFunction` example |
+| [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) | WebFlux API versioning via `spring.webflux.apiversion.*` properties (Spring Boot 4) |
+| [boot-httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange-webclient) | `@HttpExchange` HTTP Service Client with `@ImportHttpServices` auto-configuration and `spring.http.serviceclient.*` properties |
 | [boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-thymeleaf) | Same as mvc-thymeleaf, based on Spring Boot |
 | [boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-mustache) | Same as mvc-mustache, based on Spring Boot |
 | [boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-freemarker) | Same as mvc-freemarker, based on Spring Boot |

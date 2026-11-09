@@ -12,7 +12,7 @@ A version can be carried in:
 
 The server can then route requests using a `version` attribute on the mapping annotations. This page looks at the WebFlux flavor of the feature.
 
-The examples referenced here live in the spring7-sandbox repository: [api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/api-versioning-webflux) and [boot-api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/boot-api-versioning-webflux). See the [API Versioning guide](https://github.com/hantsy/spring7-sandbox/blob/main/docs/api-versioning.md) for the full WebMVC and WebFlux treatment.
+The examples referenced here live in this repository: [api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning-webflux) (manual configuration) and [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) (Spring Boot auto-configuration and properties).
 
 ## Server-side configuration
 
@@ -79,7 +79,16 @@ public class GreetingController {
 }
 ```
 
-In a Spring Boot 4 WebFlux application, the same configuration applies. Boot also exposes properties for this feature, while the WebMVC counterpart uses `spring.mvc.api-versioning.*` properties.
+In a Spring Boot 4 WebFlux application, the same configuration can be expressed entirely with `spring.webflux.apiversion.*` properties, as the [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) example shows:
+
+```properties
+spring.webflux.apiversion.use.header=X-API-Version
+spring.webflux.apiversion.supported=1.0,1.1,2.0
+spring.webflux.apiversion.detect-supported=false
+spring.webflux.apiversion.default=1.0
+```
+
+The WebMVC counterpart uses `spring.mvc.apiversion.*` properties.
 
 ## Client-side versioning with WebClient
 
@@ -175,4 +184,4 @@ public class GreetingControllerTest {
 }
 ```
 
-For the complete code, see [api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/api-versioning-webflux) and [boot-api-versioning-webflux](https://github.com/hantsy/spring7-sandbox/tree/main/boot-api-versioning-webflux) in the spring7-sandbox repo.
+For the complete code, see [api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning-webflux) and [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) in this repo.
