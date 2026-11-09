@@ -15,7 +15,7 @@
     <!-- lookup parent from repository -->
   </parent>
   <properties>
-    <gmavenplus-plugin.version>5.0.0</gmavenplus-plugin.version>
+    <gmavenplus-plugin.version>5.1.0</gmavenplus-plugin.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <java.version>25</java.version>
