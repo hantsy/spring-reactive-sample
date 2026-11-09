@@ -1,5 +1,5 @@
 
-# Coroutines in Spring WebFlux (Kotlin)
+# Coroutines
 
 Spring WebFlux supports Kotlin coroutines as a first-class programming model. In practice, this means you can write controller methods as `suspend` functions that return a single value, or as regular functions returning `Flow<T>` when the API produces a stream of values.
 
@@ -151,6 +151,8 @@ For coroutine-aware testing, use the Kotlin coroutines test utilities together w
 - [kotlinx-coroutines-test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test)
 - [MockK](https://mockk.io/)
 - [Spring MockK](https://github.com/Ninja-Squad/springmockk) for Spring integration
+
+Additionally, [kotest-assertions-jvm](https://github.com/kotest/kotest/tree/master/kotest-assertions/kotest-assertions-jvm) provides coroutine-friendly assertions for testing suspending functions.
 
 ### Example: controller test with `runTest` and MockK
 
