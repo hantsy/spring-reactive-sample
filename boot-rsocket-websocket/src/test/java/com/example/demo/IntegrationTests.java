@@ -29,6 +29,7 @@ public class IntegrationTests {
     RSocketRequester.Builder builder;
 
     @BeforeAll
+    @SuppressWarnings("deprecation")
     public void setup() {
         requester = builder
                 .dataMimeType(MimeTypeUtils.APPLICATION_JSON)

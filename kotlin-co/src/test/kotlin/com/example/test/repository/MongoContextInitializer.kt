@@ -6,14 +6,15 @@ import org.springframework.context.ApplicationListener
 import org.springframework.context.ConfigurableApplicationContext
 import org.springframework.context.event.ContextClosedEvent
 import org.springframework.core.env.MapPropertySource
-import org.testcontainers.containers.MongoDBContainer
+import org.testcontainers.utility.DockerImageName
+import org.testcontainers.mongodb.MongoDBContainer
 import java.util.Map
 
 
 class MongoContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
     companion object {
         private val log = LoggerFactory.getLogger(MongoContextInitializer::class.java)
-        private val container = MongoDBContainer("mongo")
+        private val container = MongoDBContainer(DockerImageName.parse("mongo"))
     }
 
     override fun initialize(applicationContext: ConfigurableApplicationContext) {

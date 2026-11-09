@@ -23,6 +23,7 @@ import java.time.LocalDateTime
 class DemoApplication
 
 
+@Suppress("DEPRECATION")
 fun beans() = beans {
     bean {
         CommandLineRunner {

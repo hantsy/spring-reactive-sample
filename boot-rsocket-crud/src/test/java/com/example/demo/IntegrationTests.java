@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import io.rsocket.transport.netty.client.TcpClientTransport;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class IntegrationTests {
         // the rsocket server port is fixed in application.properties (7000)
         requester = builder
                 .dataMimeType(MimeTypeUtils.APPLICATION_JSON)
-                .connect(TcpClientTransport.create("localhost", 7000)).block();
+                .tcp("localhost", 7000);
     }
 
     @Test

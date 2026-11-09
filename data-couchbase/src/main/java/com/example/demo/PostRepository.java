@@ -5,8 +5,6 @@
  */
 package com.example.demo;
 
-import org.springframework.data.couchbase.core.query.ViewIndexed;
 import org.springframework.data.couchbase.repository.ReactiveCouchbaseRepository;
 
-@ViewIndexed(designDoc = "post", viewName = "all")
 interface PostRepository extends ReactiveCouchbaseRepository<Post, String>{}

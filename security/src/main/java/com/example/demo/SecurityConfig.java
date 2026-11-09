@@ -14,7 +14,6 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.User.UserBuilder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
@@ -47,9 +46,8 @@ class SecurityConfig {
 
     @Bean
     public MapReactiveUserDetailsService userDetailsRepository() {
-        UserBuilder users = User.withDefaultPasswordEncoder();
-        UserDetails user = users.username("user").password("password").roles("USER").build();
-        UserDetails admin = users.username("admin").password("password").roles("USER", "ADMIN").build();
+        UserDetails user = User.withUsername("user").password("{noop}password").roles("USER").build();
+        UserDetails admin = User.withUsername("admin").password("{noop}password").roles("USER", "ADMIN").build();
         return new MapReactiveUserDetailsService(user, admin);
     }
 

@@ -42,7 +42,7 @@ public class Application {
         File base = new File(System.getProperty("java.io.tmpdir"));
         Context rootContext = tomcat.addContext("", base.getAbsolutePath());
         Tomcat.addServlet(rootContext, "main", servlet).setAsyncSupported(true);
-        rootContext.addServletMappingDecoded("/", "main");
+        rootContext.addServletMapping("/", "main");
 
         tomcat.setHostname("localhost");
         tomcat.setPort(this.port);
