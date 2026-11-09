@@ -12,7 +12,7 @@ A version can be carried in:
 
 The server can then route requests using a `version` attribute on the mapping annotations. This page looks at the WebFlux flavor of the feature.
 
-The examples referenced here live in this repository: [api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning-webflux) (manual configuration) and [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) (Spring Boot auto-configuration and properties).
+The examples referenced here live in this repository: [api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning) (manual configuration) and [boot-api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning) (Spring Boot auto-configuration and properties).
 
 ## Server-side configuration
 
@@ -79,7 +79,7 @@ public class GreetingController {
 }
 ```
 
-In a Spring Boot 4 WebFlux application, the same configuration can be expressed entirely with `spring.webflux.apiversion.*` properties, as the [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) example shows:
+In a Spring Boot 4 WebFlux application, the same configuration can be expressed entirely with `spring.webflux.apiversion.*` properties, as the [boot-api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning) example shows:
 
 ```properties
 spring.webflux.apiversion.use.header=X-API-Version
@@ -184,4 +184,4 @@ public class GreetingControllerTest {
 }
 ```
 
-For the complete code, see [api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning-webflux) and [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) in this repo.
+For the complete code, see [api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning) and [boot-api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning) in this repo.

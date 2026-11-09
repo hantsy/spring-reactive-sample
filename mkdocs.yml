@@ -117,6 +117,7 @@ nav:
           - other/rsocket/tcp.md
           - other/rsocket/websocket.md
           - other/rsocket/crud.md
+          - other/rsocket/declarative-client.md
           - other/rsocket/integration.md
       - Spring Session:
           - other/session/intro.md

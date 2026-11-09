@@ -6,7 +6,7 @@ The interface becomes the contract with the remote API. Method annotations descr
 
 Spring Boot 4 adds auto-configuration for these HTTP service clients: `@ImportHttpServices` registers the interfaces, and `spring.http.serviceclient.*` properties configure each group.
 
-The examples referenced here live in this repository: [httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/httpexchange-webclient) (manual configuration) and [boot-httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange-webclient) (Boot starter and properties).
+The examples referenced here live in this repository: [httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/httpexchange-webclient) (manual configuration), [boot-httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange-webclient) (Boot starter and properties), and [boot-httpexchange](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange) (a shared contract implemented by the server and proxied by the client).
 
 ## Declare an HTTP interface
 
@@ -174,6 +174,62 @@ public class WebClientConfig {
 ```
 
 You can explore the complete code in [boot-httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange-webclient).
+
+## Share the contract between server and client
+
+The same interface can play both sides of the conversation: the server implements it as a controller, and the client consumes it as a proxy. The [boot-httpexchange](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange) example runs both roles in one application — the client group points back at the server's own address:
+
+```properties
+spring.http.serviceclient[post].base-url=http://localhost:8080
+```
+
+On the server side, a `@RestController` implements the interface. The `@HttpExchange` annotations on the interface methods drive the request mapping, so the controller carries no mapping annotations of its own:
+
+```java
+@RestController
+public class PostApiController implements PostApi {
+    private final PostRepository posts;
+
+    public PostApiController(PostRepository posts) {
+        this.posts = posts;
+    }
+
+    @Override
+    public Flux<Post> allPosts() {
+        return this.posts.findAll();
+    }
+
+    @Override
+    public Mono<Post> getById(UUID id) {
+        return this.posts.findById(id);
+    }
+
+    // save, update, delete follow the same pattern
+}
+```
+
+Because the controller and the client proxy both implement `PostApi`, the context holds two beans of that type. Inject the proxy by its registered name — `GROUP#INTERFACE` — to disambiguate:
+
+```java
+public ClientExampleInitializer(
+        @Qualifier("post#com.example.demo.PostApi") PostApi client) {
+    this.client = client;
+}
+```
+
+Error responses stay structured. The server converts `PostNotFoundException` into a `ProblemDetail` body (`spring.webflux.problemdetails.enabled=true`), and the client decides how to surface it through a status handler on a `WebClientCustomizer`:
+
+```java
+@Bean
+WebClientCustomizer webClientCustomizer() {
+    return builder -> builder
+            .defaultStatusHandler(HttpStatusCode::is4xxClientError, ClientResponse::createError);
+}
+```
+
+The default handler raises a `WebClientResponseException` in the calling reactive flow. Alternatively, parse the `ProblemDetail` body in the handler and restore the original `PostNotFoundException`, so client code catches the same exception type the server threw.
+
+When you customize the shared `JsonMapper`, contribute a `JsonMapperBuilderCustomizer` rather than replacing the mapper bean — Boot applies its own settings, including the `ProblemDetail` serialization mixin, through the same customizer chain.
 
 ## Testing with WireMock
 

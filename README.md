@@ -66,7 +66,7 @@ The following table lists all sample codes available in this repository.
 | [sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse) | Server Send Event example |
 | [websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket) | WebSocket example |
 | [web-filter](https://github.com/hantsy/spring-reactive-sample/tree/master/web-filter) | `WebFilter` example |
-| [api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning-webflux) | WebFlux API versioning with manual `ApiVersionConfigurer` configuration (Spring Framework 7) |
+| [api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning) | WebFlux API versioning with manual `ApiVersionConfigurer` configuration (Spring Framework 7) |
 | [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in Groovy |
 | [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example |
 | [client](https://github.com/hantsy/spring-reactive-sample/tree/master/client) | `WebClient` example for calling backend reactive APIs |
@@ -94,6 +94,7 @@ The following table lists all sample codes available in this repository.
 | [boot-rsocket-tcp](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-tcp) | RSocket over TCP — the four interaction models |
 | [boot-rsocket-websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-websocket) | RSocket over WebSocket |
 | [boot-rsocket-crud](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocket-crud) | RSocket CRUD example with Spring Data R2DBC |
+| [boot-rsocketexchange](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-rsocketexchange) | Declarative RSocket client (`@RSocketExchange`) with R2DBC PostgreSQL and Testcontainers |
 | [integration-rsocket](https://github.com/hantsy/spring-reactive-sample/tree/master/integration-rsocket) | RSocket with Spring Integration (merged server/client) |
 
 ### Spring Boot Samples
@@ -102,8 +103,9 @@ The following table lists all sample codes available in this repository.
 | :--- | :--- |
 | [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) | Spring Boot example with 3 Maven profiles to switch between Jetty, Tomcat, and Undertow |
 | [boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) | Simple `RouterFunction` example |
-| [boot-api-versioning-webflux](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning-webflux) | WebFlux API versioning via `spring.webflux.apiversion.*` properties (Spring Boot 4) |
+| [boot-api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning) | WebFlux API versioning via `spring.webflux.apiversion.*` properties (Spring Boot 4) |
 | [boot-httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange-webclient) | `@HttpExchange` HTTP Service Client with `@ImportHttpServices` auto-configuration and `spring.http.serviceclient.*` properties |
+| [boot-httpexchange](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange) | Shared `@HttpExchange` contract implemented by the server and proxied by the client, with `ProblemDetail` error handling |
 | [boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-thymeleaf) | Same as mvc-thymeleaf, based on Spring Boot |
 | [boot-mvc-mustache](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-mustache) | Same as mvc-mustache, based on Spring Boot |
 | [boot-mvc-freemarker](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-freemarker) | Same as mvc-freemarker, based on Spring Boot |
