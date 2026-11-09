@@ -99,6 +99,8 @@ The extensions come from `org.springframework.transaction.reactive` (`executeAnd
 
 `CoWebFilter` is the coroutine variant of the reactive `WebFilter` contract from [Web Programming](../web/web-filter.md). Instead of returning `Mono<Void>`, the `filter` method is a `suspend` function, and the chain exposes a `CoWebFilterChain` whose `filter` call suspends.
 
+### SecurityWebFilter
+
 The following example demonstrates a simple security check using a `CoWebFilter`.
 
 ```kotlin
@@ -119,11 +121,11 @@ class SecurityWebFilter : CoWebFilter() {
 }
 ```
 
-Declared as a `@Component`, the filter is picked up by component scanning and registered into the `WebHandler` chain — the same behavior as a Java `WebFilter`, with the method body written in sequential coroutine style. 
+Declared as a `@Component`, the filter is picked up by component scanning and registered into the `WebHandler` chain — the same behavior as a Java `WebFilter`, with the method body written in sequential coroutine style.
 
 Check the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample from the spring6-sandbox repository.
 
-### ExceptionFilter: a CoWebFilter for error mapping
+### ExceptionWebFilter
 
 A `CoWebFilter` can also handle exceptions thrown by the downstream chain. The [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample registers an `ExceptionFilter` that maps a domain exception to a 404 response:
 
