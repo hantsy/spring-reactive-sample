@@ -67,7 +67,7 @@ Check the [kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/mas
 
 ### The router DSL
 
-The `router { }` function (`RouterFunctionDsl`) declares functional routes with a nesting style that reads top-down, replacing the `andRoute` chain from [Annotation-Driven Kotlin and RouterFunctions](kotlin.md#routerfunctions-in-kotlin):
+The `router { }` function (`RouterFunctionDsl`) declares functional routes with a nesting style that reads top-down, replacing the `andRoute` chain from [RouterFunctions](router-functions.md):
 
 ```kotlin
 class PostRoutes(private val postHandler: PostHandler) {

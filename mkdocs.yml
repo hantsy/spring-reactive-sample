@@ -98,7 +98,8 @@ nav:
       - testing/kotlin.md
   - Kotlin:
       - kotlin/intro.md
-      - kotlin/kotlin.md
+      - kotlin/annotation-driven-controller.md
+      - kotlin/router-functions.md
       - kotlin/coroutines.md
       - kotlin/dsl.md
       - kotlin/misc.md

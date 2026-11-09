@@ -146,7 +146,7 @@ This keeps the Spring model intact while making the code feel much more natural 
 
 If you are new to the Kotlin side of Spring, a good flow is to move from the familiar patterns to the more Kotlin-specific ones:
 
-- start with [Annotation-Driven Kotlin and RouterFunctions](kotlin.md) to see the Kotlin equivalents of the usual Spring WebFlux code you already know
+- start with [Annotation-Driven Controller](annotation-driven-controller.md) to see the Kotlin equivalents of the usual Spring WebFlux code you already know
 - then read [Coroutines](coroutines.md) to learn how `suspend` functions, `Flow`, and coroutine-aware Spring APIs make the code feel more natural
 - next, explore [Kotlin DSLs](dsl.md) for the more expressive, declarative functional style
 - finish with [Events, caching, and scheduling](misc.md) for the practical integration details that show up in real applications
