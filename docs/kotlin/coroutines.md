@@ -223,33 +223,7 @@ class PostControllerTests {
 }
 ```
 
-```kotlin
-@OptIn(ExperimentalCoroutinesApi::class)
-@WebFluxTest(controllers = [HelloController::class])
-class WebFilterTests {
-
-    @TestConfiguration
-    @Import(value = [SecurityWebFilter::class])
-    class TestConfig
-
-    @Autowired
-    private lateinit var client: WebTestClient
-
-    @Test
-    fun `authentication failed with no user params`() = runTest {
-        client.get().uri("/hello")
-            .exchange()
-            .expectStatus().isUnauthorized
-    }
-
-    @Test
-    fun `authentication passed with user params`() = runTest {
-        client.get().uri("/hello?user=Hantsy")
-            .exchange()
-            .expectStatus().isOk
-    }
-}
-```
-
 The test dependencies: `kotlinx-coroutines-test`, `com.ninja-squad:springmockk`, and `io.kotest:kotest-assertions-core-jvm`.
+
+See [Web Filter](../web/web-filter.md) for the security and exception filter examples.
 
