@@ -149,7 +149,9 @@ See [Kotlin DSLs](dsl.md) for the rest of that sample.
 
 `kotlinx-coroutines-test` provides `runTest`, and [MockK](https://mockk.io/) provides `coEvery`/`coVerify` for suspending functions, [Spring Mockk](https://github.com/Ninja-Squad/springmockk) provides integration with Spring's testing framework, such as `@MockkBean/@SpykBean`. 
 
-The following `PostControllerTest` demonstrates how to test a controller with a mocked repository using `runTest` and MockK:
+JUnit 6 introduces native Kotlin support for coroutines-based tests: a `@Test` method can now be a direct `suspend fun`. The classic `fun test() = runTest { ... }` pattern is therefore no longer needed — JUnit drives the coroutine scope automatically, and suspending test functions can call suspending collaborators directly.
+
+The following `PostControllerTest` demonstrates how to test a controller with a mocked repository using MockK and `WebTestClient`, with the tests written as direct suspend functions:
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -163,7 +165,7 @@ class PostControllerTest {
     private lateinit var client: WebTestClient
 
     @Test
-    fun `get posts by title with invalid title`() = runTest {
+    suspend fun `get posts by title with invalid title`() {
         coEvery { postRepository.findByTitleContains(any()) } returns
                 flowOf(Post(id = 1, title = "test title", content = "test content"))
 
@@ -175,7 +177,7 @@ class PostControllerTest {
     }
 
     @Test
-    fun `get post that not found`() = runTest {
+    suspend fun `get post that not found`() {
         val id = 1L
         coEvery { postRepository.findById(any()) } throws PostNotFoundException(id)
 
@@ -203,14 +205,14 @@ class WebFilterTests {
     private lateinit var client: WebTestClient
 
     @Test
-    fun `authentication failed with no user params`() = runTest {
+    suspend fun `authentication failed with no user params`() {
         client.get().uri("/hello")
             .exchange()
             .expectStatus().isUnauthorized
     }
 
     @Test
-    fun `authentication passed with user params`() = runTest {
+    suspend fun `authentication passed with user params`() {
         client.get().uri("/hello?user=Hantsy")
             .exchange()
             .expectStatus().isOk
