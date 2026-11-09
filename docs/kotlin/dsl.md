@@ -14,7 +14,10 @@ Spring provides Kotlin DSLs for both halves of a WebFlux application — bean de
 
 The Kotlin `BeanDefinitionDSL` (`org.springframework.context.support.beans`) replaces annotation configuration with functional registration.
 
+**Note:** In Spring Framework 7.1+, the `beans { }` function is deprecated in favor of `BeanRegistrarDsl` (see [below](#beanregistrardsl-in-spring-framework-7)). The samples in this repository use `@Suppress("DEPRECATION")` to silence the warning while maintaining compatibility with both Spring Framework 6.x and 7.x. For new code targeting Spring Framework 7+, prefer `BeanRegistrarDsl`.
+
 ```kotlin
+@Suppress("DEPRECATION")
 fun beans() = beans {
     bean {
         CommandLineRunner {
