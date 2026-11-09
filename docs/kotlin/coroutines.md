@@ -1,14 +1,19 @@
 
-# Coroutines
+# Coroutines in Spring WebFlux (Kotlin)
 
-Spring WebFlux treats Kotlin coroutines as first-class citizens: a controller method can be a `suspend` function returning a single value, or a regular function returning `Flow<T>` for streams. Spring bridges to and from Reactor internally, so the reactive server stack stays unchanged.
+Spring WebFlux supports Kotlin coroutines as a first-class programming model. In practice, this means you can write controller methods as `suspend` functions that return a single value, or as regular functions returning `Flow<T>` when the API produces a stream of values.
 
-The samples referenced here are [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) and [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) in this repository, plus [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) and its [SecurityWebFilter](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) in the spring6-sandbox repository.
+At the framework boundary, Spring bridges between coroutine-based code and Reactor primitives (`Mono` and `Flux`) internally, so the reactive runtime remains the same while the application code becomes more idiomatic and easier to read.
 
-## Suspend methods in `@RestController`
+This document focuses on the coroutine patterns used in the sample projects in this repository and related Spring examples:
 
-Use `suspend` functions to erase the Reactor Mono/Flux wrapper types, allowing you to write code that looks synchronous while still being non-blocking.
+- [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co)
+- [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co)
+- [spring6-sandbox / boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co)
 
+## `suspend` controller methods
+
+Use `suspend` functions to remove Reactor wrapper types from the method signature. The method still executes asynchronously and non-blockingly, but the body reads like ordinary Kotlin code.
 
 ```kotlin
 @RestController
@@ -38,47 +43,43 @@ class PostController(private val postRepository: PostRepository) {
 }
 ```
 
-Notes on the style:
+Comparison with a Reactor-based controller shows the differences:
 
-- `suspend fun` replaces `Mono<T>` — the function suspends until the single result arrives.
-- `Flow<Post>` replaces `Flux<T>` for multi-value streams.
-- Nullability replaces `switchIfEmpty`: `findById` returns `Post?`, and the Elvis operator (`?:`) throws the not-found exception.
-- Validation (`@Valid`, `@NotBlank`) works the same as in Java, and `@ExceptionHandler` handles both validation and domain exceptions.
+- `suspend fun` replaces `Mono<T>`. The function suspends until the result becomes available.
+- `Flow<T>` replaces `Flux<T>` for streaming collections.
+- `Post?` replaces `switchIfEmpty(...)` patterns. When a value is missing, the Elvis operator (`?:`) can raise a domain exception.
+- `@Valid`, `@NotBlank`, and other validation annotations behave exactly as in a Java-based Spring MVC or WebFlux controller.
+- `@ExceptionHandler` remains the normal mechanism for translating domain exceptions into HTTP responses.
 
-The [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) sample of this repository shows the same pattern against MongoDB, with a `ProblemDetail`-based exception handler:
 
-```kotlin
-@ExceptionHandler(value = [PostNotFoundException::class])
-suspend fun handlePostNotFoundException(e: PostNotFoundException): ProblemDetail {
-    val detail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, e.message ?: "Post was not found")
-    detail.apply {
-        title = "Not Found"
-        type = URI.create("http://example.com/not_found")
-    }
-    return detail
-}
-```
+## Coroutine-friendly repository interfaces
 
-Check the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample from the spring6-sandbox repository.
-
-## Coroutine friendly Repository
-
-Spring Data provides `CoroutineCrudRepository` for coroutine-based data access — add `kotlinx-coroutines-reactor` and the store's reactive driver:
+Spring Data provides `CoroutineCrudRepository` for coroutine-based persistence operations. In typical usage, you add the coroutine support dependency and the reactive driver for your datastore.
 
 ```kotlin
-import org.springframework.data.repository.kotlin.CoroutineCrudRepository
 import kotlinx.coroutines.flow.Flow
+import org.springframework.data.repository.kotlin.CoroutineCrudRepository
+import org.springframework.data.repository.kotlin.CoroutineSortingRepository
 
 interface PostRepository : CoroutineCrudRepository<Post, Long>, CoroutineSortingRepository<Post, Long> {
     fun findByTitleContains(title: String): Flow<Post>
 }
 ```
 
-Derived query methods return `Flow` for collections and nullable types (or `suspend`) for single results — no reactive wrapper types anywhere.
+Derived repository methods naturally return:
 
-## Transactions in coroutines
+- `Flow<T>` for collection-valued queries
+- nullable `T?` or `suspend` single-result methods for one item
+- no Reactor wrapper types in the repository API itself
 
-Spring's `TransactionalOperator` provides coroutine extensions — `executeAndAwait` for single results and the `transactional` extension for `Flow`:
+This keeps the repository layer consistent with the rest of the coroutine-based application code.
+
+## Transactions with coroutines
+
+Spring provides coroutine-aware transaction extensions via `TransactionalOperator`. The most common patterns are:
+
+- `executeAndAwait` for single-value transaction results
+- `transactional(...)` for `Flow` pipelines
 
 ```kotlin
 // single-result transaction
@@ -93,15 +94,13 @@ flowOf("test 1", "test 2", "test 3")
     .collect { log.debug("saved post: $it") }
 ```
 
-The extensions come from `org.springframework.transaction.reactive` (`executeAndAwait`, `transactional`).
+These extensions come from the `org.springframework.transaction.reactive` package and integrate with the reactive transaction infrastructure while allowing coroutine-style sequencing.
 
-## CoWebFilter
+## `CoWebFilter`
 
-`CoWebFilter` is the coroutine variant of the reactive `WebFilter` contract from [Web Programming](../web/web-filter.md). Instead of returning `Mono<Void>`, the `filter` method is a `suspend` function, and the chain exposes a `CoWebFilterChain` whose `filter` call suspends.
+`CoWebFilter` is the coroutine version of the reactive `WebFilter` contract described in the Web Programming chapter. Instead of returning `Mono<Void>`, the filter method is `suspend` and the chain exposes a `CoWebFilterChain`, whose `filter` call also suspends.
 
-### SecurityWebFilter
-
-The following example demonstrates a simple security check using a `CoWebFilter`.
+### Security filter example
 
 ```kotlin
 import org.springframework.http.HttpStatus
@@ -121,13 +120,13 @@ class SecurityWebFilter : CoWebFilter() {
 }
 ```
 
-Declared as a `@Component`, the filter is picked up by component scanning and registered into the `WebHandler` chain — the same behavior as a Java `WebFilter`, with the method body written in sequential coroutine style.
+When declared as a `@Component`, the filter is discovered by component scanning and registered into the `WebHandler` chain. The behavior matches a Java `WebFilter`, but the logic is expressed in a straightforward sequential coroutine style.
 
-Check the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample from the spring6-sandbox repository.
+The Spring 6 sandbox sample in [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) demonstrates the same pattern in a real application.
 
-### ExceptionWebFilter
+### Exception filter example
 
-A `CoWebFilter` can also handle exceptions thrown by the downstream chain. The [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample registers an `ExceptionFilter` that maps a domain exception to a 404 response:
+A `CoWebFilter` can also catch exceptions thrown by downstream handlers or filters. The [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample registers an `ExceptionFilter` that maps a domain exception to an HTTP 404 response:
 
 ```kotlin
 @Component
@@ -143,15 +142,17 @@ class ExceptionFilter : CoWebFilter() {
 }
 ```
 
-See [Kotlin DSLs](dsl.md) for the rest of that sample.
+See [Kotlin DSLs](dsl.md) for the broader sample usage.
 
-## Testing
+## Testing coroutine-based WebFlux applications
 
-`kotlinx-coroutines-test` provides `runTest`, and [MockK](https://mockk.io/) provides `coEvery`/`coVerify` for suspending functions, [Spring Mockk](https://github.com/Ninja-Squad/springmockk) provides integration with Spring's testing framework, such as `@MockkBean/@SpykBean`. 
+For coroutine-aware testing, use the Kotlin coroutines test utilities together with your preferred mocking library. A common setup uses:
 
-JUnit 6 introduces native Kotlin support for coroutines-based tests: a `@Test` method can now be a direct `suspend fun`. The classic `fun test() = runTest { ... }` pattern is therefore no longer needed — JUnit drives the coroutine scope automatically, and suspending test functions can call suspending collaborators directly.
+- [kotlinx-coroutines-test](https://github.com/Kotlin/kotlinx.coroutines/tree/master/kotlinx-coroutines-test)
+- [MockK](https://mockk.io/)
+- [Spring MockK](https://github.com/Ninja-Squad/springmockk) for Spring integration
 
-The following `PostControllerTest` demonstrates how to test a controller with a mocked repository using `runTest` and MockK:
+### Example: controller test with `runTest` and MockK
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -167,7 +168,7 @@ class PostControllerTest {
     @Test
     fun `get posts by title with invalid title`() = runTest {
         coEvery { postRepository.findByTitleContains(any()) } returns
-                flowOf(Post(id = 1, title = "test title", content = "test content"))
+            flowOf(Post(id = 1, title = "test title", content = "test content"))
 
         client.get().uri("/byTitle?title=")
             .exchange()
@@ -190,13 +191,13 @@ class PostControllerTest {
 }
 ```
 
-The `boot-kotlin-co` sample's `PostControllerTests` follows the same pattern, with the controller tests running through `@WebFluxTest` and a mocked `PostRepository` — and with JUnit 6 native Kotlin support the tests can use the new `suspend fun` syntax directly:
+### Example: suspend-based test method
+
+Recent JUnit-based Kotlin testing supports suspending test methods directly, which allows a `@Test` function to be declared as `suspend fun` without wrapping the body in `runTest`. This is especially convenient when the test code calls other suspending collaborators.
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
-@WebFluxTest(
-    controllers = [PostController::class]
-)
+@WebFluxTest(controllers = [PostController::class])
 class PostControllerTests {
 
     @Autowired
@@ -207,11 +208,11 @@ class PostControllerTests {
 
     @Test
     suspend fun `get all posts`() {
-        coEvery { posts.findAll() } returns
-                flowOf(
-                    Post(id = "1", title = "post one", content = "content of post one"),
-                    Post(id = "2", title = "post two", content = "content of post two")
-                )
+        coEvery { posts.findAll() } returns flowOf(
+            Post(id = "1", title = "post one", content = "content of post one"),
+            Post(id = "2", title = "post two", content = "content of post two")
+        )
+
         client.get()
             .uri("/posts")
             .exchange()
@@ -223,7 +224,14 @@ class PostControllerTests {
 }
 ```
 
-The test dependencies: `kotlinx-coroutines-test`, `com.ninja-squad:springmockk`, and `io.kotest:kotest-assertions-core-jvm`.
+## Summary
 
-See [Web Filter](../web/web-filter.md) for the security and exception filter examples.
+Kotlin coroutines fit naturally into Spring WebFlux without abandoning the reactive foundation. The common rule of thumb is:
+
+- use `suspend` for single-value operations
+- use `Flow` for streaming collections
+- keep validation and exception handling in the usual Spring style
+- use coroutine-aware repository and transaction APIs for clean control flow
+
+This produces code that is easier to read and maintain while preserving the performance and scalability characteristics of reactive programming.
 
