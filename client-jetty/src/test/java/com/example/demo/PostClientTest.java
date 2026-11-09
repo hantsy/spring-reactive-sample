@@ -3,7 +3,6 @@ package com.example.demo;
 
 import tools.jackson.databind.ObjectMapper;
 import com.github.tomakehurst.wiremock.common.Json;
-import com.github.tomakehurst.wiremock.http.Body;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +62,7 @@ public class PostClientTest {
                 .willReturn(
                         aResponse()
                                 .withHeader("Content-Type", "application/json")
-                                .withResponseBody(Body.fromJsonBytes(Json.toByteArray(data)))
+                                .withBody(Json.toByteArray(data))
                 )
         );
 
@@ -86,7 +85,7 @@ public class PostClientTest {
                 .willReturn(
                         aResponse()
                                 .withHeader("Content-Type", "application/json")
-                                .withResponseBody(Body.fromJsonBytes(Json.toByteArray(data)))
+                                .withBody(Json.toByteArray(data))
                 )
         );
 

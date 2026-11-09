@@ -16,7 +16,7 @@
   </parent>
   <properties>
     <java.version>25</java.version>
-    <wiremock-standalone.version>3.13.2</wiremock-standalone.version>
+    <wiremock-standalone.version>4.0.0-beta.41</wiremock-standalone.version>
   </properties>
   <dependencies>
     <dependency>
@@ -47,6 +47,18 @@
       <artifactId>wiremock-standalone</artifactId>
       <version>${wiremock-standalone.version}</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.wiremock</groupId>
+      <artifactId>wiremock-junit5</artifactId>
+      <version>${wiremock-standalone.version}</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.wiremock</groupId>
+          <artifactId>wiremock-core</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <build>

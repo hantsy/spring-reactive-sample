@@ -28,6 +28,7 @@
 	</scm>
 	<properties>
 		<java.version>25</java.version>
+		<r2dbc-migrate-spring-boot-starter.version>4.1.0</r2dbc-migrate-spring-boot-starter.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -37,7 +38,7 @@
 		<dependency>
 		  <groupId>name.nkonev.r2dbc-migrate</groupId>
 		  <artifactId>r2dbc-migrate-spring-boot-starter</artifactId>
-		  <version>4.0.1</version>
+		  <version>${r2dbc-migrate-spring-boot-starter.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.postgresql</groupId>

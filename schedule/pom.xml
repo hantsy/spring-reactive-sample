@@ -15,13 +15,10 @@
     <!-- lookup parent from repository -->
   </parent>
   <properties>
-    <byte-buddy.version>1.17.8</byte-buddy.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>25</maven.compiler.release>
     <maven.compiler.parameters>true</maven.compiler.parameters>
-    <!-- maven plugins -->
-    <maven-dependency-plugin.version>3.2.0</maven-dependency-plugin.version>
   </properties>
   <dependencies>
     <!-- Spring core dependencies-->
@@ -79,10 +76,6 @@
       <artifactId>mockito-junit-jupiter</artifactId>
       <scope>test</scope>
     </dependency>
-    <!--
-          ! Need to update to most recent version of byte-buddy to support JDK21
-          see: https://github.com/mockito/mockito/issues/3037
-        -->
     <dependency>
       <groupId>net.bytebuddy</groupId>
       <artifactId>byte-buddy</artifactId>

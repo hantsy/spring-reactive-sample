@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import com.github.tomakehurst.wiremock.common.Json;
-import com.github.tomakehurst.wiremock.http.Body;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +52,7 @@ public class PostClientTest {
                 .willReturn(
                         aResponse()
                                 .withHeader("Content-Type", "application/json")
-                                .withResponseBody(Body.fromJsonBytes(Json.toByteArray(data)))
+                                .withBody(Json.toByteArray(data))
                 )
         );
 

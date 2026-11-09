@@ -1,7 +1,6 @@
 package com.example.demo;
 
 import com.github.tomakehurst.wiremock.common.Json;
-import com.github.tomakehurst.wiremock.http.Body;
 import com.github.tomakehurst.wiremock.junit5.WireMockTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -52,7 +51,7 @@ public class PostHttpServiceTest {
                 .willReturn(
                         aResponse()
                                 .withHeader("Content-Type", "application/json")
-                                .withResponseBody(Body.fromJsonBytes(Json.toByteArray(data)))
+                                .withBody(Json.toByteArray(data))
                 )
         );
 
@@ -74,7 +73,7 @@ public class PostHttpServiceTest {
                 .willReturn(
                         aResponse()
                                 .withHeader("Content-Type", "application/json")
-                                .withResponseBody(Body.fromJsonBytes(Json.toByteArray(data)))
+                                .withBody(Json.toByteArray(data))
                 )
         );
 

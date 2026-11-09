@@ -15,7 +15,7 @@
   <description>Demo project for Spring Boot</description>
   <properties>
     <java.version>25</java.version>
-    <neo4j.version>5.26.32</neo4j.version>
+    <neo4j.version>5.26.33</neo4j.version>
     <netty.version>4.1.118.Final</netty.version>
     <!-- To avoid Netty version conflicts with Neo4j dependencies -->
   </properties>
@@ -77,7 +77,6 @@
     <dependency>
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
-      <version>6.1.0</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

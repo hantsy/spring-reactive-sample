@@ -18,6 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>25</maven.compiler.release>
+    <htmlunit-driver.version>4.13.0</htmlunit-driver.version>
   </properties>
   <dependencies>
     <dependency>
@@ -121,7 +122,7 @@
     <dependency>
       <groupId>org.seleniumhq.selenium</groupId>
       <artifactId>htmlunit-driver</artifactId>
-      <version>4.13.0</version>
+      <version>${htmlunit-driver.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>

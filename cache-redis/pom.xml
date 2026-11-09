@@ -19,6 +19,7 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <maven.compiler.release>25</maven.compiler.release>
     <maven.compiler.parameters>true</maven.compiler.parameters>
+    <testcontainers-redis-junit.version>1.6.4</testcontainers-redis-junit.version>
   </properties>
   <dependencies>
     <!-- Spring core dependencies-->
@@ -124,7 +125,7 @@
     <dependency>
       <groupId>com.redis.testcontainers</groupId>
       <artifactId>testcontainers-redis-junit</artifactId>
-      <version>1.6.4</version>
+      <version>${testcontainers-redis-junit.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
