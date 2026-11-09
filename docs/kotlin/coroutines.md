@@ -220,9 +220,3 @@ class WebFilterTests {
 
 The test dependencies: `kotlinx-coroutines-test`, `com.ninja-squad:springmockk`, and `io.kotest:kotest-assertions-core-jvm`.
 
-## When to use which filter contract
-
-| Contract | Signature | Use when |
-| :--- | :--- | :--- |
-| `WebFilter` | `Mono<Void> filter(ServerWebExchange, WebFilterChain)` | Java code, or Kotlin code already working with Reactor types |
-| `CoWebFilter` | `suspend fun filter(ServerWebExchange, CoWebFilterChain)` | Kotlin coroutines code that prefers sequential, null-safe logic |
