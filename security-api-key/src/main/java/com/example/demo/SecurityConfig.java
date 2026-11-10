@@ -1,17 +1,14 @@
 package com.example.demo;
 
-import java.util.Map;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
-import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
-import reactor.core.publisher.Mono;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -20,24 +17,15 @@ import static org.springframework.security.config.Customizer.withDefaults;
 class SecurityConfig {
 
     @Bean
+    @Order(2)
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
         return http
             .csrf(csrf -> csrf.disable())
             .httpBasic(withDefaults())
-            .addFilterBefore(apiKeyAuthenticationFilter(), SecurityWebFiltersOrder.HTTP_BASIC)
             .authorizeExchange(exchange -> exchange
+                .pathMatchers("/clients").hasRole("ADMIN")
                 .anyExchange().authenticated())
             .build();
-    }
-
-    // Not a bean: WebHttpHandlerBuilder would also pick it up as a top-level WebFilter.
-    private AuthenticationWebFilter apiKeyAuthenticationFilter() {
-        AuthenticationWebFilter filter = new AuthenticationWebFilter(
-            new ApiKeyAuthenticationManager(Map.of("user-api-key", "user", "admin-api-key", "admin")));
-        filter.setServerAuthenticationConverter(exchange
-            -> Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst("X-API-KEY"))
-                .map(ApiKeyAuthentication::unauthenticated));
-        return filter;
     }
 
     @Bean
