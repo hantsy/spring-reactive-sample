@@ -52,3 +52,23 @@ bin/
 out/
 .vscode
 site/
+
+# Spring Tool Suite extras
+.apt_generated
+.springBeans
+.sts4-cache
+
+# NetBeans extras
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+# Spring Initializr leftovers
+HELP.md
+
+# keep the Maven wrapper jar trackable despite the *.jar rule
+!.mvn/wrapper/maven-wrapper.jar
+
+# Qoder
+.qoder/
