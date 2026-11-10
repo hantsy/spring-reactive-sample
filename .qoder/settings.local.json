@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(ls -d */ 2>/dev/null | head -100; echo \"---with pom---\"; find . -maxdepth 2 -name pom.xml -not -path './legacy/*' | sed 's|^\\\\./||;s|/pom.xml||' | sort)",
-      "Bash(cd /d/hantsylabs/spring-reactive-sample\nmkdir -p ../deprecation-survey\necho \"Starting survey at $\\(date\\)\"\nfor d in */; do\n  m=\"${d%/}\"\n  [ -f \"$m/pom.xml\" ] || continue\n  echo \"Compiling $m...\"\n  \\( cd \"$m\" && ./mvnw -B clean test-compile \\\\\n    -Dmaven.compiler.showDeprecation=true \\\\\n    -Dmaven.compiler.showWarnings=true \\\\\n    > \"../../deprecation-survey/$m.log\" 2>&1 \\)\n  echo \"$m: exit $?\"\ndone\necho \"Survey complete at $\\(date\\)\")"
-    ]
-  }
-}
