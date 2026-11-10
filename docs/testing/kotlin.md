@@ -3,7 +3,7 @@
 
 Kotlin tests keep the same layered structure as the Java ones — `StepVerifier`, `WebTestClient`, Testcontainers — with a Kotlin-native toolkit on top: [Kotest](https://kotest.io/) assertion matchers, [MockK](https://mockk.io/) for suspending functions, [Spring MockK](https://github.com/Ninja-Squad/springmockk) for bean overrides, and `kotlinx-coroutines-test` for coroutine lifecycles.
 
-The samples referenced here are [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) and [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) in this repository, plus [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) in the spring6-sandbox repository.
+The samples referenced here are [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) and [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) in this repository.
 
 ## Test dependencies
 
@@ -52,41 +52,45 @@ coVerify(exactly = 0) { postRepository.findByTitleContains(any()) }
 - `@MockkBean` — replace a bean with a MockK mock; stub it with `coEvery { ... } returns ...`
 - `@MockkSpyBean` — wrap the real bean in a spy: real behavior by default, `coEvery` overrides selected calls
 
-The [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample uses `@MockkBean` inside a `@WebFluxTest` slice:
+The [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) sample uses `@MockkBean` inside a `@WebFluxTest` slice:
 
 ```kotlin
-@OptIn(ExperimentalCoroutinesApi::class)
 @WebFluxTest(controllers = [PostController::class])
-class PostControllerTest {
-
-    @MockkBean
-    private lateinit var postRepository: PostRepository
+class PostControllerTests {
 
     @Autowired
     private lateinit var client: WebTestClient
 
+    @MockkBean
+    private lateinit var posts: PostRepository
+
     @Test
-    fun `get posts by title with invalid title`() = runTest {
-        coEvery { postRepository.findByTitleContains(any()) } returns
-                flowOf(Post(id = 1, title = "test title", content = "test content"))
-
-        client.get().uri("/byTitle?title=")
+    fun `get all posts`() = runTest {
+        coEvery { posts.findAll() } returns
+                flowOf(
+                    Post(id = "1", title = "post one", content = "content of post one"),
+                    Post(id = "2", title = "post two", content = "content of two")
+                )
+        client.get()
+            .uri("/posts")
             .exchange()
-            .expectStatus().isBadRequest
+            .expectStatus().isOk
+            .expectBody().jsonPath("$.size()").isEqualTo(2)
 
-        coVerify(exactly = 0) { postRepository.findByTitleContains(any()) }
+        coVerify(exactly = 1) { posts.findAll() }
     }
 
     @Test
-    fun `get post that not found`() = runTest {
-        val id = 1L
-        coEvery { postRepository.findById(any()) } throws PostNotFoundException(id)
+    fun `get post by id when not found`() = runTest {
+        val id = UUID.randomUUID().toString()
+        coEvery { posts.findById(any()) } returns null
 
-        client.get().uri("/$id")
+        client.get()
+            .uri("/posts/$id")
             .exchange()
             .expectStatus().isNotFound
 
-        coVerify(exactly = 1) { postRepository.findById(any()) }
+        coVerify(exactly = 1) { posts.findById(any()) }
     }
 }
 ```

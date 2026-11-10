@@ -115,7 +115,7 @@ public class ApplicationTest {
 
 ## Testing filters
 
-Filters are verified by importing them into a `@WebFluxTest` slice and asserting the outcome with and without the triggering condition — the [spring6-sandbox](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) filter tests do exactly that for a security-check filter:
+Filters are verified by importing them into a `@WebFluxTest` slice and asserting the outcome with and without the triggering condition — for example, a security-check filter that requires a `user` query parameter:
 
 ```java
 @WebFluxTest(controllers = HelloController.class)

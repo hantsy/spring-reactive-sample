@@ -105,6 +105,7 @@ The following table lists all sample codes available in this repository.
 | :--- | :--- |
 | [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) | Spring Boot example with 3 Maven profiles to switch between Jetty, Tomcat, and Undertow |
 | [boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) | Simple `RouterFunction` example |
+| [boot-bean-registrar](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-bean-registrar) | Programmatic bean registration with `BeanRegistrar` and `@Import`, switching in-memory/H2 repositories by profile (Spring Framework 7) |
 | [boot-api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning) | WebFlux API versioning via `spring.webflux.apiversion.*` properties (Spring Boot 4) |
 | [boot-cors](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-cors) | WebFlux CORS with a `CorsWebFilter` bean and `@CrossOrigin` customization (Spring Boot 4) |
 | [boot-httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange-webclient) | `@HttpExchange` HTTP Service Client with `@ImportHttpServices` auto-configuration and `spring.http.serviceclient.*` properties |
@@ -117,6 +118,8 @@ The following table lists all sample codes available in this repository.
 | [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) | Written in Kotlin Coroutines |
 | [boot-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-dsl) | Kotlin-specific `BeanDefinitionDSL` and `RouterFunctionDsl` example |
 | [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) | Kotlin-specific `BeanDefinitionDSL` and `CoRouterFunctionDsl` example |
+| [boot-bean-registrar-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-bean-registrar-kotlin-dsl) | Kotlin `BeanRegistrarDsl` with coroutine handlers and `coRouter` routes (Spring Framework 7) |
+| [boot-security-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-security-kotlin-dsl) | Spring Security reactive `http { }` Kotlin DSL with in-memory users and basic auth |
 | [boot-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-redis) | Example using `ReactiveRedisConnection` and `RouterFunction` |
 | [boot-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-redis) | Spring Data Redis example |
 | [boot-data-neo4j](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-neo4j) | Spring Data Neo4j example (Spring Boot 2.4) |

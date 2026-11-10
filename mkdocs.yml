@@ -59,6 +59,7 @@ nav:
       - start/reactive-streams.md
       - start/first.md
       - start/boot-first.md
+      - start/bean-registrar.md
   - Web Programming:
       - web/intro.md
       - web/web-filter.md

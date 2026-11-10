@@ -21,25 +21,21 @@ class GreetingListener {
 
 This mirrors the Java pattern in [Application Events](../other/event.md) — publish with `ApplicationEventPublisher`, observe with `@EventListener` — with the handler body written in coroutine style.
 
-When the surrounding contract requires a blocking method — Spring Boot lifecycle hooks such as `CommandLineRunner`, for example — wrap the coroutine work in `runBlocking { ... }`, as the [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) sample does for data initialization:
+When the surrounding contract requires a blocking method — Spring Boot lifecycle hooks such as `CommandLineRunner`, for example — wrap the coroutine work in `runBlocking { ... }`, as the [boot-bean-registrar-kotlin-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-bean-registrar-kotlin-dsl) sample does for data initialization:
 
 ```kotlin
-@Component
-class DataInitializer(private val posts: PostRepository) {
-
-    @EventListener(value = [ApplicationReadyEvent::class])
-    fun init() {
-        runBlocking {
-            println(" print initial data...")
-            posts.findAll()
-        }
+registerBean {
+    CommandLineRunner {
+        runBlocking { bean<PostRepository>().initializeSampleData() }
     }
 }
 ```
 
+When the hook is an event listener, you can skip `runBlocking` entirely — the [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co) sample declares its `ApplicationReadyEvent` listener as a `suspend` function, like the `GreetingListener` above.
+
 ## Scheduling
 
-A `@Scheduled` method may be a `suspend` function that awaits a reactive pipeline with `awaitSingle` — from the [schedule](https://github.com/hantsy/spring6-sandbox/tree/main/schedule) sample of the spring6-sandbox repository:
+A `@Scheduled` method may be a `suspend` function that awaits a reactive pipeline with `awaitSingle`:
 
 ```kotlin
 @Component
@@ -112,4 +108,4 @@ class CustomConfig {
 }
 ```
 
-Annotate the DTOs with `@Serializable` and Spring encodes/decodes them on the HTTP boundary. See the [boot-kotlinx-serialization-json](https://github.com/hantsy/spring7-sandbox/tree/main/boot-kotlinx-serialization-json) sample and the [serialization guide](https://github.com/hantsy/spring7-sandbox/blob/main/docs/kotlinx-serialization.md) in the spring7-sandbox repository.
+Annotate the DTOs with `@Serializable` and Spring encodes/decodes them on the HTTP boundary.

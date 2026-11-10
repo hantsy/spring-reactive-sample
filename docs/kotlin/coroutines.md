@@ -5,11 +5,10 @@ Spring WebFlux supports Kotlin coroutines as a first-class programming model. In
 
 At the framework boundary, Spring bridges between coroutine-based code and Reactor primitives (`Mono` and `Flux`) internally, so the reactive runtime remains the same while the application code becomes more idiomatic and easier to read.
 
-This document focuses on the coroutine patterns used in the sample projects in this repository and related Spring examples:
+This document focuses on the coroutine patterns used in the sample projects in this repository:
 
 - [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co)
 - [boot-kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co)
-- [spring6-sandbox / boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co)
 
 ## `suspend` controller methods
 
@@ -122,7 +121,7 @@ class SecurityWebFilter : CoWebFilter() {
 
 When declared as a `@Component`, the filter is discovered by component scanning and registered into the `WebHandler` chain. The behavior matches a Java `WebFilter`, but the logic is expressed in a straightforward sequential coroutine style.
 
-The Spring 6 sandbox sample in [boot-kotlin-co](https://github.com/hantsy/spring6-sandbox/tree/main/boot-kotlin-co) demonstrates the same pattern in a real application.
+The [boot-kotlin-co-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-kotlin-co-dsl) sample uses `CoWebFilter` in a real application — its exception filter is shown below.
 
 ### Exception filter example
 

@@ -1,0 +1,34 @@
+name: boot-bean-registrar-kotlin-dsl
+
+on:
+  push:
+    paths:
+      - "boot-bean-registrar-kotlin-dsl/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "boot-bean-registrar-kotlin-dsl/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v6
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        cd boot-bean-registrar-kotlin-dsl
+        mvn -B package --file pom.xml
