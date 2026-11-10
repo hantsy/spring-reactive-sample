@@ -71,6 +71,7 @@ The following table lists all sample codes available in this repository.
 | [sse](https://github.com/hantsy/spring-reactive-sample/tree/master/sse) | Server Send Event example |
 | [websocket](https://github.com/hantsy/spring-reactive-sample/tree/master/websocket) | WebSocket example |
 | [web-filter](https://github.com/hantsy/spring-reactive-sample/tree/master/web-filter) | `WebFilter` example |
+| [cors](https://github.com/hantsy/spring-reactive-sample/tree/master/cors) | WebFlux CORS with manual `CorsWebFilter` configuration (without Spring Boot) |
 | [api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/api-versioning) | WebFlux API versioning with manual `ApiVersionConfigurer` configuration (Spring Framework 7) |
 | [groovy](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy) | Written in Groovy |
 | [groovy-dsl](https://github.com/hantsy/spring-reactive-sample/tree/master/groovy-dsl) | Groovy DSL bean definition example |
@@ -105,6 +106,7 @@ The following table lists all sample codes available in this repository.
 | [boot-start](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start) | Spring Boot example with 3 Maven profiles to switch between Jetty, Tomcat, and Undertow |
 | [boot-start-routes](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-start-routes) | Simple `RouterFunction` example |
 | [boot-api-versioning](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-api-versioning) | WebFlux API versioning via `spring.webflux.apiversion.*` properties (Spring Boot 4) |
+| [boot-cors](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-cors) | WebFlux CORS with a `CorsWebFilter` bean and `@CrossOrigin` customization (Spring Boot 4) |
 | [boot-httpexchange-webclient](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange-webclient) | `@HttpExchange` HTTP Service Client with `@ImportHttpServices` auto-configuration and `spring.http.serviceclient.*` properties |
 | [boot-httpexchange](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-httpexchange) | Shared `@HttpExchange` contract implemented by the server and proxied by the client, with `ProblemDetail` error handling |
 | [boot-mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-mvc-thymeleaf) | Same as mvc-thymeleaf, based on Spring Boot |

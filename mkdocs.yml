@@ -62,6 +62,7 @@ nav:
   - Web Programming:
       - web/intro.md
       - web/web-filter.md
+      - web/cors.md
       - web/func.md
       - web/exception.md
       - web/problem-details.md

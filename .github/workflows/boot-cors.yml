@@ -1,0 +1,34 @@
+name: boot-cors
+
+on:
+  push:
+    paths:
+      - "boot-cors/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "boot-cors/**"
+    types:
+      - opened
+      - synchronize
+      - reopened
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v7
+      with:
+          fetch-depth: 0
+    - name: Set up JDK
+      uses: actions/setup-java@v6
+      with:
+        java-version: '25'
+        distribution: 'temurin'
+        cache: 'maven'
+    - name: Build with Maven
+      run: |
+        cd boot-cors
+        mvn -B package --file pom.xml
