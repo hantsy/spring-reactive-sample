@@ -8,6 +8,7 @@ package com.example.demo;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -34,6 +35,7 @@ class User implements UserDetails {
     @Id
     private String id;
     private String username;
+    @JsonIgnore
     private String password;
 
     @Builder.Default()

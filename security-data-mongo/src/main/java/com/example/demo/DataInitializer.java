@@ -22,19 +22,16 @@ import reactor.core.publisher.Flux;
 @Slf4j
 class DataInitializer {
 
-    private final PostRepository posts;
     private final UserRepository users;
     private final PasswordEncoder passwordEncoder;
 
-    public DataInitializer(PostRepository posts, UserRepository users, PasswordEncoder passwordEncoder) {
-        this.posts = posts;
+    public DataInitializer(UserRepository users, PasswordEncoder passwordEncoder) {
         this.users = users;
         this.passwordEncoder = passwordEncoder;
     }
 
     @EventListener(value = ContextRefreshedEvent.class)
     public void init() {
-        initPosts();
         initUsers();
     }
 
@@ -60,31 +57,9 @@ class DataInitializer {
                         }
                     )
             )
-            .log()
-            .subscribe(
-                null,
-                null,
-                () -> log.info("done users initialization...")
-            );
-    }
-
-    private void initPosts() {
-        log.info("start data initialization  ...");
-        this.posts
-            .deleteAll()
-            .thenMany(
-                Flux
-                    .just("Post one", "Post two")
-                    .flatMap(
-                        title -> this.posts.save(Post.builder().title(title).content("content of " + title).build())
-                    )
-            )
-            .log()
-            .subscribe(
-                null,
-                null,
-                () -> log.info("done initialization...")
-            );
+            .then()
+            .block();
+        log.info("done users initialization...");
     }
 
 }

@@ -85,7 +85,6 @@ nav:
       - data/r2dbc.md
   - Security:
       - security/intro.md
-      - security/start.md
       - security/config.md
       - security/config-boot.md
       - security/method.md

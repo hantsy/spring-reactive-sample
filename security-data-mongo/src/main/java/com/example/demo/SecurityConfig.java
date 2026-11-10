@@ -7,7 +7,6 @@ package com.example.demo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.authorization.AuthorizationResult;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
@@ -20,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.AuthorizationContext;
 import reactor.core.publisher.Mono;
+
+import static org.springframework.security.config.Customizer.withDefaults;
 
 /**
  * @author hantsy
@@ -36,9 +37,9 @@ class SecurityConfig {
     @Bean
     SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
         return http
+            .csrf(csrf -> csrf.disable())
+            .httpBasic(withDefaults())
             .authorizeExchange(exchange -> exchange
-                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
-                .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
                 .pathMatchers("/users/{user}/**").access(this::currentUserMatchesPath)
                 .anyExchange().authenticated())
             .build();
