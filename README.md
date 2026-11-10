@@ -63,6 +63,7 @@ The following table lists all sample codes available in this repository.
 | [security-user-properties](https://github.com/hantsy/spring-reactive-sample/tree/master/security-user-properties) | Same as **security**, but stores users in *users.properties* |
 | [security-method](https://github.com/hantsy/spring-reactive-sample/tree/master/security-method) | Replaces URI-based configuration with method-level constraints |
 | [security-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/security-data-mongo) | Mongo-driven `ReactiveUserDetailsService` and a custom `access(...)` decision that replaces path matching |
+| [security-api-key](https://github.com/hantsy/spring-reactive-sample/tree/master/security-api-key) | `X-API-KEY` header authentication with a custom `AuthenticationWebFilter` before HTTP Basic |
 | [multipart](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart) | Multipart request handling and file uploading |
 | [multipart-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/multipart-data-mongo) | Multipart and file uploading, data stored in Mongo via Spring Data Mongo Reactive `GridFsTemplate` |
 | [mvc-thymeleaf](https://github.com/hantsy/spring-reactive-sample/tree/master/mvc-thymeleaf) | Traditional web application using Thymeleaf as template engine |
