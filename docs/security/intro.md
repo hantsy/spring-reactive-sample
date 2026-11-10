@@ -66,34 +66,6 @@ SecurityWebFilterChain applicationSecurity(ServerHttpSecurity http) {
 
 These rules protect requests based on their paths and other request attributes. Authentication can be provided by mechanisms such as form login, HTTP Basic, OAuth 2.0 login, or bearer tokens; choose and configure only the mechanisms that match the application.
 
-## Method security
-
-Path rules are a useful first boundary, but they are not always enough. A route may be available to several roles while a particular operation or object requires a more specific permission. Method security lets you express those checks close to the service method:
-
-```java
-@Configuration
-@EnableReactiveMethodSecurity
-class MethodSecurityConfig {
-}
-
-@Service
-class ReportService {
-
-    private final ReportRepository reports;
-
-    ReportService(ReportRepository reports) {
-        this.reports = reports;
-    }
-
-    @PreAuthorize("hasRole('ADMIN') or #owner == authentication.name")
-    public Mono<Report> findReport(String owner, String reportId) {
-        return reports.findById(reportId);
-    }
-}
-```
-
-Use the filter chain for broad request-level policy and method security for fine-grained checks around business operations. They complement one another: method security does not replace URL authorization, and URL authorization alone may not express ownership or domain-specific rules. For reactive applications, enable reactive method security and ensure secured methods are invoked through Spring-managed beans so the security interception applies.
-
 ## A friendly reading path
 
 This page covers the general security model. A natural way through the rest of the chapter is to move into the concrete configuration pieces:
