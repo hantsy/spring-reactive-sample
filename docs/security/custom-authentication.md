@@ -1,40 +1,26 @@
-# HTTP Basic and API key authentication
+# Custom authentication
 
-Authorization rules decide whether a request may pass through the filter chain; authentication mechanisms establish who is making it. Every mechanism in a WebFlux application is a `WebFilter` inside the `SecurityWebFilterChain`: it converts the request's credentials into an `Authentication` token, passes the token to a `ReactiveAuthenticationManager`, and on success puts the authenticated result into the `SecurityContext` for the rest of the chain.
+Built-in mechanisms cover the common credential formats. When your clients send something else — a header of your own design, a device id, a signature — Spring Security has no customizer to enable, and you do not need one. The mechanism is assembled from the same four parts `httpBasic` and `formLogin` use internally, plus one registration call.
 
-This page covers two request-level mechanisms: the built-in HTTP Basic support, for human users, and a custom API key mechanism for client applications that send an `X-API-KEY` header. Unlike [Form based authentication](form.md), the client sends credentials with every request; no login page or session is involved.
+This page builds that mechanism around the [security-api-key](https://github.com/hantsy/spring-reactive-sample/tree/master/security-api-key) sample: client applications authenticate with an opaque key in an `X-API-KEY` header, and nothing else changes about how the chain runs. Note that, unlike [form login](built-in-authentication.md), these credentials ride every request — there is no login page, no session, and no cookie in the design.
 
-The two never meet. The [security-api-key](https://github.com/hantsy/spring-reactive-sample/tree/master/security-api-key) sample puts each mechanism in its own `SecurityWebFilterChain` and splits the application by path: everything under `/api/**` is authenticated by API keys and nothing else, everything outside it by HTTP Basic.
+## The shape of a mechanism
 
-## HTTP Basic
+Every authentication mechanism is the same pipeline, so adding one means supplying the pieces that are specific to your credential format:
 
-Enable HTTP Basic with `httpBasic(withDefaults())`:
+1. An `Authentication` token type — the object that carries the raw credential before validation and the resolved principal after it.
+2. A `ServerAuthenticationConverter` — reads the credential off the `ServerWebExchange` and returns the unauthenticated token.
+3. A `ReactiveAuthenticationManager` — validates the token and returns the authenticated one, or signals failure.
+4. An `AuthenticationWebFilter` — wires 1-3 together, and decides when they apply at all through a `ServerWebExchangeMatcher`.
+5. One registration call on `ServerHttpSecurity` — `addFilterAt(filter, SecurityWebFiltersOrder.AUTHENTICATION)`, or `addFilterBefore`/`addFilterAfter` to place it relative to an existing filter.
 
-```java
-@Bean
-SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
-    return http
-        .httpBasic(withDefaults())
-        .authorizeExchange(exchange -> exchange
-            .anyExchange().authenticated())
-        .build();
-}
-```
+You write no `WebFilter` of your own from scratch, no code to save the `SecurityContext`, and no code to write the rejection response. `AuthenticationWebFilter` already does that work: it runs the matcher, calls the converter, subscribes to the manager, stores the result through the chain's `ServerSecurityContextRepository`, and on `AuthenticationException` hands off to its failure handler. Overriding those four settings is the entire mechanism.
 
-The customizer installs an `AuthenticationWebFilter` at the `HTTP_BASIC` position in the chain, wired with:
+## Worked example: an `X-API-KEY` header
 
-1. A `ServerHttpBasicAuthenticationConverter` that decodes the `Authorization: Basic ...` header into a username/password token.
-2. A `UserDetailsRepositoryReactiveAuthenticationManager` that validates the token against the application's `ReactiveUserDetailsService` bean — the in-memory `MapReactiveUserDetailsService` in this page's sample, or a custom store as described in [Customize UserDetailsRepository](user-details-repo.md).
-3. A `NoOpServerSecurityContextRepository`: the authenticated result is not persisted, so every request re-reads the header.
-4. An entry point that answers rejected requests with `401` and a `WWW-Authenticate: Basic` challenge — the response seen in [Configure Spring Security](config.md).
+### Step 1: the token
 
-## Custom API key authentication
-
-Machine-to-machine clients often authenticate with an API key in a custom header instead of username/password credentials. Spring Security ships no built-in API key mechanism, and you do not need one: the sample reuses the same `AuthenticationWebFilter` machinery and supplies the pieces specific to API keys — a store of the client applications that own the keys, a token type, a manager, a converter, and a filter that wires them together.
-
-### The client app store
-
-A key belongs to a client application, not to a user account, so the sample gives it its own entity. `ClientApp` pairs a name with the opaque secret that stands for it:
+A key belongs to a client application, not to a user account, so the sample gives the credential its own principal type. `ClientApp` pairs a name with the opaque secret that stands for it:
 
 ```java
 record ClientApp(String name, String apiKey) {
@@ -74,12 +60,6 @@ class ClientAppRepository {
 
 }
 ```
-
-1. `findByApiKey` is the authentication lookup. An unknown key yields an empty `Mono` rather than `null`, so the manager decides what absence means.
-2. The same store serves administration: `findAll` backs `GET /clients` and `save` backs `POST /clients`. A key registered through the admin endpoint is live for authentication immediately — one source of truth for both jobs.
-3. Two applications are seeded with fixed keys so the sample is reproducible; `registered(...)` shows how a generated key differs from a hand-assigned one. Swap the map for a real store — and hashed keys — in production.
-
-### The authentication token
 
 `ApiKeyAuthentication` carries the raw key before validation and the resolved principal after it:
 
@@ -127,9 +107,29 @@ public class ApiKeyAuthentication extends AbstractAuthenticationToken {
 2. The manager returns the `authenticated` form: the client app name the key maps to, its granted authorities, and the authenticated flag set to true.
 3. `eraseCredentials()` clears the key so it is not held after the exchange completes. `getName()` comes from `AbstractAuthenticationToken` and resolves to the principal, so downstream code reads the authenticated application name with `authentication.getName()`.
 
-### The authentication manager
+### Step 2: the converter
 
-`ApiKeyAuthenticationManager` asks the store who owns the key and grants a single fixed role to every client application:
+The converter reads the header and hands the raw value to the token factory:
+
+```java
+class ApiKeyAuthenticationConverter implements ServerAuthenticationConverter {
+
+    public static final String API_KEY_HEADER = "X-API-KEY";
+
+    @Override
+    public Mono<Authentication> convert(ServerWebExchange exchange) {
+        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(API_KEY_HEADER))
+            .map(ApiKeyAuthentication::unauthenticated);
+    }
+
+}
+```
+
+An empty `Mono` from `convert(...)` tells `AuthenticationWebFilter` that this request carries no credentials for this mechanism, so it moves on unchanged. `API_KEY_HEADER` is public because the header name is part of the contract with callers — it is what the README, the tests, and the curl transcript below all quote.
+
+### Step 3: the manager
+
+The manager asks the store who owns the key and grants a single fixed role to every client application:
 
 ```java
 class ApiKeyAuthenticationManager implements ReactiveAuthenticationManager {
@@ -157,29 +157,9 @@ class ApiKeyAuthenticationManager implements ReactiveAuthenticationManager {
 1. An empty lookup becomes a `BadCredentialsException` through `switchIfEmpty`. `AuthenticationWebFilter` catches `AuthenticationException` and routes it to its failure handler, so a wrong key never reaches the controller.
 2. The principal is the application name, the authority is `ROLE_APP` for all of them. Per-application roles would belong to the store, not to the manager; until then, `hasRole("APP")` is what the `/api` chain asks for and what every registered application satisfies.
 
-### The authentication converter
+### Step 4: the filter
 
-`ApiKeyAuthenticationConverter` reads the header and hands the raw value to the token factory:
-
-```java
-class ApiKeyAuthenticationConverter implements ServerAuthenticationConverter {
-
-    public static final String API_KEY_HEADER = "X-API-KEY";
-
-    @Override
-    public Mono<Authentication> convert(ServerWebExchange exchange) {
-        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(API_KEY_HEADER))
-            .map(ApiKeyAuthentication::unauthenticated);
-    }
-
-}
-```
-
-An empty `Mono` from `convert(...)` tells `AuthenticationWebFilter` that this request carries no credentials for this mechanism, so it moves on unchanged. `API_KEY_HEADER` is public because the header name is part of the contract with callers — it is what the README, the tests, and the curl transcripts below all quote.
-
-### The authentication filter
-
-`ApiKeyAuthenticationFilter` collects the collaborators and adds the wiring that makes the mechanism fire only for requests carrying the header:
+The filter collects the collaborators and adds the wiring that makes the mechanism fire only for requests carrying the header:
 
 ```java
 class ApiKeyAuthenticationFilter extends AuthenticationWebFilter {
@@ -211,7 +191,7 @@ class ApiKeyAuthenticationFilter extends AuthenticationWebFilter {
 2. `setAuthenticationFailureHandler(...)` replaces the default. Left alone, the failure handler calls `HttpBasicServerAuthenticationEntryPoint`, which would answer a rejected API key with a `WWW-Authenticate: Basic` challenge — inviting a machine client to retry with credentials it was never meant to have. `HttpStatusServerEntryPoint` writes a bare `401` instead.
 3. `setServerAuthenticationConverter(...)` swaps the Basic converter for the header reader above. The repository is passed through to the manager, and the `NoOpServerSecurityContextRepository` default stays: an API key is resent with every request, so there is nothing worth persisting between them.
 
-### Two ordered chains
+### Step 5: register it
 
 The filter is registered in a chain of its own, matching only the machine-facing paths:
 
@@ -272,9 +252,9 @@ class SecurityConfig {
 3. `@Order` is load-bearing. Without it the chains run in bean-definition order, which is not something to rely on; giving the Basic chain the earlier value makes it match every path first and the `/api` tests fail — a bad key answers with a Basic challenge again and the `ROLE_APP` rule is never reached.
 4. Because a path is served by exactly one chain, each chain carries one mechanism, and neither mechanism has to know the other exists: `Authorization` is invisible to `/api/**` and `X-API-KEY` is invisible everywhere else. The `exceptionHandling` entry point on the API chain keeps its rejections free of the `WWW-Authenticate: Basic` header that `httpBasic` would otherwise advertise.
 5. Construct the filter with `new` here rather than declaring it as a bean. `WebHttpHandlerBuilder` collects all `WebFilter` beans, so a bean would run once standalone and again inside the security chain.
-6. `csrf` is disabled in both chains: neither mechanism relies on a cookie a browser could be tricked into sending, which is the attack `CsrfWebFilter` exists to stop.
+6. `csrf` is disabled in both chains: neither mechanism relies on a cookie a browser could be tricked into sending, which is the attack `CsrfWebFilter` exists to stop. That exemption is a property of these transports, not a habit to carry into a cookie-based mechanism — see the CSRF discussion in [Built-in authentication mechanisms](built-in-authentication.md).
 
-### Registering client apps
+## Registering client apps
 
 Management of the store deliberately lives outside `/api/**`, so it is guarded by HTTP Basic and an admin role rather than by the keys it hands out:
 
@@ -310,7 +290,7 @@ class ClientAppController {
 
 `POST /clients` takes only a name, generates the key, and returns both. The new key authenticates against the same repository the manager reads, so the application can call `/api/**` immediately — `adminRegistersClientAppAndNewKeyAccessesApiPath` asserts exactly that round trip.
 
-### Which mechanism answers a request
+## Which mechanism answers a request
 
 | Path | Credentials sent | Chain that owns it | Result |
 | --- | --- | --- | --- |
@@ -375,4 +355,4 @@ curl -s -o /dev/null -w "%{http_code}\n" http://localhost:8080/api/posts -H "X-A
 
 ## See it in code
 
-The [security-api-key](https://github.com/hantsy/spring-reactive-sample/tree/master/security-api-key) sample exposes `GET /user`, which renders the current `Authentication` as name, authorities, and the authenticated flag; `GET /api/posts`, the general-purpose API for client applications; and `GET`/`POST /clients`, the admin-only registry behind them. Continue with [Method level constraints](method.md) to move authorization next to the business methods themselves.
+The [security-api-key](https://github.com/hantsy/spring-reactive-sample/tree/master/security-api-key) sample exposes `GET /user`, which renders the current `Authentication` as name, authorities, and the authenticated flag; `GET /api/posts`, the general-purpose API for client applications; and `GET`/`POST /clients`, the admin-only registry behind them. The same pipeline is what the built-in mechanisms are built from — compare it against [Built-in authentication mechanisms](built-in-authentication.md) — and once authentication is settled, [Method level constraints](method.md) moves authorization next to the business methods themselves.

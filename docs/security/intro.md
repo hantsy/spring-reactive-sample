@@ -72,8 +72,9 @@ This page covers the general security model. A natural way through the rest of t
 
 - continue with [Configure Spring Security](config.md) to see the core `ServerHttpSecurity` setup and how it behaves in practice
 - then read [Configure Spring Security in Spring Boot](config-boot.md) for the auto-configuration-based variant you will usually reach for in real projects
-- explore [HTTP Basic and API key authentication](authentication.md) for the request-level authentication mechanisms, including a custom `X-API-KEY` filter
+- explore [Built-in authentication mechanisms](built-in-authentication.md) for the request-level mechanisms Spring Security ships — HTTP Basic, form login, and a tour of the rest
 - move into [Method level constraints](method.md) to protect business logic and endpoints with authorization rules
-- finish with [Customize UserDetailsRepository](user-details-repo.md) and [Form based authentication](form.md) for user management and login flows
+- read [Customize UserDetailsRepository](user-details-repo.md) to see where the credentials those mechanisms check actually come from
+- finish with [Custom authentication](custom-authentication.md), which walks an `X-API-KEY` mechanism end to end and shows how the same pieces are assembled when none of the built-ins fits
 
 The chapters are ordered to build from concept to implementation: first the model, then the configuration, then the practical details that make security feel real in a reactive application.

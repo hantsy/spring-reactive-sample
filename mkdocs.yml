@@ -87,10 +87,10 @@ nav:
       - security/intro.md
       - security/config.md
       - security/config-boot.md
-      - security/authentication.md
+      - security/built-in-authentication.md
       - security/method.md
       - security/user-details-repo.md
-      - security/form.md
+      - security/custom-authentication.md
   - Testing:
       - testing/intro.md
       - testing/web-components.md

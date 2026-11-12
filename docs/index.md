@@ -22,7 +22,7 @@ The chapters build on one another, but each topic is written to stand on its own
 2. **[Getting Started](start/intro.md)** — Reactor basics, Reactive Streams, and your first WebFlux app with and without Spring Boot.
 3. **[Web Programming](web/intro.md)** — controllers, functional routing, error handling, uploads, SSE, WebSocket, view rendering, `WebClient`, and API versioning.
 4. **[Data Operations](data/intro.md)** — reactive data access with MongoDB, Redis, Cassandra, Couchbase, Neo4j, Elasticsearch, and relational databases via R2DBC.
-5. **[Security](security/intro.md)** — `ServerHttpSecurity`, method security, custom user services, and form-based authentication.
+5. **[Security](security/intro.md)** — `ServerHttpSecurity`, the built-in authentication mechanisms, method security, custom user services, and building a mechanism of your own.
 6. **[Testing](testing/intro.md)** — `StepVerifier`, `WebTestClient`, Testcontainers, and Spring Test integration.
 7. **[Kotlin](kotlin/intro.md)** — Kotlin-first WebFlux development with coroutines and DSLs.
 8. **[Reactive Ecosystem](other/mutiny.md)** — Mutiny, RxJava 3, JDK Flow, Groovy, caching, events, scheduling, RSocket (TCP, WebSocket, CRUD, Spring Integration), Spring Session, and Spring Integration.
