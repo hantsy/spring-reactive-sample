@@ -1,5 +1,8 @@
+# Configuration
 
-# Configure Spring Security
+In a WebFlux application, security is configured by declaring a `SecurityWebFilterChain` bean built from `ServerHttpSecurity`. That bean looks the same with or without Spring Boot; what differs is who switches WebFlux security on — you, with `@EnableWebFluxSecurity`, or Boot's auto-configuration.
+
+## Without Spring Boot
 
 When you are developing a Spring WebFlux application without Spring Boot, add the security dependencies from the [previous page](intro.md) to your project.
 
@@ -43,6 +46,59 @@ In the above codes:
 2. A `SecurityWebFilterChain` bean is required to configure the details of Spring Security. `ServerHttpSecurity` comes from the reactive config support — similar to the servlet-stack `HttpSecurity`, but it handles `ServerWebExchange` instead of the Servlet based `WebRequest`.
 3. A `ReactiveUserDetailsService` resolves users reactively. The in-memory `MapReactiveUserDetailsService` is the default choice for demos; you can customize it by implementing the interface yourself — see [Customize UserDetailsRepository](user-details-repo.md).
 4. The `pathMatchers` rules protect the API: `GET /posts/**` is public, `DELETE /posts/**` requires the `ADMIN` role, and every other exchange must be authenticated.
+
+## With Spring Boot
+
+For Spring Boot applications, add `spring-boot-starter-security` to the project dependencies.
+
+```xml
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+Then declare the same chain bean — and leave the annotation out:
+
+```java
+@Configuration
+class SecurityConfig {
+
+    @Bean
+    SecurityWebFilterChain springWebFilterChain(ServerHttpSecurity http) {
+        return http
+            .authorizeExchange(exchange -> exchange
+                .pathMatchers(HttpMethod.GET, "/posts/**").permitAll()
+                .pathMatchers(HttpMethod.DELETE, "/posts/**").hasRole("ADMIN")
+                .anyExchange().authenticated())
+            .build();
+    }
+
+    // ...
+}
+```
+
+The missing `@EnableWebFluxSecurity` is deliberate. `ReactiveWebSecurityAutoConfiguration` applies it for you: its nested `EnableWebFluxSecurityConfiguration` carries the annotation and is `@ConditionalOnMissingBean(WebFilterChainProxy.class)`, so it stands down only if security has already been enabled some other way. Adding the annotation yourself is harmless, but it is not what makes a Boot application secure.
+
+Two defaults are worth knowing, because both are conditional on what you declare:
+
+1. **The fallback chain.** With no `SecurityWebFilterChain` bean of your own, Spring Security builds one that requires authentication for every exchange and enables both `httpBasic` and `formLogin`. Declaring the bean above replaces that fallback entirely — the rules you write are the only rules, so a path you forget to mention is still caught by `anyExchange().authenticated()`.
+2. **The deny-all authentication manager.** Boot contributes a `ReactiveAuthenticationManager` that rejects every authentication attempt, and it is `@ConditionalOnMissingBean` on `ReactiveAuthenticationManager`, `ReactiveUserDetailsService`, and `SecurityWebFilterChain`. Until you supply one of those, no credential can succeed. Adding the `MapReactiveUserDetailsService` bean from the previous section — or any `ReactiveUserDetailsService` of your own — switches it off and gives the built-in mechanisms something to validate against.
+
+### Method security needs an explicit declaration
+
+Auto-configuration stops at the filter chain. No Boot auto-configuration enables method security, so `@EnableReactiveMethodSecurity` has to be declared explicitly even in a Boot application:
+
+```java
+@Configuration
+@EnableReactiveMethodSecurity
+class SecurityConfig {
+
+    // ...
+}
+```
+
+Without it, `@PreAuthorize` and the other method constraints are inert — the annotations compile and the application starts, but nothing intercepts the calls. See [Method level constraints](method.md) for applying them to reactive methods.
 
 ## Verify with curl
 

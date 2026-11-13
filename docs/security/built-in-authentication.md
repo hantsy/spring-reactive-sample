@@ -24,7 +24,7 @@ The customizer installs an `AuthenticationWebFilter` at the `HTTP_BASIC` positio
 1. A `ServerHttpBasicAuthenticationConverter` that decodes the `Authorization: Basic ...` header into a username/password token.
 2. A `UserDetailsRepositoryReactiveAuthenticationManager` that validates the token against the application's `ReactiveUserDetailsService` bean — the in-memory `MapReactiveUserDetailsService` used across this chapter's samples, or a custom store as described in [Customize UserDetailsRepository](user-details-repo.md).
 3. A `NoOpServerSecurityContextRepository`: the authenticated result is not persisted, so every request re-reads the header.
-4. An entry point that answers rejected requests with `401` and a `WWW-Authenticate: Basic` challenge — the response seen in [Configure Spring Security](config.md).
+4. An entry point that answers rejected requests with `401` and a `WWW-Authenticate: Basic` challenge — the response seen in [Configuration](config.md).
 
 Nothing about the mechanism depends on the credentials being a human's password. What makes Basic convenient for demos is that a single `curl -u` drives it, which is why the samples in this chapter use it; [Custom authentication](custom-authentication.md) covers the machine-to-machine case where a header of your own design fits better.
 

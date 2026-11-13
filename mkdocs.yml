@@ -86,7 +86,6 @@ nav:
   - Security:
       - security/intro.md
       - security/config.md
-      - security/config-boot.md
       - security/built-in-authentication.md
       - security/method.md
       - security/user-details-repo.md

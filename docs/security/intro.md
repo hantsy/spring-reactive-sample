@@ -43,7 +43,7 @@ The reactive pieces ship in the standard Spring Security modules — no separate
 </dependency>
 ```
 
-For Spring Boot applications, a single starter is enough. See [Configure Spring Security in Spring Boot applications](config-boot.md).
+For Spring Boot applications, a single starter is enough. See [Configuration](config.md) for both variants.
 
 ## How request security is applied
 
@@ -70,8 +70,7 @@ These rules protect requests based on their paths and other request attributes. 
 
 This page covers the general security model. A natural way through the rest of the chapter is to move into the concrete configuration pieces:
 
-- continue with [Configure Spring Security](config.md) to see the core `ServerHttpSecurity` setup and how it behaves in practice
-- then read [Configure Spring Security in Spring Boot](config-boot.md) for the auto-configuration-based variant you will usually reach for in real projects
+- continue with [Configuration](config.md) to see the core `ServerHttpSecurity` setup, both without Spring Boot and with the starter's auto-configuration
 - explore [Built-in authentication mechanisms](built-in-authentication.md) for the request-level mechanisms Spring Security ships — HTTP Basic, form login, and a tour of the rest
 - move into [Method level constraints](method.md) to protect business logic and endpoints with authorization rules
 - read [Customize UserDetailsRepository](user-details-repo.md) to see where the credentials those mechanisms check actually come from
