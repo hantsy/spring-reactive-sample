@@ -37,9 +37,11 @@ Inject a `WebSession` as a controller method parameter and read or write attribu
 | :--- | :--- | :--- | :--- |
 | In-memory map | `@EnableSpringWebSession` | `ReactiveMapSessionRepository` | `spring-session-core` |
 | Redis | `@EnableRedisWebSession` | `ReactiveRedisSessionRepository` (auto) | `spring-session-data-redis` |
-| MongoDB | `@EnableMongoWebSession` | `ReactiveMongoOperationsSessionRepository` (auto) | `spring-session-data-mongodb` |
+| MongoDB | `@EnableMongoWebSession` | `ReactiveMongoOperationsSessionRepository` (auto) | `spring-session-data-mongodb` (*removed in Spring Session 4.0* — see [Mongo-backed sessions](mongo.md)) |
 
 An external store is recommended for production: sessions survive restarts and are shared across instances.
+
+Spring Session 4.0 dropped its own MongoDB module, so `spring-session-data-mongodb` is no longer part of the Spring Session BOM. The MongoDB store is now published by the MongoDB team as [`org.mongodb:mongodb-spring-session`](https://github.com/mongodb/mongo-spring-session), targeting Spring Session 4.0+ and moving the classes to `org.mongodb.spring.session.*`. The sample that used the old module is kept for reference in [`legacy/session-data-mongo`](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/session-data-mongo).
 
 ## Choosing a session strategy
 

@@ -106,7 +106,6 @@ updates:
       - /security-method
       - /security-user-properties
       - /session
-      - /session-data-mongo
       - /session-data-redis
       - /session-header
       - /smallrye-mutiny

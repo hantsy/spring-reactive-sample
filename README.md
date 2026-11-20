@@ -93,7 +93,6 @@ The following table lists all sample codes available in this repository.
 | [session](https://github.com/hantsy/spring-reactive-sample/tree/master/session) | Spring Session example |
 | [session-header](https://github.com/hantsy/spring-reactive-sample/tree/master/session-header) | Spring Session `WebSessionIdResolver` example |
 | [session-data-redis](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-redis) | Spring Data Redis based `ReactiveSessionRepository` example |
-| [session-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/session-data-mongo) | Spring Data Mongo based `ReactiveSessionRepository` example |
 | [exception-handler](https://github.com/hantsy/spring-reactive-sample/tree/master/exception-handler) | Exception Handler example |
 | [problem-details](https://github.com/hantsy/spring-reactive-sample/tree/master/problem-details) | RFC 9457 `ProblemDetail` error responses in a manual WebFlux + R2DBC application |
 | [integration](https://github.com/hantsy/spring-reactive-sample/tree/master/integration) | Spring Integration example |
@@ -179,7 +178,8 @@ Spring [removed support of RxJava/RxJava2](https://github.com/spring-projects/sp
 | [websocket-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/websocket-reactor-netty2) | WebSocket example with Reactor Netty 2 |
 | [vanilla-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/vanilla-reactor-netty2) | Same as **vanilla**, but uses Reactor Netty 2.x as the runtime |
 | [client-reactor-netty2](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/client-reactor-netty2) | `WebClient` with Reactor Netty 2.x HttpClient |
-| [boot-pulsar](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-pulsar) | Spring for Pulsar Reactive example |
+| [boot-pulsar](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/boot-pulsar) | Spring for Pulsar Reactive example (*Deprecated*, Apache Pulsar support is deprecated in Spring Boot 4.2) |
+| [session-data-mongo](https://github.com/hantsy/spring-reactive-sample/tree/master/legacy/session-data-mongo) | Spring Data Mongo based `ReactiveSessionRepository` example (*Deprecated*, Spring Session 4.0 removed MongoDB support) |
 
 ## References
 
