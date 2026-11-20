@@ -2,17 +2,20 @@ package com.example.test.it
 
 import com.example.demo.Application
 import com.example.demo.domain.Post
+import com.example.test.MongoContextInitializer
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.kotlin.test.test
 
-@SpringJUnitConfig(classes = [Application::class])
+@SpringJUnitConfig
+@ContextConfiguration(classes = [Application::class], initializers = [MongoContextInitializer::class])
 class ApplicationTests {
 
     @Value("\${server.port:8080}")

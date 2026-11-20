@@ -2,6 +2,7 @@ package com.example.test.repository
 
 import com.example.demo.domain.Post
 import com.example.demo.repository.PostRepository
+import com.example.test.MongoContextInitializer
 import com.example.test.repository.PostRepositoryTest.TestConfig
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.shouldNotBe

@@ -58,6 +58,53 @@ public class PostRepositoryTest {
 
 Because the properties use the application's own keys (`r2dbc.*` in the samples), no container library knowledge leaks into the configuration classes — see the [cache](https://github.com/hantsy/spring-reactive-sample/tree/master/cache) sample for the complete pattern, and the [r2dbc-connection-factories](https://github.com/hantsy/spring-reactive-sample/tree/master/r2dbc-connection-factories) tests for raw-driver variants.
 
+## Plain Spring in Kotlin
+
+The same pattern applies to the Kotlin samples. The [kotlin-co](https://github.com/hantsy/spring-reactive-sample/tree/master/kotlin-co) module keeps a shared `MongoContextInitializer` at the top of the test sources so every test class that needs a database can reuse it:
+
+```kotlin
+class MongoContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
+
+    override fun initialize(applicationContext: ConfigurableApplicationContext) {
+        val container = MongoDBContainer("mongo:8")
+        container.start()
+
+        applicationContext.addApplicationListener(
+            ApplicationListener<ApplicationEvent> { event ->
+                if (event is ContextClosedEvent) {
+                    container.stop()
+                }
+            }
+        )
+
+        applicationContext.environment
+            .propertySources
+            .addFirst(
+                MapPropertySource(
+                    "testproperties",
+                    mapOf<String, Any>("mongo.uri" to "mongodb://${container.host}:${container.firstMappedPort}")
+                )
+            )
+    }
+}
+```
+
+The container is started inside `initialize()` rather than held in a `companion object` field, so each test class that applies the initializer gets its own container and stops it when its context closes. The URI is published as a `MapPropertySource` with the application's own `mongo.uri` key, overriding the `application.properties` default that points at a locally running MongoDB.
+
+The initializer is applied together with the application configuration, because a plain Spring test needs both the context classes and the initializers:
+
+```kotlin
+@SpringJUnitConfig
+@ContextConfiguration(classes = [Application::class], initializers = [MongoContextInitializer::class])
+class ApplicationTests {
+
+    @Test
+    fun `should load posts`() = runTest {
+        // ...
+    }
+}
+```
+
 ## Spring Boot with @DynamicPropertySource
 
 For Boot applications, the `@Testcontainers` + `@Container` + `@DynamicPropertySource` combination starts the container with the JUnit lifecycle and maps its runtime values into arbitrary property keys. From the [boot-data-mongo-template](https://github.com/hantsy/spring-reactive-sample/tree/master/boot-data-mongo-template) sample:
@@ -123,6 +170,6 @@ No `@DynamicPropertySource`, no property names — Boot wires `spring.data.mongo
 
 | Style | Use when |
 | :--- | :--- |
-| `ApplicationContextInitializer` + `TestPropertyValues` | Plain Spring (no Boot) tests; reusable initializer shared by many test classes |
+| `ApplicationContextInitializer` + `TestPropertyValues` | Plain Spring (no Boot) tests in Java or Kotlin; reusable initializer shared by many test classes |
 | `@Testcontainers` + `@DynamicPropertySource` | Boot tests needing explicit control of property keys or container options |
 | `@ServiceConnection` | Boot tests with a supported container type — the least code, zero property names |

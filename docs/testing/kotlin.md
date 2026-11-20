@@ -176,3 +176,5 @@ class PostControllerTest {
 ```
 
 When Boot's bean-override machinery is available, prefer `@MockkBean` over the manual `@Primary` mock bean — the manual registration shown here is what makes the same test work in plain Spring modules.
+
+The repository-backed tests in the same module need a real MongoDB instead of a mock. They apply a shared `MongoContextInitializer` that starts a Testcontainers-managed MongoDB and publishes its URI as the `mongo.uri` property — see [Data Operations with Testcontainers](testcontainers.md#plain-spring-in-kotlin).
