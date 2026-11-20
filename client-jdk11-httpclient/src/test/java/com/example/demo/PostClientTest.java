@@ -46,7 +46,6 @@ public class PostClientTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    @SneakyThrows
     @BeforeEach
     public void setup() {
     }

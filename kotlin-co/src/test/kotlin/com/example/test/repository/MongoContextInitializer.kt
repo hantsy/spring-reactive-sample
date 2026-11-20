@@ -8,7 +8,6 @@ import org.springframework.context.event.ContextClosedEvent
 import org.springframework.core.env.MapPropertySource
 import org.testcontainers.utility.DockerImageName
 import org.testcontainers.mongodb.MongoDBContainer
-import java.util.Map
 
 
 class MongoContextInitializer : ApplicationContextInitializer<ConfigurableApplicationContext> {
@@ -28,7 +27,7 @@ class MongoContextInitializer : ApplicationContextInitializer<ConfigurableApplic
             .addFirst(
                 MapPropertySource(
                     "testproperties",
-                    Map.of<String, Any>("mongo.uri", "mongodb://${container.host}:${container.firstMappedPort}")
+                    mapOf<String, Any>("mongo.uri" to "mongodb://${container.host}:${container.firstMappedPort}")
                 )
             )
 
